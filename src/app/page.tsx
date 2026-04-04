@@ -132,13 +132,13 @@ export default function Home() {
 
           <div className="flex shrink-0 items-center gap-3">
             <Link
-              href="/inloggen"
+              href="/auth"
               className="text-sm font-medium text-white/90 transition-colors hover:text-white"
             >
               Inloggen
             </Link>
             <Link
-              href="/aanmelden"
+              href="/auth?tab=aanmelden"
               className="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-600"
             >
               Aanmelden
