@@ -46,7 +46,14 @@ export default function AuthPage() {
       setError(signError.message);
       return;
     }
-    router.push("/dashboard");
+    const returnTo = new URLSearchParams(window.location.search).get(
+      "returnTo",
+    );
+    const safe =
+      returnTo && returnTo.startsWith("/") && !returnTo.startsWith("//")
+        ? returnTo
+        : null;
+    router.push(safe ?? "/dashboard");
     router.refresh();
   }
 
