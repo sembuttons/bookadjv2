@@ -165,7 +165,8 @@ export default function Home() {
 
           <form
             className="mx-auto mt-10 max-w-4xl rounded-2xl bg-white p-4 shadow-xl sm:p-6"
-            action="#"
+            action="/zoeken"
+            method="get"
             role="search"
             aria-label="DJ zoeken"
           >
@@ -200,9 +201,7 @@ export default function Home() {
                   className="rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm text-neutral-900 outline-none ring-black transition-[box-shadow] focus:border-neutral-400 focus:ring-2"
                   defaultValue=""
                 >
-                  <option value="" disabled>
-                    Kies een genre
-                  </option>
+                  <option value="">Alle genres</option>
                   {genres.map((g) => (
                     <option key={g} value={g}>
                       {g}

@@ -1,0 +1,18 @@
+import Link from "next/link";
+
+export default function DjNotFound() {
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4 font-sans text-center">
+      <h1 className="text-2xl font-bold text-neutral-900">DJ niet gevonden</h1>
+      <p className="mt-2 text-neutral-600">
+        Dit profiel bestaat niet of is niet zichtbaar.
+      </p>
+      <Link
+        href="/zoeken"
+        className="mt-6 text-sm font-semibold text-neutral-900 underline"
+      >
+        Naar zoeken
+      </Link>
+    </div>
+  );
+}
