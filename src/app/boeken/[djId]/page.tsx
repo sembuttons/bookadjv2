@@ -145,9 +145,45 @@ export default function BoekenPage() {
       const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
 
       setSubmitting(true);
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session?.user) {
+        setSubmitting(false);
+        setSubmitError("Sessie verlopen. Log opnieuw in.");
+        return;
+      }
+
+      const sessionUserId = session.user.id;
+      const userEmail = session.user.email;
+      if (!userEmail) {
+        setSubmitting(false);
+        setSubmitError(
+          "Geen e-mailadres op je account. Vul dit aan en probeer opnieuw.",
+        );
+        return;
+      }
+
+      const { error: upsertUserError } = await supabase.from("users").upsert(
+        {
+          id: sessionUserId,
+          email: userEmail,
+          full_name: session.user.user_metadata?.full_name || "",
+          role: session.user.user_metadata?.role || "customer",
+        },
+        { onConflict: "id" },
+      );
+
+      if (upsertUserError) {
+        setSubmitting(false);
+        setSubmitError(upsertUserError.message);
+        return;
+      }
+
       const payload = {
         reference: randomReference(),
-        customer_id: userId,
+        customer_id: sessionUserId,
         dj_id: djId,
         status: "pending",
         event_date: eventDate,
