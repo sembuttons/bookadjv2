@@ -8,7 +8,7 @@ import { supabase } from "@/lib/supabase";
 const sidebarLinks = [
   { href: "/dashboard/klant", label: "Mijn boekingen", match: "exact" as const },
   {
-    href: "/dashboard/klant/berichten",
+    href: "/berichten",
     label: "Berichten",
     match: "prefix" as const,
   },
@@ -25,6 +25,9 @@ const sidebarLinks = [
 ];
 
 function linkIsActive(pathname: string, href: string, match: "exact" | "prefix") {
+  if (href === "/berichten") {
+    return pathname === "/berichten" || pathname.startsWith("/berichten/");
+  }
   if (match === "exact") {
     return pathname === href;
   }
@@ -41,6 +44,7 @@ export default function KlantDashboardLayout({
   const [ready, setReady] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [loggingOut, setLoggingOut] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -65,12 +69,35 @@ export default function KlantDashboardLayout({
 
       setUserEmail(session.user.email ?? null);
       setReady(true);
+
+      const { count } = await supabase
+        .from("messages")
+        .select("id", { count: "exact", head: true })
+        .eq("recipient_id", session.user.id)
+        .eq("is_read", false);
+      if (!cancelled) setUnreadMessages(count ?? 0);
     })();
 
     return () => {
       cancelled = true;
     };
   }, [router]);
+
+  useEffect(() => {
+    if (!ready) return;
+    void (async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session?.user) return;
+      const { count } = await supabase
+        .from("messages")
+        .select("id", { count: "exact", head: true })
+        .eq("recipient_id", session.user.id)
+        .eq("is_read", false);
+      setUnreadMessages(count ?? 0);
+    })();
+  }, [ready, pathname]);
 
   const handleLogout = useCallback(async () => {
     setLoggingOut(true);
@@ -128,13 +155,18 @@ export default function KlantDashboardLayout({
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors md:px-3 md:py-2.5 ${
+                  className={`relative rounded-lg px-3 py-2 text-sm font-medium transition-colors md:px-3 md:py-2.5 ${
                     active
                       ? "bg-black text-white md:bg-neutral-100 md:text-neutral-900"
                       : "text-neutral-700 hover:bg-neutral-100"
                   }`}
                 >
                   {item.label}
+                  {item.href === "/berichten" && unreadMessages > 0 ? (
+                    <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-orange-500 px-1 text-[10px] font-bold text-white">
+                      {unreadMessages > 9 ? "9+" : unreadMessages}
+                    </span>
+                  ) : null}
                 </Link>
               );
             })}

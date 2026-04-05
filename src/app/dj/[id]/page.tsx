@@ -26,8 +26,8 @@ import {
   type ReviewRow,
   starDistribution,
 } from "@/lib/dj-profile-helpers";
+import { StelVraagButton } from "@/components/messaging/stel-vraag-button";
 import { supabase } from "@/lib/supabase";
-import { AskDjModalHost, AskDjLauncherButton } from "./ask-dj-modal";
 import { BookingPanel } from "./booking-panel";
 import { DjHelpSection } from "./dj-help-section";
 import { DjProfileFaq } from "./dj-profile-faq";
@@ -213,10 +213,6 @@ export default async function DjProfilePage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-white font-sans text-neutral-900">
-      {djUserId ? (
-        <AskDjModalHost djUserId={djUserId} returnToPath={`/dj/${id}`} />
-      ) : null}
-
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black text-white shadow-sm">
         <div className="relative mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
           <Link
@@ -324,7 +320,10 @@ export default async function DjProfilePage({ params }: PageProps) {
           </div>
           <div className="flex shrink-0 flex-col gap-1 sm:items-end">
             {djUserId ? (
-              <AskDjLauncherButton className="rounded-xl bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-900" />
+              <StelVraagButton
+                djUserId={djUserId}
+                className="rounded-xl bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-900"
+              />
             ) : (
               <span className="rounded-xl bg-neutral-200 px-6 py-3 text-sm font-medium text-neutral-500">
                 Stel een vraag
@@ -529,6 +528,7 @@ export default async function DjProfilePage({ params }: PageProps) {
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <BookingPanel
               djId={id}
+              djUserId={djUserId || null}
               hourlyRate={hourly}
               djHomeCity={city}
               djOriginAddress={djOriginAddress}

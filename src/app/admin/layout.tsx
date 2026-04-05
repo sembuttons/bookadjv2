@@ -9,6 +9,7 @@ const nav = [
   { href: "/admin", label: "Dashboard", match: "exact" as const },
   { href: "/admin/verificaties", label: "DJ Verificaties", match: "prefix" as const },
   { href: "/admin/boekingen", label: "Boekingen", match: "prefix" as const },
+  { href: "/admin/berichten", label: "Berichten", match: "prefix" as const },
   { href: "/admin/gebruikers", label: "Gebruikers", match: "prefix" as const },
   { href: "/admin/geschillen", label: "Geschillen", match: "prefix" as const },
 ];

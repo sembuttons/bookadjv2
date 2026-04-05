@@ -5,13 +5,14 @@ import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
 import { ShieldCheck } from "lucide-react";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { DatePickerPopover } from "@/components/date-picker-popover";
-import { AskDjLauncherButton } from "./ask-dj-modal";
+import { StelVraagButton } from "@/components/messaging/stel-vraag-button";
 
 const KM_RATE = 0.42;
 const libraries: ("places")[] = ["places"];
 
 type Props = {
   djId: string;
+  djUserId?: string | null;
   hourlyRate: number;
   djHomeCity: string;
   /** Voor Distance Matrix: volledig adres of stad */
@@ -39,6 +40,7 @@ function TravelLine({
 
 function BookingPanelPlain({
   djId,
+  djUserId,
   hourlyRate,
   djHomeCity,
   responseTimeLabel = "Binnen 2 uur",
@@ -176,7 +178,16 @@ function BookingPanelPlain({
         >
           Boeking aanvragen
         </Link>
-        <AskDjLauncherButton className="mt-3 w-full rounded-xl border-2 border-neutral-900 bg-white py-3 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50" />
+        {djUserId ? (
+          <StelVraagButton
+            djUserId={djUserId}
+            className="mt-3 w-full rounded-xl border-2 border-neutral-900 bg-white py-3 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50"
+          />
+        ) : (
+          <span className="mt-3 block w-full rounded-xl border-2 border-neutral-200 py-3 text-center text-sm font-medium text-neutral-400">
+            Stel een vraag
+          </span>
+        )}
       </div>
 
       <div className="flex items-center gap-3 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-950 ring-1 ring-emerald-200">
@@ -222,6 +233,7 @@ function BookingPanelWithGoogle(p: Props) {
 
 function BookingPanelGoogleLoaded({
   djId,
+  djUserId,
   hourlyRate,
   djHomeCity,
   djOriginAddress,
@@ -405,7 +417,16 @@ function BookingPanelGoogleLoaded({
         >
           Boeking aanvragen
         </Link>
-        <AskDjLauncherButton className="mt-3 w-full rounded-xl border-2 border-neutral-900 bg-white py-3 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50" />
+        {djUserId ? (
+          <StelVraagButton
+            djUserId={djUserId}
+            className="mt-3 w-full rounded-xl border-2 border-neutral-900 bg-white py-3 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50"
+          />
+        ) : (
+          <span className="mt-3 block w-full rounded-xl border-2 border-neutral-200 py-3 text-center text-sm font-medium text-neutral-400">
+            Stel een vraag
+          </span>
+        )}
       </div>
 
       <div className="flex items-center gap-3 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-950 ring-1 ring-emerald-200">
