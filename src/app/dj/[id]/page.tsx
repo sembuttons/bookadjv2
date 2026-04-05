@@ -1,4 +1,12 @@
 import Link from "next/link";
+import {
+  BadgeCheck,
+  CircleDollarSign,
+  Headphones,
+  LayoutDashboard,
+  MapPin,
+  Check,
+} from "lucide-react";
 import { notFound } from "next/navigation";
 import {
   averageFromReviews,
@@ -19,7 +27,11 @@ import {
   starDistribution,
 } from "@/lib/dj-profile-helpers";
 import { supabase } from "@/lib/supabase";
+import { AskDjModalHost, AskDjLauncherButton } from "./ask-dj-modal";
 import { BookingPanel } from "./booking-panel";
+import { DjHelpSection } from "./dj-help-section";
+import { DjProfileFaq } from "./dj-profile-faq";
+import { DjUspGrid, type UspItem } from "./dj-usp-grid";
 import { MediaTabs } from "./media-tabs";
 
 export const dynamic = "force-dynamic";
@@ -36,14 +48,12 @@ function formatMemberSince(row: DjProfileRow): string {
   if (typeof c !== "string") return "—";
   const d = new Date(c);
   if (Number.isNaN(d.getTime())) return "—";
-  return d.toLocaleDateString("nl-NL", { month: "long", year: "numeric" });
-}
-
-function metaAcceptance(row: DjProfileRow): string {
-  const v = row.acceptance_rate ?? row.acceptance_percent;
-  if (typeof v === "number") return `${Math.round(v)}%`;
-  if (typeof v === "string" && v.trim()) return v.includes("%") ? v : `${v}%`;
-  return "98%";
+  const monthRaw = d.toLocaleDateString("nl-NL", { month: "long" });
+  const month =
+    monthRaw.charAt(0).toLocaleUpperCase("nl-NL") +
+    monthRaw.slice(1).toLowerCase();
+  const year = d.getFullYear();
+  return `Lid sinds ${month} ${year}`;
 }
 
 function metaResponse(row: DjProfileRow): string {
@@ -53,17 +63,96 @@ function metaResponse(row: DjProfileRow): string {
   return "Binnen 2 uur";
 }
 
-function StarBadge({ value }: { value: number }) {
-  const full = Math.min(5, Math.max(0, Math.round(value)));
+function StarSvg({ filled }: { filled: boolean }) {
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-black px-3 py-1 text-sm font-semibold text-white">
-      <span className="flex text-emerald-400" aria-hidden>
-        {Array.from({ length: 5 }, (_, i) => (
-          <span key={i}>{i < full ? "★" : "☆"}</span>
-        ))}
-      </span>
+    <svg
+      className={filled ? "h-3.5 w-3.5 text-amber-400" : "h-3.5 w-3.5 text-neutral-300"}
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden
+    >
+      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+    </svg>
+  );
+}
+
+function StarRow({ value, size = "md" }: { value: number; size?: "sm" | "md" }) {
+  const full = Math.min(5, Math.max(0, Math.round(value)));
+  const starClass =
+    size === "sm" ? "h-3 w-3" : "h-3.5 w-3.5";
+  return (
+    <span className="flex gap-0.5" aria-hidden>
+      {Array.from({ length: 5 }, (_, i) => (
+        <svg
+          key={i}
+          className={`${starClass} ${i < full ? "text-amber-400" : "text-neutral-300"}`}
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+      ))}
+    </span>
+  );
+}
+
+function StarBadge({ value }: { value: number }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-black px-3 py-1 text-sm font-semibold text-white">
+      <StarRow value={value} size="sm" />
       <span className="text-white">{value.toFixed(1)}</span>
     </span>
+  );
+}
+
+function parseCustomUsps(row: DjProfileRow): UspItem[] {
+  const raw = row.custom_usps;
+  if (raw == null) return [];
+  let arr: unknown;
+  if (Array.isArray(raw)) {
+    arr = raw;
+  } else if (typeof raw === "string") {
+    try {
+      arr = JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  } else {
+    return [];
+  }
+  if (!Array.isArray(arr)) return [];
+  const out: UspItem[] = [];
+  for (const u of arr) {
+    if (!u || typeof u !== "object") continue;
+    const o = u as Record<string, unknown>;
+    const title = typeof o.title === "string" ? o.title.trim() : "";
+    if (!title) continue;
+    out.push({
+      icon_name: typeof o.icon_name === "string" ? o.icon_name : "star",
+      title,
+      description:
+        typeof o.description === "string" ? o.description.trim() : "",
+    });
+  }
+  return out;
+}
+
+function ArrowLeftLink() {
+  return (
+    <svg
+      className="mr-1 inline h-4 w-4 -mt-0.5 align-middle"
+      viewBox="0 0 20 20"
+      fill="none"
+      aria-hidden
+    >
+      <path
+        d="M12.5 15L7.5 10l5-5"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
 
@@ -106,9 +195,28 @@ export default async function DjProfilePage({ params }: PageProps) {
       `Van intieme borrels tot volle dansvloeren: altijd afgestemd op jouw publiek en sfeer.`;
 
   const fn = firstName(name);
+  const homeAddr =
+    typeof profile.home_address === "string" ? profile.home_address.trim() : "";
+  const djOriginAddress = homeAddr || `${city}, Nederland`;
+  const djUserId =
+    typeof profile.user_id === "string" ? profile.user_id : "";
+  const customUsps = parseCustomUsps(profile);
+
+  const instagramUrl =
+    typeof profile.instagram_url === "string"
+      ? profile.instagram_url
+      : null;
+  const soundcloudUrl =
+    typeof profile.soundcloud_url === "string"
+      ? profile.soundcloud_url
+      : null;
 
   return (
     <div className="min-h-screen bg-white font-sans text-neutral-900">
+      {djUserId ? (
+        <AskDjModalHost djUserId={djUserId} returnToPath={`/dj/${id}`} />
+      ) : null}
+
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black text-white shadow-sm">
         <div className="relative mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
           <Link
@@ -149,7 +257,6 @@ export default async function DjProfilePage({ params }: PageProps) {
       </header>
 
       <div className="mx-auto max-w-[1400px] px-4 pb-16 pt-6 sm:px-6 lg:px-8">
-        {/* Gallery */}
         <div className="relative grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-3">
           <div className="relative flex min-h-[220px] items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-neutral-800 via-neutral-900 to-black lg:min-h-[420px]">
             <button
@@ -182,52 +289,47 @@ export default async function DjProfilePage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Name row + CTA */}
         <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-          <div className="min-w-0 space-y-4">
+          <div className="min-w-0 space-y-3">
             <div className="flex flex-wrap items-center gap-3">
               <h1 className="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
                 {name}
               </h1>
-              {isVerifiedProfile(profile) ? (
-                <span className="rounded-full bg-emerald-500 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-white">
-                  Geverifieerd
-                </span>
-              ) : null}
               <StarBadge value={displayRating} />
             </div>
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-neutral-600">
+
+            {isVerifiedProfile(profile) ? (
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                <Check className="h-3.5 w-3.5 stroke-[3]" aria-hidden />
+                Geverifieerde DJ
+              </div>
+            ) : null}
+
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-neutral-600">
               <span className="inline-flex items-center gap-1.5">
-                <span className="text-neutral-400" aria-hidden>
-                  📍
-                </span>
+                <MapPin className="h-4 w-4 shrink-0 text-neutral-500" aria-hidden />
                 {city}
               </span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {genres.length ? (
-                genres.map((g) => (
-                  <span
-                    key={g}
-                    className="rounded-full bg-neutral-900 px-3 py-1 text-xs font-medium text-white"
-                  >
-                    {g}
-                  </span>
-                ))
-              ) : (
-                <span className="text-sm text-neutral-500">
-                  Genres volgen op profiel
-                </span>
-              )}
+              {genres.length > 0
+                ? genres.map((g) => (
+                    <span
+                      key={g}
+                      className="rounded-full bg-neutral-900 px-3 py-1 text-xs font-medium text-white"
+                    >
+                      {g}
+                    </span>
+                  ))
+                : null}
             </div>
           </div>
           <div className="flex shrink-0 flex-col gap-1 sm:items-end">
-            <button
-              type="button"
-              className="rounded-xl bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-900"
-            >
-              Stel een vraag
-            </button>
+            {djUserId ? (
+              <AskDjLauncherButton className="rounded-xl bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-900" />
+            ) : (
+              <span className="rounded-xl bg-neutral-200 px-6 py-3 text-sm font-medium text-neutral-500">
+                Stel een vraag
+              </span>
+            )}
             <p className="text-xs text-neutral-500 sm:text-right">
               Reageert binnen 2 uur
             </p>
@@ -235,9 +337,12 @@ export default async function DjProfilePage({ params }: PageProps) {
         </div>
 
         <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_minmax(280px,360px)] lg:gap-12 lg:items-start">
-          {/* LEFT */}
           <div className="min-w-0 space-y-14">
-            <MediaTabs djFirstName={fn} />
+            <MediaTabs
+              djFirstName={fn}
+              instagramUrl={instagramUrl}
+              soundcloudUrl={soundcloudUrl}
+            />
 
             <section aria-labelledby="over-heading">
               <h2
@@ -283,92 +388,90 @@ export default async function DjProfilePage({ params }: PageProps) {
               </ul>
             </section>
 
-            <section aria-labelledby="reviews-heading">
-              <h2
-                id="reviews-heading"
-                className="text-xl font-bold text-neutral-900 sm:text-2xl"
-              >
-                Reviews
-              </h2>
-              {reviews.length === 0 ? (
-                <p className="mt-4 text-sm text-neutral-600">Nog geen reviews.</p>
-              ) : (
-                <>
-                  <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-start">
-                    <div className="flex shrink-0 flex-col items-center rounded-2xl border border-neutral-200 bg-white px-8 py-6 lg:items-start">
-                      <p className="text-5xl font-bold text-neutral-900">
-                        {displayRating.toFixed(1)}
-                      </p>
-                      <p className="mt-1 text-sm text-neutral-500">
-                        op basis van {totalReviews}{" "}
-                        {totalReviews === 1 ? "beoordeling" : "beoordelingen"}
-                      </p>
-                    </div>
-                    <div className="min-w-0 flex-1 space-y-2">
-                      {([5, 4, 3, 2, 1] as const).map((star) => {
-                        const count = dist[star];
-                        const pct = Math.round((count / maxBar) * 100);
-                        return (
-                          <div
-                            key={star}
-                            className="flex items-center gap-3 text-sm"
-                          >
-                            <span className="w-8 text-neutral-600">
-                              {star} ★
-                            </span>
-                            <div className="h-2 flex-1 overflow-hidden rounded-full bg-neutral-100">
-                              <div
-                                className="h-full rounded-full bg-emerald-500"
-                                style={{ width: `${pct}%` }}
-                              />
-                            </div>
-                            <span className="w-8 text-right text-neutral-500">
-                              {count}
-                            </span>
-                          </div>
-                        );
-                      })}
-                    </div>
+            <DjUspGrid stageName={displayForBio} items={customUsps} />
+
+            {reviews.length > 0 ? (
+              <section aria-labelledby="reviews-heading">
+                <h2
+                  id="reviews-heading"
+                  className="text-xl font-bold text-neutral-900 sm:text-2xl"
+                >
+                  Reviews
+                </h2>
+                <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-start">
+                  <div className="flex shrink-0 flex-col items-center rounded-2xl border border-neutral-200 bg-white px-8 py-6 lg:items-start">
+                    <p className="text-5xl font-bold text-neutral-900">
+                      {displayRating.toFixed(1)}
+                    </p>
+                    <p className="mt-1 text-sm text-neutral-500">
+                      op basis van {totalReviews}{" "}
+                      {totalReviews === 1 ? "beoordeling" : "beoordelingen"}
+                    </p>
                   </div>
-                  <div className="mt-8 -mx-4 flex gap-4 overflow-x-auto px-4 pb-2 snap-x snap-mandatory sm:mx-0 sm:px-0">
-                    {reviews.map((r, i) => {
-                      const rid =
-                        typeof r.id === "string" || typeof r.id === "number"
-                          ? String(r.id)
-                          : `r-${i}`;
-                      const dt = getReviewDate(r);
+                  <div className="min-w-0 flex-1 space-y-2">
+                    {([5, 4, 3, 2, 1] as const).map((star) => {
+                      const count = dist[star];
+                      const pct = Math.round((count / maxBar) * 100);
                       return (
-                        <article
-                          key={rid}
-                          className="min-w-[min(100%,280px)] max-w-xs shrink-0 snap-start rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm"
+                        <div
+                          key={star}
+                          className="flex items-center gap-3 text-sm"
                         >
-                          <div className="flex items-center justify-between gap-2">
-                            <p className="font-semibold text-neutral-900">
-                              {getReviewAuthor(r)}
-                            </p>
-                            <span className="text-amber-500">
-                              {"★".repeat(Math.round(getReviewRating(r)))}
-                            </span>
+                          <span className="flex w-14 items-center gap-1 text-neutral-600">
+                            {star}
+                            <StarSvg filled />
+                          </span>
+                          <div className="h-2 flex-1 overflow-hidden rounded-full bg-neutral-100">
+                            <div
+                              className="h-full rounded-full bg-emerald-500"
+                              style={{ width: `${pct}%` }}
+                            />
                           </div>
-                          {dt ? (
-                            <p className="mt-1 text-xs text-neutral-500">
-                              {dt.toLocaleDateString("nl-NL", {
-                                day: "numeric",
-                                month: "long",
-                                year: "numeric",
-                              })}
-                            </p>
-                          ) : null}
-                          <p className="mt-3 text-sm leading-relaxed text-neutral-700">
-                            {getReviewBody(r) || "—"}
-                          </p>
-                        </article>
+                          <span className="w-8 text-right text-neutral-500">
+                            {count}
+                          </span>
+                        </div>
                       );
                     })}
                   </div>
-                </>
-              )}
-            </section>
+                </div>
+                <div className="mt-8 -mx-4 flex gap-4 overflow-x-auto px-4 pb-2 snap-x snap-mandatory sm:mx-0 sm:px-0">
+                  {reviews.map((r, i) => {
+                    const rid =
+                      typeof r.id === "string" || typeof r.id === "number"
+                        ? String(r.id)
+                        : `r-${i}`;
+                    const dt = getReviewDate(r);
+                    const rating = Math.round(getReviewRating(r));
+                    return (
+                      <article
+                        key={rid}
+                        className="min-w-[min(100%,280px)] max-w-xs shrink-0 snap-start rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="font-semibold text-neutral-900">
+                            {getReviewAuthor(r)}
+                          </p>
+                          <StarRow value={rating} size="sm" />
+                        </div>
+                        {dt ? (
+                          <p className="mt-1 text-xs text-neutral-500">
+                            {dt.toLocaleDateString("nl-NL", {
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                            })}
+                          </p>
+                        ) : null}
+                        <p className="mt-3 text-sm leading-relaxed text-neutral-700">
+                          {getReviewBody(r) || "—"}
+                        </p>
+                      </article>
+                    );
+                  })}
+                </div>
+              </section>
+            ) : null}
 
             <section aria-labelledby="trust-heading">
               <h2
@@ -380,110 +483,56 @@ export default async function DjProfilePage({ params }: PageProps) {
               <ul className="mt-6 grid gap-4 sm:grid-cols-2">
                 {[
                   {
-                    icon: "🛡️",
-                    t: "Betalingsbescherming",
-                    d: "Je betaling loopt veilig via bookadj tot na je evenement.",
+                    Icon: CircleDollarSign,
+                    t: "Jij betaalt nooit voor niets",
+                    d: "Kaart pas belast bij acceptatie. Geen reactie? Volledig terugbetaald.",
                   },
                   {
-                    icon: "✓",
-                    t: "Geverifieerd",
-                    d: "DJ’s op het platform worden gecontroleerd.",
+                    Icon: BadgeCheck,
+                    t: "Elke DJ is geverifieerd",
+                    d: "ID-controle, KVK-verificatie en Stripe KYC voordat een DJ live gaat.",
                   },
                   {
-                    icon: "🎧",
-                    t: "Vervanger",
-                    d: "Bij no-show helpen we met een passende vervanging waar mogelijk.",
+                    Icon: Headphones,
+                    t: "Wij staan achter elke boeking",
+                    d: "DJ annuleert? Wij regelen een vervanger of betalen je volledig terug.",
                   },
                   {
-                    icon: "📋",
-                    t: "Alles op één plek",
-                    d: "Aanvraag, chat en betaling overzichtelijk bij elkaar.",
+                    Icon: LayoutDashboard,
+                    t: "Alles op één plek, altijd veilig",
+                    d: "Betaling, communicatie en boeking via één beveiligd platform.",
                   },
-                ].map((x) => (
+                ].map(({ Icon, t, d }) => (
                   <li
-                    key={x.t}
+                    key={t}
                     className="flex gap-4 rounded-2xl border border-neutral-200 bg-neutral-50 p-5"
                   >
-                    <span className="text-2xl" aria-hidden>
-                      {x.icon}
-                    </span>
+                    <Icon
+                      className="h-8 w-8 shrink-0 text-neutral-900"
+                      strokeWidth={1.5}
+                      aria-hidden
+                    />
                     <div>
-                      <p className="font-semibold text-neutral-900">{x.t}</p>
-                      <p className="mt-1 text-sm text-neutral-600">{x.d}</p>
+                      <p className="font-semibold text-neutral-900">{t}</p>
+                      <p className="mt-1 text-sm text-neutral-600">{d}</p>
                     </div>
                   </li>
                 ))}
               </ul>
             </section>
 
-            <section aria-labelledby="faq-heading">
-              <h2
-                id="faq-heading"
-                className="text-xl font-bold text-neutral-900 sm:text-2xl"
-              >
-                Veelgestelde vragen
-              </h2>
-              <div className="mt-4 divide-y divide-neutral-200 rounded-2xl border border-neutral-200 bg-white px-4">
-                <details className="group py-4">
-                  <summary className="cursor-pointer list-none font-semibold text-neutral-900 [&::-webkit-details-marker]:hidden">
-                    Hoe zit het met annuleren?
-                  </summary>
-                  <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-                    Annuleringsvoorwaarden staan in je offerte. Binnen de
-                    afgesproken termijn kun je kosteloos of tegen een vast
-                    percentage annuleren — afhankelijk van hoe dichtbij het
-                    evenement is.
-                  </p>
-                </details>
-                <details className="group py-4">
-                  <summary className="cursor-pointer list-none font-semibold text-neutral-900 [&::-webkit-details-marker]:hidden">
-                    Wanneer betaal ik?
-                  </summary>
-                  <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-                    Je betaalt veilig via bookadj. Het bedrag wordt pas definitief
-                    verrekend na acceptatie door de DJ en volgens het
-                    uitbetalingsmoment na je evenement.
-                  </p>
-                </details>
-                <details className="group py-4">
-                  <summary className="cursor-pointer list-none font-semibold text-neutral-900 [&::-webkit-details-marker]:hidden">
-                    Kan ik verzoeknummers doorgeven?
-                  </summary>
-                  <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-                    Ja. Na boeking bespreek je je wishlist en &apos;do not
-                    play&apos;-lijst rechtstreeks met de DJ.
-                  </p>
-                </details>
-                <details className="group py-4">
-                  <summary className="cursor-pointer list-none font-semibold text-neutral-900 [&::-webkit-details-marker]:hidden">
-                    Is alle apparatuur inbegrepen?
-                  </summary>
-                  <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-                    Standaard is professionele DJ-gear inbegrepen. Extra licht of
-                    geluid voor grote venues stem je vooraf af.
-                  </p>
-                </details>
-                <details className="group py-4">
-                  <summary className="cursor-pointer list-none font-semibold text-neutral-900 [&::-webkit-details-marker]:hidden">
-                    Wat als de DJ niet komt opdagen?
-                  </summary>
-                  <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-                    Bij ernstige problemen helpt bookadj met vervanging of
-                    terugbetaling volgens onze voorwaarden en Stripe-bescherming.
-                  </p>
-                </details>
-              </div>
-            </section>
+            <DjHelpSection />
+
+            <DjProfileFaq />
           </div>
 
-          {/* RIGHT sticky */}
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <BookingPanel
               djId={id}
               hourlyRate={hourly}
               djHomeCity={city}
+              djOriginAddress={djOriginAddress}
               responseTimeLabel={metaResponse(profile)}
-              acceptanceRateLabel={metaAcceptance(profile)}
               memberSinceLabel={formatMemberSince(profile)}
             />
           </aside>
@@ -492,9 +541,10 @@ export default async function DjProfilePage({ params }: PageProps) {
         <p className="mt-12 text-center">
           <Link
             href="/zoeken"
-            className="text-sm font-medium text-neutral-600 underline hover:text-neutral-900"
+            className="inline-flex items-center text-sm font-medium text-neutral-600 hover:text-neutral-900"
           >
-            ← Terug naar zoeken
+            <ArrowLeftLink />
+            Terug naar zoeken
           </Link>
         </p>
       </div>

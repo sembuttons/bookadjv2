@@ -2,8 +2,15 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { getCity, getGenres, getHourlyRate, getProfileRating, getReviewCount, getStageName } from "@/lib/dj-profile-helpers";
-import type { DjProfileRow } from "@/lib/dj-profile-helpers";
+import {
+  getCity,
+  getGenres,
+  getHourlyRate,
+  getProfileRating,
+  getReviewCount,
+  getStageName,
+  type DjProfileRow,
+} from "@/lib/dj-profile-helpers";
 import { supabase } from "@/lib/supabase";
 
 const FILTER_GENRES = [
@@ -16,7 +23,26 @@ const FILTER_GENRES = [
   "Latin",
 ] as const;
 
-type SortKey = "best" | "price_asc" | "price_desc" | "rating";
+const PRICE_SLIDER_MIN = 50;
+const PRICE_SLIDER_MAX = 350;
+const PRICE_STEP = 5;
+
+type SortKey = "best" | "price_asc" | "price_desc" | "rating" | "newest";
+
+const SORT_OPTIONS: { value: SortKey; label: string }[] = [
+  { value: "best", label: "Beste match" },
+  { value: "price_asc", label: "Prijs laag naar hoog" },
+  { value: "price_desc", label: "Prijs hoog naar laag" },
+  { value: "rating", label: "Hoogste beoordeling" },
+  { value: "newest", label: "Nieuwste eerst" },
+];
+
+function getCreatedAtMs(row: DjProfileRow): number {
+  const c = row.created_at;
+  if (typeof c !== "string") return 0;
+  const t = Date.parse(c);
+  return Number.isNaN(t) ? 0 : t;
+}
 
 function initials(name: string) {
   const s = name
@@ -26,6 +52,133 @@ function initials(name: string) {
     .map((p) => p[0]?.toUpperCase() ?? "")
     .join("");
   return s || "DJ";
+}
+
+function IconChevronDown({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden
+    >
+      <path
+        d="M4 6l4 4 4-4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconSparkleNew({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      width="14"
+      height="14"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden
+    >
+      <path
+        d="M8 1.5l1.2 3.5h3.8L10.2 8l1.2 3.5L8 10.5 4.6 11.5 5.8 8 2.5 5H6.2L8 1.5z"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinejoin="round"
+        fill="none"
+      />
+    </svg>
+  );
+}
+
+const rangeThumb =
+  "[&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:relative [&::-webkit-slider-thumb]:z-10 [&::-webkit-slider-thumb]:mt-[-6px] [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-grab [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:bg-black [&::-webkit-slider-thumb]:shadow-sm [&::-webkit-slider-thumb]:active:cursor-grabbing " +
+  "[&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-grab [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-black [&::-moz-range-thumb]:shadow-sm [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:active:cursor-grabbing";
+
+const rangeTrackTransparent =
+  "[&::-webkit-slider-runnable-track]:h-1 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-transparent " +
+  "[&::-moz-range-track]:h-1 [&::-moz-range-track]:rounded-full [&::-moz-range-track]:bg-transparent";
+
+function DualHourlyRateSlider({
+  minVal,
+  maxVal,
+  onMinChange,
+  onMaxChange,
+}: {
+  minVal: number;
+  maxVal: number;
+  onMinChange: (v: number) => void;
+  onMaxChange: (v: number) => void;
+}) {
+  const span = PRICE_SLIDER_MAX - PRICE_SLIDER_MIN;
+  const leftPct = ((minVal - PRICE_SLIDER_MIN) / span) * 100;
+  const widthPct = ((maxVal - minVal) / span) * 100;
+
+  const minZ = minVal > PRICE_SLIDER_MAX - maxVal ? 30 : 20;
+  const maxZ = minVal > PRICE_SLIDER_MAX - maxVal ? 20 : 30;
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between text-sm font-semibold text-neutral-900">
+        <span>{`€${minVal}`}</span>
+        <span>{`€${maxVal}`}</span>
+      </div>
+
+      <div className="relative h-10 pt-2">
+        <div
+          className="pointer-events-none absolute left-0 right-0 top-[calc(50%-2px)] h-px bg-neutral-200"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute top-[calc(50%-2px)] h-0.5 rounded-full bg-black"
+          style={{
+            left: `${leftPct}%`,
+            width: `${Math.max(widthPct, 0)}%`,
+          }}
+          aria-hidden
+        />
+
+        <input
+          type="range"
+          min={PRICE_SLIDER_MIN}
+          max={PRICE_SLIDER_MAX}
+          step={PRICE_STEP}
+          value={minVal}
+          onChange={(e) => {
+            const v = Number(e.target.value);
+            onMinChange(Math.min(v, maxVal - PRICE_STEP));
+          }}
+          className={`pointer-events-none absolute inset-x-0 top-1/2 w-full -translate-y-1/2 appearance-none bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 ${rangeTrackTransparent} ${rangeThumb}`}
+          style={{ zIndex: minZ }}
+          aria-label="Minimum uurtarief"
+        />
+        <input
+          type="range"
+          min={PRICE_SLIDER_MIN}
+          max={PRICE_SLIDER_MAX}
+          step={PRICE_STEP}
+          value={maxVal}
+          onChange={(e) => {
+            const v = Number(e.target.value);
+            onMaxChange(Math.max(v, minVal + PRICE_STEP));
+          }}
+          className={`pointer-events-none absolute inset-x-0 top-1/2 w-full -translate-y-1/2 appearance-none bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 ${rangeTrackTransparent} ${rangeThumb}`}
+          style={{ zIndex: maxZ }}
+          aria-label="Maximum uurtarief"
+        />
+      </div>
+
+      <div className="flex justify-between text-xs text-neutral-500">
+        <span>{`€${PRICE_SLIDER_MIN}`}</span>
+        <span>{`€${PRICE_SLIDER_MAX}`}</span>
+      </div>
+    </div>
+  );
 }
 
 export default function ZoekenPage() {
@@ -40,8 +193,8 @@ export default function ZoekenPage() {
   const [genreChecks, setGenreChecks] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(FILTER_GENRES.map((g) => [g, false])),
   );
-  const [priceMin, setPriceMin] = useState(0);
-  const [priceMax, setPriceMax] = useState(500);
+  const [priceMin, setPriceMin] = useState(PRICE_SLIDER_MIN);
+  const [priceMax, setPriceMax] = useState(PRICE_SLIDER_MAX);
   const [sort, setSort] = useState<SortKey>("best");
 
   useEffect(() => {
@@ -132,6 +285,8 @@ export default function ZoekenPage() {
         }
         case "rating":
           return getProfileRating(b) - getProfileRating(a);
+        case "newest":
+          return getCreatedAtMs(b) - getCreatedAtMs(a);
         case "best":
         default:
           return score(b) - score(a);
@@ -182,55 +337,29 @@ export default function ZoekenPage() {
         </ul>
       </fieldset>
 
-      <div className="space-y-4 border-b border-neutral-200 py-6">
-        <h2 className="text-sm font-semibold text-neutral-900">Uurtarief (€)</h2>
-        <label className="block text-xs text-neutral-500">
-          Minimum
-          <input
-            type="number"
-            min={0}
-            value={priceMin}
-            onChange={(e) =>
-              setPriceMin(Math.max(0, Number(e.target.value) || 0))
-            }
-            className="mt-1 w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm"
-          />
-        </label>
-        <label className="block text-xs text-neutral-500">
-          Maximum
-          <input
-            type="number"
-            min={0}
-            value={priceMax}
-            onChange={(e) =>
-              setPriceMax(Math.max(0, Number(e.target.value) || 0))
-            }
-            className="mt-1 w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm"
-          />
-        </label>
-      </div>
-
-      <div className="py-6">
-        <label className="block text-sm font-semibold text-neutral-900">
-          Sorteren
-        </label>
-        <select
-          value={sort}
-          onChange={(e) => setSort(e.target.value as SortKey)}
-          className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm"
-        >
-          <option value="best">Beste match</option>
-          <option value="price_asc">Prijs laag → hoog</option>
-          <option value="price_desc">Prijs hoog → laag</option>
-          <option value="rating">Beoordeling</option>
-        </select>
+      <div className="space-y-2 border-b border-neutral-200 py-6">
+        <h2 className="text-sm font-semibold text-neutral-900">
+          Uurtarief (€)
+        </h2>
+        <p className="text-xs text-neutral-500">
+          Toon DJ&apos;s met uurtarief binnen dit bereik. Profielen zonder
+          tarief blijven zichtbaar.
+        </p>
+        <DualHourlyRateSlider
+          minVal={priceMin}
+          maxVal={priceMax}
+          onMinChange={setPriceMin}
+          onMaxChange={setPriceMax}
+        />
       </div>
     </>
   );
 
+  const resultCount = filteredSorted.length;
+
   return (
     <div className="min-h-screen bg-white font-sans text-neutral-900">
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black text-white shadow-sm">
+      <header className="border-b border-white/10 bg-black text-white shadow-sm">
         <div className="relative mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
           <Link href="/" className="shrink-0 text-xl font-semibold tracking-tight">
             bookadj
@@ -320,7 +449,7 @@ export default function ZoekenPage() {
         </details>
 
         <aside className="hidden lg:block" aria-label="Filters">
-          <div className="sticky top-36 rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
+          <div className="rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
             <h2 className="mb-4 text-base font-bold">Filters</h2>
             {FilterBlock}
           </div>
@@ -332,6 +461,42 @@ export default function ZoekenPage() {
               {error}
             </p>
           ) : null}
+
+          {!loading && !error ? (
+            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-neutral-700">
+                <span className="font-semibold text-neutral-900">
+                  {resultCount}
+                </span>
+                {resultCount === 1
+                  ? " resultaat"
+                  : " resultaten"}
+              </p>
+              <div className="relative flex min-w-0 flex-1 items-center justify-end sm:max-w-md sm:flex-initial">
+                <label className="flex w-full cursor-pointer items-center gap-2 text-sm text-neutral-700 sm:w-auto">
+                  <span className="shrink-0 whitespace-nowrap">
+                    Sorteren op:
+                  </span>
+                  <span className="relative inline-flex min-w-0 flex-1 items-center sm:min-w-[220px]">
+                    <select
+                      value={sort}
+                      onChange={(e) => setSort(e.target.value as SortKey)}
+                      aria-label="Sorteer resultaten"
+                      className="w-full cursor-pointer appearance-none rounded-lg border border-neutral-200 bg-white py-2.5 pl-3 pr-10 text-sm font-medium text-neutral-900 shadow-sm transition-colors hover:border-neutral-300 focus:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-black/10"
+                    >
+                      {SORT_OPTIONS.map((o) => (
+                        <option key={o.value} value={o.value}>
+                          {o.label}
+                        </option>
+                      ))}
+                    </select>
+                    <IconChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
+                  </span>
+                </label>
+              </div>
+            </div>
+          ) : null}
+
           {loading ? (
             <p className="py-16 text-center text-neutral-600">Laden…</p>
           ) : !error && filteredSorted.length === 0 ? (
@@ -381,7 +546,10 @@ export default function ZoekenPage() {
                               ? `v.a. €${rate.toLocaleString("nl-NL")}/uur`
                               : "Tarief op aanvraag"}
                           </p>
-                          <span className="text-sm text-amber-500">★ Nieuw</span>
+                          <span className="inline-flex items-center gap-1 text-sm font-medium text-amber-600">
+                            <IconSparkleNew className="shrink-0 text-amber-500" />
+                            Nieuw
+                          </span>
                         </div>
                       </div>
                     </Link>
