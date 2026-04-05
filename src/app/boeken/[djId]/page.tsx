@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { Navbar } from "@/components/Navbar";
 import {
   getCity,
   getDisplayName,
@@ -68,7 +69,7 @@ export default function BoekenPage() {
       if (cancelled) return;
       if (!session) {
         router.replace(
-          `/auth?returnTo=${encodeURIComponent(`/boeken/${djId}`)}`,
+          `/auth?redirect=${encodeURIComponent(`/boeken/${djId}`)}`,
         );
         return;
       }
@@ -283,22 +284,17 @@ export default function BoekenPage() {
 
   return (
     <div className="min-h-screen bg-white font-sans text-neutral-900">
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black text-white shadow-sm">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <Link href="/" className="text-xl font-semibold tracking-tight">
-            bookadj
-          </Link>
-          <Link
-            href={`/dj/${encodeURIComponent(djId)}`}
-            className="text-sm font-medium text-white/90 hover:text-white"
-          >
-            Terug naar profiel
-          </Link>
-        </div>
-      </header>
-
+      <Navbar />
       <div className="border-b border-neutral-200 bg-neutral-50">
-        <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+        <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6">
+          <div className="mb-4 flex justify-end">
+            <Link
+              href={`/dj/${encodeURIComponent(djId)}`}
+              className="text-sm font-medium text-neutral-700 hover:text-neutral-900"
+            >
+              Terug naar profiel
+            </Link>
+          </div>
           <ol className="flex items-center justify-between gap-2 text-xs font-semibold sm:text-sm">
             <li className="flex flex-1 flex-col items-center gap-2 sm:flex-row sm:justify-center">
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-black text-white sm:h-10 sm:w-10">

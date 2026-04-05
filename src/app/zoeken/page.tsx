@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { Navbar } from "@/components/Navbar";
 import {
   getCity,
   getGenres,
@@ -124,11 +125,6 @@ function DualHourlyRateSlider({
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between text-sm font-semibold text-neutral-900">
-        <span>{`€${minVal}`}</span>
-        <span>{`€${maxVal}`}</span>
-      </div>
-
       <div className="relative h-10 pt-2">
         <div
           className="pointer-events-none absolute left-0 right-0 top-[calc(50%-2px)] h-px bg-neutral-200"
@@ -359,36 +355,10 @@ export default function ZoekenPage() {
 
   return (
     <div className="min-h-screen bg-white font-sans text-neutral-900">
-      <header className="border-b border-white/10 bg-black text-white shadow-sm">
-        <div className="relative mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
-          <Link href="/" className="shrink-0 text-xl font-semibold tracking-tight">
-            bookadj
-          </Link>
-          <nav className="order-last flex w-full justify-center gap-6 text-sm font-medium text-white/90 md:order-none md:absolute md:left-1/2 md:w-auto md:-translate-x-1/2 md:gap-8">
-            <Link href="/zoeken" className="hover:text-white">
-              DJ&apos;s vinden
-            </Link>
-            <Link href="/#hoe-het-werkt" className="hover:text-white">
-              Hoe het werkt
-            </Link>
-            <Link href="/#voor-djs" className="hover:text-white">
-              Voor DJ&apos;s
-            </Link>
-          </nav>
-          <div className="flex shrink-0 gap-3">
-            <Link href="/auth" className="text-sm font-medium text-white/90 hover:text-white">
-              Inloggen
-            </Link>
-            <Link
-              href="/auth?tab=aanmelden"
-              className="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600"
-            >
-              Aanmelden
-            </Link>
-          </div>
-        </div>
+      <Navbar />
 
-        <div className="border-t border-white/10 bg-white text-neutral-900">
+      <header className="border-b border-neutral-200 bg-white text-neutral-900 shadow-sm">
+        <div className="mx-auto max-w-[1600px]">
           <form
             onSubmit={handleZoeken}
             className="mx-auto flex max-w-[1600px] flex-col gap-4 px-4 py-4 sm:flex-row sm:flex-wrap sm:items-end sm:gap-4 sm:px-6 lg:px-8"

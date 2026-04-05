@@ -23,7 +23,7 @@ export function StelVraagButton({ djUserId, className, children }: Props) {
         const path = `/berichten/${encodeURIComponent(djUserId)}`;
         if (!session) {
           router.push(
-            `/auth?returnTo=${encodeURIComponent(path)}`,
+            `/auth?redirect=${encodeURIComponent(path)}`,
           );
           return;
         }

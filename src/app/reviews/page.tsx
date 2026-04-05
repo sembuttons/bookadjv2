@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { Navbar } from "@/components/Navbar";
 
 export default function ReviewsPage() {
   return (
-    <div className="min-h-screen bg-white px-4 py-16 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-2xl text-center">
+    <div className="min-h-screen bg-white">
+      <Navbar />
+      <div className="mx-auto max-w-2xl px-4 py-16 text-center sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold tracking-tight text-neutral-900">
           Reviews
         </h1>

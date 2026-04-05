@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Navbar } from "@/components/Navbar";
 import {
   getDisplayName,
   type DjProfileRow,
@@ -119,7 +120,7 @@ export default function BevestigingPage() {
       if (cancelled) return;
       if (!session) {
         router.replace(
-          `/auth?returnTo=${encodeURIComponent(`/bevestiging/${bookingId}`)}`,
+          `/auth?redirect=${encodeURIComponent(`/bevestiging/${bookingId}`)}`,
         );
         return;
       }
@@ -226,19 +227,7 @@ export default function BevestigingPage() {
 
   return (
     <div className="min-h-screen bg-white font-sans text-neutral-900">
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black text-white shadow-sm">
-        <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <Link href="/" className="text-xl font-semibold tracking-tight">
-            bookadj
-          </Link>
-          <Link
-            href="/dashboard/klant"
-            className="text-sm font-medium text-white/90 hover:text-white"
-          >
-            Dashboard
-          </Link>
-        </div>
-      </header>
+      <Navbar />
 
       {/* Alle stappen voltooid */}
       <div className="border-b border-neutral-200 bg-neutral-50">

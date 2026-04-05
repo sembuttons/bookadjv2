@@ -4,9 +4,8 @@ import {
   CircleDollarSign,
   Headphones,
   LayoutDashboard,
-  MapPin,
-  Check,
 } from "lucide-react";
+import { Navbar } from "@/components/Navbar";
 import { notFound } from "next/navigation";
 import {
   averageFromReviews,
@@ -43,7 +42,7 @@ function firstName(full: string) {
   return p || full;
 }
 
-function formatMemberSince(row: DjProfileRow): string {
+function formatSidebarMemberSince(row: DjProfileRow): string {
   const c = row.created_at ?? row.member_since;
   if (typeof c !== "string") return "—";
   const d = new Date(c);
@@ -53,7 +52,7 @@ function formatMemberSince(row: DjProfileRow): string {
     monthRaw.charAt(0).toLocaleUpperCase("nl-NL") +
     monthRaw.slice(1).toLowerCase();
   const year = d.getFullYear();
-  return `Lid sinds ${month} ${year}`;
+  return `${month} ${year}`;
 }
 
 function metaResponse(row: DjProfileRow): string {
@@ -92,15 +91,6 @@ function StarRow({ value, size = "md" }: { value: number; size?: "sm" | "md" }) 
           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
         </svg>
       ))}
-    </span>
-  );
-}
-
-function StarBadge({ value }: { value: number }) {
-  return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-black px-3 py-1 text-sm font-semibold text-white">
-      <StarRow value={value} size="sm" />
-      <span className="text-white">{value.toFixed(1)}</span>
     </span>
   );
 }
@@ -195,9 +185,6 @@ export default async function DjProfilePage({ params }: PageProps) {
       `Van intieme borrels tot volle dansvloeren: altijd afgestemd op jouw publiek en sfeer.`;
 
   const fn = firstName(name);
-  const homeAddr =
-    typeof profile.home_address === "string" ? profile.home_address.trim() : "";
-  const djOriginAddress = homeAddr || `${city}, Nederland`;
   const djUserId =
     typeof profile.user_id === "string" ? profile.user_id : "";
   const customUsps = parseCustomUsps(profile);
@@ -213,44 +200,7 @@ export default async function DjProfilePage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-white font-sans text-neutral-900">
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black text-white shadow-sm">
-        <div className="relative mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
-          <Link
-            href="/"
-            className="shrink-0 text-xl font-semibold tracking-tight text-white"
-          >
-            bookadj
-          </Link>
-          <nav
-            className="order-last flex w-full justify-center gap-6 text-sm font-medium text-white/90 md:order-none md:absolute md:left-1/2 md:w-auto md:-translate-x-1/2 md:gap-8"
-            aria-label="Hoofdnavigatie"
-          >
-            <Link href="/zoeken" className="hover:text-white">
-              DJ&apos;s vinden
-            </Link>
-            <Link href="/#hoe-het-werkt" className="hover:text-white">
-              Hoe het werkt
-            </Link>
-            <Link href="/#voor-djs" className="hover:text-white">
-              Voor DJ&apos;s
-            </Link>
-          </nav>
-          <div className="flex shrink-0 gap-3">
-            <Link
-              href="/auth"
-              className="text-sm font-medium text-white/90 hover:text-white"
-            >
-              Inloggen
-            </Link>
-            <Link
-              href="/auth?tab=aanmelden"
-              className="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600"
-            >
-              Aanmelden
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Navbar />
 
       <div className="mx-auto max-w-[1400px] px-4 pb-16 pt-6 sm:px-6 lg:px-8">
         <div className="relative grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-3">
@@ -287,43 +237,77 @@ export default async function DjProfilePage({ params }: PageProps) {
 
         <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0 space-y-3">
-            <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
-                {name}
-              </h1>
-              <StarBadge value={displayRating} />
-            </div>
+            <h1 className="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
+              {name}
+            </h1>
 
             {isVerifiedProfile(profile) ? (
               <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
-                <Check className="h-3.5 w-3.5 stroke-[3]" aria-hidden />
+                <svg
+                  className="h-3.5 w-3.5 shrink-0"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  aria-hidden
+                >
+                  <path
+                    d="M5 10l3 3 7-7"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
                 Geverifieerde DJ
               </div>
             ) : null}
 
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-neutral-600">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm font-medium text-[#111110]">
               <span className="inline-flex items-center gap-1.5">
-                <MapPin className="h-4 w-4 shrink-0 text-neutral-500" aria-hidden />
+                <svg
+                  className="h-4 w-4 shrink-0 text-[#111110]"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden
+                >
+                  <path
+                    d="M12 21s7-4.35 7-10a7 7 0 10-14 0c0 5.65 7 10 7 10z"
+                    stroke="currentColor"
+                    strokeWidth="1.75"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <circle
+                    cx="12"
+                    cy="11"
+                    r="2.25"
+                    stroke="currentColor"
+                    strokeWidth="1.75"
+                  />
+                </svg>
                 {city}
               </span>
-              {genres.length > 0
-                ? genres.map((g) => (
-                    <span
-                      key={g}
-                      className="rounded-full bg-neutral-900 px-3 py-1 text-xs font-medium text-white"
-                    >
-                      {g}
-                    </span>
-                  ))
-                : null}
             </div>
+            {genres.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {genres.map((g) => (
+                  <span
+                    key={g}
+                    className="rounded-full bg-neutral-900 px-3 py-1 text-xs font-medium text-white"
+                  >
+                    {g}
+                  </span>
+                ))}
+              </div>
+            ) : null}
           </div>
           <div className="flex shrink-0 flex-col gap-1 sm:items-end">
             {djUserId ? (
               <StelVraagButton
                 djUserId={djUserId}
                 className="rounded-xl bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-900"
-              />
+              >
+                Stel {fn} een vraag
+              </StelVraagButton>
             ) : (
               <span className="rounded-xl bg-neutral-200 px-6 py-3 text-sm font-medium text-neutral-500">
                 Stel een vraag
@@ -530,10 +514,9 @@ export default async function DjProfilePage({ params }: PageProps) {
               djId={id}
               djUserId={djUserId || null}
               hourlyRate={hourly}
-              djHomeCity={city}
-              djOriginAddress={djOriginAddress}
+              contactButtonLabel={`Stel ${fn} een vraag`}
               responseTimeLabel={metaResponse(profile)}
-              memberSinceLabel={formatMemberSince(profile)}
+              memberSinceLabel={formatSidebarMemberSince(profile)}
             />
           </aside>
         </div>

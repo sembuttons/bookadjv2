@@ -1,7 +1,27 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ExternalLink } from "lucide-react";
+
+function IconExternalLink({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+    >
+      <path
+        d="M14 3h7v7M10 14L21 3M21 14v6a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h6"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 type TabKey = "instagram" | "soundcloud";
 
@@ -81,7 +101,7 @@ export function MediaTabs({
           className="inline-flex items-center gap-2 text-sm font-semibold text-neutral-900 underline-offset-4 hover:underline"
         >
           {current.label} openen
-          <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
+          <IconExternalLink className="h-4 w-4 shrink-0" />
         </a>
       </div>
 

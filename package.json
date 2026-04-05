@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@react-google-maps/api": "^2.20.8",
     "@stripe/react-stripe-js": "^6.1.0",
     "@stripe/stripe-js": "^9.0.1",
     "@supabase/ssr": "^0.10.0",

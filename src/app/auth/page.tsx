@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Navbar } from "@/components/Navbar";
 import { supabase } from "@/lib/supabase";
 
 type Tab = "login" | "signup";
@@ -30,6 +30,9 @@ export default function AuthPage() {
     if (params.get("tab") === "aanmelden") {
       setTab("signup");
     }
+    const r = params.get("role")?.toLowerCase();
+    if (r === "dj") setRole("dj");
+    if (r === "klant" || r === "customer") setRole("klant");
   }, []);
 
   async function handleLogin(e: React.FormEvent) {
@@ -46,14 +49,44 @@ export default function AuthPage() {
       setError(signError.message);
       return;
     }
-    const returnTo = new URLSearchParams(window.location.search).get(
-      "returnTo",
-    );
-    const safe =
-      returnTo && returnTo.startsWith("/") && !returnTo.startsWith("//")
-        ? returnTo
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session?.user) {
+      setError("Kon sessie niet starten. Probeer opnieuw.");
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const redirectRaw = params.get("redirect") ?? params.get("returnTo");
+    const redirectTo =
+      redirectRaw &&
+      redirectRaw.startsWith("/") &&
+      !redirectRaw.startsWith("//")
+        ? redirectRaw
         : null;
-    router.push(safe ?? "/dashboard");
+
+    if (redirectTo) {
+      router.push(redirectTo);
+      router.refresh();
+      return;
+    }
+
+    const { data: row } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", session.user.id)
+      .maybeSingle();
+    const dbRole = (row as { role?: string } | null)?.role?.toLowerCase();
+    const metaRole = (
+      session.user.user_metadata?.role as string | undefined
+    )?.toLowerCase();
+    const effective = dbRole || metaRole;
+
+    if (effective === "admin") router.push("/admin");
+    else if (effective === "dj") router.push("/dashboard/dj");
+    else router.push("/dashboard/klant");
     router.refresh();
   }
 
@@ -105,55 +138,7 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black text-white shadow-sm">
-        <div className="relative mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
-          <Link
-            href="/"
-            className="shrink-0 text-xl font-semibold tracking-tight text-white"
-          >
-            bookadj
-          </Link>
-
-          <nav
-            className="order-last flex w-full justify-center gap-6 text-sm font-medium text-white/90 md:order-none md:absolute md:left-1/2 md:w-auto md:-translate-x-1/2 md:gap-8"
-            aria-label="Hoofdnavigatie"
-          >
-            <Link
-              href="/#zoeken"
-              className="transition-colors hover:text-white"
-            >
-              DJ&apos;s vinden
-            </Link>
-            <Link
-              href="/#hoe-het-werkt"
-              className="transition-colors hover:text-white"
-            >
-              Hoe het werkt
-            </Link>
-            <Link
-              href="/#voor-djs"
-              className="transition-colors hover:text-white"
-            >
-              Voor DJ&apos;s
-            </Link>
-          </nav>
-
-          <div className="flex shrink-0 items-center gap-3">
-            <Link
-              href="/auth"
-              className="text-sm font-medium text-white transition-colors hover:text-white"
-            >
-              Inloggen
-            </Link>
-            <Link
-              href="/auth?tab=aanmelden"
-              className="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-600"
-            >
-              Aanmelden
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Navbar />
 
       <main className="mx-auto max-w-md px-4 py-12 sm:px-6 lg:px-8">
         <h1 className="text-center text-2xl font-bold tracking-tight text-neutral-900">

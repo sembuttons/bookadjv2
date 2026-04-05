@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { Navbar } from "@/components/Navbar";
 import { supabase } from "@/lib/supabase";
 
 const sidebarLinks = [
@@ -116,32 +117,7 @@ export default function KlantDashboardLayout({
 
   return (
     <div className="min-h-screen bg-white font-sans text-neutral-900">
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black text-white shadow-sm">
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
-          <Link
-            href="/"
-            className="shrink-0 text-xl font-semibold tracking-tight text-white"
-          >
-            bookadj
-          </Link>
-          <div className="flex min-w-0 items-center gap-3 sm:gap-4">
-            <span
-              className="hidden truncate text-sm text-white/80 sm:block"
-              title={userEmail}
-            >
-              {userEmail}
-            </span>
-            <button
-              type="button"
-              onClick={handleLogout}
-              disabled={loggingOut}
-              className="shrink-0 rounded-lg border border-white/25 bg-transparent px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-white/10 disabled:opacity-50"
-            >
-              {loggingOut ? "Bezig…" : "Uitloggen"}
-            </button>
-          </div>
-        </div>
-      </header>
+      <Navbar />
 
       <div className="mx-auto flex max-w-[1600px] flex-col md:flex-row">
         <aside className="border-b border-neutral-200 bg-neutral-50 md:w-56 md:shrink-0 md:border-b-0 md:border-r md:border-neutral-200 md:bg-white">
