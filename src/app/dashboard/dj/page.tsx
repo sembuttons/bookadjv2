@@ -144,13 +144,13 @@ export default function DjDashboardPage() {
     const [pendingRes, confirmedRes] = await Promise.all([
       supabase
         .from("bookings")
-        .select("*, users(full_name, email)")
+        .select("*, users!bookings_customer_id_fkey(full_name, email)")
         .eq("dj_id", djId)
         .eq("status", "pending")
         .order("created_at", { ascending: false }),
       supabase
         .from("bookings")
-        .select("*, users(full_name, email)")
+        .select("*, users!bookings_customer_id_fkey(full_name, email)")
         .eq("dj_id", djId)
         .eq("status", "confirmed")
         .order("created_at", { ascending: false }),

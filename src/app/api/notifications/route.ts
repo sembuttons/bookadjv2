@@ -4,8 +4,7 @@ import { supabaseAdmin } from "@/lib/supabase-server";
 
 const resendApiKey = process.env.RESEND_API_KEY;
 const defaultFrom =
-  process.env.RESEND_FROM_EMAIL ??
-  "bookadj <noreply@bookadjv2.vercel.app>";
+  process.env.RESEND_FROM_EMAIL || "bookadj <onboarding@resend.dev>";
 
 const NOTIFICATION_TYPES = [
   "booking_requested",
@@ -80,7 +79,9 @@ export async function POST(req: Request) {
 
   const { data: booking, error: bookingError } = await supabaseAdmin
     .from("bookings")
-    .select("*, users(email, full_name), dj_profiles(stage_name, city)")
+    .select(
+      "*, users!bookings_customer_id_fkey(email, full_name), dj_profiles(stage_name, city)",
+    )
     .eq("id", bookingId)
     .single();
 
