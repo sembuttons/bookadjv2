@@ -190,6 +190,26 @@ export default function DjDashboardPage() {
         setLoadError(error.message);
         return;
       }
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session?.access_token) {
+        try {
+          await fetch("/api/notifications", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${session.access_token}`,
+            },
+            body: JSON.stringify({
+              type: "booking_confirmed",
+              bookingId,
+            }),
+          });
+        } catch {
+          /* e-mailfout blokkeert acceptatie niet */
+        }
+      }
       await loadData();
     },
     [djProfileId, loadData],
@@ -209,6 +229,26 @@ export default function DjDashboardPage() {
         setLoadError(error.message);
         return;
       }
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session?.access_token) {
+        try {
+          await fetch("/api/notifications", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${session.access_token}`,
+            },
+            body: JSON.stringify({
+              type: "booking_declined",
+              bookingId,
+            }),
+          });
+        } catch {
+          /* e-mailfout blokkeert afwijzen niet */
+        }
+      }
       await loadData();
     },
     [djProfileId, loadData],
@@ -223,9 +263,7 @@ export default function DjDashboardPage() {
   if (noProfile) {
     return (
       <div className="rounded-2xl border border-neutral-200 bg-white p-8 text-center shadow-sm">
-        <p className="text-neutral-800">
-          Je hebt nog geen DJ profiel. Maak er een aan om boekingen te ontvangen.
-        </p>
+        <p className="text-lg font-semibold text-neutral-900">Nog geen DJ profiel</p>
         <Link
           href="/dashboard/dj/profiel-aanmaken"
           className="mt-6 inline-flex rounded-xl bg-black px-5 py-3 text-sm font-bold text-white hover:bg-neutral-900"
@@ -237,7 +275,7 @@ export default function DjDashboardPage() {
   }
 
   return (
-    <div className="space-y-14">
+    <div className="space-y-14 bg-white">
       {loadError ? (
         <p
           className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"

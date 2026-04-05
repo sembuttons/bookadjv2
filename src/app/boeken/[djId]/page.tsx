@@ -218,6 +218,24 @@ export default function BoekenPage() {
         return;
       }
 
+      if (session.access_token) {
+        try {
+          await fetch("/api/notifications", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${session.access_token}`,
+            },
+            body: JSON.stringify({
+              type: "booking_requested",
+              bookingId,
+            }),
+          });
+        } catch {
+          /* e-mailfout blokkeert doorsturen niet */
+        }
+      }
+
       router.push(`/bevestiging/${bookingId}`);
       router.refresh();
     },

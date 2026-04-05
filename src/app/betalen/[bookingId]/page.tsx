@@ -1,13 +1,28 @@
 "use client";
 
+import {
+  Elements,
+  PaymentElement,
+  useElements,
+  useStripe,
+} from "@stripe/react-stripe-js";
+import type { PaymentIntent, StripeElementsOptions } from "@stripe/stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   getDisplayName,
   type DjProfileRow,
 } from "@/lib/dj-profile-helpers";
 import { supabase } from "@/lib/supabase";
+
+const stripePublishableKey =
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "";
+
+const stripePromise = stripePublishableKey
+  ? loadStripe(stripePublishableKey)
+  : null;
 
 type BookingRow = Record<string, unknown> & { id: string };
 
@@ -33,6 +48,92 @@ function formatEventDate(iso: string | undefined): string {
   });
 }
 
+function formatEuroFromCents(cents: number | null | undefined): string {
+  if (typeof cents !== "number" || Number.isNaN(cents)) return "€0";
+  const euros = cents / 100;
+  return `€${euros.toLocaleString("nl-NL", {
+    minimumFractionDigits: Number.isInteger(euros) ? 0 : 2,
+    maximumFractionDigits: 2,
+  })}`;
+}
+
+function totalCents(booking: BookingRow | null): number {
+  if (!booking) return 0;
+  const t = booking.total_amount;
+  if (typeof t === "number" && Number.isFinite(t)) return Math.round(t);
+  if (typeof t === "string") {
+    const n = parseFloat(t);
+    return Number.isFinite(n) ? Math.round(n) : 0;
+  }
+  return 0;
+}
+
+function PaymentForm({
+  bookingId,
+  onPaid,
+  onError,
+}: {
+  bookingId: string;
+  onPaid: (pi: PaymentIntent) => Promise<void>;
+  onError: (msg: string | null) => void;
+}) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [processing, setProcessing] = useState(false);
+  const [localError, setLocalError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!stripe || !elements) return;
+    setProcessing(true);
+    setLocalError(null);
+    onError(null);
+
+    const { error, paymentIntent } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: `${window.location.origin}/betalen/${bookingId}`,
+      },
+      redirect: "if_required",
+    });
+
+    setProcessing(false);
+
+    if (error) {
+      const msg =
+        error.message ?? "Betaling mislukt. Probeer het opnieuw of kies een andere betaalmethode.";
+      setLocalError(msg);
+      onError(msg);
+      return;
+    }
+
+    if (paymentIntent?.status === "succeeded") {
+      await onPaid(paymentIntent);
+    }
+  };
+
+  return (
+    <form onSubmit={(e) => void handleSubmit(e)} className="space-y-6">
+      <PaymentElement />
+      {localError ? (
+        <p
+          className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"
+          role="alert"
+        >
+          {localError}
+        </p>
+      ) : null}
+      <button
+        type="submit"
+        disabled={!stripe || processing}
+        className="w-full rounded-xl bg-black py-3.5 text-sm font-bold text-white hover:bg-neutral-900 disabled:opacity-50"
+      >
+        {processing ? "Bezig met betalen…" : "Betaal nu"}
+      </button>
+    </form>
+  );
+}
+
 export default function BetalenPage() {
   const router = useRouter();
   const params = useParams();
@@ -41,19 +142,91 @@ export default function BetalenPage() {
     typeof bookingIdRaw === "string" ? bookingIdRaw : bookingIdRaw?.[0] ?? "";
 
   const [authReady, setAuthReady] = useState(false);
+  const [sessionUserId, setSessionUserId] = useState<string | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [booking, setBooking] = useState<BookingRow | null>(null);
   const [dj, setDj] = useState<DjProfileRow | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
 
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiry, setExpiry] = useState("");
-  const [cvv, setCvv] = useState("");
-  const [nameOnCard, setNameOnCard] = useState("");
-
-  const [submitting, setSubmitting] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [piLoading, setPiLoading] = useState(false);
+  const [piError, setPiError] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [justConfirmed, setJustConfirmed] = useState(false);
+  const [returnClientSecret, setReturnClientSecret] = useState<string | null>(
+    null,
+  );
+
+  const finalizingRef = useRef(false);
+  const returnRetrieveStartedRef = useRef(false);
+
+  const finalizePayment = useCallback(
+    async (paymentIntent: PaymentIntent) => {
+      if (finalizingRef.current) return;
+      finalizingRef.current = true;
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session?.user) {
+        setSubmitError("Sessie verlopen. Log opnieuw in.");
+        finalizingRef.current = false;
+        return;
+      }
+
+      const uid = session.user.id;
+
+      const { error: u1 } = await supabase
+        .from("bookings")
+        .update({ status: "confirmed" })
+        .eq("id", bookingId)
+        .eq("status", "pending")
+        .or(`customer_id.eq.${uid},user_id.eq.${uid}`);
+
+      if (u1) {
+        setSubmitError(u1.message);
+        finalizingRef.current = false;
+        return;
+      }
+
+      const { data: existingPay } = await supabase
+        .from("payments")
+        .select("id")
+        .eq("stripe_payment_intent_id", paymentIntent.id)
+        .maybeSingle();
+
+      if (!existingPay) {
+        const { error: u2 } = await supabase.from("payments").insert({
+          booking_id: bookingId,
+          stripe_payment_intent_id: paymentIntent.id,
+          amount: paymentIntent.amount,
+          currency: paymentIntent.currency,
+          status: paymentIntent.status,
+        });
+        if (u2) {
+          setSubmitError(u2.message);
+          finalizingRef.current = false;
+          return;
+        }
+      }
+
+      if (typeof window !== "undefined") {
+        window.history.replaceState({}, "", `/betalen/${bookingId}`);
+      }
+
+      router.push(`/bevestiging/${bookingId}`);
+      router.refresh();
+    },
+    [bookingId, router],
+  );
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const s = new URLSearchParams(window.location.search).get(
+      "payment_intent_client_secret",
+    );
+    if (s) setReturnClientSecret(s);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -68,6 +241,8 @@ export default function BetalenPage() {
         );
         return;
       }
+      setSessionUserId(session.user.id);
+      setAccessToken(session.access_token);
       setAuthReady(true);
     })();
     return () => {
@@ -76,7 +251,7 @@ export default function BetalenPage() {
   }, [router, bookingId]);
 
   useEffect(() => {
-    if (!authReady || !bookingId) return;
+    if (!authReady || !bookingId || !sessionUserId) return;
     let cancelled = false;
     (async () => {
       setLoading(true);
@@ -85,6 +260,9 @@ export default function BetalenPage() {
         .from("bookings")
         .select("*")
         .eq("id", bookingId)
+        .or(
+          `customer_id.eq.${sessionUserId},user_id.eq.${sessionUserId}`,
+        )
         .maybeSingle();
 
       if (cancelled) return;
@@ -115,7 +293,113 @@ export default function BetalenPage() {
     return () => {
       cancelled = true;
     };
-  }, [authReady, bookingId]);
+  }, [authReady, bookingId, sessionUserId]);
+
+  useEffect(() => {
+    if (
+      !returnClientSecret ||
+      !booking ||
+      !stripePromise ||
+      returnRetrieveStartedRef.current ||
+      finalizingRef.current
+    ) {
+      return;
+    }
+    const st =
+      typeof booking.status === "string"
+        ? booking.status.toLowerCase()
+        : "";
+    if (st !== "pending") return;
+
+    returnRetrieveStartedRef.current = true;
+    let cancelled = false;
+    setSubmitError(null);
+
+    (async () => {
+      const stripe = await stripePromise;
+      if (!stripe || cancelled) return;
+      const { paymentIntent } =
+        await stripe.retrievePaymentIntent(returnClientSecret);
+      if (cancelled) return;
+      if (paymentIntent?.status === "succeeded") {
+        await finalizePayment(paymentIntent);
+      } else {
+        setSubmitError(
+          "Betaling is nog niet voltooid. Probeer het opnieuw of kies een andere methode.",
+        );
+        returnRetrieveStartedRef.current = false;
+        if (typeof window !== "undefined") {
+          window.history.replaceState({}, "", `/betalen/${bookingId}`);
+        }
+        setReturnClientSecret(null);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [returnClientSecret, booking, bookingId, finalizePayment]);
+
+  useEffect(() => {
+    if (
+      !authReady ||
+      !accessToken ||
+      !bookingId ||
+      !booking ||
+      returnClientSecret
+    ) {
+      return;
+    }
+    const st =
+      typeof booking.status === "string"
+        ? booking.status.toLowerCase()
+        : "";
+    if (st !== "pending") return;
+    if (!stripePublishableKey || !stripePromise) {
+      setPiError("Stripe is niet geconfigureerd (NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY).");
+      return;
+    }
+
+    let cancelled = false;
+    setPiLoading(true);
+    setPiError(null);
+
+    (async () => {
+      const res = await fetch("/api/create-payment-intent", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ bookingId }),
+      });
+      const json = (await res.json()) as {
+        clientSecret?: string;
+        error?: string;
+      };
+      if (cancelled) return;
+      setPiLoading(false);
+      if (!res.ok) {
+        setPiError(json.error ?? "Kon betaling niet starten.");
+        return;
+      }
+      if (!json.clientSecret) {
+        setPiError("Geen betalingsgegevens ontvangen.");
+        return;
+      }
+      setClientSecret(json.clientSecret);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    authReady,
+    accessToken,
+    bookingId,
+    booking,
+    returnClientSecret,
+  ]);
 
   const djName = dj ? getDisplayName(dj) : "DJ";
   const eventDate =
@@ -126,55 +410,32 @@ export default function BetalenPage() {
       : typeof booking?.hours === "string"
         ? parseInt(booking.hours, 10) || 0
         : 0;
-  const location =
-    typeof booking?.location === "string" ? booking.location : "—";
+  const venue =
+    typeof booking?.venue_address === "string" && booking.venue_address.trim()
+      ? booking.venue_address.trim()
+      : typeof booking?.location === "string"
+        ? booking.location
+        : "—";
   const startTime =
     typeof booking?.start_time === "string" ? booking.start_time : "";
 
-  const djLine =
-    typeof booking?.dj_line_total === "number"
-      ? booking.dj_line_total
-      : typeof booking?.dj_line_total === "string"
-        ? parseFloat(booking.dj_line_total)
-        : 0;
-  const travel =
-    typeof booking?.travel_cost === "number"
-      ? booking.travel_cost
-      : typeof booking?.travel_cost === "string"
-        ? parseFloat(booking.travel_cost)
-        : 0;
-  const total =
-    typeof booking?.total_amount === "number"
-      ? booking.total_amount
-      : typeof booking?.total_amount === "string"
-        ? parseFloat(booking.total_amount)
-        : djLine + travel;
+  const cents = totalCents(booking);
+  const totalDisplay = formatEuroFromCents(cents);
 
-  const handleConfirm = useCallback(async () => {
-    if (!bookingId || !booking) return;
-    setSubmitError(null);
-    setSubmitting(true);
+  const bookingStatus =
+    typeof booking?.status === "string"
+      ? booking.status.toLowerCase()
+      : "";
+  const alreadyConfirmed = bookingStatus === "confirmed";
+  const canPay = bookingStatus === "pending";
 
-    const { error } = await supabase
-      .from("bookings")
-      .update({ status: "confirmed" })
-      .eq("id", bookingId);
-
-    setSubmitting(false);
-
-    if (error) {
-      setSubmitError(error.message);
-      return;
-    }
-
-    setJustConfirmed(true);
-  }, [bookingId, booking]);
-
-  const alreadyConfirmed =
-    booking != null &&
-    typeof booking.status === "string" &&
-    booking.status === "confirmed";
-  const confirmed = justConfirmed || alreadyConfirmed;
+  const elementsOptions: StripeElementsOptions | undefined = clientSecret
+    ? {
+        clientSecret,
+        appearance: { theme: "stripe" },
+        locale: "nl",
+      }
+    : undefined;
 
   if (!authReady) {
     return (
@@ -219,7 +480,6 @@ export default function BetalenPage() {
         </div>
       </header>
 
-      {/* Progress — stap 2 actief */}
       <div className="border-b border-neutral-200 bg-neutral-50">
         <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
           <ol className="flex items-center justify-between gap-2 text-xs font-semibold sm:text-sm">
@@ -279,66 +539,50 @@ export default function BetalenPage() {
               <div className="flex justify-between gap-4">
                 <dt className="text-neutral-500">Locatie</dt>
                 <dd className="max-w-[60%] text-right font-medium text-neutral-900">
-                  {location}
+                  {venue}
                 </dd>
               </div>
               <div className="flex justify-between gap-4 border-t border-neutral-100 pt-3">
                 <dt className="font-semibold text-neutral-900">Totaal</dt>
                 <dd className="text-lg font-bold text-neutral-900">
-                  €{total.toLocaleString("nl-NL")}
+                  {totalDisplay}
                 </dd>
               </div>
             </dl>
           </section>
 
           <div className="rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-950 ring-1 ring-emerald-200">
-            Je betaling wordt vastgezet (hold): er wordt nog niets definitief
-            afgeschreven tot de DJ je boeking accepteert. Daarna wordt het bedrag
-            volgens de afspraken verwerkt.
+            Betaling verloopt veilig via Stripe. Na een geslaagde betaling wordt
+            je boeking bevestigd en ga je door naar de bevestigingspagina.
           </div>
 
-          {confirmed ? (
+          {alreadyConfirmed ? (
             <div
               className="rounded-2xl border border-emerald-200 bg-emerald-50 px-6 py-8 text-center"
               role="status"
             >
               <p className="text-xl font-bold text-emerald-950">
-                Boeking bevestigd
+                Boeking al bevestigd
               </p>
               <p className="mt-2 text-sm text-emerald-900">
-                Je aanvraag staat klaar. De DJ ontvangt een seintje — je hoort
-                snel van ons.
+                Deze boeking is betaald en bevestigd.
               </p>
               <Link
-                href="/dashboard/klant"
+                href={`/bevestiging/${encodeURIComponent(bookingId)}`}
                 className="mt-6 inline-flex rounded-xl bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-900"
               >
-                Naar mijn boekingen
+                Naar bevestiging
               </Link>
             </div>
-          ) : (
+          ) : canPay ? (
             <>
               <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-                <h2 className="text-lg font-bold text-neutral-900">
-                  Betaalgegevens
-                </h2>
+                <h2 className="text-lg font-bold text-neutral-900">Betalen</h2>
                 <p className="mt-1 text-sm text-neutral-500">
-                  Demovelden — echte Stripe-integratie volgt.
+                  Kies je betaalmethode en rond de betaling af.
                 </p>
 
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {[
-                    { label: "VISA", className: "bg-[#1a1f71] text-white" },
-                    { label: "MC", className: "bg-neutral-900 text-white" },
-                    { label: "iDEAL", className: "bg-[#CC0066] text-white" },
-                  ].map((b) => (
-                    <span
-                      key={b.label}
-                      className={`rounded px-3 py-1 text-xs font-bold ${b.className}`}
-                    >
-                      {b.label}
-                    </span>
-                  ))}
+                <div className="mt-4 flex flex-wrap gap-2">
                   <span className="inline-flex items-center gap-1 rounded border border-neutral-200 bg-neutral-50 px-3 py-1 text-xs font-semibold text-neutral-700">
                     🔒 Stripe
                   </span>
@@ -353,63 +597,37 @@ export default function BetalenPage() {
                   </p>
                 ) : null}
 
-                <div className="mt-6 space-y-4">
-                  <label className="block">
-                    <span className="text-sm font-semibold text-neutral-800">
-                      Kaartnummer
-                    </span>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      autoComplete="cc-number"
-                      placeholder="1234 5678 9012 3456"
-                      value={cardNumber}
-                      onChange={(e) => setCardNumber(e.target.value)}
-                      className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
-                    />
-                  </label>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <label className="block">
-                      <span className="text-sm font-semibold text-neutral-800">
-                        Vervaldatum
-                      </span>
-                      <input
-                        type="text"
-                        placeholder="MM / JJ"
-                        autoComplete="cc-exp"
-                        value={expiry}
-                        onChange={(e) => setExpiry(e.target.value)}
-                        className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                <div className="mt-6">
+                  {returnClientSecret &&
+                  !clientSecret &&
+                  !piError &&
+                  !submitError ? (
+                    <p className="text-sm text-neutral-600">
+                      Betaling controleren…
+                    </p>
+                  ) : piError ? (
+                    <p
+                      className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"
+                      role="alert"
+                    >
+                      {piError}
+                    </p>
+                  ) : piLoading || !clientSecret ? (
+                    <p className="text-sm text-neutral-600">
+                      Betaling voorbereiden…
+                    </p>
+                  ) : stripePromise && elementsOptions?.clientSecret ? (
+                    <Elements
+                      stripe={stripePromise}
+                      options={elementsOptions}
+                    >
+                      <PaymentForm
+                        bookingId={bookingId}
+                        onPaid={finalizePayment}
+                        onError={setSubmitError}
                       />
-                    </label>
-                    <label className="block">
-                      <span className="text-sm font-semibold text-neutral-800">
-                        CVV
-                      </span>
-                      <input
-                        type="text"
-                        inputMode="numeric"
-                        autoComplete="cc-csc"
-                        placeholder="123"
-                        value={cvv}
-                        onChange={(e) => setCvv(e.target.value)}
-                        className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
-                      />
-                    </label>
-                  </div>
-                  <label className="block">
-                    <span className="text-sm font-semibold text-neutral-800">
-                      Naam op kaart
-                    </span>
-                    <input
-                      type="text"
-                      autoComplete="cc-name"
-                      placeholder="Zoals op de kaart"
-                      value={nameOnCard}
-                      onChange={(e) => setNameOnCard(e.target.value)}
-                      className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
-                    />
-                  </label>
+                    </Elements>
+                  ) : null}
                 </div>
               </section>
 
@@ -417,15 +635,15 @@ export default function BetalenPage() {
                 {[
                   {
                     t: "Versleuteld",
-                    d: "Verbinding via TLS; gegevens worden niet op onze servers opgeslagen (met Stripe).",
+                    d: "Je betaalgegevens worden door Stripe verwerkt; wij slaan kaartgegevens niet op.",
                   },
                   {
-                    t: "Nog geen charge",
-                    d: "Geen definitieve afschrijving tot de DJ je boeking accepteert.",
+                    t: "Direct bevestigen",
+                    d: "Na een geslaagde betaling wordt je boeking op bevestigd gezet.",
                   },
                   {
-                    t: "Restitutie",
-                    d: "Annulering en terugbetaling volgens onze voorwaarden en het moment van annuleren.",
+                    t: "Support",
+                    d: "Problemen met betalen? Neem contact op met support.",
                   },
                 ].map((x) => (
                   <li
@@ -438,6 +656,21 @@ export default function BetalenPage() {
                 ))}
               </ul>
             </>
+          ) : (
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 px-6 py-8 text-center">
+              <p className="font-semibold text-amber-950">
+                Deze boeking kan niet worden betaald.
+              </p>
+              <p className="mt-2 text-sm text-amber-900">
+                Status: {bookingStatus || "—"}
+              </p>
+              <Link
+                href="/dashboard/klant"
+                className="mt-6 inline-flex rounded-xl bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-900"
+              >
+                Naar mijn boekingen
+              </Link>
+            </div>
           )}
         </div>
 
@@ -459,50 +692,21 @@ export default function BetalenPage() {
             </div>
 
             <div className="mt-5 space-y-2 border-t border-neutral-100 pt-5 text-sm">
-              <div className="flex justify-between text-neutral-700">
-                <span>DJ</span>
-                <span className="font-medium">
-                  €{djLine.toLocaleString("nl-NL")}
-                </span>
-              </div>
-              <div className="flex justify-between text-neutral-700">
-                <span>Apparatuur</span>
-                <span className="font-medium text-emerald-700">Inbegrepen</span>
-              </div>
-              <div className="flex justify-between text-neutral-700">
-                <span>Reiskosten</span>
-                <span className="font-medium">
-                  €{travel.toLocaleString("nl-NL")}
-                </span>
-              </div>
               <div className="flex justify-between border-t border-neutral-200 pt-2 text-base font-bold text-neutral-900">
                 <span>Totaal</span>
-                <span>€{total.toLocaleString("nl-NL")}</span>
+                <span>{totalDisplay}</span>
               </div>
             </div>
 
-            {!confirmed ? (
-              <>
-                <button
-                  type="button"
-                  onClick={handleConfirm}
-                  disabled={submitting}
-                  className="mt-6 w-full rounded-xl bg-black py-3.5 text-sm font-bold text-white hover:bg-neutral-900 disabled:opacity-50"
-                >
-                  {submitting ? "Bezig…" : "Bevestig boeking"}
-                </button>
-                <p className="mt-4 flex items-center justify-center gap-2 text-xs text-neutral-500">
-                  <span aria-hidden className="text-base">
-                    🔒
-                  </span>
-                  Beveiligd via Stripe
-                </p>
-              </>
-            ) : (
+            {canPay ? (
+              <p className="mt-6 text-center text-xs text-neutral-500">
+                Voltooi de betaling in het formulier links.
+              </p>
+            ) : alreadyConfirmed ? (
               <p className="mt-6 text-center text-sm font-medium text-emerald-800">
                 Boeking is bevestigd.
               </p>
-            )}
+            ) : null}
           </div>
         </aside>
       </div>
