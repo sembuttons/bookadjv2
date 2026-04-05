@@ -11,6 +11,13 @@ export function getDisplayName(row: DjProfileRow): string {
   return "DJ";
 }
 
+/** Prefer `stage_name` for public-facing DJ brand; fallback to display name. */
+export function getStageName(row: DjProfileRow): string {
+  const s = row.stage_name;
+  if (typeof s === "string" && s.trim()) return s.trim();
+  return getDisplayName(row);
+}
+
 export function getCity(row: DjProfileRow): string {
   const c = row.city;
   return typeof c === "string" ? c : "—";
@@ -59,6 +66,17 @@ export function getProfileRating(row: DjProfileRow): number {
   if (typeof r === "string") {
     const n = parseFloat(r);
     return Number.isNaN(n) ? 0 : n;
+  }
+  return 0;
+}
+
+export function getReviewCount(row: DjProfileRow): number {
+  const n =
+    row.review_count ?? row.reviews_count ?? row.number_of_reviews ?? 0;
+  if (typeof n === "number" && !Number.isNaN(n)) return Math.max(0, n);
+  if (typeof n === "string") {
+    const x = parseInt(n, 10);
+    return Number.isNaN(x) ? 0 : Math.max(0, x);
   }
   return 0;
 }

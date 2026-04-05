@@ -1,12 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
-export const dynamic = "force-dynamic";
 import {
   averageFromReviews,
   getBio,
   getCity,
-  getDisplayName,
   getGenres,
   getHourlyRate,
   getProfileRating,
@@ -14,6 +11,7 @@ import {
   getReviewBody,
   getReviewDate,
   getReviewRating,
+  getStageName,
   getYearsExperience,
   isVerifiedProfile,
   type DjProfileRow,
@@ -23,6 +21,8 @@ import {
 import { supabase } from "@/lib/supabase";
 import { BookingPanel } from "./booking-panel";
 import { MediaTabs } from "./media-tabs";
+
+export const dynamic = "force-dynamic";
 
 type PageProps = { params: Promise<{ id: string }> };
 
@@ -86,7 +86,8 @@ export default async function DjProfilePage({ params }: PageProps) {
   const profile = profileRes.data as DjProfileRow;
   const reviews = (reviewsRes.error ? [] : (reviewsRes.data ?? [])) as ReviewRow[];
 
-  const name = getDisplayName(profile);
+  const name = getStageName(profile);
+  const displayForBio = getStageName(profile);
   const city = getCity(profile);
   const years = getYearsExperience(profile);
   const genres = getGenres(profile);
@@ -101,7 +102,7 @@ export default async function DjProfilePage({ params }: PageProps) {
 
   const bio =
     getBio(profile) ||
-    `${name} is een professionele DJ met oog voor detail en een brede muzikale basis. ` +
+    `${displayForBio} is een professionele DJ met oog voor detail en een brede muzikale basis. ` +
       `Van intieme borrels tot volle dansvloeren: altijd afgestemd op jouw publiek en sfeer.`;
 
   const fn = firstName(name);
@@ -202,12 +203,6 @@ export default async function DjProfilePage({ params }: PageProps) {
                 </span>
                 {city}
               </span>
-              {years != null ? (
-                <span>{years} jaar ervaring</span>
-              ) : null}
-              <span className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-semibold text-neutral-800 ring-1 ring-neutral-200">
-                Apparatuur inbegrepen
-              </span>
             </div>
             <div className="flex flex-wrap gap-2">
               {genres.length ? (
@@ -249,7 +244,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                 id="over-heading"
                 className="text-xl font-bold text-neutral-900 sm:text-2xl"
               >
-                Over {name}
+                Over {displayForBio}
               </h2>
               <p className="mt-4 max-w-3xl text-base leading-relaxed text-neutral-700">
                 {bio}
@@ -293,84 +288,85 @@ export default async function DjProfilePage({ params }: PageProps) {
                 id="reviews-heading"
                 className="text-xl font-bold text-neutral-900 sm:text-2xl"
               >
-                Beoordelingen
+                Reviews
               </h2>
-              <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-start">
-                <div className="flex shrink-0 flex-col items-center rounded-2xl border border-neutral-200 bg-white px-8 py-6 lg:items-start">
-                  <p className="text-5xl font-bold text-neutral-900">
-                    {displayRating.toFixed(1)}
-                  </p>
-                  <p className="mt-1 text-sm text-neutral-500">
-                    op basis van {totalReviews}{" "}
-                    {totalReviews === 1 ? "beoordeling" : "beoordelingen"}
-                  </p>
-                </div>
-                <div className="min-w-0 flex-1 space-y-2">
-                  {([5, 4, 3, 2, 1] as const).map((star) => {
-                    const count = dist[star];
-                    const pct = Math.round((count / maxBar) * 100);
-                    return (
-                      <div
-                        key={star}
-                        className="flex items-center gap-3 text-sm"
-                      >
-                        <span className="w-8 text-neutral-600">{star} ★</span>
-                        <div className="h-2 flex-1 overflow-hidden rounded-full bg-neutral-100">
-                          <div
-                            className="h-full rounded-full bg-emerald-500"
-                            style={{ width: `${pct}%` }}
-                          />
-                        </div>
-                        <span className="w-8 text-right text-neutral-500">
-                          {count}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
               {reviews.length === 0 ? (
-                <p className="mt-6 text-sm text-neutral-500">
-                  Nog geen beoordelingen — wees de eerste na je boeking.
-                </p>
+                <p className="mt-4 text-sm text-neutral-600">Nog geen reviews.</p>
               ) : (
-                <div className="mt-8 -mx-4 flex gap-4 overflow-x-auto px-4 pb-2 snap-x snap-mandatory sm:mx-0 sm:px-0">
-                  {reviews.map((r, i) => {
-                    const rid =
-                      typeof r.id === "string" || typeof r.id === "number"
-                        ? String(r.id)
-                        : `r-${i}`;
-                    const dt = getReviewDate(r);
-                    return (
-                      <article
-                        key={rid}
-                        className="min-w-[min(100%,280px)] max-w-xs shrink-0 snap-start rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm"
-                      >
-                        <div className="flex items-center justify-between gap-2">
-                          <p className="font-semibold text-neutral-900">
-                            {getReviewAuthor(r)}
+                <>
+                  <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-start">
+                    <div className="flex shrink-0 flex-col items-center rounded-2xl border border-neutral-200 bg-white px-8 py-6 lg:items-start">
+                      <p className="text-5xl font-bold text-neutral-900">
+                        {displayRating.toFixed(1)}
+                      </p>
+                      <p className="mt-1 text-sm text-neutral-500">
+                        op basis van {totalReviews}{" "}
+                        {totalReviews === 1 ? "beoordeling" : "beoordelingen"}
+                      </p>
+                    </div>
+                    <div className="min-w-0 flex-1 space-y-2">
+                      {([5, 4, 3, 2, 1] as const).map((star) => {
+                        const count = dist[star];
+                        const pct = Math.round((count / maxBar) * 100);
+                        return (
+                          <div
+                            key={star}
+                            className="flex items-center gap-3 text-sm"
+                          >
+                            <span className="w-8 text-neutral-600">
+                              {star} ★
+                            </span>
+                            <div className="h-2 flex-1 overflow-hidden rounded-full bg-neutral-100">
+                              <div
+                                className="h-full rounded-full bg-emerald-500"
+                                style={{ width: `${pct}%` }}
+                              />
+                            </div>
+                            <span className="w-8 text-right text-neutral-500">
+                              {count}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <div className="mt-8 -mx-4 flex gap-4 overflow-x-auto px-4 pb-2 snap-x snap-mandatory sm:mx-0 sm:px-0">
+                    {reviews.map((r, i) => {
+                      const rid =
+                        typeof r.id === "string" || typeof r.id === "number"
+                          ? String(r.id)
+                          : `r-${i}`;
+                      const dt = getReviewDate(r);
+                      return (
+                        <article
+                          key={rid}
+                          className="min-w-[min(100%,280px)] max-w-xs shrink-0 snap-start rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm"
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <p className="font-semibold text-neutral-900">
+                              {getReviewAuthor(r)}
+                            </p>
+                            <span className="text-amber-500">
+                              {"★".repeat(Math.round(getReviewRating(r)))}
+                            </span>
+                          </div>
+                          {dt ? (
+                            <p className="mt-1 text-xs text-neutral-500">
+                              {dt.toLocaleDateString("nl-NL", {
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric",
+                              })}
+                            </p>
+                          ) : null}
+                          <p className="mt-3 text-sm leading-relaxed text-neutral-700">
+                            {getReviewBody(r) || "—"}
                           </p>
-                          <span className="text-amber-500">
-                            {"★".repeat(Math.round(getReviewRating(r)))}
-                          </span>
-                        </div>
-                        {dt ? (
-                          <p className="mt-1 text-xs text-neutral-500">
-                            {dt.toLocaleDateString("nl-NL", {
-                              day: "numeric",
-                              month: "long",
-                              year: "numeric",
-                            })}
-                          </p>
-                        ) : null}
-                        <p className="mt-3 text-sm leading-relaxed text-neutral-700">
-                          {getReviewBody(r) || "—"}
-                        </p>
-                      </article>
-                    );
-                  })}
-                </div>
+                        </article>
+                      );
+                    })}
+                  </div>
+                </>
               )}
             </section>
 
@@ -386,22 +382,22 @@ export default async function DjProfilePage({ params }: PageProps) {
                   {
                     icon: "🛡️",
                     t: "Betalingsbescherming",
-                    d: "Geld pas vrij na je evenement.",
+                    d: "Je betaling loopt veilig via bookadj tot na je evenement.",
                   },
                   {
                     icon: "✓",
-                    t: "Geverifieerde DJ’s",
-                    d: "Gecontroleerde profielen en reviews.",
+                    t: "Geverifieerd",
+                    d: "DJ’s op het platform worden gecontroleerd.",
                   },
                   {
-                    icon: "💬",
-                    t: "Direct contact",
-                    d: "Alles via één platform, zonder ruis.",
+                    icon: "🎧",
+                    t: "Vervanger",
+                    d: "Bij no-show helpen we met een passende vervanging waar mogelijk.",
                   },
                   {
-                    icon: "€",
-                    t: "Transparante prijzen",
-                    d: "Duidelijke breakdown vóór je boekt.",
+                    icon: "📋",
+                    t: "Alles op één plek",
+                    d: "Aanvraag, chat en betaling overzichtelijk bij elkaar.",
                   },
                 ].map((x) => (
                   <li
@@ -483,6 +479,7 @@ export default async function DjProfilePage({ params }: PageProps) {
           {/* RIGHT sticky */}
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <BookingPanel
+              djId={id}
               hourlyRate={hourly}
               djHomeCity={city}
               responseTimeLabel={metaResponse(profile)}

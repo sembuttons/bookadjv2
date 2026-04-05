@@ -1,10 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 
 const KM_RATE = 0.42;
 
 type Props = {
+  djId: string;
   hourlyRate: number;
   djHomeCity: string;
   responseTimeLabel?: string;
@@ -13,6 +15,7 @@ type Props = {
 };
 
 export function BookingPanel({
+  djId,
   hourlyRate,
   djHomeCity,
   responseTimeLabel = "Binnen 2 uur",
@@ -115,15 +118,22 @@ export function BookingPanel({
             className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
           />
           <p className="mt-1 text-xs text-neutral-500">
-            Reiskosten: €{KM_RATE.toLocaleString("nl-NL", { minimumFractionDigits: 2 })}/km
-            heen en terug (geschat).
+            Reiskosten: €
+            {KM_RATE.toLocaleString("nl-NL", {
+              minimumFractionDigits: 2,
+            })}
+            /km heen en terug (geschat).
           </p>
         </label>
 
         <div className="mt-6 space-y-2 rounded-xl bg-neutral-50 px-4 py-3 text-sm">
           <div className="flex justify-between text-neutral-700">
-            <span>DJ ({hours} uur × €{hourlyRate})</span>
-            <span className="font-medium">€{djCost.toLocaleString("nl-NL")}</span>
+            <span>
+              DJ ({hours} uur × €{hourlyRate})
+            </span>
+            <span className="font-medium">
+              €{djCost.toLocaleString("nl-NL")}
+            </span>
           </div>
           <div className="flex justify-between text-neutral-700">
             <span>Apparatuur</span>
@@ -141,12 +151,12 @@ export function BookingPanel({
           </div>
         </div>
 
-        <button
-          type="button"
-          className="mt-5 w-full rounded-xl bg-black py-3.5 text-sm font-bold text-emerald-400 transition-colors hover:bg-neutral-900"
+        <Link
+          href={`/boeken/${encodeURIComponent(djId)}`}
+          className="mt-5 flex w-full items-center justify-center rounded-xl bg-black py-3.5 text-sm font-bold text-emerald-400 transition-colors hover:bg-neutral-900"
         >
           Boeking aanvragen
-        </button>
+        </Link>
         <button
           type="button"
           className="mt-3 w-full rounded-xl border-2 border-neutral-900 bg-white py-3 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50"
@@ -169,7 +179,9 @@ export function BookingPanel({
         </div>
         <div className="rounded-xl border border-neutral-200 bg-white px-4 py-3">
           <p className="text-xs text-neutral-500">Acceptatiegraad</p>
-          <p className="font-semibold text-neutral-900">{acceptanceRateLabel}</p>
+          <p className="font-semibold text-neutral-900">
+            {acceptanceRateLabel}
+          </p>
         </div>
         <div className="rounded-xl border border-neutral-200 bg-white px-4 py-3">
           <p className="text-xs text-neutral-500">Lid sinds</p>

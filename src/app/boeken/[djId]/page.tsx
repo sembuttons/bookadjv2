@@ -12,8 +12,6 @@ import {
 } from "@/lib/dj-profile-helpers";
 import { supabase } from "@/lib/supabase";
 
-const KM_RATE = 0.42;
-
 const EVENT_TYPES = [
   "Verjaardagsfeest",
   "Bruiloft",
@@ -34,6 +32,10 @@ function initials(name: string) {
   );
 }
 
+function randomReference() {
+  return `BKA-${Math.floor(1000 + Math.random() * 9000)}`;
+}
+
 export default function BoekenPage() {
   const router = useRouter();
   const params = useParams();
@@ -50,10 +52,9 @@ export default function BoekenPage() {
   const [eventDate, setEventDate] = useState("");
   const [hours, setHours] = useState(4);
   const [startTime, setStartTime] = useState("");
-  const [location, setLocation] = useState("");
-  const [distanceKm, setDistanceKm] = useState(0);
+  const [venueAddress, setVenueAddress] = useState("");
   const [eventType, setEventType] = useState<string>(EVENT_TYPES[0]);
-  const [message, setMessage] = useState("");
+  const [customerMessage, setCustomerMessage] = useState("");
 
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -66,7 +67,9 @@ export default function BoekenPage() {
       } = await supabase.auth.getSession();
       if (cancelled) return;
       if (!session) {
-        router.replace(`/auth?returnTo=${encodeURIComponent(`/boeken/${djId}`)}`);
+        router.replace(
+          `/auth?returnTo=${encodeURIComponent(`/boeken/${djId}`)}`,
+        );
         return;
       }
       setUserId(session.user.id);
@@ -110,24 +113,10 @@ export default function BoekenPage() {
   const city = profile ? getCity(profile) : "—";
   const genres = profile ? getGenres(profile) : [];
 
-  const travelCost = useMemo(() => {
-    const v = Math.round(distanceKm * KM_RATE * 2 * 100) / 100;
-    return Number.isFinite(v) ? v : 0;
-  }, [distanceKm]);
-
-  const djLineTotal = useMemo(
+  const djCostEuro = useMemo(
     () => Math.round(hourlyRate * hours * 100) / 100,
     [hourlyRate, hours],
   );
-
-  const total = useMemo(
-    () => Math.round((djLineTotal + travelCost) * 100) / 100,
-    [djLineTotal, travelCost],
-  );
-
-  const handleLocationChange = (value: string) => {
-    setLocation(value);
-  };
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -145,27 +134,33 @@ export default function BoekenPage() {
         setSubmitError("Kies een starttijd.");
         return;
       }
-      if (!location.trim()) {
+      if (!venueAddress.trim()) {
         setSubmitError("Vul de locatie in.");
         return;
       }
 
+      const totalAmountCents = Math.round(hours * hourlyRate * 100);
+      const platformFeeCents = Math.round(totalAmountCents * 0.15);
+      const djPayoutCents = totalAmountCents - platformFeeCents;
+      const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+
       setSubmitting(true);
       const payload = {
+        reference: randomReference(),
+        customer_id: userId,
         dj_id: djId,
-        user_id: userId,
         status: "pending",
         event_date: eventDate,
-        hours,
         start_time: startTime,
-        location: location.trim(),
-        distance_km: distanceKm,
+        hours,
+        venue_address: venueAddress.trim(),
         event_type: eventType,
-        message_to_dj: message.trim() || null,
-        travel_cost: travelCost,
-        dj_line_total: djLineTotal,
-        total_amount: total,
-        equipment_included: true,
+        customer_message: customerMessage.trim() || null,
+        hourly_rate_snapshot: hourlyRate,
+        total_amount: totalAmountCents,
+        platform_fee: platformFeeCents,
+        dj_payout: djPayoutCents,
+        expires_at: expiresAt,
       };
 
       const { data, error } = await supabase
@@ -187,7 +182,7 @@ export default function BoekenPage() {
         return;
       }
 
-      router.push(`/betalen/${bookingId}`);
+      router.push(`/bevestiging/${bookingId}`);
       router.refresh();
     },
     [
@@ -196,14 +191,11 @@ export default function BoekenPage() {
       profile,
       eventDate,
       startTime,
-      location,
-      distanceKm,
+      venueAddress,
       eventType,
-      message,
+      customerMessage,
       hours,
-      travelCost,
-      djLineTotal,
-      total,
+      hourlyRate,
       router,
     ],
   );
@@ -251,7 +243,6 @@ export default function BoekenPage() {
         </div>
       </header>
 
-      {/* Progress */}
       <div className="border-b border-neutral-200 bg-neutral-50">
         <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
           <ol className="flex items-center justify-between gap-2 text-xs font-semibold sm:text-sm">
@@ -288,7 +279,6 @@ export default function BoekenPage() {
             onSubmit={handleSubmit}
             className="space-y-8"
           >
-            {/* DJ summary */}
             <div className="flex gap-4 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-neutral-900 text-sm font-bold text-white">
                 {initials(djName)}
@@ -376,32 +366,11 @@ export default function BoekenPage() {
                 <input
                   type="text"
                   required
-                  value={location}
-                  onChange={(e) => handleLocationChange(e.target.value)}
+                  value={venueAddress}
+                  onChange={(e) => setVenueAddress(e.target.value)}
                   placeholder="Adres of plaats"
                   className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
                 />
-              </label>
-
-              <label className="block">
-                <span className="text-sm font-semibold text-neutral-800">
-                  Enkele reisafstand (km)
-                </span>
-                <input
-                  type="number"
-                  min={0}
-                  max={800}
-                  step={1}
-                  value={distanceKm}
-                  onChange={(e) =>
-                    setDistanceKm(Math.max(0, Number(e.target.value) || 0))
-                  }
-                  className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
-                />
-                <p className="mt-1 text-xs text-neutral-500">
-                  Reiskosten: afstand × €{KM_RATE.toFixed(2)} × 2 (heen en
-                  terug).
-                </p>
               </label>
 
               <label className="block">
@@ -424,11 +393,13 @@ export default function BoekenPage() {
               <label className="block">
                 <span className="text-sm font-semibold text-neutral-800">
                   Bericht aan DJ{" "}
-                  <span className="font-normal text-neutral-500">(optioneel)</span>
+                  <span className="font-normal text-neutral-500">
+                    (optioneel)
+                  </span>
                 </span>
                 <textarea
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
+                  value={customerMessage}
+                  onChange={(e) => setCustomerMessage(e.target.value)}
                   rows={4}
                   placeholder="Bijv. sfeer, verzoeknummers, planning…"
                   className="mt-2 w-full resize-y rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
@@ -436,14 +407,13 @@ export default function BoekenPage() {
               </label>
             </div>
 
-            {/* Mobile summary CTA */}
             <div className="lg:hidden">
               <button
                 type="submit"
                 disabled={submitting}
                 className="w-full rounded-xl bg-black py-3.5 text-sm font-bold text-white disabled:opacity-50"
               >
-                {submitting ? "Bezig…" : "Bevestig en ga naar betaling"}
+                {submitting ? "Bezig…" : "Boeking aanvragen"}
               </button>
             </div>
           </form>
@@ -487,7 +457,7 @@ export default function BoekenPage() {
                 <li>
                   Locatie:{" "}
                   <span className="font-medium text-neutral-800">
-                    {location.trim() || "—"}
+                    {venueAddress.trim() || "—"}
                   </span>
                 </li>
                 <li>
@@ -505,22 +475,12 @@ export default function BoekenPage() {
                   DJ ({hours} × €{hourlyRate.toLocaleString("nl-NL")})
                 </span>
                 <span className="font-medium">
-                  €{djLineTotal.toLocaleString("nl-NL")}
-                </span>
-              </div>
-              <div className="flex justify-between text-neutral-700">
-                <span>Apparatuur</span>
-                <span className="font-medium text-emerald-700">Inbegrepen</span>
-              </div>
-              <div className="flex justify-between text-neutral-700">
-                <span>Reiskosten</span>
-                <span className="font-medium">
-                  €{travelCost.toLocaleString("nl-NL")}
+                  €{djCostEuro.toLocaleString("nl-NL")}
                 </span>
               </div>
               <div className="flex justify-between border-t border-neutral-200 pt-2 text-base font-bold text-neutral-900">
                 <span>Totaal</span>
-                <span>€{total.toLocaleString("nl-NL")}</span>
+                <span>€{djCostEuro.toLocaleString("nl-NL")}</span>
               </div>
             </div>
 
@@ -530,7 +490,7 @@ export default function BoekenPage() {
               disabled={submitting}
               className="mt-6 hidden w-full rounded-xl bg-black py-3.5 text-sm font-bold text-white hover:bg-neutral-900 disabled:opacity-50 lg:block"
             >
-              {submitting ? "Bezig…" : "Bevestig en ga naar betaling"}
+              {submitting ? "Bezig…" : "Boeking aanvragen"}
             </button>
 
             <p className="mt-4 flex items-center justify-center gap-2 text-xs text-neutral-500">
@@ -542,7 +502,6 @@ export default function BoekenPage() {
           </div>
         </aside>
       </div>
-
     </div>
   );
 }

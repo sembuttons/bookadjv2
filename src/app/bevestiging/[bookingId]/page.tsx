@@ -26,14 +26,35 @@ function formatEventDate(iso: string | undefined): string {
 function formatReference(booking: BookingRow | null, id: string): string {
   if (!booking) return `#BKA-${id.replace(/-/g, "").slice(0, 8).toUpperCase()}`;
   const ref =
+    booking.reference ??
     booking.reference_code ??
-    booking.booking_reference ??
-    booking.reference;
+    booking.booking_reference;
   if (typeof ref === "string" && ref.trim()) {
     const r = ref.trim().toUpperCase();
-    return r.startsWith("#") ? r : `#BKA-${r.replace(/^BKA-?/i, "")}`;
+    if (r.startsWith("#")) return r;
+    return r.startsWith("BKA-") ? `#${r}` : `#BKA-${r.replace(/^BKA-?/i, "")}`;
   }
   return `#BKA-${id.replace(/-/g, "").slice(0, 8).toUpperCase()}`;
+}
+
+function totalAsEuro(booking: BookingRow): number {
+  const t = booking.total_amount;
+  if (typeof t === "number" && !Number.isNaN(t)) {
+    if (Number.isInteger(t) && t >= 100) {
+      return t / 100;
+    }
+    return t;
+  }
+  if (typeof t === "string") {
+    const n = parseFloat(t);
+    return Number.isNaN(n) ? 0 : n;
+  }
+  return 0;
+}
+
+function venueLine(booking: BookingRow): string {
+  const v = booking.venue_address ?? booking.location;
+  return typeof v === "string" && v.trim() ? v.trim() : "—";
 }
 
 const timelineSteps = [
@@ -126,9 +147,11 @@ export default function BevestigingPage() {
         return;
       }
 
-      let q = supabase.from("bookings").select("*").eq("id", bookingId);
-      q = q.eq("user_id", uid);
-      const { data: b, error: bErr } = await q.maybeSingle();
+      const { data: b, error: bErr } = await supabase
+        .from("bookings")
+        .select("*")
+        .eq("id", bookingId)
+        .maybeSingle();
 
       if (cancelled) return;
       if (bErr || !b) {
@@ -140,6 +163,18 @@ export default function BevestigingPage() {
       }
 
       const row = b as BookingRow;
+      const ownerCustomer =
+        typeof row.customer_id === "string" && row.customer_id === uid;
+      const ownerLegacy =
+        typeof row.user_id === "string" && row.user_id === uid;
+      if (!ownerCustomer && !ownerLegacy) {
+        setLoadError("Geen toegang tot deze boeking.");
+        setBooking(null);
+        setDj(null);
+        setLoading(false);
+        return;
+      }
+
       setBooking(row);
 
       const djId = typeof row.dj_id === "string" ? row.dj_id : null;
@@ -165,14 +200,8 @@ export default function BevestigingPage() {
     typeof booking?.event_date === "string" ? booking.event_date : "";
   const startTime =
     typeof booking?.start_time === "string" ? booking.start_time : "";
-  const location =
-    typeof booking?.location === "string" ? booking.location : "—";
-  const total =
-    typeof booking?.total_amount === "number"
-      ? booking.total_amount
-      : typeof booking?.total_amount === "string"
-        ? parseFloat(booking.total_amount)
-        : 0;
+  const location = booking ? venueLine(booking) : "—";
+  const totalEuro = booking ? totalAsEuro(booking) : 0;
 
   const reference = formatReference(booking, bookingId);
 
@@ -326,7 +355,7 @@ export default function BevestigingPage() {
               <div className="sm:col-span-2">
                 <dt className="text-xs text-neutral-500">Totaalbedrag</dt>
                 <dd className="mt-0.5 text-lg font-bold text-neutral-900">
-                  €{total.toLocaleString("nl-NL")}
+                  €{totalEuro.toLocaleString("nl-NL")}
                 </dd>
               </div>
             </dl>
@@ -368,7 +397,7 @@ export default function BevestigingPage() {
               href="/dashboard/klant"
               className="flex flex-1 items-center justify-center rounded-xl bg-black px-6 py-3.5 text-center text-sm font-bold text-white hover:bg-neutral-900"
             >
-              Boeking bekijken
+              Naar mijn boekingen
             </Link>
             <Link
               href="/"
