@@ -7,6 +7,7 @@ import type { LucideIcon } from "lucide-react";
 import {
   CalendarDays,
   ClipboardList,
+  Image as ImageIcon,
   MessageSquare,
   Star,
   User,
@@ -91,11 +92,20 @@ function djNav(): NavItem[] {
       isActive: (p) => p.startsWith("/dashboard/dj/profiel"),
     },
     {
+      key: "media",
+      label: "Media & Links",
+      href: "/dashboard/dj/media",
+      icon: ImageIcon,
+      isActive: (p) => p.startsWith("/dashboard/dj/media"),
+    },
+    {
       key: "kalender",
       label: "Beschikbaarheid",
-      href: "/dashboard/dj/kalender",
+      href: "/dashboard/dj/beschikbaarheid",
       icon: CalendarDays,
-      isActive: (p) => p.startsWith("/dashboard/dj/kalender"),
+      isActive: (p) =>
+        p.startsWith("/dashboard/dj/beschikbaarheid") ||
+        p.startsWith("/dashboard/dj/kalender"),
     },
     {
       key: "uitbetalingen",

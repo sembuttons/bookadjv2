@@ -95,6 +95,7 @@ export default function BoekenPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [blockedIsoDates, setBlockedIsoDates] = useState<string[]>([]);
 
   useEffect(() => {
     const fromUrl = parseUrlDateParam(searchParams.get("date"));
@@ -150,6 +151,29 @@ export default function BoekenPage() {
     };
   }, [authReady, djId]);
 
+  useEffect(() => {
+    if (!djId) return;
+    let cancelled = false;
+    void (async () => {
+      const { data, error: be } = await supabase
+        .from("dj_availability")
+        .select("blocked_date")
+        .eq("dj_id", djId);
+      if (cancelled) return;
+      if (be || !data) {
+        setBlockedIsoDates([]);
+        return;
+      }
+      const list = data
+        .map((r) => (r as { blocked_date?: string }).blocked_date)
+        .filter((d): d is string => typeof d === "string" && /^\d{4}-\d{2}-\d{2}$/.test(d));
+      setBlockedIsoDates(list);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [djId]);
+
   const hourlyRate = profile ? getHourlyRate(profile) ?? 125 : 125;
   const djName = profile ? getDisplayName(profile) : "…";
   const city = profile ? getCity(profile) : "—";
@@ -158,6 +182,16 @@ export default function BoekenPage() {
   const djCostEuro = useMemo(
     () => Math.round(hourlyRate * hours * 100) / 100,
     [hourlyRate, hours],
+  );
+
+  const estimatedTotalEuro = useMemo(
+    () => Math.round((djCostEuro + travelCost) * 100) / 100,
+    [djCostEuro, travelCost],
+  );
+
+  const blockedSet = useMemo(
+    () => new Set(blockedIsoDates),
+    [blockedIsoDates],
   );
 
   const { isLoaded } = useJsApiLoader({
@@ -211,6 +245,10 @@ export default function BoekenPage() {
       setSubmitError(null);
       const nextFieldErr: Record<string, string> = {};
       if (!eventDate.trim()) nextFieldErr.eventDate = "Dit veld is verplicht";
+      else if (blockedSet.has(eventDate.trim())) {
+        nextFieldErr.eventDate =
+          "Deze datum is niet beschikbaar. Kies een andere dag.";
+      }
       if (!startTime.trim()) nextFieldErr.startTime = "Dit veld is verplicht";
       if (!venueAddress.trim()) nextFieldErr.venueAddress = "Dit veld is verplicht";
       setFieldErrors(nextFieldErr);
@@ -346,6 +384,7 @@ export default function BoekenPage() {
       hours,
       hourlyRate,
       router,
+      blockedSet,
     ],
   );
 
@@ -435,15 +474,21 @@ export default function BoekenPage() {
                   {" · "}
                   {city}
                 </p>
-                <p className="mt-1 text-sm font-semibold text-neutral-900">
-                  €{hourlyRate.toLocaleString("nl-NL")}/uur
+                <p className="mt-1 text-base font-bold text-bookadj sm:text-lg">
+                  v.a. €{hourlyRate.toLocaleString("nl-NL")} per uur
                 </p>
               </div>
             </div>
 
             <div className="rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-950 ring-1 ring-emerald-200">
-              Geen betaling tot acceptatie — je kaart wordt pas belast wanneer de
-              DJ je aanvraag accepteert.
+              <p>
+                Geen betaling tot acceptatie — je kaart wordt pas belast wanneer de DJ je
+                aanvraag accepteert.
+              </p>
+              <p className="mt-2 text-emerald-900/90">
+                Je wordt pas in rekening gebracht na acceptatie. Geen acceptatie binnen de
+                termijn? Dan betaal je niets.
+              </p>
             </div>
 
             {submitError ? (
@@ -471,6 +516,7 @@ export default function BoekenPage() {
                   placeholder="Kies een datum"
                   triggerClassName="flex h-[42px] w-full items-center rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-left text-sm text-neutral-900 outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
                   popoverAlign="left"
+                  blockedIsoDates={blockedIsoDates}
                 />
                 {fieldErrors.eventDate ? (
                   <p className="mt-1.5 text-sm text-red-600" role="alert">
@@ -639,9 +685,19 @@ export default function BoekenPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full rounded-xl bg-black py-3.5 text-sm font-bold text-white disabled:opacity-50"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-black py-3.5 text-sm font-bold text-white disabled:opacity-50"
               >
-                {submitting ? "Bezig…" : "Boeking aanvragen"}
+                {submitting ? (
+                  <>
+                    <span
+                      className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+                      aria-hidden
+                    />
+                    Bezig met verzenden…
+                  </>
+                ) : (
+                  "Boeking aanvragen"
+                )}
               </button>
             </div>
           </form>
@@ -698,27 +754,52 @@ export default function BoekenPage() {
             </div>
 
             <div className="mt-5 space-y-2 border-t border-neutral-100 pt-5 text-sm">
+              <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                Prijsopbouw (indicatie)
+              </p>
               <div className="flex justify-between text-neutral-700">
                 <span>
-                  DJ ({hours} × €{hourlyRate.toLocaleString("nl-NL")})
+                  Uurtarief × uren ({hours} × €{hourlyRate.toLocaleString("nl-NL")})
                 </span>
                 <span className="font-medium">
                   €{djCostEuro.toLocaleString("nl-NL")}
                 </span>
               </div>
-              <div className="flex justify-between border-t border-neutral-200 pt-2 text-base font-bold text-neutral-900">
-                <span>Totaal</span>
-                <span>€{djCostEuro.toLocaleString("nl-NL")}</span>
+              <div className="flex justify-between text-neutral-700">
+                <span>Reiskosten (indicatie)</span>
+                <span className="font-medium">
+                  {travelCost > 0
+                    ? `€${travelCost.toLocaleString("nl-NL")}`
+                    : "€0"}
+                </span>
               </div>
+              <div className="flex justify-between border-t border-neutral-200 pt-2 text-base font-bold text-neutral-900">
+                <span>Totaal (indicatie)</span>
+                <span>€{estimatedTotalEuro.toLocaleString("nl-NL")}</span>
+              </div>
+              <p className="text-xs text-neutral-500">
+                Het uurtarief wordt vastgelegd bij je aanvraag. Reiskosten kunnen door de DJ worden
+                bevestigd.
+              </p>
             </div>
 
             <button
               type="submit"
               form="boeking-form"
               disabled={submitting}
-              className="mt-6 hidden w-full rounded-xl bg-black py-3.5 text-sm font-bold text-white hover:bg-neutral-900 disabled:opacity-50 lg:block"
+              className="mt-6 hidden w-full items-center justify-center gap-2 rounded-xl bg-black py-3.5 text-sm font-bold text-white hover:bg-neutral-900 disabled:opacity-50 lg:flex"
             >
-              {submitting ? "Bezig…" : "Boeking aanvragen"}
+              {submitting ? (
+                <>
+                  <span
+                    className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+                    aria-hidden
+                  />
+                  Bezig met verzenden…
+                </>
+              ) : (
+                "Boeking aanvragen"
+              )}
             </button>
 
             <p className="mt-4 flex items-center justify-center gap-2 text-xs text-neutral-500">

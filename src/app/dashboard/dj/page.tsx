@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { DjOnboardingChecklist } from "@/components/dj-onboarding-checklist";
 import { DashboardBookingsSkeleton, EmptyState } from "@/components/skeleton";
 import { supabase } from "@/lib/supabase-browser";
 
@@ -103,6 +104,10 @@ export default function DjDashboardPage() {
   const [pending, setPending] = useState<BookingRow[]>([]);
   const [confirmed, setConfirmed] = useState<BookingRow[]>([]);
   const [actionId, setActionId] = useState<string | null>(null);
+  const [onboardingPhotos, setOnboardingPhotos] = useState<unknown>(null);
+  const [onboardingVideoUrl, setOnboardingVideoUrl] = useState<unknown>(null);
+  const [onboardingInstagram, setOnboardingInstagram] = useState<unknown>(null);
+  const [onboardingSoundcloud, setOnboardingSoundcloud] = useState<unknown>(null);
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -120,7 +125,7 @@ export default function DjDashboardPage() {
 
     const { data: profile, error: profileError } = await supabase
       .from("dj_profiles")
-      .select("id")
+      .select("id, photos, video_url, instagram_url, soundcloud_url")
       .eq("user_id", session.user.id)
       .maybeSingle();
 
@@ -133,6 +138,10 @@ export default function DjDashboardPage() {
     if (!profile?.id) {
       setNoProfile(true);
       setDjProfileId(null);
+      setOnboardingPhotos(null);
+      setOnboardingVideoUrl(null);
+      setOnboardingInstagram(null);
+      setOnboardingSoundcloud(null);
       setPending([]);
       setConfirmed([]);
       setLoading(false);
@@ -141,6 +150,10 @@ export default function DjDashboardPage() {
 
     const djId = profile.id as string;
     setDjProfileId(djId);
+    setOnboardingPhotos((profile as { photos?: unknown }).photos ?? null);
+    setOnboardingVideoUrl((profile as { video_url?: unknown }).video_url ?? null);
+    setOnboardingInstagram((profile as { instagram_url?: unknown }).instagram_url ?? null);
+    setOnboardingSoundcloud((profile as { soundcloud_url?: unknown }).soundcloud_url ?? null);
 
     const [pendingRes, confirmedRes] = await Promise.all([
       supabase
@@ -306,6 +319,16 @@ export default function DjDashboardPage() {
         >
           {loadError}
         </p>
+      ) : null}
+
+      {djProfileId ? (
+        <DjOnboardingChecklist
+          djProfileId={djProfileId}
+          photos={onboardingPhotos}
+          videoUrl={onboardingVideoUrl}
+          instagramUrl={onboardingInstagram}
+          soundcloudUrl={onboardingSoundcloud}
+        />
       ) : null}
 
       <section aria-labelledby="nieuwe-aanvragen-heading">

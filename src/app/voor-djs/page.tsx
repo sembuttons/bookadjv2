@@ -313,7 +313,11 @@ export default function VoorDjsPage() {
 
           <ol className="mt-16 flex flex-col gap-12 lg:flex-row lg:items-start lg:gap-0">
             {steps.map((s, i) => (
-              <li key={s.n} className="flex flex-1 flex-col items-center text-center lg:min-w-0 lg:items-start lg:text-left">
+              <li
+                key={s.n}
+                id={i === 1 ? "verificatie" : undefined}
+                className={`flex flex-1 flex-col items-center text-center lg:min-w-0 lg:items-start lg:text-left ${i === 1 ? "scroll-mt-24" : ""}`}
+              >
                 <div className="flex w-full items-start gap-0 lg:gap-4">
                   <div className="flex flex-1 flex-col items-center lg:items-start">
                     <span className="inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-neutral-900 text-sm font-bold tracking-wide text-emerald-400">

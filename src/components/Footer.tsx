@@ -1,7 +1,15 @@
 import Link from "next/link";
-import { PaymentMethodBadges } from "@/components/payment-method-badges";
 
 const footerBg = "#111111";
+
+const FOOTER_PAY_LABELS = [
+  "iDEAL",
+  "Visa",
+  "Mastercard",
+  "PayPal",
+  "Apple Pay",
+  "Google Pay",
+] as const;
 
 export function Footer() {
   return (
@@ -27,7 +35,15 @@ export function Footer() {
               <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-white/45">
                 Betaalmethoden
               </p>
-              <PaymentMethodBadges variant="dark" showStripe className="justify-start" />
+              <ul className="flex flex-wrap gap-2" aria-label="Geaccepteerde betaalmethoden">
+                {FOOTER_PAY_LABELS.map((label) => (
+                  <li key={label}>
+                    <span className="inline-block rounded-full border border-white/15 bg-white/10 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-white/75">
+                      {label}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
@@ -56,7 +72,7 @@ export function Footer() {
                 </li>
                 <li>
                   <Link
-                    href="/zoeken"
+                    href="/steden"
                     className="text-white/70 transition-colors hover:text-white"
                   >
                     Steden
@@ -87,7 +103,7 @@ export function Footer() {
               <ul className="mt-4 space-y-3">
                 <li>
                   <Link
-                    href="/auth?tab=aanmelden&role=dj"
+                    href="/voor-djs"
                     className="text-white/70 transition-colors hover:text-white"
                   >
                     Aanmelden als DJ
@@ -95,18 +111,18 @@ export function Footer() {
                 </li>
                 <li>
                   <Link
-                    href="/dashboard/dj"
+                    href="/hoe-het-werkt"
                     className="text-white/70 transition-colors hover:text-white"
                   >
-                    Dashboard
+                    Hoe werkt het voor DJ&apos;s
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/voor-djs"
+                    href="/voor-djs#verificatie"
                     className="text-white/70 transition-colors hover:text-white"
                   >
-                    Verificatie
+                    DJ verificatie
                   </Link>
                 </li>
               </ul>

@@ -13,6 +13,7 @@ import {
   getCity,
   getGenres,
   getHourlyRate,
+  getProfilePhotoUrls,
   getProfileRating,
   getReviewAuthor,
   getReviewBody,
@@ -25,6 +26,7 @@ import {
   type ReviewRow,
   starDistribution,
 } from "@/lib/dj-profile-helpers";
+import { videoEmbedSrc } from "@/lib/video-embed";
 import { StelVraagButton } from "@/components/messaging/stel-vraag-button";
 import { supabase } from "@/lib/supabase";
 import { supabaseAdmin } from "@/lib/supabase-server";
@@ -79,6 +81,12 @@ function metaResponse(row: DjProfileRow): string {
   if (typeof h === "number") return `Binnen ${h} uur`;
   if (typeof h === "string" && h.trim()) return h;
   return "Binnen 2 uur";
+}
+
+function avgResponseHoursText(row: DjProfileRow): string {
+  const h = row.response_time_hours ?? row.avg_response_hours;
+  if (typeof h === "number" && !Number.isNaN(h)) return `${h} uur`;
+  return "2 uur";
 }
 
 function StarSvg({ filled }: { filled: boolean }) {
@@ -167,7 +175,7 @@ function ArrowLeftLink() {
 export default async function DjProfilePage({ params }: PageProps) {
   const { id } = await params;
 
-  const [profileRes, reviewsRes, ownerRes, relatedRes] = await Promise.all([
+  const [profileRes, reviewsRes, ownerRes, relatedRes, availRes] = await Promise.all([
     supabase.from("dj_profiles").select("*").eq("id", id).maybeSingle(),
     supabase
       .from("reviews")
@@ -182,6 +190,7 @@ export default async function DjProfilePage({ params }: PageProps) {
       .eq("verification_status", "verified")
       .neq("id", id)
       .limit(30),
+    supabase.from("dj_availability").select("blocked_date").eq("dj_id", id),
   ]);
 
   if (profileRes.error || !profileRes.data) {
@@ -236,6 +245,20 @@ export default async function DjProfilePage({ params }: PageProps) {
   const soundcloudUrl =
     typeof profile.soundcloud_url === "string" ? profile.soundcloud_url : null;
 
+  const blockedIsoDates = availRes.error
+    ? []
+    : (availRes.data ?? [])
+        .map((r) => (r as { blocked_date?: string }).blocked_date)
+        .filter((d): d is string => typeof d === "string" && /^\d{4}-\d{2}-\d{2}$/.test(d));
+
+  const photoUrls = getProfilePhotoUrls(profile);
+  const galleryMain = photoUrls[0] ?? DJ_GALLERY_MAIN;
+  const gallerySubA = photoUrls[1] ?? DJ_GALLERY_2;
+  const gallerySubB = photoUrls[2] ?? DJ_GALLERY_3;
+  const videoRaw =
+    typeof profile.video_url === "string" ? profile.video_url.trim() : "";
+  const videoIframeSrc = videoRaw ? videoEmbedSrc(videoRaw) : null;
+
   return (
     <div className="min-h-screen bg-white font-sans text-neutral-900">
       <Navbar />
@@ -245,18 +268,29 @@ export default async function DjProfilePage({ params }: PageProps) {
         <div className="relative grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-3">
           <div
             className="relative flex min-h-[220px] items-center justify-center overflow-hidden rounded-2xl bg-neutral-900 bg-cover bg-center lg:min-h-[420px]"
-            style={{ backgroundImage: `url(${DJ_GALLERY_MAIN})` }}
+            style={{ backgroundImage: `url(${galleryMain})` }}
           >
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/20" aria-hidden />
-            <button
-              type="button"
-              className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-white/15 text-white ring-2 ring-white/40 backdrop-blur-sm transition-all duration-200 hover:bg-white/25"
-              aria-label="Video — binnenkort beschikbaar"
-            >
-              <svg className="ml-1 h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </button>
+            {videoIframeSrc ? (
+              <a
+                href="#dj-video"
+                className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-white/15 text-white ring-2 ring-white/40 backdrop-blur-sm transition-all duration-200 hover:bg-white/25"
+                aria-label="Bekijk video"
+              >
+                <svg className="ml-1 h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </a>
+            ) : (
+              <span
+                className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-white/50 ring-2 ring-white/20"
+                aria-hidden
+              >
+                <svg className="ml-1 h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </span>
+            )}
             <span className="absolute bottom-3 left-3 z-10 rounded bg-black/55 px-2 py-1 text-xs text-white/95">
               Sfeerbeeld · {name}
             </span>
@@ -264,7 +298,7 @@ export default async function DjProfilePage({ params }: PageProps) {
           <div className="relative grid min-h-[220px] grid-rows-2 gap-2 lg:min-h-[420px]">
             <div className="relative overflow-hidden rounded-2xl">
               <img
-                src={DJ_GALLERY_2}
+                src={gallerySubA}
                 alt={`${name} — DJ-set sfeerbeeld`}
                 className="h-full min-h-[104px] w-full object-cover"
                 width={800}
@@ -274,7 +308,7 @@ export default async function DjProfilePage({ params }: PageProps) {
             </div>
             <div className="relative overflow-hidden rounded-2xl">
               <img
-                src={DJ_GALLERY_3}
+                src={gallerySubB}
                 alt={`${name} — publiek en licht`}
                 className="h-full min-h-[104px] w-full object-cover"
                 width={800}
@@ -282,14 +316,23 @@ export default async function DjProfilePage({ params }: PageProps) {
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" aria-hidden />
             </div>
-            <button
-              type="button"
-              className="absolute bottom-3 right-3 z-10 min-h-[44px] rounded-lg bg-white/95 px-4 py-2 text-sm font-semibold text-neutral-900 shadow-md ring-1 ring-neutral-200 transition-all duration-200 hover:bg-white"
-            >
-              Alle foto&apos;s tonen
-            </button>
           </div>
         </div>
+
+        {videoIframeSrc ? (
+          <div id="dj-video" className="mt-6 scroll-mt-24">
+            <h2 className="text-lg font-bold text-neutral-900">Video</h2>
+            <div className="mt-3 aspect-video w-full max-w-4xl overflow-hidden rounded-2xl border border-neutral-200 bg-black shadow-sm">
+              <iframe
+                title={`Video van ${name}`}
+                src={videoIframeSrc}
+                className="h-full w-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        ) : null}
 
         {/* Name + badge + location + genres — all in one block */}
         <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -319,7 +362,16 @@ export default async function DjProfilePage({ params }: PageProps) {
                   Geverifieerde DJ
                 </div>
               ) : null}
+              {totalReviews > 5 ? (
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-950 ring-1 ring-amber-200">
+                  Veel geboekt
+                </div>
+              ) : null}
             </div>
+
+            <p className="text-xl font-bold text-bookadj sm:text-2xl">
+              v.a. €{hourly.toLocaleString("nl-NL")} per uur
+            </p>
 
             <div className="flex flex-wrap items-center gap-2 text-sm font-semibold text-neutral-900">
               <StarRow value={displayRating} size="sm" />
@@ -383,7 +435,7 @@ export default async function DjProfilePage({ params }: PageProps) {
               Stel {fn} een vraag
             </StelVraagButton>
             <p className="text-xs text-neutral-500 sm:text-right">
-              Reageert binnen 2 uur
+              Gemiddelde reactietijd: {avgResponseHoursText(profile)}
             </p>
           </div>
         </div>
@@ -458,6 +510,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                 contactButtonLabel={`Stel ${fn} een vraag`}
                 responseTimeLabel={metaResponse(profile)}
                 memberSinceLabel={formatSidebarMemberSince(profile)}
+                blockedIsoDates={blockedIsoDates}
               />
             </div>
 
@@ -606,6 +659,7 @@ export default async function DjProfilePage({ params }: PageProps) {
               contactButtonLabel={`Stel ${fn} een vraag`}
               responseTimeLabel={metaResponse(profile)}
               memberSinceLabel={formatSidebarMemberSince(profile)}
+              blockedIsoDates={blockedIsoDates}
             />
           </aside>
         </div>

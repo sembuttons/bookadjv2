@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
@@ -18,7 +17,7 @@ import {
 } from "lucide-react";
 
 const HERO_BG =
-  "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=1200&q=80&auto=format&fit=crop";
+  "https://images.unsplash.com/photo-1598387993441-a364f854cfba?w=1200&q=80";
 
 type FlowKey = "klant" | "dj";
 
@@ -231,36 +230,72 @@ export function HowItWorksClient() {
   return (
     <div className="bg-white">
       {/* Hero */}
-      <section className="relative isolate overflow-hidden border-b border-neutral-200 px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-24">
-        <div className="absolute inset-0 -z-20">
-          <Image
-            src={HERO_BG}
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
-        </div>
+      <section className="relative isolate min-h-[min(88vh,720px)] w-full overflow-hidden text-white">
         <div
-          className="absolute inset-0 -z-10 bg-gradient-to-b from-black/85 via-black/75 to-black/90"
+          className="absolute inset-0 -z-20 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${HERO_BG})` }}
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 -z-10 bg-gradient-to-b from-black/70 via-black/50 to-black/30"
           aria-hidden
         />
 
-        <div className="relative mx-auto max-w-4xl">
-          <h1 className="text-balance text-3xl font-bold tracking-tight sm:text-5xl">
+        <div className="relative mx-auto flex min-h-[min(88vh,720px)] max-w-4xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
+          <h1 className="text-balance text-4xl font-bold tracking-tight drop-shadow-sm sm:text-5xl md:text-6xl">
             Hoe werkt bookadj?
           </h1>
-          <p className="mt-4 max-w-2xl text-base text-white/85 sm:text-lg">
-            Alles wat je moet weten — van zoeken tot feestje.
+          <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-white/90 sm:text-lg">
+            Van zoeken naar de perfecte DJ tot een onvergetelijk feest — wij regelen het.
           </p>
 
-          <FlowToggle value={flow} onChange={setFlow} />
+          <div className="mt-10 flex w-full max-w-md flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center sm:gap-4">
+            <Link
+              href="/zoeken"
+              className="inline-flex min-h-[48px] items-center justify-center rounded-xl bg-black px-8 py-3 text-sm font-bold text-white shadow-lg ring-1 ring-white/10 transition-all duration-200 hover:bg-neutral-900"
+            >
+              Ik zoek een DJ
+            </Link>
+            <Link
+              href="/voor-djs"
+              className="inline-flex min-h-[48px] items-center justify-center rounded-xl border-2 border-white bg-transparent px-8 py-3 text-sm font-bold text-white shadow-sm backdrop-blur-sm transition-all duration-200 hover:bg-white/10"
+            >
+              Ik ben een DJ
+            </Link>
+          </div>
+
+          <div className="mt-12 w-full max-w-md sm:max-w-lg">
+            <FlowToggle value={flow} onChange={setFlow} />
+          </div>
+
+          <a
+            href="#stap-voor-stap"
+            className="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-1 text-xs font-medium text-white/80 transition-colors hover:text-white"
+          >
+            <span className="sr-only">Scroll naar uitleg</span>
+            <span
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20 backdrop-blur-sm"
+              aria-hidden
+            >
+              <svg
+                className="h-5 w-5 animate-bounce"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+          </a>
         </div>
       </section>
 
       {/* Section 1/2 steps */}
-      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+      <section
+        id="stap-voor-stap"
+        className="mx-auto max-w-7xl scroll-mt-24 px-4 py-14 sm:px-6 lg:px-8 lg:py-20"
+      >
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-700">
             {flow === "klant" ? "Voor klanten" : "Voor DJ's"}

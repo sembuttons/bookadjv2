@@ -9,6 +9,7 @@ import {
   getGenres,
   getHourlyRate,
   getProfileRating,
+  getResponseTimeLabel,
   getReviewCount,
   getStageName,
   type DjProfileRow,
@@ -235,6 +236,15 @@ export default function ZoekenPage() {
     () => FILTER_GENRES.filter((g) => genreChecks[g]),
     [genreChecks],
   );
+
+  const hasActiveFilters = useMemo(() => {
+    if (stad.trim()) return true;
+    if (datum.trim()) return true;
+    if (occasion.trim()) return true;
+    if (selectedGenres.length > 0) return true;
+    if (priceMin !== PRICE_SLIDER_MIN || priceMax !== PRICE_SLIDER_MAX) return true;
+    return false;
+  }, [stad, datum, occasion, selectedGenres, priceMin, priceMax]);
 
   const filteredSorted = useMemo(() => {
     let list = [...rows];
@@ -475,16 +485,16 @@ export default function ZoekenPage() {
                   : " resultaten"}
               </p>
               <div className="relative flex min-w-0 flex-1 items-center justify-end sm:max-w-md sm:flex-initial">
-                <label className="flex w-full cursor-pointer items-center gap-2 text-sm text-neutral-700 sm:w-auto">
-                  <span className="shrink-0 whitespace-nowrap">
-                    Sorteren op:
+                <label className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+                  <span className="shrink-0 text-xs font-bold uppercase tracking-wide text-neutral-500 sm:text-sm sm:font-semibold sm:normal-case sm:tracking-normal sm:text-neutral-800">
+                    Sorteren
                   </span>
-                  <span className="relative inline-flex min-w-0 flex-1 items-center sm:min-w-[220px]">
+                  <span className="relative inline-flex min-w-0 flex-1 items-center sm:min-w-[240px]">
                     <select
                       value={sort}
                       onChange={(e) => setSort(e.target.value as SortKey)}
                       aria-label="Sorteer resultaten"
-                      className="input-field w-full cursor-pointer appearance-none py-0 pl-3 pr-10 font-medium shadow-sm"
+                      className="input-field w-full cursor-pointer appearance-none border-2 border-neutral-900 py-2.5 pl-3 pr-10 text-sm font-semibold shadow-md sm:py-3"
                     >
                       {SORT_OPTIONS.map((o) => (
                         <option key={o.value} value={o.value}>
@@ -492,10 +502,18 @@ export default function ZoekenPage() {
                         </option>
                       ))}
                     </select>
-                    <IconChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
+                    <IconChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-600" />
                   </span>
                 </label>
               </div>
+            </div>
+          ) : null}
+
+          {!loading && !error && !hasActiveFilters ? (
+            <div className="mb-6 rounded-xl border border-emerald-200 bg-emerald-50/80 px-4 py-3 text-sm text-emerald-950 ring-1 ring-emerald-100">
+              <span className="font-semibold">Geen filters actief.</span> Je ziet nu alle geverifieerde
+              DJ&apos;s. Gebruik de filters links (of boven op mobiel) om sneller te vinden wat bij je
+              past.
             </div>
           ) : null}
 
@@ -537,6 +555,7 @@ export default function ZoekenPage() {
                 const city = getCity(row);
                 const genres = getGenres(row);
                 const rate = getHourlyRate(row);
+                const responseLabel = getResponseTimeLabel(row);
                 return (
                   <li key={id}>
                     <Link
@@ -570,6 +589,9 @@ export default function ZoekenPage() {
                             </span>
                           ))}
                         </div>
+                        <p className="text-xs text-neutral-500">
+                          Reactietijd: {responseLabel}
+                        </p>
                         <div className="flex items-center justify-between border-t border-neutral-100 pt-3">
                           <p className="font-bold text-neutral-900">
                             {rate != null

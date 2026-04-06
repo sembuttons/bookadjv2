@@ -145,3 +145,21 @@ export function starDistribution(reviews: ReviewRow[]): Record<1 | 2 | 3 | 4 | 5
   }
   return dist;
 }
+
+/** Public photo URLs from `dj_profiles.photos` jsonb (max 6). */
+export function getProfilePhotoUrls(row: DjProfileRow): string[] {
+  const p = row.photos;
+  if (!Array.isArray(p)) return [];
+  return p
+    .filter((x): x is string => typeof x === "string" && Boolean(x.trim()))
+    .map((s) => s.trim())
+    .slice(0, 6);
+}
+
+/** Label for search cards / UI, e.g. "Binnen 2 uur". */
+export function getResponseTimeLabel(row: DjProfileRow): string {
+  const h = row.response_time_hours ?? row.avg_response_hours;
+  if (typeof h === "number" && !Number.isNaN(h)) return `Binnen ${h} uur`;
+  if (typeof h === "string" && h.trim()) return h.trim();
+  return "Binnen 2 uur";
+}

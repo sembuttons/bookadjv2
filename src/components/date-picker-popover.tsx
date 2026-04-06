@@ -92,6 +92,8 @@ export type DatePickerPopoverProps = {
   triggerClassName?: string;
   popoverAlign?: "left" | "right";
   triggerId?: string;
+  /** ISO yyyy-mm-dd dates that cannot be selected (e.g. DJ blocked). */
+  blockedIsoDates?: readonly string[];
 };
 
 export function DatePickerPopover({
@@ -103,6 +105,7 @@ export function DatePickerPopover({
   triggerClassName,
   popoverAlign = "left",
   triggerId,
+  blockedIsoDates,
 }: DatePickerPopoverProps) {
   const [open, setOpen] = useState(false);
   const selected = parseISODate(value);
@@ -112,6 +115,10 @@ export function DatePickerPopover({
   });
   const popoverRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+
+  const blockedSet = blockedIsoDates?.length
+    ? new Set(blockedIsoDates)
+    : null;
 
   useEffect(() => {
     const s = parseISODate(value);
@@ -162,8 +169,14 @@ export function DatePickerPopover({
 
   function selectDay(day: number) {
     const d = new Date(year, month, day);
-    onChange(toISODateLocal(startOfDay(d)));
+    const iso = toISODateLocal(startOfDay(d));
+    if (blockedSet?.has(iso)) return;
+    onChange(iso);
     setOpen(false);
+  }
+
+  function isoForDay(day: number) {
+    return toISODateLocal(startOfDay(new Date(year, month, day)));
   }
 
   const labelText = selected
@@ -240,21 +253,31 @@ export function DatePickerPopover({
               day == null ? (
                 <div key={`e-${i}`} className="aspect-square" />
               ) : (
-                <button
-                  key={day}
-                  type="button"
-                  onClick={() => selectDay(day)}
-                  className={[
-                    "flex aspect-square items-center justify-center rounded-lg text-sm font-medium transition-colors",
-                    isSelected(day)
-                      ? "bg-bookadj text-white shadow-sm"
-                      : isToday(day)
-                        ? "bg-neutral-100 font-semibold text-neutral-900 ring-1 ring-neutral-300"
-                        : "text-neutral-800 hover:bg-neutral-50",
-                  ].join(" ")}
-                >
-                  {day}
-                </button>
+                (() => {
+                  const iso = isoForDay(day);
+                  const blocked = blockedSet?.has(iso) ?? false;
+                  return (
+                    <button
+                      key={day}
+                      type="button"
+                      disabled={blocked}
+                      title={blocked ? "Deze datum is niet beschikbaar" : undefined}
+                      onClick={() => selectDay(day)}
+                      className={[
+                        "flex aspect-square items-center justify-center rounded-lg text-sm font-medium transition-colors",
+                        blocked
+                          ? "cursor-not-allowed bg-neutral-100 text-neutral-300 line-through"
+                          : isSelected(day)
+                            ? "bg-bookadj text-white shadow-sm"
+                            : isToday(day)
+                              ? "bg-neutral-100 font-semibold text-neutral-900 ring-1 ring-neutral-300"
+                              : "text-neutral-800 hover:bg-neutral-50",
+                      ].join(" ")}
+                    >
+                      {day}
+                    </button>
+                  );
+                })()
               ),
             )}
           </div>

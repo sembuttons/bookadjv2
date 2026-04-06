@@ -2,15 +2,18 @@ import Link from "next/link";
 import { HomeSearchForm } from "@/components/home-search-form";
 import { Navbar } from "@/components/Navbar";
 import { EmptyState } from "@/components/skeleton";
-import { PaymentMethodBadges } from "@/components/payment-method-badges";
 import {
   Briefcase,
+  CreditCard,
   Gift,
   GraduationCap,
   Heart,
   Home as HomeIcon,
+  MessageCircle,
   MoreHorizontal,
   Music,
+  Shield,
+  Star,
   Zap,
 } from "lucide-react";
 import {
@@ -151,11 +154,10 @@ export default async function Home() {
             De DJ-boekingsmarktplaats van Nederland
           </p>
           <h1 className="text-balance text-[1.65rem] font-bold leading-tight tracking-tight drop-shadow-sm min-[400px]:text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
-            Vind de perfecte DJ voor jouw evenement
+            De beste DJ voor jouw feest — geverifieerd en verzekerd
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-pretty text-sm text-neutral-200 min-[400px]:text-base sm:mt-6 sm:text-lg">
-            Geverifieerde DJ&apos;s, transparante prijzen en volledige
-            betalingsbescherming
+            Boek direct via ons platform. Veilig betalen, eerlijke reviews, altijd een DJ die past.
           </p>
 
           <HomeSearchForm />
@@ -204,7 +206,7 @@ export default async function Home() {
       </section>
 
       <section
-        className="border-t border-bookadj/25 bg-neutral-950 px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-24"
+        className="border-t border-bookadj/20 bg-gradient-to-b from-neutral-950 to-neutral-900 px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-24"
         aria-labelledby="trust-pro-heading"
       >
         <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
@@ -219,62 +221,45 @@ export default async function Home() {
               Boek met vertrouwen
             </h2>
             <p className="mt-4 text-base leading-relaxed text-neutral-300 sm:text-lg">
-              Elke DJ doorloopt ID- en bedrijfscontrole. Betalingen verlopen
-              veilig via het platform — pas belast wanneer je boeking is
-              geaccepteerd. Jij feest, wij regelen de rest.
+              Eerlijke informatie, duidelijke afspraken en een platform dat met je meedenkt — van
+              eerste klik tot na het feest.
             </p>
-            <ul className="mt-8 space-y-3 text-sm text-neutral-300">
-              <li className="flex gap-3">
-                <span
-                  className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-bookadj text-white"
-                  aria-hidden
+            <ul className="mt-10 grid gap-4 sm:grid-cols-2">
+              {(
+                [
+                  {
+                    Icon: Shield,
+                    title: "Veilig boeken",
+                    text: "Alle DJ's worden handmatig geverifieerd voordat ze live gaan. Jij boekt met zekerheid.",
+                  },
+                  {
+                    Icon: CreditCard,
+                    title: "Betaal pas na acceptatie",
+                    text: "Je betaling wordt alleen verwerkt als de DJ je boeking accepteert. Geen reactie? Geen kosten.",
+                  },
+                  {
+                    Icon: MessageCircle,
+                    title: "Direct contact",
+                    text: "Communiceer rechtstreeks met de DJ via ons platform. Snel, veilig en overzichtelijk.",
+                  },
+                  {
+                    Icon: Star,
+                    title: "Eerlijke reviews",
+                    text: "Reviews komen alleen van klanten die daadwerkelijk hebben geboekt. Geen neppe beoordelingen.",
+                  },
+                ] as const
+              ).map(({ Icon, title, text }) => (
+                <li
+                  key={title}
+                  className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm"
                 >
-                  <svg className="h-3 w-3" viewBox="0 0 12 12" fill="none">
-                    <path
-                      d="M2.5 6l2.5 2.5L9.5 3.5"
-                      stroke="currentColor"
-                      strokeWidth="1.75"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-                Geverifieerde profielen en duidelijke reviews
-              </li>
-              <li className="flex gap-3">
-                <span
-                  className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-bookadj text-white"
-                  aria-hidden
-                >
-                  <svg className="h-3 w-3" viewBox="0 0 12 12" fill="none">
-                    <path
-                      d="M2.5 6l2.5 2.5L9.5 3.5"
-                      stroke="currentColor"
-                      strokeWidth="1.75"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-                Beschermde betaling tot na je evenement
-              </li>
-              <li className="flex gap-3">
-                <span
-                  className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-bookadj text-white"
-                  aria-hidden
-                >
-                  <svg className="h-3 w-3" viewBox="0 0 12 12" fill="none">
-                    <path
-                      d="M2.5 6l2.5 2.5L9.5 3.5"
-                      stroke="currentColor"
-                      strokeWidth="1.75"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-                Support bij vragen of wijzigingen
-              </li>
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-400/25">
+                    <Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden />
+                  </span>
+                  <h3 className="mt-4 font-bold text-white">{title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-neutral-300">{text}</p>
+                </li>
+              ))}
             </ul>
             <Link
               href="/zoeken"
@@ -520,7 +505,7 @@ export default async function Home() {
       </section>
 
       <section
-        className="border-y-2 border-black bg-neutral-100 px-4 py-10 sm:px-6 lg:px-8"
+        className="border-y border-neutral-200 bg-neutral-100 px-4 py-10 sm:px-6 lg:px-8"
         aria-label="Cijfers"
       >
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-8 text-center sm:gap-12 lg:gap-20">
@@ -556,30 +541,6 @@ export default async function Home() {
               tevreden klanten
             </p>
           </div>
-        </div>
-      </section>
-
-      <section
-        className="border-b border-neutral-200 bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-16"
-        aria-labelledby="payment-methods-heading"
-      >
-        <div className="mx-auto max-w-3xl text-center">
-          <h2
-            id="payment-methods-heading"
-            className="text-xl font-bold tracking-tight text-neutral-900 sm:text-2xl"
-          >
-            Betaal veilig
-          </h2>
-          <p className="mt-2 text-sm text-neutral-600 sm:text-base">
-            Betalingen verlopen via Stripe. Kies de methode die bij jou past.
-          </p>
-          <p className="mt-3 text-xs font-medium text-neutral-500">
-            256-bit SSL beveiliging · 500+ tevreden klanten
-          </p>
-          <PaymentMethodBadges
-            className="mt-8 justify-center"
-            variant="light"
-          />
         </div>
       </section>
 

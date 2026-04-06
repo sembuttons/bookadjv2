@@ -19,6 +19,7 @@ type Props = {
   contactButtonLabel?: string;
   responseTimeLabel?: string;
   memberSinceLabel?: string;
+  blockedIsoDates?: readonly string[];
 };
 
 function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number) {
@@ -44,6 +45,7 @@ export function BookingPanel({
   contactButtonLabel = "Stel een vraag",
   responseTimeLabel = "Binnen 2 uur",
   memberSinceLabel = "—",
+  blockedIsoDates,
 }: Props) {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY ?? "",
@@ -126,6 +128,7 @@ export function BookingPanel({
             placeholder="Kies een datum"
             popoverAlign="right"
             triggerClassName="input-field flex items-center justify-start text-left"
+            blockedIsoDates={blockedIsoDates}
           />
         </div>
 

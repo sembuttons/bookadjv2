@@ -155,6 +155,23 @@ export function Navbar() {
   const displayRole = role;
   const isDj = displayRole === "dj";
   const isAdmin = displayRole === "admin";
+  const isCustomer = !isDj && !isAdmin;
+
+  const BerichtenMenuItem = (
+    <Link
+      href="/berichten"
+      role="menuitem"
+      className="flex items-center justify-between gap-2 px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-50"
+      onClick={() => setMenuOpen(false)}
+    >
+      <span>Berichten</span>
+      {unread > 0 ? (
+        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-orange-500 px-1.5 text-[10px] font-bold text-white">
+          {unread > 9 ? "9+" : unread}
+        </span>
+      ) : null}
+    </Link>
+  );
 
   const navLinkClass =
     "py-2 text-sm font-medium text-neutral-800 transition-all duration-200 hover:text-bookadj md:py-0";
@@ -307,73 +324,76 @@ export function Navbar() {
                     <p className="truncate text-xs text-neutral-400">{email}</p>
                   </div>
                   <div className="my-2 border-t border-neutral-100" role="separator" />
-                  <Link
-                    href="/dashboard/klant"
-                    role="menuitem"
-                    className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-50"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    Mijn boekingen
-                  </Link>
-                  <Link
-                    href="/berichten"
-                    role="menuitem"
-                    className="flex items-center justify-between gap-2 px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-50"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    <span>Berichten</span>
-                    {unread > 0 ? (
-                      <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-orange-500 px-1.5 text-[10px] font-bold text-white">
-                        {unread > 9 ? "9+" : unread}
-                      </span>
-                    ) : null}
-                  </Link>
-                  <Link
-                    href="/dashboard/klant/reviews"
-                    role="menuitem"
-                    className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-50"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    Mijn reviews
-                  </Link>
-                  <Link
-                    href="/dashboard/klant/profiel"
-                    role="menuitem"
-                    className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-50"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    Profiel
-                  </Link>
-                  <div className="my-2 border-t border-neutral-100" role="separator" />
-                  {!isDj ? (
-                    <Link
-                      href="/voor-djs"
-                      role="menuitem"
-                      className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-50"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      Voor DJ&apos;s
-                    </Link>
-                  ) : null}
-                  {isDj ? (
-                    <Link
-                      href="/dashboard/dj"
-                      role="menuitem"
-                      className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-50"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      DJ Dashboard
-                    </Link>
-                  ) : null}
                   {isAdmin ? (
-                    <Link
-                      href="/admin"
-                      role="menuitem"
-                      className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-50"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      Admin
-                    </Link>
+                    <>
+                      <Link
+                        href="/admin"
+                        role="menuitem"
+                        className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-50"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        Admin panel
+                      </Link>
+                      {BerichtenMenuItem}
+                    </>
+                  ) : null}
+                  {isDj && !isAdmin ? (
+                    <>
+                      <Link
+                        href="/dashboard/dj"
+                        role="menuitem"
+                        className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-50"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        Mijn boekingen
+                      </Link>
+                      {BerichtenMenuItem}
+                      <Link
+                        href="/dashboard/dj"
+                        role="menuitem"
+                        className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-50"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        DJ Dashboard
+                      </Link>
+                      <Link
+                        href="/dashboard/dj/profiel"
+                        role="menuitem"
+                        className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-50"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        Mijn profiel
+                      </Link>
+                    </>
+                  ) : null}
+                  {isCustomer ? (
+                    <>
+                      <Link
+                        href="/dashboard/klant"
+                        role="menuitem"
+                        className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-50"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        Mijn boekingen
+                      </Link>
+                      {BerichtenMenuItem}
+                      <Link
+                        href="/dashboard/klant/reviews"
+                        role="menuitem"
+                        className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-50"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        Mijn reviews
+                      </Link>
+                      <Link
+                        href="/dashboard/klant/profiel"
+                        role="menuitem"
+                        className="block px-4 py-2.5 text-sm text-neutral-800 hover:bg-neutral-50"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        Profiel
+                      </Link>
+                    </>
                   ) : null}
                   <div className="my-2 border-t border-neutral-100" role="separator" />
                   <button
