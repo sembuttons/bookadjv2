@@ -514,6 +514,11 @@ export default async function DjProfilePage({ params }: PageProps) {
               djId={id}
               djUserId={djUserId || null}
               hourlyRate={hourly}
+              homeLat={typeof profile.home_lat === "number" ? profile.home_lat : null}
+              homeLng={typeof profile.home_lng === "number" ? profile.home_lng : null}
+              ratePerKm={
+                typeof profile.rate_per_km === "number" ? profile.rate_per_km : null
+              }
               contactButtonLabel={`Stel ${fn} een vraag`}
               responseTimeLabel={metaResponse(profile)}
               memberSinceLabel={formatSidebarMemberSince(profile)}

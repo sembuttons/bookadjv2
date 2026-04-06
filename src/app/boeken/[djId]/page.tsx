@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
 import { Navbar } from "@/components/Navbar";
 import {
   getCity,
@@ -22,6 +23,8 @@ const EVENT_TYPES = [
   "Anders",
 ] as const;
 
+const libraries = ["places"] as const;
+
 function initials(name: string) {
   return (
     name
@@ -35,6 +38,19 @@ function initials(name: string) {
 
 function randomReference() {
   return `BKA-${Math.floor(1000 + Math.random() * 9000)}`;
+}
+
+function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
 }
 
 export default function BoekenPage() {
@@ -54,6 +70,10 @@ export default function BoekenPage() {
   const [hours, setHours] = useState(4);
   const [startTime, setStartTime] = useState("");
   const [venueAddress, setVenueAddress] = useState("");
+  const [travelCost, setTravelCost] = useState(0);
+  const [travelDistance, setTravelDistance] = useState(0);
+  const [autocomplete, setAutocomplete] =
+    useState<google.maps.places.Autocomplete | null>(null);
   const [eventType, setEventType] = useState<string>(EVENT_TYPES[0]);
   const [customerMessage, setCustomerMessage] = useState("");
 
@@ -118,6 +138,51 @@ export default function BoekenPage() {
     () => Math.round(hourlyRate * hours * 100) / 100,
     [hourlyRate, hours],
   );
+
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY ?? "",
+    libraries: libraries as any,
+  });
+
+  const onPlaceChanged = useCallback(() => {
+    if (!autocomplete) return;
+    const place = autocomplete.getPlace();
+    const formatted = place?.formatted_address ?? place?.name ?? "";
+    if (formatted) setVenueAddress(formatted);
+
+    const loc = place?.geometry?.location;
+    if (!loc) return;
+    const lat = typeof loc.lat === "function" ? loc.lat() : null;
+    const lng = typeof loc.lng === "function" ? loc.lng() : null;
+    if (lat == null || lng == null) return;
+
+    const homeLat =
+      profile && typeof (profile as any).home_lat === "number"
+        ? ((profile as any).home_lat as number)
+        : null;
+    const homeLng =
+      profile && typeof (profile as any).home_lng === "number"
+        ? ((profile as any).home_lng as number)
+        : null;
+    const perKm =
+      profile && typeof (profile as any).rate_per_km === "number"
+        ? (((profile as any).rate_per_km as number) > 0
+            ? ((profile as any).rate_per_km as number)
+            : 0.42)
+        : 0.42;
+
+    if (homeLat != null && homeLng != null) {
+      const crow = haversineKm(homeLat, homeLng, lat, lng);
+      const roadReturnTrip = crow * 1.3 * 2;
+      const kmRounded = Math.round(roadReturnTrip);
+      const cost = Math.round(roadReturnTrip * perKm);
+      setTravelDistance(kmRounded);
+      setTravelCost(cost);
+    } else {
+      setTravelDistance(0);
+      setTravelCost(0);
+    }
+  }, [autocomplete, profile]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -413,14 +478,35 @@ export default function BoekenPage() {
                 <span className="text-sm font-semibold text-neutral-800">
                   Locatie evenement
                 </span>
-                <input
-                  type="text"
-                  required
-                  value={venueAddress}
-                  onChange={(e) => setVenueAddress(e.target.value)}
-                  placeholder="Adres of plaats"
-                  className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
-                />
+                {isLoaded ? (
+                  <Autocomplete
+                    onLoad={(ac) => setAutocomplete(ac)}
+                    onPlaceChanged={onPlaceChanged}
+                    options={{ componentRestrictions: { country: "nl" } }}
+                  >
+                    <input
+                      type="text"
+                      required
+                      value={venueAddress}
+                      onChange={(e) => setVenueAddress(e.target.value)}
+                      placeholder="Straat en huisnummer, Stad"
+                      className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                    />
+                  </Autocomplete>
+                ) : (
+                  <input
+                    type="text"
+                    placeholder="Adres laden..."
+                    disabled
+                    className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm"
+                  />
+                )}
+                {travelCost > 0 ? (
+                  <div className="mt-2 text-xs italic text-neutral-600">
+                    Reiskosten: €{travelCost} (geschatte afstand: {travelDistance}
+                    km retour)
+                  </div>
+                ) : null}
               </label>
 
               <label className="block">

@@ -2,37 +2,94 @@
 
 import Link from "next/link";
 import { ShieldCheck } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
+import { useCallback, useMemo, useState } from "react";
 import { DatePickerPopover } from "@/components/date-picker-popover";
 import { StelVraagButton } from "@/components/messaging/stel-vraag-button";
+
+const libraries = ["places"] as const;
 
 type Props = {
   djId: string;
   djUserId?: string | null;
   hourlyRate: number;
+  homeLat?: number | null;
+  homeLng?: number | null;
+  ratePerKm?: number | null;
   contactButtonLabel?: string;
   responseTimeLabel?: string;
   memberSinceLabel?: string;
 };
 
+function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
 export function BookingPanel({
   djId,
   djUserId,
   hourlyRate,
+  homeLat,
+  homeLng,
+  ratePerKm,
   contactButtonLabel = "Stel een vraag",
   responseTimeLabel = "Binnen 2 uur",
   memberSinceLabel = "—",
 }: Props) {
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY ?? "",
+    libraries: libraries as any,
+  });
+
   const [hours, setHours] = useState(4);
   const [eventDate, setEventDate] = useState("");
-  const [location, setLocation] = useState("");
+  const [venueAddress, setVenueAddress] = useState("");
+  const [travelCost, setTravelCost] = useState(0);
+  const [travelDistance, setTravelDistance] = useState(0);
+  const [autocomplete, setAutocomplete] =
+    useState<google.maps.places.Autocomplete | null>(null);
+
+  const onPlaceChanged = useCallback(() => {
+    if (!autocomplete) return;
+    const place = autocomplete.getPlace();
+    const formatted = place?.formatted_address ?? place?.name ?? "";
+    if (formatted) setVenueAddress(formatted);
+
+    const loc = place?.geometry?.location;
+    if (!loc) return;
+    const lat = typeof loc.lat === "function" ? loc.lat() : null;
+    const lng = typeof loc.lng === "function" ? loc.lng() : null;
+    if (lat == null || lng == null) return;
+
+    if (typeof homeLat === "number" && typeof homeLng === "number") {
+      const crow = haversineKm(homeLat, homeLng, lat, lng);
+      const roadReturnTrip = crow * 1.3 * 2;
+      const kmRounded = Math.round(roadReturnTrip);
+      const perKm = typeof ratePerKm === "number" && ratePerKm > 0 ? ratePerKm : 0.42;
+      const cost = Math.round(roadReturnTrip * perKm);
+      setTravelDistance(kmRounded);
+      setTravelCost(cost);
+    } else {
+      setTravelDistance(0);
+      setTravelCost(0);
+    }
+  }, [autocomplete, homeLat, homeLng, ratePerKm]);
 
   const djCost = useMemo(
     () => Math.round(hourlyRate * hours * 100) / 100,
     [hourlyRate, hours],
   );
 
-  const total = useMemo(() => djCost, [djCost]);
+  const total = useMemo(() => djCost + travelCost, [djCost, travelCost]);
 
   const hourOptions = [1, 2, 3, 4, 5, 6, 7, 8];
 
@@ -76,17 +133,38 @@ export function BookingPanel({
           <span className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
             Locatie evenement
           </span>
-          <input
-            type="text"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            placeholder="Straat en huisnummer, Stad"
-            className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
-          />
+          {isLoaded ? (
+            <Autocomplete
+              onLoad={(ac) => setAutocomplete(ac)}
+              onPlaceChanged={onPlaceChanged}
+              options={{ componentRestrictions: { country: "nl" } }}
+            >
+              <input
+                type="text"
+                value={venueAddress}
+                onChange={(e) => setVenueAddress(e.target.value)}
+                placeholder="Straat en huisnummer, Stad"
+                className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+              />
+            </Autocomplete>
+          ) : (
+            <input
+              type="text"
+              placeholder="Adres laden..."
+              disabled
+              className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-900 outline-none placeholder:text-neutral-400"
+            />
+          )}
         </label>
-        <p className="mt-2 rounded-lg bg-neutral-100 px-3 py-2 text-xs italic text-neutral-600">
-          Reiskosten worden berekend na bevestiging van de DJ
-        </p>
+        {travelCost > 0 ? (
+          <div className="mt-2 text-xs italic text-neutral-600">
+            Reiskosten: €{travelCost} (geschatte afstand: {travelDistance}km retour)
+          </div>
+        ) : (
+          <p className="mt-2 rounded-lg bg-neutral-100 px-3 py-2 text-xs italic text-neutral-600">
+            Reiskosten worden berekend na bevestiging van de DJ
+          </p>
+        )}
 
         <div className="mt-6 space-y-2 rounded-xl bg-neutral-50 px-4 py-3 text-sm">
           <div className="flex justify-between text-neutral-700">
@@ -103,8 +181,8 @@ export function BookingPanel({
           </div>
           <div className="flex justify-between text-neutral-700">
             <span>Reiskosten</span>
-            <span className="font-medium italic text-neutral-500">
-              Na acceptatie
+            <span className="font-medium text-neutral-700">
+              {travelCost > 0 ? `€${travelCost.toLocaleString("nl-NL")}` : "—"}
             </span>
           </div>
           <div className="flex justify-between border-t border-neutral-200 pt-2 text-base font-bold text-neutral-900">
