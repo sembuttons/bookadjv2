@@ -197,6 +197,16 @@ export default function DjProfielAanmakenPage() {
       e.preventDefault();
       setSubmitError(null);
 
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session?.user) {
+        router.replace(
+          `/auth?redirect=${encodeURIComponent("/dashboard/dj/profiel-aanmaken")}`,
+        );
+        return;
+      }
+
       const name = stageName.trim();
       const bioTrim = bio.trim();
       const cityTrim = city.trim();
@@ -225,13 +235,7 @@ export default function DjProfielAanmakenPage() {
       setFieldErrors(err);
       if (Object.keys(err).length > 0) return;
 
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (!session?.user) {
-        setSubmitError("Sessie verlopen. Log opnieuw in.");
-        return;
-      }
+      const userId = session.user.id;
 
       const yearsParsed = yearsExperience.trim()
         ? parseInt(yearsExperience.trim(), 10)
@@ -243,8 +247,22 @@ export default function DjProfielAanmakenPage() {
 
       setSubmitting(true);
 
+      const { error: userUpsertError } = await supabase.from("users").upsert(
+        {
+          id: userId,
+          email: session.user.email ?? null,
+          role: "dj",
+        },
+        { onConflict: "id" },
+      );
+      if (userUpsertError) {
+        setSubmitting(false);
+        setSubmitError(userUpsertError.message);
+        return;
+      }
+
       const payload = {
-        user_id: session.user.id,
+        user_id: userId,
         stage_name: name,
         bio: bioTrim,
         city: cityTrim,
