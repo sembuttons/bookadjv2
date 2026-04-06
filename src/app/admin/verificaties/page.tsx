@@ -30,16 +30,25 @@ export default function AdminVerificatiesPage() {
   const load = useCallback(async () => {
     setLoading(true);
     setLoadError(null);
-    const { data, error } = await supabase
-      .from("dj_profiles")
-      .select("*")
-      .eq("verification_status", "pending")
-      .order("created_at", { ascending: true });
-    if (error) {
-      setLoadError(error.message);
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session?.access_token) {
+      setLoadError("Niet ingelogd.");
+      setProfiles([]);
+      setLoading(false);
+      return;
+    }
+
+    const res = await fetch("/api/admin/verifications/pending", {
+      headers: { Authorization: `Bearer ${session.access_token}` },
+    });
+    const json = (await res.json()) as { data?: unknown; error?: string };
+    if (!res.ok) {
+      setLoadError(json.error ?? "Kon verificaties niet laden.");
       setProfiles([]);
     } else {
-      setProfiles((data as DjProfileRow[]) ?? []);
+      setProfiles((json.data as DjProfileRow[]) ?? []);
     }
     setLoading(false);
   }, []);
@@ -51,13 +60,28 @@ export default function AdminVerificatiesPage() {
   const approve = useCallback(
     async (id: string) => {
       setActionId(id);
-      const { error } = await supabase
-        .from("dj_profiles")
-        .update({ verification_status: "verified", is_visible: true })
-        .eq("id", id);
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        setActionId(null);
+        setLoadError("Niet ingelogd.");
+        return;
+      }
+
+      const res = await fetch("/api/admin/verifications/action", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ id, action: "approve" }),
+      });
+      const json = (await res.json()) as { error?: string };
       setActionId(null);
-      if (error) {
-        setLoadError(error.message);
+      if (!res.ok) {
+        setLoadError(json.error ?? "Actie mislukt.");
         return;
       }
       await load();
@@ -68,13 +92,28 @@ export default function AdminVerificatiesPage() {
   const reject = useCallback(
     async (id: string) => {
       setActionId(id);
-      const { error } = await supabase
-        .from("dj_profiles")
-        .update({ verification_status: "rejected" })
-        .eq("id", id);
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        setActionId(null);
+        setLoadError("Niet ingelogd.");
+        return;
+      }
+
+      const res = await fetch("/api/admin/verifications/action", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ id, action: "reject" }),
+      });
+      const json = (await res.json()) as { error?: string };
       setActionId(null);
-      if (error) {
-        setLoadError(error.message);
+      if (!res.ok) {
+        setLoadError(json.error ?? "Actie mislukt.");
         return;
       }
       await load();
