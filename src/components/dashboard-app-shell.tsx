@@ -222,8 +222,8 @@ export function DashboardAppShell({
           href={item.href}
           className={`relative flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
             active
-              ? "border-r-2 border-green-500 bg-green-500/10 text-green-400"
-              : "text-gray-400 hover:bg-gray-900 hover:text-white"
+              ? "border-r-2 border-green-500 bg-gradient-to-r from-green-50 to-transparent font-medium text-green-700"
+              : "text-slate-600 hover:bg-gray-50 hover:text-slate-900"
           }`}
         >
           <span className="min-w-0 flex-1">{item.label}</span>
@@ -238,7 +238,7 @@ export function DashboardAppShell({
 
   if (!ready || !userEmail) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] font-sans text-white antialiased">
+      <div className="min-h-screen bg-[#f8fafc] font-sans text-slate-900 antialiased">
         <Navbar />
         <div className="mx-auto max-w-[1600px] px-4 py-8 sm:px-6 lg:px-10">
           <DashboardShellSkeleton />
@@ -248,12 +248,12 @@ export function DashboardAppShell({
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] pb-[4.5rem] font-sans text-white antialiased md:pb-0">
+    <div className="min-h-screen bg-[#f8fafc] pb-[4.5rem] font-sans text-slate-900 antialiased md:pb-0">
       <Navbar />
 
       <div className="mx-auto flex max-w-[1600px] flex-col md:flex-row">
         <aside
-          className="hidden w-56 shrink-0 border-b-0 border-r border-gray-900 bg-[#0f0f0f] md:block lg:w-60"
+          className="hidden w-56 shrink-0 border-b-0 border-r border-gray-100 bg-white md:block lg:w-60"
           aria-label={
             sidebarRole === "dj" ? "DJ-dashboard navigatie" : "Dashboard navigatie"
           }
@@ -264,7 +264,7 @@ export function DashboardAppShell({
               type="button"
               onClick={() => void handleLogout()}
               disabled={loggingOut}
-              className="mt-3 border-t border-gray-900 pt-4 text-left text-sm font-medium text-gray-400 transition-colors hover:bg-gray-900 hover:text-white disabled:opacity-50"
+              className="mt-3 border-t border-gray-100 pt-4 text-left text-sm font-medium text-slate-500 transition-colors hover:bg-gray-50 hover:text-slate-900 disabled:opacity-50"
             >
               Uitloggen
             </button>
@@ -283,7 +283,7 @@ export function DashboardAppShell({
       </div>
 
       <nav
-        className="fixed bottom-0 left-0 right-0 z-[60] flex items-stretch justify-around border-t border-gray-900 bg-[#0f0f0f] px-1 pt-1 shadow-[0_-4px_24px_rgba(0,0,0,0.35)] md:hidden"
+        className="fixed bottom-0 left-0 right-0 z-[60] flex items-stretch justify-around border-t border-gray-200 bg-white px-1 pt-1 shadow-[0_-4px_24px_rgba(15,23,42,0.08)] md:hidden"
         style={{
           paddingBottom: "max(0.35rem, env(safe-area-inset-bottom, 0px))",
         }}
@@ -301,12 +301,12 @@ export function DashboardAppShell({
               key={item.key}
               href={item.href}
               className={`relative flex min-h-[48px] min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-lg px-1 py-1 text-[10px] font-medium transition-all duration-200 ${
-                active ? "text-green-500" : "text-gray-500"
+                active ? "text-green-600" : "text-slate-500"
               }`}
             >
               <span className="relative">
                 <Icon
-                  className={`h-6 w-6 ${active ? "text-green-500" : "text-gray-400"}`}
+                  className={`h-6 w-6 ${active ? "text-green-600" : "text-slate-400"}`}
                   strokeWidth={1.75}
                   aria-hidden
                 />

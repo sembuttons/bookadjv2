@@ -137,7 +137,7 @@ function DualHourlyRateSlider({
     <div className="space-y-3">
       <div className="relative h-10 pt-2">
         <div
-          className="pointer-events-none absolute left-0 right-0 top-[calc(50%-2px)] h-px bg-gray-800/50"
+          className="pointer-events-none absolute left-0 right-0 top-[calc(50%-2px)] h-px bg-gray-200"
           aria-hidden
         />
         <div
@@ -329,8 +329,8 @@ export default function ZoekenPage() {
 
   const FilterBlock = (
     <>
-      <div className="space-y-2 border-b border-gray-800 py-6">
-        <h2 className="text-sm font-semibold text-white">Gelegenheid</h2>
+      <div className="space-y-2 border-b border-gray-100 py-6">
+        <h2 className="text-sm font-semibold text-slate-900">Gelegenheid</h2>
         <p className="text-xs text-gray-500">
           Filter op type feest (secundair naast je zoekbalk).
         </p>
@@ -349,15 +349,15 @@ export default function ZoekenPage() {
         </select>
       </div>
 
-      <fieldset className="space-y-3 border-b border-gray-800 py-6">
-        <legend className="text-sm font-semibold text-white">Genre</legend>
+      <fieldset className="space-y-3 border-b border-gray-100 py-6">
+        <legend className="text-sm font-semibold text-slate-900">Genre</legend>
         <ul className="space-y-2">
           {FILTER_GENRES.map((g) => (
             <li key={g}>
-              <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-400">
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-600">
                 <input
                   type="checkbox"
-                  className="h-4 w-4 rounded border-gray-800"
+                  className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
                   checked={genreChecks[g] ?? false}
                   onChange={() =>
                     setGenreChecks((p) => ({ ...p, [g]: !p[g] }))
@@ -370,8 +370,8 @@ export default function ZoekenPage() {
         </ul>
       </fieldset>
 
-      <div className="space-y-2 border-b border-gray-800 py-6">
-        <h2 className="text-sm font-semibold text-white">
+      <div className="space-y-2 border-b border-gray-100 py-6">
+        <h2 className="text-sm font-semibold text-slate-900">
           Uurtarief (€)
         </h2>
         <p className="text-xs text-gray-500">
@@ -391,10 +391,10 @@ export default function ZoekenPage() {
   const resultCount = filteredSorted.length;
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] font-sans text-white">
+    <div className="min-h-screen bg-[#f8fafc] font-sans text-slate-900">
       <Navbar />
 
-      <header className="border-b border-gray-900 bg-[#0a0a0a] text-white shadow-sm">
+      <header className="border-b border-gray-100 bg-white text-slate-900 shadow-sm">
         <div className="mx-auto max-w-[1600px]">
           <form
             onSubmit={handleZoeken}
@@ -441,7 +441,7 @@ export default function ZoekenPage() {
             </label>
             <button
               type="submit"
-              className="h-11 min-h-[44px] w-full shrink-0 rounded-lg bg-green-500 px-6 text-sm font-bold text-black transition-all duration-200 hover:bg-green-400 sm:w-auto"
+              className="h-11 min-h-[44px] w-full shrink-0 rounded-xl bg-gradient-to-r from-green-500 to-green-400 px-6 text-sm font-bold text-black transition-all duration-150 hover:from-green-400 hover:to-green-300 active:scale-[0.98] sm:w-auto"
             >
               Zoeken
             </button>
@@ -450,8 +450,8 @@ export default function ZoekenPage() {
       </header>
 
       <div className="mx-auto grid max-w-[1600px] gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[260px_1fr] lg:gap-10 lg:px-8">
-        <details className="rounded-xl border border-gray-800 bg-[#0f172a] p-4 lg:hidden">
-          <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between text-sm font-semibold text-white [&::-webkit-details-marker]:hidden">
+        <details className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm lg:hidden">
+          <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between text-sm font-semibold text-slate-900 [&::-webkit-details-marker]:hidden">
             <span>Filters</span>
             <span className="text-xs font-normal text-gray-500">
               {occasion ? occasionLabel(occasion) : "Geen"}
@@ -462,7 +462,7 @@ export default function ZoekenPage() {
 
         <aside className="hidden lg:block" aria-label="Filters">
           <div className="card-interactive p-5">
-            <h2 className="mb-4 text-base font-bold">Filters</h2>
+            <h2 className="mb-4 text-base font-bold text-slate-900">Filters</h2>
             {FilterBlock}
           </div>
         </aside>
@@ -476,8 +476,8 @@ export default function ZoekenPage() {
 
           {!loading && !error ? (
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-gray-400">
-                <span className="font-semibold text-white">
+              <p className="text-sm text-slate-600">
+                <span className="font-semibold text-slate-900">
                   {resultCount}
                 </span>
                 {resultCount === 1
@@ -486,7 +486,7 @@ export default function ZoekenPage() {
               </p>
               <div className="relative flex min-w-0 flex-1 items-center justify-end sm:max-w-md sm:flex-initial">
                 <label className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
-                  <span className="shrink-0 text-xs font-bold uppercase tracking-wide text-gray-500 sm:text-sm sm:font-semibold sm:normal-case sm:tracking-normal sm:text-white">
+                  <span className="shrink-0 text-xs font-bold uppercase tracking-wide text-gray-500 sm:text-sm sm:font-semibold sm:normal-case sm:tracking-normal sm:text-slate-900">
                     Sorteren
                   </span>
                   <span className="relative inline-flex min-w-0 flex-1 items-center sm:min-w-[240px]">
@@ -494,7 +494,7 @@ export default function ZoekenPage() {
                       value={sort}
                       onChange={(e) => setSort(e.target.value as SortKey)}
                       aria-label="Sorteer resultaten"
-                      className="input-field w-full cursor-pointer appearance-none border-2 border-green-800 py-2.5 pl-3 pr-10 text-sm font-semibold shadow-md sm:py-3"
+                      className="input-field w-full cursor-pointer appearance-none border-2 border-green-200 py-2.5 pl-3 pr-10 text-sm font-semibold shadow-sm sm:py-3"
                     >
                       {SORT_OPTIONS.map((o) => (
                         <option key={o.value} value={o.value}>
@@ -510,7 +510,7 @@ export default function ZoekenPage() {
           ) : null}
 
           {!loading && !error && !hasActiveFilters ? (
-            <div className="mb-6 rounded-xl border border-green-800/40 bg-[#052e16]/80 px-4 py-3 text-sm text-green-400 ring-1 ring-green-800/35">
+            <div className="mb-6 rounded-xl border border-green-200 bg-[#f0fdf4] px-4 py-3 text-sm text-green-800 ring-1 ring-green-100">
               <span className="font-semibold">Geen filters actief.</span> Je ziet nu alle geverifieerde
               DJ&apos;s. Gebruik de filters links (of boven op mobiel) om sneller te vinden wat bij je
               past.
@@ -562,7 +562,7 @@ export default function ZoekenPage() {
                       className="group card-interactive block h-full overflow-hidden"
                     >
                       <div
-                        className="relative aspect-[4/3] overflow-hidden rounded-t-2xl bg-[#111827] bg-cover bg-center"
+                        className="relative aspect-[4/3] overflow-hidden rounded-t-2xl bg-gradient-to-br from-gray-900 to-gray-800 bg-cover bg-center"
                         style={{ backgroundImage: `url(${ZOEKEN_CARD_IMG})` }}
                       >
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/20" />
@@ -574,15 +574,15 @@ export default function ZoekenPage() {
                         </span>
                       </div>
                       <div className="space-y-2 p-4">
-                        <h3 className="text-lg font-semibold text-white group-hover:underline">
+                        <h3 className="text-lg font-semibold text-slate-900 group-hover:underline">
                           {stage}
                         </h3>
-                        <p className="text-sm text-gray-400">{city}</p>
+                        <p className="text-sm text-slate-500">{city}</p>
                         <div className="flex flex-wrap gap-2">
                           {genres.slice(0, 4).map((g) => (
                             <span
                               key={g}
-                              className="rounded-full bg-gray-800 px-2.5 py-0.5 text-xs font-medium text-gray-300"
+                              className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
                             >
                               {g}
                             </span>
@@ -591,8 +591,8 @@ export default function ZoekenPage() {
                         <p className="text-xs text-gray-500">
                           Reactietijd: {responseLabel}
                         </p>
-                        <div className="flex items-center justify-between border-t border-gray-800/60 pt-3">
-                          <span className="text-sm text-gray-400">
+                        <div className="flex items-center justify-between border-t border-gray-100 pt-3">
+                          <span className="text-sm text-slate-500">
                             Profiel bekijken
                           </span>
                           <span className="inline-flex items-center gap-1 text-sm font-medium text-amber-600">

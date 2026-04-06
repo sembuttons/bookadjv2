@@ -235,25 +235,25 @@ export function DatePickerPopover({
       style={portal ? popoverStyle : undefined}
       className={
         portal
-          ? "rounded-2xl border border-gray-800 bg-[#111827] p-4 shadow-2xl ring-1 ring-gray-800/30"
-          : `absolute top-full z-[60] mt-2 w-[min(100vw-2rem,320px)] rounded-2xl border border-gray-800 bg-[#111827] p-4 shadow-2xl ring-1 ring-gray-800/30 ${popAlignClass}`
+          ? "rounded-2xl border border-gray-200 bg-white p-4 shadow-2xl shadow-gray-400/20 ring-1 ring-black/5"
+          : `absolute top-full z-[60] mt-2 w-[min(100vw-2rem,320px)] rounded-2xl border border-gray-200 bg-white p-4 shadow-2xl shadow-gray-400/20 ring-1 ring-black/5 ${popAlignClass}`
       }
     >
       <div className="mb-4 flex items-center justify-between gap-2">
         <button
           type="button"
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-[#0f172a]/80"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-gray-100"
           aria-label="Vorige maand"
           onClick={() => setCursor(new Date(year, month - 1, 1))}
         >
           <ChevronLeft className="h-5 w-5" />
         </button>
-        <p className="min-w-0 flex-1 text-center text-sm font-semibold capitalize text-white">
+        <p className="min-w-0 flex-1 text-center text-sm font-semibold capitalize text-slate-900">
           {MONTHS_NL[month]} {year}
         </p>
         <button
           type="button"
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-[#0f172a]/80"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-gray-100"
           aria-label="Volgende maand"
           onClick={() => setCursor(new Date(year, month + 1, 1))}
         >
@@ -261,7 +261,7 @@ export function DatePickerPopover({
         </button>
       </div>
 
-      <div className="mb-2 grid grid-cols-7 gap-1 text-center text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+      <div className="mb-2 grid grid-cols-7 gap-1 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-400">
         {WEEKDAYS_NL.map((d) => (
           <div key={d}>{d}</div>
         ))}
@@ -285,12 +285,12 @@ export function DatePickerPopover({
                   className={[
                     "flex aspect-square items-center justify-center rounded-lg text-sm font-medium transition-colors",
                     blocked
-                      ? "cursor-not-allowed bg-[#0f172a]/80 text-gray-400 line-through"
+                      ? "cursor-not-allowed bg-gray-100 text-slate-400 line-through"
                       : isSelected(day)
-                        ? "bg-green-500 text-black font-bold shadow-sm"
+                        ? "bg-gradient-to-r from-green-500 to-green-400 text-black font-bold shadow-sm"
                         : isToday(day)
-                          ? "bg-[#0f172a]/80 font-semibold text-white ring-1 ring-gray-800"
-                          : "text-white hover:bg-[#0f172a]",
+                          ? "bg-green-50 font-semibold text-green-800 ring-1 ring-green-200"
+                          : "text-slate-800 hover:bg-gray-100",
                   ].join(" ")}
                 >
                   {day}
@@ -306,7 +306,7 @@ export function DatePickerPopover({
   return (
     <div className="relative flex flex-col gap-1.5 text-left">
       {label ? (
-        <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+        <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
           {label}
         </span>
       ) : null}
@@ -322,7 +322,7 @@ export function DatePickerPopover({
           "input-field flex items-center justify-start text-left"
         }
       >
-        <span className={labelText ? "" : "text-gray-500"}>
+        <span className={labelText ? "text-slate-900" : "text-gray-400"}>
           {labelText ?? placeholder}
         </span>
       </button>

@@ -229,7 +229,7 @@ export function HowItWorksClient() {
   );
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
+    <div className="min-h-screen bg-white">
       {/* Hero — aansluitend op Voor DJ’s: één kleurvlak met subtiele gradient */}
       <section className="relative isolate min-h-[min(88vh,720px)] w-full overflow-x-clip text-white">
         <div

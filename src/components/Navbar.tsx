@@ -339,21 +339,21 @@ export function Navbar() {
                 <div
                   ref={menuRef}
                   role="menu"
-                  className="absolute right-0 top-full z-50 mt-2 min-w-[260px] rounded-xl border border-gray-800 bg-[#111827] py-2 shadow-lg"
+                  className="absolute right-0 top-full z-50 mt-2 min-w-[260px] rounded-xl border border-gray-200 bg-white py-2 shadow-xl shadow-gray-400/25"
                 >
                   <div className="px-4 py-2 text-left">
-                    <p className="text-sm font-semibold text-gray-500">
+                    <p className="text-sm font-semibold text-slate-900">
                       {fullName || "Account"}
                     </p>
-                    <p className="truncate text-xs text-gray-500">{email}</p>
+                    <p className="truncate text-xs text-slate-500">{email}</p>
                   </div>
-                  <div className="my-2 border-t border-gray-800/60" role="separator" />
+                  <div className="my-2 border-t border-gray-100" role="separator" />
                   {isAdmin ? (
                     <>
                       <Link
                         href="/admin"
                         role="menuitem"
-                        className="block px-4 py-2.5 text-sm text-white hover:bg-[#0f172a]"
+                        className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-gray-50"
                         onClick={() => setMenuOpen(false)}
                       >
                         Admin panel
@@ -366,7 +366,7 @@ export function Navbar() {
                       <Link
                         href="/dashboard/dj"
                         role="menuitem"
-                        className="block px-4 py-2.5 text-sm text-white hover:bg-[#0f172a]"
+                        className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-gray-50"
                         onClick={() => setMenuOpen(false)}
                       >
                         Mijn boekingen
@@ -375,7 +375,7 @@ export function Navbar() {
                       <Link
                         href="/dashboard/dj"
                         role="menuitem"
-                        className="block px-4 py-2.5 text-sm text-white hover:bg-[#0f172a]"
+                        className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-gray-50"
                         onClick={() => setMenuOpen(false)}
                       >
                         DJ Dashboard
@@ -383,7 +383,7 @@ export function Navbar() {
                       <Link
                         href="/dashboard/dj/profiel"
                         role="menuitem"
-                        className="block px-4 py-2.5 text-sm text-white hover:bg-[#0f172a]"
+                        className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-gray-50"
                         onClick={() => setMenuOpen(false)}
                       >
                         Mijn profiel
@@ -395,7 +395,7 @@ export function Navbar() {
                       <Link
                         href="/dashboard/klant"
                         role="menuitem"
-                        className="block px-4 py-2.5 text-sm text-white hover:bg-[#0f172a]"
+                        className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-gray-50"
                         onClick={() => setMenuOpen(false)}
                       >
                         Mijn boekingen
@@ -404,7 +404,7 @@ export function Navbar() {
                       <Link
                         href="/dashboard/klant/reviews"
                         role="menuitem"
-                        className="block px-4 py-2.5 text-sm text-white hover:bg-[#0f172a]"
+                        className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-gray-50"
                         onClick={() => setMenuOpen(false)}
                       >
                         Mijn reviews
@@ -412,7 +412,7 @@ export function Navbar() {
                       <Link
                         href="/dashboard/klant/profiel"
                         role="menuitem"
-                        className="block px-4 py-2.5 text-sm text-white hover:bg-[#0f172a]"
+                        className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-gray-50"
                         onClick={() => setMenuOpen(false)}
                       >
                         Profiel
@@ -423,7 +423,7 @@ export function Navbar() {
                   <button
                     type="button"
                     role="menuitem"
-                    className="w-full px-4 py-2.5 text-left text-sm text-white hover:bg-[#0f172a]"
+                    className="w-full px-4 py-2.5 text-left text-sm text-slate-700 hover:bg-gray-50"
                     onClick={() => void handleSignOut()}
                   >
                     Uitloggen

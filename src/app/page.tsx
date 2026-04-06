@@ -19,6 +19,7 @@ import {
 import {
   getCity,
   getGenres,
+  getHourlyRate,
   getProfileRating,
   getStageName,
   type DjProfileRow,
@@ -67,17 +68,11 @@ const reviews = [
 
 const PLACEHOLDER_GOOGLE_REVIEWS = "https://www.google.com";
 
-/** Home hero */
 const HERO_BG_IMAGE =
   "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=1200&q=80";
 
-/** Trust / Fiverr-style column — DJ deck, atmospheric */
 const TRUST_SECTION_IMAGE =
   "https://images.unsplash.com/photo-1598387993784-808f6ee9fa6f?w=1200&q=80&auto=format&fit=crop";
-
-/** Bottom CTA strip */
-const VOOR_DJS_SECTION_BG =
-  "https://images.unsplash.com/photo-1571266028243-d220c6a6fe7e?w=1200&q=80";
 
 const occasionCards = [
   { id: "bruiloft", label: "Bruiloft", Icon: Heart },
@@ -88,6 +83,12 @@ const occasionCards = [
   { id: "huisfeest", label: "Huisfeest", Icon: HomeIcon },
   { id: "afstuderen", label: "Afstuderen", Icon: GraduationCap },
   { id: "anders", label: "Anders", Icon: MoreHorizontal },
+] as const;
+
+const heroStats = [
+  { value: "NL", label: "Landelijk zoeken" },
+  { value: "Veilig", label: "Betalen via het platform" },
+  { value: "Support", label: "Hulp wanneer je het nodig hebt" },
 ] as const;
 
 function initialsFromName(name: string) {
@@ -108,7 +109,7 @@ function StarRow({ value }: { value: number }) {
         <svg
           key={i}
           className={
-            i < full ? "h-4 w-4 text-green-500" : "h-4 w-4 text-gray-800"
+            i < full ? "h-4 w-4 text-green-600" : "h-4 w-4 text-gray-200"
           }
           viewBox="0 0 20 20"
           fill="currentColor"
@@ -132,9 +133,10 @@ export default async function Home() {
   const newDjs = (newDjRows ?? []) as DjProfileRow[];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0b0f0d] to-[#0a0a0a] font-sans">
+    <div className="min-h-screen bg-white font-sans text-slate-900">
       <Navbar />
 
+      {/* Hero */}
       <section
         id="zoeken"
         className="relative isolate overflow-x-clip px-4 pb-20 pt-28 text-center text-white sm:px-6 sm:pb-24 sm:pt-32 lg:px-8 lg:pb-28 lg:pt-36"
@@ -145,38 +147,70 @@ export default async function Home() {
           aria-hidden
         />
         <div
-          className="absolute inset-0 -z-10 bg-black/60"
+          className="absolute inset-0 -z-10"
+          style={{
+            background:
+              "linear-gradient(135deg, #0a0a0a 0%, #0f2818 100%)",
+            opacity: 0.92,
+          }}
           aria-hidden
         />
+        <div
+          className="pointer-events-none absolute inset-0 -z-[5]"
+          style={{
+            backgroundImage:
+              "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(34,197,94,0.15), transparent)",
+          }}
+          aria-hidden
+        />
+
         <div className="relative mx-auto max-w-4xl">
           <p className="mb-4 text-sm font-medium uppercase tracking-widest text-green-400">
             De DJ-boekingsmarktplaats van Nederland
           </p>
-          <h1 className="text-balance text-[1.65rem] font-bold leading-tight tracking-tight text-white drop-shadow-sm min-[400px]:text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
+          <h1 className="text-balance text-4xl font-black leading-tight tracking-tight text-white sm:text-5xl md:text-6xl">
             De beste DJ voor jouw feest —{" "}
-            <span className="text-green-400">geverifieerd</span> en verzekerd
+            <span className="bg-gradient-to-r from-green-400 to-green-300 bg-clip-text text-transparent">
+              geverifieerd
+            </span>{" "}
+            en verzekerd
           </h1>
-          <p className="mx-auto mt-5 max-w-2xl text-pretty text-sm text-gray-400 min-[400px]:text-base sm:mt-6 sm:text-lg">
-            Geverifieerde DJ&apos;s, transparante prijzen en volledige betalingsbescherming
+          <p className="mx-auto mt-5 max-w-2xl text-pretty text-base text-gray-400 sm:mt-6 sm:text-lg">
+            Geverifieerde DJ&apos;s, transparante prijzen en volledige
+            betalingsbescherming
           </p>
 
           <HomeSearchForm />
+
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 sm:mt-10">
+            {heroStats.map(({ value, label }) => (
+              <div key={label} className="text-center">
+                <p className="text-2xl font-black text-green-400 sm:text-3xl">
+                  {value}
+                </p>
+                <p className="mt-0.5 text-xs font-medium text-gray-500 sm:text-sm">
+                  {label}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
+      {/* Occasions */}
       <section
-        className="bg-gradient-to-b from-[#0a0a0a] via-[#0b100e] to-[#0a0a0a] px-4 py-14 sm:px-6 lg:px-8 lg:py-16"
+        className="bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-16"
         aria-labelledby="occasion-heading"
       >
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
             <h2
               id="occasion-heading"
-              className="text-2xl font-bold tracking-tight text-white sm:text-3xl"
+              className="text-2xl font-black tracking-tight text-gray-900 sm:text-3xl"
             >
               Wat wil je boeken?
             </h2>
-            <p className="mt-3 text-gray-400">
+            <p className="mt-3 text-slate-600">
               Kies je gelegenheid en zie meteen de beste DJ&apos;s voor jouw
               type event.
             </p>
@@ -188,12 +222,12 @@ export default async function Home() {
                 <Link
                   key={id}
                   href={`/zoeken?${new URLSearchParams({ occasion: id }).toString()}`}
-                  className="group flex min-w-[min(100%,220px)] shrink-0 snap-start flex-col items-center justify-center gap-3 rounded-2xl border border-gray-800 bg-[#111827] p-6 text-center shadow-sm transition-all duration-200 hover:border-green-600 hover:bg-[#0f1f0f] hover:shadow-md sm:min-w-0"
+                  className="group flex min-w-[min(100%,220px)] shrink-0 snap-start flex-col items-center justify-center gap-3 rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-sm transition-all duration-200 hover:border-green-200 hover:shadow-md hover:shadow-green-100 sm:min-w-0"
                 >
-                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#052e16] text-green-500 ring-1 ring-green-800/50">
+                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-green-50 to-green-100 text-green-600">
                     <Icon className="h-7 w-7" strokeWidth={1.75} aria-hidden />
                   </span>
-                  <span className="text-sm font-semibold text-gray-200">
+                  <span className="text-sm font-semibold text-gray-800">
                     {label}
                   </span>
                 </Link>
@@ -203,130 +237,125 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Trust — Fiverr-style: dark left, photo right */}
       <section
-        className="bg-gradient-to-b from-[#0a0a0a] via-[#0c1411] to-[#0a0a0a] px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-24"
+        className="bg-white px-0 py-16 sm:py-20 lg:py-24"
         aria-labelledby="trust-pro-heading"
       >
-        <div className="mx-auto max-w-7xl">
-          <p className="text-sm font-semibold uppercase tracking-widest text-green-400">
-            Kwaliteit &amp; veiligheid
-          </p>
-          <h2
-            id="trust-pro-heading"
-            className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-[2.5rem] lg:leading-tight"
-          >
-            Boek met vertrouwen
-          </h2>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-gray-400 sm:text-lg">
-            Eerlijke informatie, duidelijke afspraken en een platform dat met je meedenkt — van
-            eerste klik tot na het feest.
-          </p>
+        <div className="mx-auto grid max-w-7xl lg:grid-cols-2 lg:gap-0">
+          <div className="bg-[#0a0a0a] px-4 py-14 text-white sm:px-8 lg:rounded-l-3xl lg:px-12 lg:py-16">
+            <p className="text-sm font-semibold uppercase tracking-widest text-green-400">
+              Kwaliteit &amp; veiligheid
+            </p>
+            <h2
+              id="trust-pro-heading"
+              className="mt-3 text-3xl font-black tracking-tight sm:text-4xl"
+            >
+              Boek met vertrouwen
+            </h2>
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-gray-400">
+              Eerlijke informatie, duidelijke afspraken en een platform dat met
+              je meedenkt — van eerste klik tot na het feest.
+            </p>
 
-          <div className="mt-10 grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-            <ul className="grid max-w-xl gap-4 sm:grid-cols-2 lg:pr-4">
+            <ul className="mt-10 grid max-w-xl gap-4 sm:grid-cols-2">
               {(
                 [
                   {
                     Icon: Shield,
                     title: "Veilig boeken",
-                    text: "Alle DJ's worden handmatig geverifieerd voordat ze live gaan. Jij boekt met zekerheid.",
+                    text: "DJ's worden geverifieerd voordat ze live gaan.",
                   },
                   {
                     Icon: CreditCard,
                     title: "Betaal pas na acceptatie",
-                    text: "Je betaling wordt alleen verwerkt als de DJ je boeking accepteert. Geen reactie? Geen kosten.",
+                    text: "Geen betaling zonder reactie van de DJ.",
                   },
                   {
                     Icon: MessageCircle,
                     title: "Direct contact",
-                    text: "Communiceer rechtstreeks met de DJ via ons platform. Snel, veilig en overzichtelijk.",
+                    text: "Berichten via het platform, overzichtelijk.",
                   },
                   {
                     Icon: Star,
                     title: "Eerlijke reviews",
-                    text: "Reviews komen alleen van klanten die daadwerkelijk hebben geboekt. Geen neppe beoordelingen.",
+                    text: "Alleen van klanten die geboekt hebben.",
                   },
                 ] as const
               ).map(({ Icon, title, text }) => (
                 <li
                   key={title}
-                  className="rounded-2xl border border-gray-800 bg-[#111827] p-5"
+                  className="rounded-2xl border border-white/10 bg-white/5 p-5 transition-shadow duration-200 hover:shadow-md"
                 >
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-green-500/15 text-green-400 ring-1 ring-green-500/30">
+                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-green-500/20 to-green-600/30 text-green-400">
                     <Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden />
                   </span>
                   <h3 className="mt-4 font-bold text-white">{title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-gray-400">{text}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-400">
+                    {text}
+                  </p>
                 </li>
               ))}
             </ul>
 
-            <div className="relative mx-auto flex w-full max-w-lg justify-center lg:mx-0 lg:max-w-none lg:justify-end">
-            <div
-              className="aspect-[4/3] w-full overflow-hidden rounded-2xl bg-gray-900 bg-cover bg-center shadow-2xl ring-1 ring-green-800/30"
-              style={{ backgroundImage: `url(${TRUST_SECTION_IMAGE})` }}
-              aria-hidden
-            />
-            <div className="absolute -bottom-4 left-4 right-4 sm:-bottom-6 sm:left-auto sm:right-8 sm:w-[min(100%,320px)]">
-              <div className="rounded-xl border border-green-800/40 bg-[#111827]/95 p-4 shadow-xl shadow-black/40 backdrop-blur-md sm:p-5">
-                <div className="flex items-center gap-3">
-                  <div
-                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-green-500 text-sm font-bold text-black"
-                    aria-hidden
-                  >
-                    NV
-                  </div>
-                  <div className="min-w-0 text-left">
-                    <p className="truncate font-semibold text-white">DJ Nova</p>
-                    <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-green-500/25 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-green-400 ring-1 ring-green-500/40">
-                      <svg
-                        className="h-3 w-3 text-green-400"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        aria-hidden
-                      >
-                        <path
-                          d="M5 10l3 3 7-7"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                      Geverifieerde DJ
-                    </span>
-                  </div>
-                </div>
-                <p className="mt-3 text-xs text-gray-500">
-                  Zo zie je op het platform dat een DJ gecontroleerd is — met echte
-                  reviews en duidelijke afspraken.
-                </p>
-              </div>
-            </div>
-            </div>
+            <Link
+              href="/zoeken"
+              className="mt-10 inline-flex rounded-xl bg-gradient-to-r from-green-500 to-green-400 px-8 py-3 text-sm font-bold text-black transition-all duration-150 hover:from-green-400 hover:to-green-300 active:scale-[0.98]"
+            >
+              Ontdek DJ&apos;s
+            </Link>
           </div>
 
-          <Link
-            href="/zoeken"
-            className="mt-10 inline-flex rounded-lg bg-green-500 px-6 py-3 text-sm font-bold text-black transition-colors hover:bg-green-400"
-          >
-            Ontdek DJ&apos;s
-          </Link>
+          <div className="relative min-h-[320px] bg-gray-100 px-4 py-10 sm:px-8 lg:rounded-r-3xl lg:py-0">
+            <div className="relative mx-auto flex h-full min-h-[280px] w-full max-w-lg items-center justify-center lg:absolute lg:inset-0 lg:mx-0 lg:max-w-none">
+              <div
+                className="aspect-[4/3] w-full max-w-md overflow-hidden rounded-3xl bg-gray-200 bg-cover bg-center shadow-xl lg:max-w-lg lg:self-center"
+                style={{ backgroundImage: `url(${TRUST_SECTION_IMAGE})` }}
+                aria-hidden
+              />
+              <div className="absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-auto sm:right-8 sm:w-[min(100%,300px)]">
+                <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-xl sm:p-5">
+                  <div className="flex items-center gap-3">
+                    <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-green-500 to-green-400 text-sm font-bold text-black">
+                      NV
+                      <span
+                        className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-white bg-green-500"
+                        aria-hidden
+                      />
+                    </div>
+                    <div className="min-w-0 text-left">
+                      <p className="truncate font-semibold text-slate-900">
+                        DJ Nova
+                      </p>
+                      <span className="mt-1 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-green-600">
+                        Geverifieerde DJ
+                      </span>
+                    </div>
+                  </div>
+                  <p className="mt-3 text-xs text-slate-500">
+                    Zo zie je op het platform dat een DJ gecontroleerd is —
+                    met echte reviews en duidelijke afspraken.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
+      {/* New DJs */}
       <section
-        className="bg-gradient-to-b from-[#0a0a0a] via-[#0b0f0d] to-[#0a0a0a] px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
+        className="bg-[#f8fafc] px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
         aria-labelledby="new-heading"
       >
         <div className="mx-auto max-w-7xl">
           <h2
             id="new-heading"
-            className="text-2xl font-bold tracking-tight text-white sm:text-3xl"
+            className="text-2xl font-black tracking-tight text-gray-900 sm:text-3xl"
           >
             Nieuw toegevoegd
           </h2>
-          <p className="mt-2 text-gray-400">
+          <p className="mt-2 text-slate-600">
             De meest recente geverifieerde DJ&apos;s op bookadj.
           </p>
           {newDjs.length === 0 ? (
@@ -334,7 +363,7 @@ export default async function Home() {
               <EmptyState
                 icon={
                   <svg
-                    className="h-7 w-7"
+                    className="h-7 w-7 text-green-600"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -348,10 +377,7 @@ export default async function Home() {
                 title="Nog geen profielen om te tonen"
                 description="Zodra geverifieerde DJ’s live gaan, verschijnen ze hier. Ontdek intussen het volledige aanbod op de zoekpagina."
                 action={
-                  <Link
-                    href="/zoeken"
-                    className="inline-flex rounded-lg bg-green-500 px-5 py-2.5 text-sm font-bold text-black transition-colors hover:bg-green-400"
-                  >
+                  <Link href="/zoeken" className="btn-primary px-6 py-2.5 text-sm">
                     DJ&apos;s zoeken
                   </Link>
                 }
@@ -363,49 +389,70 @@ export default async function Home() {
                 const name = getStageName(dj);
                 const city = getCity(dj);
                 const djGenres = getGenres(dj).slice(0, 3);
+                const rate = getHourlyRate(dj);
                 const rating = getProfileRating(dj);
                 const displayRating = rating > 0 ? rating : 4.8;
                 return (
                   <li key={dj.id}>
                     <Link href={`/dj/${dj.id}`}>
-                      <article className="card-interactive flex h-full flex-col p-5 transition-colors hover:border-green-800 hover:shadow-lg hover:shadow-green-900/20">
-                        <div className="flex items-start gap-4">
-                          <div
-                            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#111827] text-sm font-bold text-white"
+                      <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gray-200/80">
+                        <div className="relative flex aspect-[5/3] items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
+                          <span className="absolute left-3 top-3 z-[1] rounded-full bg-gradient-to-r from-green-500 to-green-400 px-2 py-0.5 text-xs font-bold text-black shadow-sm">
+                            Geverifieerd
+                          </span>
+                          <span
+                            className="text-2xl font-black text-white drop-shadow-md"
                             aria-hidden
                           >
                             {initialsFromName(name)}
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <h3 className="truncate font-semibold text-white">
-                              {name}
-                            </h3>
-                            <p className="text-sm text-gray-400">{city}</p>
-                          </div>
-                        </div>
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          {djGenres.length > 0 ? (
-                            djGenres.map((tag) => (
-                              <span
-                                key={tag}
-                                className="rounded-full bg-gray-800 px-2.5 py-0.5 text-xs font-medium text-gray-300"
-                              >
-                                {tag}
-                              </span>
-                            ))
-                          ) : (
-                            <span className="rounded-full bg-[#0f172a]/80 px-2.5 py-0.5 text-xs font-medium text-gray-500">
-                              Diverse stijlen
-                            </span>
-                          )}
-                        </div>
-                        <div className="mt-4 flex items-center gap-2 border-t border-gray-800/60 pt-4 text-sm">
-                          <StarRow value={Math.round(displayRating)} />
-                          <span className="font-medium text-white">
-                            {displayRating.toFixed(1)}
                           </span>
-                          <span className="text-gray-500">·</span>
-                          <span className="text-gray-400">Profiel bekijken</span>
+                        </div>
+                        <div className="flex flex-1 flex-col p-5">
+                          <h3 className="truncate font-bold text-gray-900">
+                            {name}
+                          </h3>
+                          <p className="text-sm text-gray-500">{city}</p>
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            {djGenres.length > 0 ? (
+                              djGenres.map((tag) => (
+                                <span
+                                  key={tag}
+                                  className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+                                >
+                                  {tag}
+                                </span>
+                              ))
+                            ) : (
+                              <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-500">
+                                Diverse stijlen
+                              </span>
+                            )}
+                          </div>
+                          <div className="mt-4 flex items-end justify-between border-t border-gray-100 pt-4">
+                            <div>
+                              <p className="text-lg font-black text-gray-900">
+                                {rate != null
+                                  ? `€${Math.round(rate)}`
+                                  : "—"}
+                                {rate != null ? (
+                                  <span className="text-sm font-semibold text-gray-500">
+                                    /uur
+                                  </span>
+                                ) : null}
+                              </p>
+                              {rate == null ? (
+                                <p className="text-xs text-gray-500">
+                                  Op aanvraag
+                                </p>
+                              ) : null}
+                            </div>
+                            <div className="text-right text-sm">
+                              <StarRow value={Math.round(displayRating)} />
+                              <p className="mt-1 font-semibold text-green-600">
+                                {displayRating.toFixed(1)}
+                              </p>
+                            </div>
+                          </div>
                         </div>
                       </article>
                     </Link>
@@ -417,163 +464,183 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* How it works */}
       <section
         id="hoe-het-werkt"
-        className="bg-gradient-to-b from-[#0a0a0a] via-[#0c1210] to-[#0a0a0a] px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
+        className="bg-gradient-to-b from-white to-[#f0fdf4] px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
         aria-labelledby="how-heading"
       >
         <div className="mx-auto max-w-7xl">
           <h2
             id="how-heading"
-            className="text-center text-2xl font-bold tracking-tight text-white sm:text-3xl"
+            className="text-center text-2xl font-black tracking-tight text-gray-900 sm:text-3xl"
           >
             Hoe het werkt
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-center text-gray-400">
+          <p className="mx-auto mt-3 max-w-2xl text-center text-slate-600">
             In drie stappen van idee naar geboekte DJ — zonder gedoe.
           </p>
           <div
-            className="mx-auto mt-4 h-1 w-16 rounded-full bg-green-500"
+            className="mx-auto mt-4 h-1 w-16 rounded-full bg-gradient-to-r from-green-500 to-green-400"
             aria-hidden
           />
-          <ol className="mt-12 grid gap-8 lg:grid-cols-3">
-            <li>
-              <article className="card-interactive h-full p-8">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#052e16] text-lg font-bold text-green-400 ring-2 ring-green-800/50">
-                  1
-                </span>
-                <h3 className="mt-6 text-xl font-semibold text-white">
-                  Zoek en vergelijk
-                </h3>
-                <p className="mt-2 text-gray-400">
-                  Kies datum en genre en bekijk profielen, voorbeelden en
-                  reviews.
-                </p>
-                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-gray-400">
-                  <li>Duidelijke tariefinformatie en pakketten</li>
-                  <li>Geverifieerde DJ-profielen</li>
-                  <li>Filter op datum en genre</li>
-                </ul>
-              </article>
-            </li>
-            <li>
-              <article className="card-interactive h-full p-8">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#052e16] text-lg font-bold text-green-400 ring-2 ring-green-800/50">
-                  2
-                </span>
-                <h3 className="mt-6 text-xl font-semibold text-white">
-                  Stuur een aanvraag
-                </h3>
-                <p className="mt-2 text-gray-400">
-                  Beschrijf je evenement en ontvang een voorstel dat past bij
-                  jouw budget.
-                </p>
-                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-gray-400">
-                  <li>Eén plek voor alle berichten</li>
-                  <li>Snelle reacties van DJ&apos;s</li>
-                  <li>Geen verplichting tot boeking</li>
-                </ul>
-              </article>
-            </li>
-            <li>
-              <article className="card-interactive h-full p-8">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#052e16] text-lg font-bold text-green-400 ring-2 ring-green-800/50">
-                  3
-                </span>
-                <h3 className="mt-6 text-xl font-semibold text-white">
-                  Boek met vertrouwen
-                </h3>
-                <p className="mt-2 text-gray-400">
-                  Betaal veilig via het platform en geniet van
-                  betalingsbescherming tot na je evenement.
-                </p>
-                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-gray-400">
-                  <li>Beveiligde betalingen</li>
-                  <li>Duidelijke annuleringsvoorwaarden</li>
-                  <li>Support bij vragen</li>
-                </ul>
-              </article>
-            </li>
+
+          <ol className="relative mt-12 grid gap-8 lg:grid-cols-3">
+            <div
+              className="pointer-events-none absolute left-[18%] right-[18%] top-6 hidden h-0 border-t-2 border-dashed border-green-200 lg:block"
+              aria-hidden
+            />
+            {(
+              [
+                {
+                  n: "1",
+                  title: "Zoek en vergelijk",
+                  desc: "Kies datum en genre en bekijk profielen, voorbeelden en reviews.",
+                  bullets: [
+                    "Duidelijke tariefinformatie en pakketten",
+                    "Geverifieerde DJ-profielen",
+                    "Filter op datum en genre",
+                  ],
+                },
+                {
+                  n: "2",
+                  title: "Stuur een aanvraag",
+                  desc: "Beschrijf je evenement en ontvang een voorstel dat past bij jouw budget.",
+                  bullets: [
+                    "Eén plek voor alle berichten",
+                    "Snelle reacties van DJ's",
+                    "Geen verplichting tot boeking",
+                  ],
+                },
+                {
+                  n: "3",
+                  title: "Boek met vertrouwen",
+                  desc: "Betaal veilig via het platform en geniet van betalingsbescherming tot na je evenement.",
+                  bullets: [
+                    "Beveiligde betalingen",
+                    "Duidelijke annuleringsvoorwaarden",
+                    "Support bij vragen",
+                  ],
+                },
+              ] as const
+            ).map((step) => (
+              <li key={step.n} className="relative">
+                <article className="h-full rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                  <span className="relative z-[1] flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-green-600 text-lg font-black text-black shadow-sm">
+                    {step.n}
+                  </span>
+                  <h3 className="mt-6 text-lg font-bold text-gray-900">
+                    {step.title}
+                  </h3>
+                  <p className="mt-2 text-sm text-slate-500">{step.desc}</p>
+                  <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-slate-500">
+                    {step.bullets.map((b) => (
+                      <li key={b}>{b}</li>
+                    ))}
+                  </ul>
+                </article>
+              </li>
+            ))}
           </ol>
         </div>
       </section>
 
+      {/* Stats band */}
       <section
-        className="bg-gradient-to-b from-[#0a0a0a] via-[#0d1512] to-[#0a0a0a] px-4 py-12 sm:px-6 lg:px-8 lg:py-14"
+        className="relative overflow-hidden px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
+        style={{
+          background: "linear-gradient(135deg, #0a0a0a 0%, #052e16 100%)",
+        }}
         aria-label="Waarom bookadj"
       >
-        <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-100"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(34,197,94,0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(34,197,94,0.03) 1px, transparent 1px)
+            `,
+            backgroundSize: "32px 32px",
+          }}
+          aria-hidden
+        />
+        <div className="relative mx-auto grid max-w-7xl gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {(
             [
               {
-                title: "Geverifieerde profielen",
-                text: "We controleren DJ’s voordat ze zichtbaar worden — minder risico, meer vertrouwen.",
+                head: "Verify",
+                text: "We controleren DJ’s voordat ze zichtbaar worden.",
               },
               {
-                title: "Betalingsbescherming",
-                text: "Je betaalt via het platform; uitbetaling aan de DJ verloopt volgens duidelijke afspraken.",
+                head: "Pay",
+                text: "Je betaalt via het platform volgens duidelijke afspraken.",
               },
               {
-                title: "Alles op één plek",
-                text: "Zoeken, berichten en boeking — zonder je telefoonnummer overal te hoeven delen.",
+                head: "1 plek",
+                text: "Zoeken, berichten en boeking — overzichtelijk.",
               },
               {
-                title: "Support bij vragen",
-                text: "Loop je ergens tegenaan? We helpen je verder met heldere communicatie.",
+                head: "Support",
+                text: "Vragen? We helpen je met heldere communicatie.",
               },
             ] as const
-          ).map(({ title, text }) => (
-            <div key={title} className="text-center sm:text-left">
-              <p className="text-base font-bold text-green-400">{title}</p>
-              <p className="mt-2 text-sm leading-relaxed text-gray-500">{text}</p>
+          ).map(({ head, text }) => (
+            <div key={head} className="text-center sm:text-left">
+              <p className="text-4xl font-black tracking-tight text-transparent sm:text-5xl bg-gradient-to-r from-green-400 to-green-300 bg-clip-text">
+                {head}
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-gray-400">
+                {text}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
+      {/* Reviews */}
       <section
-        className="bg-gradient-to-b from-[#0a0a0a] via-[#0c1210] to-[#0a0a0a] px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
+        className="bg-white px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
         aria-labelledby="reviews-heading"
       >
         <div className="mx-auto max-w-7xl">
           <h2
             id="reviews-heading"
-            className="text-2xl font-bold tracking-tight text-white sm:text-3xl"
+            className="text-2xl font-black tracking-tight text-gray-900 sm:text-3xl"
           >
             Wat klanten zeggen
           </h2>
-          <p className="mt-2 text-gray-400">
+          <p className="mt-2 text-slate-600">
             Echte ervaringen van organisatoren en DJ&apos;s.
           </p>
           <div
-            className="mt-4 h-1 w-16 rounded-full bg-green-500"
+            className="mt-4 h-1 w-16 rounded-full bg-gradient-to-r from-green-500 to-green-400"
             aria-hidden
           />
           <div className="mt-10 -mx-4 flex gap-4 overflow-x-auto px-4 pb-2 snap-x snap-mandatory sm:mx-0 sm:px-0">
             {reviews.map((r) => (
               <blockquote
                 key={r.name}
-                className="card-interactive min-w-[min(100%,280px)] max-w-sm shrink-0 snap-start p-6 transition-colors hover:border-green-500/30 sm:min-w-[300px]"
+                className="min-w-[min(100%,280px)] max-w-sm shrink-0 snap-start rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-200 hover:border-green-200 hover:shadow-md sm:min-w-[300px]"
               >
                 <StarRow value={r.rating} />
-                <p className="mt-4 text-sm leading-relaxed text-gray-400">
+                <p className="mt-4 text-sm leading-relaxed text-slate-600">
                   &ldquo;{r.quote}&rdquo;
                 </p>
-                <footer className="mt-4 border-t border-gray-800/60 pt-4">
-                  <p className="font-semibold text-white">{r.name}</p>
-                  <p className="text-sm text-gray-500">{r.role}</p>
+                <footer className="mt-4 border-t border-gray-100 pt-4">
+                  <p className="font-semibold text-gray-900">{r.name}</p>
+                  <p className="text-sm text-slate-500">{r.role}</p>
                 </footer>
               </blockquote>
             ))}
             <div className="min-w-[min(100%,280px)] max-w-sm shrink-0 snap-start sm:min-w-[300px]">
               <Link
                 href="/reviews"
-                className="flex h-full min-h-[200px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-800 bg-[#0f172a] px-6 py-8 text-center transition-colors hover:border-green-500/50 hover:bg-green-500/5"
+                className="flex h-full min-h-[200px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-[#f8fafc] px-6 py-8 text-center transition-all duration-200 hover:border-green-300 hover:bg-green-50/50"
               >
-                <span className="text-sm font-semibold text-white">
+                <span className="text-sm font-semibold text-gray-900">
                   Lees alle reviews
                 </span>
-                <span className="mt-2 text-xs text-gray-500">
+                <span className="mt-2 text-xs text-slate-500">
                   Bekijk het volledige overzicht
                 </span>
               </Link>
@@ -581,17 +648,14 @@ export default async function Home() {
           </div>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
-            <Link
-              href="/reviews"
-              className="inline-flex items-center justify-center rounded-lg border-2 border-black bg-[#111827] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#0f172a]"
-            >
+            <Link href="/reviews" className="btn-secondary px-6 py-3 text-sm">
               Bekijk alle reviews
             </Link>
             <a
               href={PLACEHOLDER_GOOGLE_REVIEWS}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-lg bg-green-500 px-6 py-3 text-sm font-bold text-black transition-colors hover:bg-green-400"
+              className="btn-primary px-6 py-3 text-sm"
             >
               Reviews op Google
             </a>
@@ -599,45 +663,51 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* CTA */}
       <section
         id="voor-djs"
-        className="relative isolate overflow-hidden bg-gradient-to-b from-[#0a0a0a] via-[#050505] to-[#0a0a0a] px-4 py-16 text-center text-white sm:px-6 sm:py-20 lg:px-8"
+        className="relative isolate overflow-hidden px-4 py-16 text-center text-white sm:px-6 sm:py-20 lg:px-8"
+        style={{
+          background: "linear-gradient(135deg, #0f172a 0%, #052e16 100%)",
+        }}
         aria-labelledby="cta-heading"
       >
         <div
-          className="absolute inset-0 -z-20 bg-cover bg-center bg-no-repeat opacity-40"
-          style={{ backgroundImage: `url(${VOOR_DJS_SECTION_BG})` }}
+          className="pointer-events-none absolute inset-0 -z-10"
+          style={{
+            backgroundImage:
+              "radial-gradient(ellipse 60% 60% at 50% 100%, rgba(34,197,94,0.2), transparent)",
+          }}
           aria-hidden
         />
-        <div className="absolute inset-0 -z-10 bg-[#050505]/90" aria-hidden />
         <div className="relative mx-auto max-w-3xl">
           <h2
             id="cta-heading"
-            className="text-2xl font-bold tracking-tight text-white sm:text-3xl md:text-4xl"
+            className="text-3xl font-black tracking-tight text-white sm:text-4xl md:text-5xl"
           >
-            Klaar voor jouw perfecte <span className="text-green-400">avond</span>?
+            Klaar voor jouw perfecte{" "}
+            <span className="text-green-400">avond</span>?
           </h2>
-          <p className="mt-4 text-gray-500">
+          <p className="mt-4 text-gray-400">
             Maak een account en ontdek DJ&apos;s in jouw regio — of meld je aan
             als DJ en ontvang serieuze aanvragen.
           </p>
-          <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+          <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:justify-center">
             <Link
               href="/zoeken"
-              className="rounded-lg bg-green-500 px-6 py-3 text-sm font-bold text-black transition-colors hover:bg-green-400"
+              className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-green-500 to-green-400 px-8 py-4 text-sm font-bold text-black transition-all duration-150 hover:from-green-400 hover:to-green-300 active:scale-[0.98]"
             >
               Zoek een DJ
             </Link>
             <Link
               href="/aanmelden"
-              className="rounded-lg border border-gray-700 bg-transparent px-6 py-3 text-sm font-semibold text-gray-300 transition-colors hover:border-gray-600 hover:bg-gray-900 hover:text-white"
+              className="inline-flex items-center justify-center rounded-xl border border-white/20 px-8 py-4 text-sm font-semibold text-white transition-all duration-150 hover:bg-white/10"
             >
               Account aanmaken
             </Link>
           </div>
         </div>
       </section>
-
     </div>
   );
 }

@@ -97,9 +97,17 @@ export function BookingPanel({
 
   return (
     <div className="space-y-5">
-      <div className="card-interactive p-5 sm:p-6">
-        <div className="mt-0">
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
+        <p className="text-3xl font-black text-slate-900">
+          €{Math.round(hourlyRate)}
+          <span className="text-lg font-semibold text-slate-500">/uur</span>
+        </p>
+        <p className="mt-1 text-xs text-slate-500">
+          Indicatie — totaal hangt af van duur en locatie.
+        </p>
+
+        <div className="mt-6">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
             Aantal uren
           </p>
           <div className="mt-2 flex flex-nowrap gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -108,10 +116,10 @@ export function BookingPanel({
                 key={h}
                 type="button"
                 onClick={() => setHours(h)}
-                className={`shrink-0 rounded-full px-3.5 py-2 text-sm font-semibold transition-colors ${
+                className={`shrink-0 rounded-full px-3.5 py-2 text-sm font-semibold transition-all duration-150 ${
                   hours === h
-                    ? "bg-green-500 text-black font-bold shadow-sm"
-                    : "bg-gray-800 text-white hover:bg-green-500 hover:text-black"
+                    ? "bg-gradient-to-r from-green-500 to-green-400 font-bold text-black shadow-sm"
+                    : "bg-gray-100 text-slate-700 hover:bg-green-50 hover:text-green-800"
                 }`}
               >
                 {h} uur
@@ -133,7 +141,7 @@ export function BookingPanel({
         </div>
 
         <label className="mt-4 block">
-          <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+          <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
             Locatie evenement
           </span>
           <div className="relative mt-2">
@@ -183,26 +191,26 @@ export function BookingPanel({
           </div>
         </label>
         {travelCost > 0 ? (
-          <div className="mt-2 rounded-lg bg-[#0f172a] px-3 py-2 text-xs text-gray-400 ring-1 ring-gray-800">
-            <span className="font-semibold text-white">
+          <div className="mt-2 rounded-xl border border-green-100 bg-[#f0fdf4] px-3 py-2 text-xs text-slate-600">
+            <span className="font-semibold text-slate-900">
               Reiskosten: €{travelCost}
             </span>{" "}
-            <span className="text-gray-400">
+            <span className="text-slate-500">
               (geschatte afstand: {travelDistance}km retour)
             </span>
           </div>
         ) : venueAddress.trim() ? (
-          <p className="mt-2 rounded-lg bg-[#0f172a]/80 px-3 py-2 text-xs italic text-gray-400">
+          <p className="mt-2 rounded-xl border border-gray-100 bg-gray-50 px-3 py-2 text-xs italic text-slate-500">
             Selecteer een adres uit de lijst om reiskosten te berekenen.
           </p>
         ) : (
-          <p className="mt-2 rounded-lg bg-[#0f172a]/80 px-3 py-2 text-xs italic text-gray-400">
+          <p className="mt-2 rounded-xl border border-gray-100 bg-gray-50 px-3 py-2 text-xs italic text-slate-500">
             Vul het adres in om reiskosten te berekenen.
           </p>
         )}
 
-        <div className="mt-6 space-y-2 rounded-xl bg-[#0f172a] px-4 py-3 text-sm">
-          <div className="flex justify-between text-gray-400">
+        <div className="mt-6 space-y-2 rounded-xl border border-gray-100 bg-slate-50 px-4 py-3 text-sm">
+          <div className="flex justify-between text-slate-500">
             <span>
               DJ ({hours} uur × €{hourlyRate})
             </span>
@@ -210,19 +218,19 @@ export function BookingPanel({
               €{djCost.toLocaleString("nl-NL")}
             </span>
           </div>
-          <div className="flex justify-between text-gray-400">
+          <div className="flex justify-between text-slate-500">
             <span>Apparatuur</span>
-            <span className="font-medium text-green-500">Inbegrepen</span>
+            <span className="font-medium text-green-600">Inbegrepen</span>
           </div>
-          <div className="flex justify-between text-gray-400">
+          <div className="flex justify-between text-slate-500">
             <span>Reiskosten</span>
-            <span className="font-medium text-gray-400">
+            <span className="font-medium text-slate-600">
               {travelCost > 0 ? `€${travelCost.toLocaleString("nl-NL")}` : "—"}
             </span>
           </div>
-          <div className="flex justify-between border-t border-gray-800 pt-2 text-base font-bold text-white">
+          <div className="flex justify-between border-t border-gray-200 pt-2 text-base font-bold text-slate-900">
             <span>Totaal (indicatie)</span>
-            <span className="text-green-400">
+            <span className="bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">
               €{total.toLocaleString("nl-NL")}
             </span>
           </div>
@@ -234,32 +242,32 @@ export function BookingPanel({
             if (!eventDate.trim()) return base;
             return `${base}?${new URLSearchParams({ date: eventDate.trim() }).toString()}`;
           })()}
-          className="mt-5 flex min-h-[44px] w-full items-center justify-center rounded-xl bg-green-500 py-3.5 text-sm font-bold text-black transition-all duration-200 hover:bg-green-400"
+          className="mt-5 flex min-h-[44px] w-full items-center justify-center rounded-xl bg-gradient-to-r from-green-500 to-green-400 py-4 text-base font-bold text-black transition-all duration-150 hover:from-green-400 hover:to-green-300 active:scale-[0.98]"
         >
           Boeking aanvragen
         </Link>
         <StelVraagButton
           djUserId={djUserId ?? undefined}
           djProfileId={djId}
-          className="mt-3 min-h-[44px] w-full rounded-xl border-2 border-green-800 bg-[#111827] py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#0f172a]"
+          className="btn-secondary mt-3 flex min-h-[44px] w-full items-center justify-center py-3 text-sm"
         >
           {contactButtonLabel}
         </StelVraagButton>
       </div>
 
-      <div className="flex items-center gap-3 rounded-xl bg-green-500/10 px-4 py-3 text-sm font-medium text-white ring-1 ring-green-500/20">
-        <ShieldCheck className="h-5 w-5 shrink-0 text-green-500" aria-hidden />
+      <div className="flex items-center gap-3 rounded-xl border border-green-200 bg-[#f0fdf4] px-4 py-3 text-sm font-medium text-slate-800">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-green-600" aria-hidden />
         Geen betaling tot acceptatie van de boeking.
       </div>
 
       <div className="grid gap-3 text-sm">
-        <div className="rounded-xl border border-gray-800 bg-[#111827] px-4 py-3 shadow-sm transition-shadow duration-300 hover:shadow-md">
-          <p className="text-xs text-gray-500">Reactietijd</p>
-          <p className="font-semibold text-white">{responseTimeLabel}</p>
+        <div className="rounded-2xl border border-gray-100 bg-white px-4 py-3 shadow-sm transition-shadow duration-300 hover:shadow-md">
+          <p className="text-xs text-slate-500">Reactietijd</p>
+          <p className="font-semibold text-slate-900">{responseTimeLabel}</p>
         </div>
-        <div className="rounded-xl border border-gray-800 bg-[#111827] px-4 py-3 shadow-sm transition-shadow duration-300 hover:shadow-md">
-          <p className="text-xs text-gray-500">Lid sinds</p>
-          <p className="font-semibold text-white">{memberSinceLabel}</p>
+        <div className="rounded-2xl border border-gray-100 bg-white px-4 py-3 shadow-sm transition-shadow duration-300 hover:shadow-md">
+          <p className="text-xs text-slate-500">Lid sinds</p>
+          <p className="font-semibold text-slate-900">{memberSinceLabel}</p>
         </div>
       </div>
     </div>

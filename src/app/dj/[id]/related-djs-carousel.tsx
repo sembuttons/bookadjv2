@@ -37,20 +37,20 @@ export function RelatedDjsCarousel({ djs }: { djs: DjProfileRow[] }) {
 
   return (
     <section
-      className="mt-16 border-t border-gray-800 pt-12"
+      className="mt-16 border-t border-gray-100 pt-12"
       aria-labelledby="related-djs-heading"
     >
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <h2
           id="related-djs-heading"
-          className="text-xl font-bold text-white sm:text-2xl"
+          className="text-xl font-bold text-slate-900 sm:text-2xl"
         >
           Andere DJ&apos;s die je misschien leuk vindt
         </h2>
         <div className="hidden gap-2 md:flex">
           <button
             type="button"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-gray-800 bg-[#111827] text-white shadow-sm transition-all duration-200 hover:border-green-500/40 hover:bg-green-500/5"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-slate-700 shadow-sm transition-all duration-200 hover:border-green-200 hover:bg-green-50"
             aria-label="Vorige DJ’s"
             onClick={() => scrollByDir(-1)}
           >
@@ -58,7 +58,7 @@ export function RelatedDjsCarousel({ djs }: { djs: DjProfileRow[] }) {
           </button>
           <button
             type="button"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-gray-800 bg-[#111827] text-white shadow-sm transition-all duration-200 hover:border-green-500/40 hover:bg-green-500/5"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-slate-700 shadow-sm transition-all duration-200 hover:border-green-200 hover:bg-green-50"
             aria-label="Volgende DJ’s"
             onClick={() => scrollByDir(1)}
           >
@@ -81,9 +81,9 @@ export function RelatedDjsCarousel({ djs }: { djs: DjProfileRow[] }) {
             <Link
               key={id}
               href={`/dj/${encodeURIComponent(id)}`}
-              className="group card-interactive flex w-[min(100%,280px)] shrink-0 snap-start flex-col overflow-hidden transition-all duration-200 hover:border-green-500/30 md:w-[260px]"
+              className="group card-interactive flex w-[min(100%,280px)] shrink-0 snap-start flex-col overflow-hidden md:w-[260px]"
             >
-              <div className="relative aspect-[4/3] overflow-hidden bg-[#111827]">
+              <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800">
                 <img
                   src={FALLBACK_IMG}
                   alt=""
@@ -100,18 +100,18 @@ export function RelatedDjsCarousel({ djs }: { djs: DjProfileRow[] }) {
                 </span>
               </div>
               <div className="flex flex-1 flex-col gap-2 p-4">
-                <p className="text-sm text-gray-400">{city}</p>
+                <p className="text-sm text-slate-500">{city}</p>
                 <div className="flex flex-wrap gap-1.5">
                   {genres.map((g) => (
                     <span
                       key={g}
-                      className="rounded-full bg-[#0f172a]/80 px-2 py-0.5 text-xs font-medium text-white"
+                      className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-slate-600"
                     >
                       {g}
                     </span>
                   ))}
                 </div>
-                <p className="mt-auto pt-2 text-sm text-gray-400">
+                <p className="mt-auto pt-2 text-sm font-medium text-green-600">
                   Bekijk profiel
                 </p>
               </div>
