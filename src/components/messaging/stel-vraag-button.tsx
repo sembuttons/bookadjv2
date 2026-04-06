@@ -17,10 +17,12 @@ export function StelVraagButton({ djUserId, className, children }: Props) {
       type="button"
       className={className}
       onClick={async () => {
+        const uid = djUserId?.trim();
+        if (!uid) return;
         const {
           data: { session },
         } = await supabase.auth.getSession();
-        const path = `/berichten/${encodeURIComponent(djUserId)}`;
+        const path = `/berichten/${encodeURIComponent(uid)}`;
         if (!session) {
           router.push(
             `/auth?redirect=${encodeURIComponent(path)}`,

@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { Lock } from "lucide-react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
 import { Navbar } from "@/components/Navbar";
 import { DatePickerPopover } from "@/components/date-picker-popover";
+import { TimePickerPopover } from "@/components/time-picker-popover";
 import {
   getCity,
   getDisplayName,
@@ -41,6 +43,12 @@ function randomReference() {
   return `BKA-${Math.floor(1000 + Math.random() * 9000)}`;
 }
 
+function parseUrlDateParam(s: string | null): string {
+  if (!s || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return "";
+  const d = new Date(`${s}T12:00:00`);
+  return Number.isNaN(d.getTime()) ? "" : s;
+}
+
 function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number) {
   const R = 6371;
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
@@ -56,9 +64,15 @@ function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number) {
 
 export default function BoekenPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const params = useParams();
   const djIdRaw = params.djId;
   const djId = typeof djIdRaw === "string" ? djIdRaw : djIdRaw?.[0] ?? "";
+
+  const boekenPathWithQuery = useMemo(() => {
+    const q = searchParams.toString();
+    return q ? `/boeken/${djId}?${q}` : `/boeken/${djId}`;
+  }, [djId, searchParams]);
 
   const [authReady, setAuthReady] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
@@ -80,6 +94,12 @@ export default function BoekenPage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const fromUrl = parseUrlDateParam(searchParams.get("date"));
+    if (fromUrl) setEventDate(fromUrl);
+  }, [searchParams]);
 
   useEffect(() => {
     let cancelled = false;
@@ -90,7 +110,7 @@ export default function BoekenPage() {
       if (cancelled) return;
       if (!session) {
         router.replace(
-          `/auth?redirect=${encodeURIComponent(`/boeken/${djId}`)}`,
+          `/auth?redirect=${encodeURIComponent(boekenPathWithQuery)}`,
         );
         return;
       }
@@ -100,7 +120,7 @@ export default function BoekenPage() {
     return () => {
       cancelled = true;
     };
-  }, [router, djId]);
+  }, [router, boekenPathWithQuery]);
 
   useEffect(() => {
     if (!authReady || !djId) return;
@@ -189,20 +209,15 @@ export default function BoekenPage() {
     async (e: React.FormEvent) => {
       e.preventDefault();
       setSubmitError(null);
+      const nextFieldErr: Record<string, string> = {};
+      if (!eventDate.trim()) nextFieldErr.eventDate = "Dit veld is verplicht";
+      if (!startTime.trim()) nextFieldErr.startTime = "Dit veld is verplicht";
+      if (!venueAddress.trim()) nextFieldErr.venueAddress = "Dit veld is verplicht";
+      setFieldErrors(nextFieldErr);
+      if (Object.keys(nextFieldErr).length > 0) return;
+
       if (!userId || !djId || !profile) {
         setSubmitError("Sessie of DJ ontbreekt. Vernieuw de pagina.");
-        return;
-      }
-      if (!eventDate.trim()) {
-        setSubmitError("Kies een evenementdatum.");
-        return;
-      }
-      if (!startTime.trim()) {
-        setSubmitError("Kies een starttijd.");
-        return;
-      }
-      if (!venueAddress.trim()) {
-        setSubmitError("Vul de locatie in.");
         return;
       }
 
@@ -272,15 +287,15 @@ export default function BoekenPage() {
         .select("id")
         .single();
 
-      setSubmitting(false);
-
       if (error) {
+        setSubmitting(false);
         setSubmitError(error.message);
         return;
       }
 
       const bookingId = data?.id;
       if (!bookingId) {
+        setSubmitting(false);
         setSubmitError("Geen boeking-ID ontvangen.");
         return;
       }
@@ -301,8 +316,21 @@ export default function BoekenPage() {
         } catch {
           /* e-mailfout blokkeert doorsturen niet */
         }
+        try {
+          await fetch("/api/bookings/welcome-thread", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${session.access_token}`,
+            },
+            body: JSON.stringify({ bookingId }),
+          });
+        } catch {
+          /* welkomstbericht optioneel */
+        }
       }
 
+      setSubmitting(false);
       router.push(`/bevestiging/${bookingId}`);
       router.refresh();
     },
@@ -392,6 +420,7 @@ export default function BoekenPage() {
         <div>
           <form
             id="boeking-form"
+            noValidate
             onSubmit={handleSubmit}
             className="space-y-8"
           >
@@ -430,12 +459,24 @@ export default function BoekenPage() {
               <div className="block">
                 <DatePickerPopover
                   value={eventDate}
-                  onChange={setEventDate}
+                  onChange={(v) => {
+                    setEventDate(v);
+                    setFieldErrors((p) => {
+                      const n = { ...p };
+                      delete n.eventDate;
+                      return n;
+                    });
+                  }}
                   label="Evenementdatum"
                   placeholder="Kies een datum"
                   triggerClassName="flex h-[42px] w-full items-center rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-left text-sm text-neutral-900 outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
                   popoverAlign="left"
                 />
+                {fieldErrors.eventDate ? (
+                  <p className="mt-1.5 text-sm text-red-600" role="alert">
+                    {fieldErrors.eventDate}
+                  </p>
+                ) : null}
               </div>
 
               <div>
@@ -460,18 +501,28 @@ export default function BoekenPage() {
                 </div>
               </div>
 
-              <label className="block">
-                <span className="text-sm font-semibold text-neutral-800">
-                  Starttijd
-                </span>
-                <input
-                  type="time"
-                  required
+              <div className="block">
+                <TimePickerPopover
                   value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
-                  className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                  onChange={(v) => {
+                    setStartTime(v);
+                    setFieldErrors((p) => {
+                      const n = { ...p };
+                      delete n.startTime;
+                      return n;
+                    });
+                  }}
+                  label="Starttijd"
+                  placeholder="Kies een tijd"
+                  triggerClassName="flex h-[42px] w-full items-center rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-left text-sm text-neutral-900 outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                  popoverAlign="left"
                 />
-              </label>
+                {fieldErrors.startTime ? (
+                  <p className="mt-1.5 text-sm text-red-600" role="alert">
+                    {fieldErrors.startTime}
+                  </p>
+                ) : null}
+              </div>
 
               <label className="block">
                 <span className="text-sm font-semibold text-neutral-800">
@@ -507,9 +558,15 @@ export default function BoekenPage() {
                     >
                       <input
                         type="text"
-                        required
                         value={venueAddress}
-                        onChange={(e) => setVenueAddress(e.target.value)}
+                        onChange={(e) => {
+                          setVenueAddress(e.target.value);
+                          setFieldErrors((p) => {
+                            const n = { ...p };
+                            delete n.venueAddress;
+                            return n;
+                          });
+                        }}
                         placeholder="Straat en huisnummer, Stad"
                         className="h-[42px] w-full rounded-lg border border-neutral-200 bg-white pl-10 pr-3 text-sm outline-none placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
                       />
@@ -535,6 +592,11 @@ export default function BoekenPage() {
                 ) : venueAddress.trim() ? (
                   <p className="mt-2 rounded-lg bg-neutral-100 px-3 py-2 text-xs italic text-neutral-600">
                     Selecteer een adres uit de lijst om reiskosten te berekenen.
+                  </p>
+                ) : null}
+                {fieldErrors.venueAddress ? (
+                  <p className="mt-1.5 text-sm text-red-600" role="alert">
+                    {fieldErrors.venueAddress}
                   </p>
                 ) : null}
               </label>
@@ -660,9 +722,7 @@ export default function BoekenPage() {
             </button>
 
             <p className="mt-4 flex items-center justify-center gap-2 text-xs text-neutral-500">
-              <span aria-hidden className="text-base">
-                🔒
-              </span>
+              <Lock className="h-3.5 w-3.5 shrink-0 text-neutral-400" aria-hidden />
               Beveiligd via Stripe
             </p>
           </div>

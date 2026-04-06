@@ -27,6 +27,7 @@ import {
 } from "@/lib/dj-profile-helpers";
 import { StelVraagButton } from "@/components/messaging/stel-vraag-button";
 import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase-server";
 import { BookingPanel } from "./booking-panel";
 import { DjHelpSection } from "./dj-help-section";
 import { DjProfileFaq } from "./dj-profile-faq";
@@ -148,13 +149,14 @@ function ArrowLeftLink() {
 export default async function DjProfilePage({ params }: PageProps) {
   const { id } = await params;
 
-  const [profileRes, reviewsRes] = await Promise.all([
+  const [profileRes, reviewsRes, ownerRes] = await Promise.all([
     supabase.from("dj_profiles").select("*").eq("id", id).maybeSingle(),
     supabase
       .from("reviews")
       .select("*")
       .eq("dj_id", id)
       .order("created_at", { ascending: false }),
+    supabaseAdmin.from("dj_profiles").select("user_id").eq("id", id).maybeSingle(),
   ]);
 
   if (profileRes.error || !profileRes.data) {
@@ -185,11 +187,19 @@ export default async function DjProfilePage({ params }: PageProps) {
 
   const fn = firstName(name);
 
-  // Fix: also try user_id from the profile row directly
-  const djUserId =
+  const ownerRow =
+    !ownerRes.error && ownerRes.data
+      ? (ownerRes.data as { user_id?: string | null })
+      : null;
+  const fromOwner =
+    typeof ownerRow?.user_id === "string" && ownerRow.user_id.trim()
+      ? ownerRow.user_id.trim()
+      : "";
+  const fromProfile =
     typeof profile.user_id === "string" && profile.user_id.trim()
       ? profile.user_id.trim()
       : "";
+  const djUserId = fromOwner || fromProfile;
 
   const customUsps = parseCustomUsps(profile);
 

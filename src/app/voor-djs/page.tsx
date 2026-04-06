@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
-import { SiteFooter } from "@/components/SiteFooter";
 
 const djSteps = [
   {
@@ -245,7 +244,6 @@ export default function VoorDjsPage() {
         </div>
       </section>
 
-      <SiteFooter />
     </div>
   );
 }

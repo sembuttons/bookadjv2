@@ -5,6 +5,15 @@ import { supabaseAdmin } from "@/lib/supabase-server";
 const resendApiKey = process.env.RESEND_API_KEY;
 const defaultFrom =
   process.env.RESEND_FROM_EMAIL || "bookadj <onboarding@resend.dev>";
+const contactInbox =
+  process.env.CONTACT_INBOX_EMAIL?.trim() || "hallo@bookadj.nl";
+
+const CONTACT_SUBJECTS = [
+  "Boeking",
+  "Betaling",
+  "Technisch probleem",
+  "Anders",
+] as const;
 
 const NOTIFICATION_TYPES = [
   "booking_requested",
@@ -38,12 +47,82 @@ function formatEuroFromCents(cents: number | null | undefined): string {
   });
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+async function handleContactForm(
+  raw: Record<string, unknown>,
+  resend: Resend,
+): Promise<NextResponse> {
+  const honeypot =
+    typeof raw._gotcha === "string" ? raw._gotcha.trim() : "";
+  if (honeypot) {
+    return NextResponse.json({ success: true });
+  }
+
+  const name =
+    typeof raw.name === "string" ? raw.name.trim().slice(0, 120) : "";
+  const email =
+    typeof raw.email === "string" ? raw.email.trim().slice(0, 254) : "";
+  const onderwerp =
+    typeof raw.onderwerp === "string" ? raw.onderwerp.trim() : "";
+  const bericht =
+    typeof raw.bericht === "string" ? raw.bericht.trim().slice(0, 8000) : "";
+
+  if (!name || !email || !EMAIL_RE.test(email)) {
+    return NextResponse.json(
+      { error: "Vul een geldige naam en e-mailadres in." },
+      { status: 400 },
+    );
+  }
+  if (!CONTACT_SUBJECTS.includes(onderwerp as (typeof CONTACT_SUBJECTS)[number])) {
+    return NextResponse.json({ error: "Ongeldig onderwerp." }, { status: 400 });
+  }
+  if (bericht.length < 10) {
+    return NextResponse.json(
+      { error: "Bericht is te kort (minimaal 10 tekens)." },
+      { status: 400 },
+    );
+  }
+
+  const nameSafe = escapeHtml(name);
+  const emailSafe = escapeHtml(email);
+  const subjSafe = escapeHtml(onderwerp);
+  const bodySafe = escapeHtml(bericht).replace(/\n/g, "<br/>");
+
+  try {
+    await resend.emails.send({
+      from: defaultFrom,
+      to: contactInbox,
+      replyTo: email,
+      subject: `[bookadj contact] ${onderwerp} — ${name}`,
+      html: `<p><strong>Naam:</strong> ${nameSafe}</p><p><strong>E-mail:</strong> ${emailSafe}</p><p><strong>Onderwerp:</strong> ${subjSafe}</p><hr/><p>${bodySafe}</p>`,
+    });
+    return NextResponse.json({ success: true });
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "E-mail kon niet worden verstuurd.";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
+
 export async function POST(req: Request) {
   if (!resendApiKey) {
     return NextResponse.json(
       { error: "RESEND_API_KEY ontbreekt." },
       { status: 500 },
     );
+  }
+
+  let body: Record<string, unknown>;
+  try {
+    body = (await req.json()) as Record<string, unknown>;
+  } catch {
+    return NextResponse.json({ error: "Ongeldige body." }, { status: 400 });
+  }
+
+  if (body.type === "contact_form") {
+    const resend = new Resend(resendApiKey);
+    return handleContactForm(body, resend);
   }
 
   const authHeader = req.headers.get("authorization");
@@ -61,15 +140,9 @@ export async function POST(req: Request) {
 
   const uid = userData.user.id;
 
-  let body: { type?: string; bookingId?: string };
-  try {
-    body = (await req.json()) as { type?: string; bookingId?: string };
-  } catch {
-    return NextResponse.json({ error: "Ongeldige body." }, { status: 400 });
-  }
-
   const type = body.type as NotificationType;
-  const bookingId = typeof body.bookingId === "string" ? body.bookingId : "";
+  const bookingId =
+    typeof body.bookingId === "string" ? body.bookingId : "";
   if (!bookingId || !NOTIFICATION_TYPES.includes(type as NotificationType)) {
     return NextResponse.json(
       { error: "type of bookingId ontbreekt of is ongeldig." },

@@ -162,8 +162,14 @@ export function Navbar() {
           <Link href="/hoe-het-werkt" className="transition-colors hover:text-neutral-900">
             Hoe het werkt
           </Link>
+          <Link href="/contact" className="transition-colors hover:text-neutral-900">
+            Contact
+          </Link>
           <Link href="/voor-djs" className="transition-colors hover:text-neutral-900">
             Voor DJ&apos;s
+          </Link>
+          <Link href="/over-ons" className="transition-colors hover:text-neutral-900">
+            Over ons
           </Link>
         </nav>
 

@@ -34,12 +34,39 @@ const BIO_MAX = 500;
 const VAT_PATTERN = /^NL\d{9}B\d{2}$/i;
 const KVK_PATTERN = /^\d{8}$/;
 
+/** Consistent label → control spacing across the form */
+const labelCls = "text-sm font-semibold text-neutral-800";
+const fieldStack = "flex flex-col gap-2";
+const inputCls =
+  "w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-900 outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10";
+const hintCls = "text-xs text-neutral-500";
+const errCls = "text-sm text-red-600";
+
 function netAfterPlatformFee(hourly: number): string {
   const net = hourly * 0.85;
   return net.toLocaleString("nl-NL", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+}
+
+function parseExtraLanguages(raw: string): string[] {
+  return raw
+    .split(/[,;]/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+function mergeLanguageLists(preset: string[], extra: string[]): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const x of [...preset, ...extra]) {
+    const k = x.toLowerCase();
+    if (seen.has(k)) continue;
+    seen.add(k);
+    out.push(x);
+  }
+  return out;
 }
 
 export default function DjProfielAanmakenPage() {
@@ -52,15 +79,16 @@ export default function DjProfielAanmakenPage() {
   const [languages, setLanguages] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(LANGUAGE_OPTIONS.map((l) => [l, false])),
   );
+  const [languagesExtra, setLanguagesExtra] = useState("");
   const [genres, setGenres] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(GENRE_OPTIONS.map((g) => [g, false])),
   );
   const [hourlyRate, setHourlyRate] = useState("");
   const [ratePerKm, setRatePerKm] = useState("0.42");
-  const [homeAddress, setHomeAddress] = useState("");
   const [vatNumber, setVatNumber] = useState("");
   const [kvkNumber, setKvkNumber] = useState("");
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -99,15 +127,29 @@ export default function DjProfielAanmakenPage() {
     [genres],
   );
 
-  const selectedLanguages = useMemo(
+  const selectedPresetLanguages = useMemo(
     () => LANGUAGE_OPTIONS.filter((l) => languages[l]),
     [languages],
+  );
+
+  const languagesForSave = useMemo(
+    () =>
+      mergeLanguageLists(
+        selectedPresetLanguages,
+        parseExtraLanguages(languagesExtra),
+      ),
+    [languagesExtra, selectedPresetLanguages],
   );
 
   const hourlyNum = useMemo(() => {
     const n = parseFloat(hourlyRate.replace(",", "."));
     return Number.isFinite(n) ? n : NaN;
   }, [hourlyRate]);
+
+  const previewHourly = useMemo(() => {
+    if (Number.isFinite(hourlyNum) && hourlyNum > 0) return hourlyNum;
+    return null;
+  }, [hourlyNum]);
 
   useEffect(() => {
     if (!success) return;
@@ -124,6 +166,11 @@ export default function DjProfielAanmakenPage() {
 
   const toggleGenre = (g: string) => {
     setGenres((prev) => ({ ...prev, [g]: !prev[g] }));
+    setFieldErrors((p) => {
+      const n = { ...p };
+      delete n.genres;
+      return n;
+    });
   };
 
   const handleSubmit = useCallback(
@@ -134,51 +181,28 @@ export default function DjProfielAanmakenPage() {
       const name = stageName.trim();
       const bioTrim = bio.trim();
       const cityTrim = city.trim();
-      const homeTrim = homeAddress.trim();
       const vatTrim = vatNumber.trim().toUpperCase();
       const kvkTrim = kvkNumber.trim();
 
-      if (!name) {
-        setSubmitError("Vul je artiestennaam in.");
-        return;
-      }
-      if (!bioTrim) {
-        setSubmitError("Vul je bio in.");
-        return;
-      }
-      if (bioTrim.length > BIO_MAX) {
-        setSubmitError(`Bio mag maximaal ${BIO_MAX} tekens zijn.`);
-        return;
-      }
-      if (!cityTrim) {
-        setSubmitError("Vul je stad in.");
-        return;
-      }
-      if (selectedGenres.length < 1) {
-        setSubmitError("Kies minimaal één genre.");
-        return;
-      }
-      if (!Number.isFinite(hourlyNum) || hourlyNum <= 0) {
-        setSubmitError("Vul een geldig uurtarief in.");
-        return;
-      }
+      const err: Record<string, string> = {};
+      if (!name) err.stageName = "Dit veld is verplicht";
+      if (!bioTrim) err.bio = "Dit veld is verplicht";
+      else if (bioTrim.length > BIO_MAX)
+        err.bio = `Maximaal ${BIO_MAX} tekens.`;
+      if (!cityTrim) err.city = "Dit veld is verplicht";
+      if (selectedGenres.length < 1) err.genres = "Dit veld is verplicht";
+      if (!Number.isFinite(hourlyNum) || hourlyNum <= 0)
+        err.hourlyRate = "Dit veld is verplicht";
       const rpk = parseFloat(ratePerKm.replace(",", "."));
-      if (!Number.isFinite(rpk) || rpk < 0) {
-        setSubmitError("Vul een geldig tarief per km in.");
-        return;
-      }
-      if (!homeTrim) {
-        setSubmitError("Vul je thuislocatie-adres in.");
-        return;
-      }
-      if (!VAT_PATTERN.test(vatTrim)) {
-        setSubmitError("BTW-nummer: gebruik formaat NL123456789B01.");
-        return;
-      }
-      if (!KVK_PATTERN.test(kvkTrim)) {
-        setSubmitError("KVK-nummer moet uit 8 cijfers bestaan.");
-        return;
-      }
+      if (!Number.isFinite(rpk) || rpk < 0)
+        err.ratePerKm = "Dit veld is verplicht";
+      if (!VAT_PATTERN.test(vatTrim))
+        err.vatNumber = "Gebruik formaat NL123456789B01.";
+      if (!KVK_PATTERN.test(kvkTrim))
+        err.kvkNumber = "Dit veld is verplicht (8 cijfers).";
+
+      setFieldErrors(err);
+      if (Object.keys(err).length > 0) return;
 
       const {
         data: { session },
@@ -211,10 +235,9 @@ export default function DjProfielAanmakenPage() {
         verification_status: "pending" as const,
         is_visible: false,
         ...(yearsExp != null ? { years_experience: yearsExp } : {}),
-        ...(selectedLanguages.length > 0
-          ? { languages: selectedLanguages }
+        ...(languagesForSave.length > 0
+          ? { languages: languagesForSave }
           : {}),
-        home_address: homeTrim,
       };
 
       const { error } = await supabase.from("dj_profiles").insert(payload);
@@ -231,13 +254,12 @@ export default function DjProfielAanmakenPage() {
     [
       bio,
       city,
-      homeAddress,
       hourlyNum,
       hourlyRate,
       kvkNumber,
+      languagesForSave,
       ratePerKm,
       selectedGenres,
-      selectedLanguages,
       stageName,
       vatNumber,
       yearsExperience,
@@ -270,12 +292,13 @@ export default function DjProfielAanmakenPage() {
       <h1 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
         DJ-profiel aanmaken
       </h1>
-      <p className="mt-1 max-w-2xl text-sm text-neutral-600">
+      <p className="mt-2 max-w-2xl text-sm text-neutral-600">
         Vul je gegevens in. Je profiel wordt pas zichtbaar na goedkeuring door
         ons team.
       </p>
 
       <form
+        noValidate
         onSubmit={(e) => void handleSubmit(e)}
         className="mt-10 max-w-3xl space-y-10"
       >
@@ -290,69 +313,106 @@ export default function DjProfielAanmakenPage() {
 
         <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
           <h2 className="text-lg font-bold text-neutral-900">Basisinformatie</h2>
-          <div className="mt-6 space-y-5">
-            <label className="block">
-              <span className="text-sm font-semibold text-neutral-800">
+          <div className="mt-6 flex flex-col gap-6">
+            <div className={fieldStack}>
+              <span className={labelCls}>
                 Artiestennaam <span className="text-red-600">*</span>
               </span>
               <input
                 type="text"
-                required
                 value={stageName}
-                onChange={(e) => setStageName(e.target.value)}
-                className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                onChange={(e) => {
+                  setStageName(e.target.value);
+                  setFieldErrors((p) => {
+                    const n = { ...p };
+                    delete n.stageName;
+                    return n;
+                  });
+                }}
+                className={inputCls}
                 placeholder="Zoals je op het podium heet"
               />
-            </label>
-            <label className="block">
-              <span className="text-sm font-semibold text-neutral-800">
+              {fieldErrors.stageName ? (
+                <p className={errCls} role="alert">
+                  {fieldErrors.stageName}
+                </p>
+              ) : null}
+            </div>
+
+            <div className={fieldStack}>
+              <span className={labelCls}>
                 Bio <span className="text-red-600">*</span>
               </span>
               <textarea
-                required
                 value={bio}
-                onChange={(e) => setBio(e.target.value.slice(0, BIO_MAX))}
+                onChange={(e) => {
+                  setBio(e.target.value.slice(0, BIO_MAX));
+                  setFieldErrors((p) => {
+                    const n = { ...p };
+                    delete n.bio;
+                    return n;
+                  });
+                }}
                 rows={5}
                 maxLength={BIO_MAX}
-                className="mt-2 w-full resize-y rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                className={`${inputCls} resize-y`}
                 placeholder="Wie ben je, wat speel je, wat kan men verwachten?"
               />
-              <p className="mt-1 text-right text-xs text-neutral-500">
+              <p className={`${hintCls} text-right`}>
                 {bio.length} / {BIO_MAX}
               </p>
-            </label>
-            <label className="block">
-              <span className="text-sm font-semibold text-neutral-800">
+              {fieldErrors.bio ? (
+                <p className={errCls} role="alert">
+                  {fieldErrors.bio}
+                </p>
+              ) : null}
+            </div>
+
+            <div className={fieldStack}>
+              <span className={labelCls}>
                 Stad <span className="text-red-600">*</span>
               </span>
               <input
                 type="text"
-                required
                 value={city}
-                onChange={(e) => setCity(e.target.value)}
-                className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                onChange={(e) => {
+                  setCity(e.target.value);
+                  setFieldErrors((p) => {
+                    const n = { ...p };
+                    delete n.city;
+                    return n;
+                  });
+                }}
+                className={inputCls}
                 placeholder="Bijv. Amsterdam"
               />
-            </label>
-            <label className="block">
-              <span className="text-sm font-semibold text-neutral-800">
-                Jaren ervaring
-              </span>
+              <p className={hintCls}>
+                Wordt getoond op je profiel en gebruikt als uitvalsbasis voor
+                reiskosten.
+              </p>
+              {fieldErrors.city ? (
+                <p className={errCls} role="alert">
+                  {fieldErrors.city}
+                </p>
+              ) : null}
+            </div>
+
+            <div className={fieldStack}>
+              <span className={labelCls}>Jaren ervaring</span>
               <input
                 type="number"
                 min={0}
                 max={80}
                 value={yearsExperience}
                 onChange={(e) => setYearsExperience(e.target.value)}
-                className="mt-2 w-full max-w-xs rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                className={`${inputCls} max-w-xs`}
                 placeholder="Optioneel"
               />
-            </label>
-            <fieldset>
-              <legend className="text-sm font-semibold text-neutral-800">
-                Talen
-              </legend>
-              <div className="mt-3 flex flex-wrap gap-3">
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <span className={labelCls}>Talen</span>
+              <div className="flex flex-wrap gap-3">
                 {LANGUAGE_OPTIONS.map((lang) => (
                   <label
                     key={lang}
@@ -368,16 +428,32 @@ export default function DjProfielAanmakenPage() {
                   </label>
                 ))}
               </div>
-            </fieldset>
+              <div className={fieldStack}>
+                <span className={labelCls}>Andere talen</span>
+                <input
+                  type="text"
+                  value={languagesExtra}
+                  onChange={(e) => setLanguagesExtra(e.target.value)}
+                  className={inputCls}
+                  placeholder="Bijv. Italiaans, Portugees, Japans"
+                />
+                <p className={hintCls}>
+                  Meerdere talen scheiden met een komma. Wordt opgeslagen als
+                  lijst samen met je vinkjes hierboven.
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
         <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
-          <h2 className="text-lg font-bold text-neutral-900">Genres</h2>
-          <p className="mt-1 text-sm text-neutral-600">
-            Kies minimaal één genre <span className="text-red-600">*</span>
-          </p>
-          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <div className="flex flex-col gap-2">
+            <h2 className="text-lg font-bold text-neutral-900">Genres</h2>
+            <p className="text-sm text-neutral-600">
+              Kies minimaal één genre <span className="text-red-600">*</span>
+            </p>
+          </div>
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
             {GENRE_OPTIONS.map((g) => (
               <label
                 key={g}
@@ -393,113 +469,156 @@ export default function DjProfielAanmakenPage() {
               </label>
             ))}
           </div>
+          {fieldErrors.genres ? (
+            <p className={`${errCls} mt-2`} role="alert">
+              {fieldErrors.genres}
+            </p>
+          ) : null}
         </section>
 
         <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
           <h2 className="text-lg font-bold text-neutral-900">Tarieven</h2>
-          <div className="mt-6 space-y-5">
-            <label className="block">
-              <span className="text-sm font-semibold text-neutral-800">
+          <div className="mt-6 flex flex-col gap-6">
+            <div className={fieldStack}>
+              <span className={labelCls}>
                 Uurtarief (€ per uur) <span className="text-red-600">*</span>
               </span>
               <input
                 type="number"
-                required
                 min={1}
                 step={1}
                 value={hourlyRate}
-                onChange={(e) => setHourlyRate(e.target.value)}
-                className="mt-2 w-full max-w-xs rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                onChange={(e) => {
+                  setHourlyRate(e.target.value);
+                  setFieldErrors((p) => {
+                    const n = { ...p };
+                    delete n.hourlyRate;
+                    return n;
+                  });
+                }}
+                className={`${inputCls} max-w-xs`}
                 placeholder="130"
               />
-            </label>
-            <label className="block">
-              <span className="text-sm font-semibold text-neutral-800">
-                Reiskosten (€ per km)
-              </span>
+              {fieldErrors.hourlyRate ? (
+                <p className={errCls} role="alert">
+                  {fieldErrors.hourlyRate}
+                </p>
+              ) : null}
+            </div>
+
+            <div className={fieldStack}>
+              <span className={labelCls}>Reiskosten (€ per km)</span>
               <input
                 type="number"
                 min={0}
                 step={0.01}
                 value={ratePerKm}
-                onChange={(e) => setRatePerKm(e.target.value)}
-                className="mt-2 w-full max-w-xs rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                onChange={(e) => {
+                  setRatePerKm(e.target.value);
+                  setFieldErrors((p) => {
+                    const n = { ...p };
+                    delete n.ratePerKm;
+                    return n;
+                  });
+                }}
+                className={`${inputCls} max-w-xs`}
               />
-              <p className="mt-1 text-xs text-neutral-500">
-                Standaard 0,42 — pas aan indien nodig.
-              </p>
-            </label>
+              <p className={hintCls}>Standaard 0,42 — pas aan indien nodig.</p>
+              {fieldErrors.ratePerKm ? (
+                <p className={errCls} role="alert">
+                  {fieldErrors.ratePerKm}
+                </p>
+              ) : null}
+            </div>
+
             <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-950">
-              <p>
-                Je ontvangt <strong>85%</strong> van elke boeking. Bij een
-                tarief van <strong>€130/uur</strong> ontvang je{" "}
-                <strong>€{netAfterPlatformFee(130)}</strong> per uur na
-                platformkosten.
-              </p>
+              {previewHourly != null ? (
+                <p>
+                  Je ontvangt <strong>85%</strong> van elke boeking. Bij een
+                  tarief van{" "}
+                  <strong>
+                    €
+                    {previewHourly.toLocaleString("nl-NL", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
+                    /uur
+                  </strong>{" "}
+                  ontvang je{" "}
+                  <strong>€{netAfterPlatformFee(previewHourly)}</strong> per
+                  uur na platformkosten.
+                </p>
+              ) : (
+                <p className="text-emerald-900/90">
+                  Vul hierboven je uurtarief in om te zien wat je per uur netto
+                  ontvangt na platformkosten (85%).
+                </p>
+              )}
             </div>
           </div>
         </section>
 
         <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
-          <h2 className="text-lg font-bold text-neutral-900">Locatie</h2>
-          <label className="mt-6 block">
-            <span className="text-sm font-semibold text-neutral-800">
-              Thuislocatie adres <span className="text-red-600">*</span>
-            </span>
-            <input
-              type="text"
-              required
-              value={homeAddress}
-              onChange={(e) => setHomeAddress(e.target.value)}
-              className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
-              placeholder="Straat, huisnummer, postcode, plaats"
-            />
-            <p className="mt-2 text-xs text-neutral-500">
-              Wordt gebruikt voor reiskostenberekening. Niet zichtbaar voor
-              klanten.
+          <div className="flex flex-col gap-2">
+            <h2 className="text-lg font-bold text-neutral-900">
+              Zakelijke gegevens
+            </h2>
+            <p className="text-sm text-neutral-600">
+              Vereist voor uitbetalingen en facturatie.
             </p>
-          </label>
-        </section>
-
-        <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
-          <h2 className="text-lg font-bold text-neutral-900">
-            Zakelijke gegevens
-          </h2>
-          <p className="mt-1 text-sm text-neutral-600">
-            Vereist voor uitbetalingen en facturatie.
-          </p>
-          <div className="mt-6 space-y-5">
-            <label className="block">
-              <span className="text-sm font-semibold text-neutral-800">
+          </div>
+          <div className="mt-6 flex flex-col gap-6">
+            <div className={fieldStack}>
+              <span className={labelCls}>
                 BTW-nummer <span className="text-red-600">*</span>
               </span>
               <input
                 type="text"
-                required
                 value={vatNumber}
-                onChange={(e) => setVatNumber(e.target.value.toUpperCase())}
-                className="mt-2 w-full max-w-md rounded-lg border border-neutral-200 px-3 py-2.5 font-mono text-sm outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                onChange={(e) => {
+                  setVatNumber(e.target.value.toUpperCase());
+                  setFieldErrors((p) => {
+                    const n = { ...p };
+                    delete n.vatNumber;
+                    return n;
+                  });
+                }}
+                className={`${inputCls} max-w-md font-mono`}
                 placeholder="NL123456789B01"
               />
-            </label>
-            <label className="block">
-              <span className="text-sm font-semibold text-neutral-800">
+              {fieldErrors.vatNumber ? (
+                <p className={errCls} role="alert">
+                  {fieldErrors.vatNumber}
+                </p>
+              ) : null}
+            </div>
+
+            <div className={fieldStack}>
+              <span className={labelCls}>
                 KVK-nummer <span className="text-red-600">*</span>
               </span>
               <input
                 type="text"
-                required
                 inputMode="numeric"
-                pattern="\d{8}"
                 maxLength={8}
                 value={kvkNumber}
-                onChange={(e) =>
-                  setKvkNumber(e.target.value.replace(/\D/g, "").slice(0, 8))
-                }
-                className="mt-2 w-full max-w-xs rounded-lg border border-neutral-200 px-3 py-2.5 font-mono text-sm outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                onChange={(e) => {
+                  setKvkNumber(e.target.value.replace(/\D/g, "").slice(0, 8));
+                  setFieldErrors((p) => {
+                    const n = { ...p };
+                    delete n.kvkNumber;
+                    return n;
+                  });
+                }}
+                className={`${inputCls} max-w-xs font-mono`}
                 placeholder="12345678"
               />
-            </label>
+              {fieldErrors.kvkNumber ? (
+                <p className={errCls} role="alert">
+                  {fieldErrors.kvkNumber}
+                </p>
+              ) : null}
+            </div>
           </div>
         </section>
 

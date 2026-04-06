@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
-import { SiteFooter } from "@/components/SiteFooter";
 
 const steps = [
   {
@@ -225,7 +224,6 @@ export default function HoeHetWerktPage() {
         </div>
       </section>
 
-      <SiteFooter />
     </div>
   );
 }

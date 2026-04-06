@@ -224,7 +224,11 @@ export function BookingPanel({
         </div>
 
         <Link
-          href={`/boeken/${encodeURIComponent(djId)}`}
+          href={(() => {
+            const base = `/boeken/${encodeURIComponent(djId)}`;
+            if (!eventDate.trim()) return base;
+            return `${base}?${new URLSearchParams({ date: eventDate.trim() }).toString()}`;
+          })()}
           className="mt-5 flex w-full items-center justify-center rounded-xl bg-black py-3.5 text-sm font-bold text-emerald-400 transition-colors hover:bg-neutral-900"
         >
           Boeking aanvragen

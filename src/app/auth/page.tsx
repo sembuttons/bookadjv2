@@ -22,8 +22,11 @@ export default function AuthPage() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [signupDone, setSignupDone] = useState(false);
   const [resetMessage, setResetMessage] = useState<string | null>(null);
+
+  const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -39,6 +42,14 @@ export default function AuthPage() {
     e.preventDefault();
     setError(null);
     setResetMessage(null);
+    setFieldErrors({});
+    const fe: Record<string, string> = {};
+    if (!loginEmail.trim()) fe.loginEmail = "Dit veld is verplicht";
+    else if (!emailOk(loginEmail)) fe.loginEmail = "Voer een geldig e-mailadres in.";
+    if (!loginPassword) fe.loginPassword = "Dit veld is verplicht";
+    setFieldErrors(fe);
+    if (Object.keys(fe).length > 0) return;
+
     setLoading(true);
     const { error: signError } = await supabase.auth.signInWithPassword({
       email: loginEmail,
@@ -94,6 +105,17 @@ export default function AuthPage() {
     e.preventDefault();
     setError(null);
     setResetMessage(null);
+    setFieldErrors({});
+    const fe: Record<string, string> = {};
+    if (!fullName.trim()) fe.signupName = "Dit veld is verplicht";
+    if (!signupEmail.trim()) fe.signupEmail = "Dit veld is verplicht";
+    else if (!emailOk(signupEmail)) fe.signupEmail = "Voer een geldig e-mailadres in.";
+    if (!signupPassword) fe.signupPassword = "Dit veld is verplicht";
+    else if (signupPassword.length < 6)
+      fe.signupPassword = "Minimaal 6 tekens.";
+    setFieldErrors(fe);
+    if (Object.keys(fe).length > 0) return;
+
     setLoading(true);
     const { error: signError } = await supabase.auth.signUp({
       email: signupEmail,
@@ -160,6 +182,7 @@ export default function AuthPage() {
             onClick={() => {
               setTab("login");
               setError(null);
+              setFieldErrors({});
               setResetMessage(null);
               setSignupDone(false);
             }}
@@ -178,6 +201,7 @@ export default function AuthPage() {
             onClick={() => {
               setTab("signup");
               setError(null);
+              setFieldErrors({});
               setResetMessage(null);
             }}
             className={`flex-1 rounded-md py-2.5 text-sm font-semibold transition-colors ${
@@ -226,11 +250,22 @@ export default function AuthPage() {
                 type="email"
                 autoComplete="email"
                 value={loginEmail}
-                onChange={(e) => setLoginEmail(e.target.value)}
-                required
+                onChange={(e) => {
+                  setLoginEmail(e.target.value);
+                  setFieldErrors((p) => {
+                    const n = { ...p };
+                    delete n.loginEmail;
+                    return n;
+                  });
+                }}
                 className="mt-1.5 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-900 outline-none ring-black placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2"
                 placeholder="naam@voorbeeld.nl"
               />
+              {fieldErrors.loginEmail ? (
+                <p className="mt-1.5 text-sm text-red-600" role="alert">
+                  {fieldErrors.loginEmail}
+                </p>
+              ) : null}
             </div>
             <div>
               <label
@@ -245,11 +280,22 @@ export default function AuthPage() {
                 type="password"
                 autoComplete="current-password"
                 value={loginPassword}
-                onChange={(e) => setLoginPassword(e.target.value)}
-                required
+                onChange={(e) => {
+                  setLoginPassword(e.target.value);
+                  setFieldErrors((p) => {
+                    const n = { ...p };
+                    delete n.loginPassword;
+                    return n;
+                  });
+                }}
                 className="mt-1.5 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-900 outline-none ring-black focus:border-neutral-400 focus:ring-2"
                 placeholder="••••••••"
               />
+              {fieldErrors.loginPassword ? (
+                <p className="mt-1.5 text-sm text-red-600" role="alert">
+                  {fieldErrors.loginPassword}
+                </p>
+              ) : null}
             </div>
             <button
               type="submit"
@@ -314,11 +360,22 @@ export default function AuthPage() {
                 type="text"
                 autoComplete="name"
                 value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                required
+                onChange={(e) => {
+                  setFullName(e.target.value);
+                  setFieldErrors((p) => {
+                    const n = { ...p };
+                    delete n.signupName;
+                    return n;
+                  });
+                }}
                 className="mt-1.5 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-900 outline-none ring-black placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2"
                 placeholder="Jan Jansen"
               />
+              {fieldErrors.signupName ? (
+                <p className="mt-1.5 text-sm text-red-600" role="alert">
+                  {fieldErrors.signupName}
+                </p>
+              ) : null}
             </div>
             <div>
               <label
@@ -333,11 +390,22 @@ export default function AuthPage() {
                 type="email"
                 autoComplete="email"
                 value={signupEmail}
-                onChange={(e) => setSignupEmail(e.target.value)}
-                required
+                onChange={(e) => {
+                  setSignupEmail(e.target.value);
+                  setFieldErrors((p) => {
+                    const n = { ...p };
+                    delete n.signupEmail;
+                    return n;
+                  });
+                }}
                 className="mt-1.5 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-900 outline-none ring-black placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2"
                 placeholder="naam@voorbeeld.nl"
               />
+              {fieldErrors.signupEmail ? (
+                <p className="mt-1.5 text-sm text-red-600" role="alert">
+                  {fieldErrors.signupEmail}
+                </p>
+              ) : null}
             </div>
             <div>
               <label
@@ -352,12 +420,22 @@ export default function AuthPage() {
                 type="password"
                 autoComplete="new-password"
                 value={signupPassword}
-                onChange={(e) => setSignupPassword(e.target.value)}
-                required
-                minLength={6}
+                onChange={(e) => {
+                  setSignupPassword(e.target.value);
+                  setFieldErrors((p) => {
+                    const n = { ...p };
+                    delete n.signupPassword;
+                    return n;
+                  });
+                }}
                 className="mt-1.5 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-900 outline-none ring-black focus:border-neutral-400 focus:ring-2"
                 placeholder="Minimaal 6 tekens"
               />
+              {fieldErrors.signupPassword ? (
+                <p className="mt-1.5 text-sm text-red-600" role="alert">
+                  {fieldErrors.signupPassword}
+                </p>
+              ) : null}
             </div>
             <div>
               <span
