@@ -355,12 +355,13 @@ export default function VoorDjsPage() {
           </h2>
           <figure className="mt-10 overflow-hidden rounded-3xl border border-neutral-200 bg-white p-8 shadow-sm sm:p-10 md:flex md:gap-10 md:p-12">
             <div className="mx-auto flex shrink-0 flex-col items-center md:mx-0">
-              <div
-                className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-emerald-200 to-neutral-300 text-sm font-bold text-neutral-600 ring-4 ring-white shadow-inner"
-                aria-hidden
-              >
-                Foto
-              </div>
+              <img
+                src="https://images.unsplash.com/photo-1571266028243-e631f2e28e4b?w=200&q=80&auto=format&fit=crop"
+                alt=""
+                className="h-24 w-24 rounded-full object-cover ring-4 ring-white shadow-inner"
+                width={96}
+                height={96}
+              />
               <figcaption className="mt-4 text-center md:text-left">
                 <p className="font-bold text-neutral-900">DJ Sam Rivers</p>
                 <p className="text-sm text-neutral-500">House &amp; disco · Utrecht</p>

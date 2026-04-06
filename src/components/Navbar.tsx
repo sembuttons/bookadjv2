@@ -40,6 +40,7 @@ export function Navbar() {
   const [role, setRole] = useState<string | null>(null);
   const [unread, setUnread] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -131,6 +132,19 @@ export function Navbar() {
     };
   }, [menuOpen]);
 
+  useEffect(() => {
+    if (!mobileNavOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileNavOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [mobileNavOpen]);
+
+  useEffect(() => {
+    setMobileNavOpen(false);
+  }, [pathname]);
+
   const handleSignOut = async () => {
     setMenuOpen(false);
     await supabase.auth.signOut();
@@ -142,9 +156,21 @@ export function Navbar() {
   const isDj = displayRole === "dj";
   const isAdmin = displayRole === "admin";
 
+  const navLinkClass =
+    "py-2 text-sm font-medium text-neutral-800 transition-all duration-200 hover:text-bookadj md:py-0";
+
   return (
     <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white shadow-sm">
-      <div className="relative mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
+      {mobileNavOpen ? (
+        <button
+          type="button"
+          className="fixed inset-0 z-[45] bg-black/40 md:hidden"
+          aria-label="Menu sluiten"
+          onClick={() => setMobileNavOpen(false)}
+        />
+      ) : null}
+
+      <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <Link
           href="/"
           className="shrink-0 text-xl font-semibold tracking-tight text-neutral-900"
@@ -153,38 +179,105 @@ export function Navbar() {
         </Link>
 
         <nav
-          className="order-last flex w-full justify-center gap-6 text-sm font-medium text-neutral-700 md:order-none md:absolute md:left-1/2 md:w-auto md:-translate-x-1/2 md:gap-8"
+          className="absolute left-1/2 hidden -translate-x-1/2 gap-8 text-sm font-medium text-neutral-700 md:flex"
           aria-label="Hoofdnavigatie"
         >
-          <Link href="/zoeken" className="transition-colors hover:text-bookadj">
+          <Link href="/zoeken" className={navLinkClass}>
             DJ&apos;s vinden
           </Link>
-          <Link href="/hoe-het-werkt" className="transition-colors hover:text-bookadj">
+          <Link href="/hoe-het-werkt" className={navLinkClass}>
             Hoe het werkt
           </Link>
-          <Link href="/voor-djs" className="transition-colors hover:text-bookadj">
+          <Link href="/voor-djs" className={navLinkClass}>
             Voor DJ&apos;s
           </Link>
-          <Link href="/over-ons" className="transition-colors hover:text-bookadj">
+          <Link href="/over-ons" className={navLinkClass}>
             Over ons
           </Link>
-          <Link href="/contact" className="transition-colors hover:text-bookadj">
+          <Link href="/support" className={navLinkClass}>
+            Support
+          </Link>
+          <Link href="/contact" className={navLinkClass}>
             Contact
           </Link>
         </nav>
 
-        <div className="flex shrink-0 items-center gap-3">
+        <div
+          className={`fixed inset-y-0 right-0 z-[48] w-[min(20rem,88vw)] max-w-full transform border-l border-neutral-200 bg-white shadow-xl transition-transform duration-200 ease-out md:hidden ${
+            mobileNavOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+          aria-hidden={!mobileNavOpen}
+          id="site-mobile-nav"
+        >
+          <div className="flex h-14 items-center justify-between border-b border-neutral-200 px-4">
+            <span className="text-sm font-bold">Menu</span>
+            <button
+              type="button"
+              className="flex h-11 w-11 items-center justify-center rounded-lg text-neutral-600 hover:bg-neutral-100"
+              aria-label="Menu sluiten"
+              onClick={() => setMobileNavOpen(false)}
+            >
+              <svg className="h-5 w-5" viewBox="0 0 20 20" fill="none" aria-hidden>
+                <path
+                  d="M5 5l10 10M15 5L5 15"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <nav className="flex flex-col gap-1 p-3" aria-label="Mobiel menu">
+            <Link href="/zoeken" className={`rounded-lg px-3 ${navLinkClass}`} onClick={() => setMobileNavOpen(false)}>
+              DJ&apos;s vinden
+            </Link>
+            <Link href="/hoe-het-werkt" className={`rounded-lg px-3 ${navLinkClass}`} onClick={() => setMobileNavOpen(false)}>
+              Hoe het werkt
+            </Link>
+            <Link href="/voor-djs" className={`rounded-lg px-3 ${navLinkClass}`} onClick={() => setMobileNavOpen(false)}>
+              Voor DJ&apos;s
+            </Link>
+            <Link href="/over-ons" className={`rounded-lg px-3 ${navLinkClass}`} onClick={() => setMobileNavOpen(false)}>
+              Over ons
+            </Link>
+            <Link href="/support" className={`rounded-lg px-3 ${navLinkClass}`} onClick={() => setMobileNavOpen(false)}>
+              Support
+            </Link>
+            <Link href="/contact" className={`rounded-lg px-3 ${navLinkClass}`} onClick={() => setMobileNavOpen(false)}>
+              Contact
+            </Link>
+          </nav>
+        </div>
+
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <button
+            type="button"
+            className="flex h-11 w-11 items-center justify-center rounded-lg border border-neutral-200 text-neutral-800 shadow-sm transition-all duration-200 hover:bg-neutral-50 md:hidden"
+            aria-expanded={mobileNavOpen}
+            aria-controls="site-mobile-nav"
+            aria-label="Menu openen"
+            onClick={() => setMobileNavOpen((o) => !o)}
+          >
+            <svg className="h-5 w-5" viewBox="0 0 20 20" fill="none" aria-hidden>
+              <path
+                d="M3 5h14M3 10h14M3 15h14"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
           {!session ? (
             <>
               <Link
                 href="/auth"
-                className="text-sm font-medium text-neutral-800 transition-colors hover:text-bookadj"
+                className="text-sm font-medium text-neutral-800 transition-all duration-200 hover:text-bookadj"
               >
                 Inloggen
               </Link>
               <Link
                 href="/auth?tab=aanmelden"
-                className="rounded-lg bg-bookadj px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-bookadj-hover"
+                className="rounded-lg bg-bookadj px-3 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-bookadj-hover min-[380px]:px-4"
               >
                 Aanmelden
               </Link>

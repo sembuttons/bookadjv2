@@ -3,6 +3,15 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import type { LucideIcon } from "lucide-react";
+import {
+  CalendarDays,
+  ClipboardList,
+  MessageSquare,
+  Star,
+  User,
+  Wallet,
+} from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { DashboardShellSkeleton } from "@/components/skeleton";
 import { supabase } from "@/lib/supabase-browser";
@@ -13,6 +22,7 @@ type NavItem = {
   key: string;
   label: string;
   href: string;
+  icon: LucideIcon;
   isActive: (pathname: string) => boolean;
   unreadBadge?: boolean;
 };
@@ -23,12 +33,14 @@ function klantNav(): NavItem[] {
       key: "boekingen",
       label: "Mijn boekingen",
       href: "/dashboard/klant",
+      icon: ClipboardList,
       isActive: (p) => p === "/dashboard/klant",
     },
     {
       key: "berichten",
       label: "Berichten",
       href: "/berichten",
+      icon: MessageSquare,
       isActive: (p) => p === "/berichten" || p.startsWith("/berichten/"),
       unreadBadge: true,
     },
@@ -36,6 +48,7 @@ function klantNav(): NavItem[] {
       key: "reviews",
       label: "Mijn reviews",
       href: "/dashboard/klant/reviews",
+      icon: Star,
       isActive: (p) =>
         p === "/dashboard/klant/reviews" ||
         p.startsWith("/dashboard/klant/reviews/"),
@@ -44,6 +57,7 @@ function klantNav(): NavItem[] {
       key: "profiel",
       label: "Profiel",
       href: "/dashboard/klant/profiel",
+      icon: User,
       isActive: (p) =>
         p === "/dashboard/klant/profiel" ||
         p.startsWith("/dashboard/klant/profiel/"),
@@ -57,6 +71,7 @@ function djNav(): NavItem[] {
       key: "boekingen",
       label: "Boekingen",
       href: "/dashboard/dj",
+      icon: ClipboardList,
       isActive: (p) =>
         p === "/dashboard/dj" || p.startsWith("/dashboard/dj/bevestigd"),
     },
@@ -64,6 +79,7 @@ function djNav(): NavItem[] {
       key: "berichten",
       label: "Berichten",
       href: "/berichten",
+      icon: MessageSquare,
       isActive: (p) => p === "/berichten" || p.startsWith("/berichten/"),
       unreadBadge: true,
     },
@@ -71,18 +87,21 @@ function djNav(): NavItem[] {
       key: "profiel",
       label: "Mijn profiel",
       href: "/dashboard/dj/profiel",
+      icon: User,
       isActive: (p) => p.startsWith("/dashboard/dj/profiel"),
     },
     {
       key: "kalender",
       label: "Beschikbaarheid",
       href: "/dashboard/dj/kalender",
+      icon: CalendarDays,
       isActive: (p) => p.startsWith("/dashboard/dj/kalender"),
     },
     {
       key: "uitbetalingen",
       label: "Uitbetalingen",
       href: "/dashboard/dj/uitbetalingen",
+      icon: Wallet,
       isActive: (p) => p.startsWith("/dashboard/dj/uitbetalingen"),
     },
   ];
@@ -112,11 +131,6 @@ export function DashboardAppShell({
   const [loggingOut, setLoggingOut] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [sidebarRole, setSidebarRole] = useState<"klant" | "dj">("klant");
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
-
-  useEffect(() => {
-    setMobileNavOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     let cancelled = false;
@@ -182,7 +196,6 @@ export function DashboardAppShell({
 
   const handleLogout = useCallback(async () => {
     setLoggingOut(true);
-    setMobileNavOpen(false);
     await supabase.auth.signOut();
     router.replace("/auth");
     router.refresh();
@@ -190,15 +203,14 @@ export function DashboardAppShell({
 
   const navItems = sidebarRole === "dj" ? djNav() : klantNav();
 
-  const renderNavLinks = (onNavigate?: () => void) =>
+  const renderDesktopNavLinks = () =>
     navItems.map((item) => {
       const active = item.isActive(pathname);
       return (
         <Link
           key={item.key}
           href={item.href}
-          onClick={() => onNavigate?.()}
-          className={`relative flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors md:border-l-[3px] ${
+          className={`relative flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 md:border-l-[3px] ${
             active
               ? "bg-neutral-900 text-white md:border-bookadj md:bg-bookadj/10 md:text-neutral-900 md:shadow-sm"
               : "text-neutral-700 hover:bg-neutral-100 md:border-transparent"
@@ -226,20 +238,10 @@ export function DashboardAppShell({
   }
 
   return (
-    <div className="min-h-screen bg-white font-sans text-neutral-900">
+    <div className="min-h-screen bg-white pb-[4.5rem] font-sans text-neutral-900 md:pb-0">
       <Navbar />
 
-      {mobileNavOpen ? (
-        <button
-          type="button"
-          className="fixed inset-0 z-[55] bg-black/40 md:hidden"
-          aria-label="Menu sluiten"
-          onClick={() => setMobileNavOpen(false)}
-        />
-      ) : null}
-
       <div className="mx-auto flex max-w-[1600px] flex-col md:flex-row">
-        {/* Desktop sidebar */}
         <aside
           className="hidden w-56 shrink-0 border-b-0 border-r border-neutral-200 bg-white md:block lg:w-60"
           aria-label={
@@ -247,7 +249,7 @@ export function DashboardAppShell({
           }
         >
           <nav className="flex flex-col gap-0.5 p-4">
-            {renderNavLinks()}
+            {renderDesktopNavLinks()}
             <button
               type="button"
               onClick={() => void handleLogout()}
@@ -259,101 +261,56 @@ export function DashboardAppShell({
           </nav>
         </aside>
 
-        {/* Mobile drawer */}
-        <aside
-          className={`fixed inset-y-0 left-0 z-[60] w-[min(18rem,100vw)] max-w-full transform border-r border-neutral-200 bg-white shadow-xl transition-transform duration-200 ease-out md:hidden ${
-            mobileNavOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
-          aria-hidden={!mobileNavOpen}
-          id="dashboard-mobile-nav"
-        >
-          <div className="flex h-14 items-center justify-between border-b border-neutral-200 px-4">
-            <span className="text-sm font-bold text-neutral-900">Menu</span>
-            <button
-              type="button"
-              className="rounded-lg p-2 text-neutral-600 hover:bg-neutral-100"
-              aria-label="Menu sluiten"
-              onClick={() => setMobileNavOpen(false)}
-            >
-              <svg
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="none"
-                aria-hidden
-              >
-                <path
-                  d="M5 5l10 10M15 5L5 15"
-                  stroke="currentColor"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
-          </div>
-          <nav
-            className="flex flex-col gap-0.5 p-3"
-            aria-label={
-              sidebarRole === "dj" ? "DJ-dashboard navigatie" : "Dashboard navigatie"
-            }
-          >
-            {renderNavLinks(() => setMobileNavOpen(false))}
-            <button
-              type="button"
-              onClick={() => void handleLogout()}
-              disabled={loggingOut}
-              className="mt-3 rounded-lg border-t border-neutral-200 pt-4 text-left text-sm font-medium text-neutral-700 disabled:opacity-50"
-            >
-              Uitloggen
-            </button>
-          </nav>
-        </aside>
-
-        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-          {/* Mobile top bar */}
-          <div className="sticky top-[52px] z-40 flex items-center gap-3 border-b border-neutral-200 bg-neutral-50 px-3 py-2.5 md:hidden">
-            <button
-              type="button"
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-800 shadow-sm"
-              aria-expanded={mobileNavOpen}
-              aria-controls="dashboard-mobile-nav"
-              aria-label="Menu openen"
-              onClick={() => setMobileNavOpen((o) => !o)}
-            >
-              <svg
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="none"
-                aria-hidden
-              >
-                <path
-                  d="M3 5h14M3 10h14M3 15h14"
-                  stroke="currentColor"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold text-neutral-900">
-                Dashboard
-              </p>
-              <p className="truncate text-xs text-neutral-500">
-                {sidebarRole === "dj" ? "DJ" : "Klant"}
-              </p>
+        <main className="min-w-0 flex-1">
+          {defaultContentPadding ? (
+            <div className="px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
+              {children}
             </div>
-          </div>
-
-          <main className="min-w-0 flex-1">
-            {defaultContentPadding ? (
-              <div className="px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
-                {children}
-              </div>
-            ) : (
-              children
-            )}
-          </main>
-        </div>
+          ) : (
+            children
+          )}
+        </main>
       </div>
+
+      <nav
+        className="fixed bottom-0 left-0 right-0 z-[60] flex items-stretch justify-around border-t border-neutral-200 bg-white px-1 pt-1 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] md:hidden"
+        style={{
+          paddingBottom: "max(0.35rem, env(safe-area-inset-bottom, 0px))",
+        }}
+        aria-label={
+          sidebarRole === "dj"
+            ? "DJ-dashboard, snelle navigatie"
+            : "Dashboard, snelle navigatie"
+        }
+      >
+        {navItems.map((item) => {
+          const active = item.isActive(pathname);
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.key}
+              href={item.href}
+              className={`relative flex min-h-[48px] min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-lg px-1 py-1 text-[10px] font-medium transition-all duration-200 ${
+                active ? "text-bookadj" : "text-neutral-500"
+              }`}
+            >
+              <span className="relative">
+                <Icon
+                  className={`h-6 w-6 ${active ? "text-bookadj" : "text-neutral-600"}`}
+                  strokeWidth={1.75}
+                  aria-hidden
+                />
+                {item.unreadBadge && unreadMessages > 0 ? (
+                  <span className="absolute -right-1.5 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-orange-500 px-0.5 text-[9px] font-bold text-white">
+                    {unreadMessages > 9 ? "9+" : unreadMessages}
+                  </span>
+                ) : null}
+              </span>
+              <span className="sr-only">{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
     </div>
   );
 }

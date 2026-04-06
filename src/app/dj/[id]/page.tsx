@@ -33,8 +33,25 @@ import { DjHelpSection } from "./dj-help-section";
 import { DjProfileFaq } from "./dj-profile-faq";
 import { DjUspGrid, type UspItem } from "./dj-usp-grid";
 import { MediaTabs } from "./media-tabs";
+import { RelatedDjsCarousel } from "./related-djs-carousel";
 
 export const dynamic = "force-dynamic";
+
+const DJ_GALLERY_MAIN =
+  "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1200&q=80&auto=format&fit=crop";
+const DJ_GALLERY_2 =
+  "https://images.unsplash.com/photo-1598387993784-808f6ee9fa6f?w=800&q=80&auto=format&fit=crop";
+const DJ_GALLERY_3 =
+  "https://images.unsplash.com/photo-1540039155733-5bb30b53aa88?w=800&q=80&auto=format&fit=crop";
+
+function shuffleDjPool<T>(items: T[]): T[] {
+  const a = [...items];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 type PageProps = { params: Promise<{ id: string }> };
 
@@ -149,7 +166,7 @@ function ArrowLeftLink() {
 export default async function DjProfilePage({ params }: PageProps) {
   const { id } = await params;
 
-  const [profileRes, reviewsRes, ownerRes] = await Promise.all([
+  const [profileRes, reviewsRes, ownerRes, relatedRes] = await Promise.all([
     supabase.from("dj_profiles").select("*").eq("id", id).maybeSingle(),
     supabase
       .from("reviews")
@@ -157,6 +174,13 @@ export default async function DjProfilePage({ params }: PageProps) {
       .eq("dj_id", id)
       .order("created_at", { ascending: false }),
     supabaseAdmin.from("dj_profiles").select("user_id").eq("id", id).maybeSingle(),
+    supabase
+      .from("dj_profiles")
+      .select("*")
+      .eq("is_visible", true)
+      .eq("verification_status", "verified")
+      .neq("id", id)
+      .limit(30),
   ]);
 
   if (profileRes.error || !profileRes.data) {
@@ -203,6 +227,9 @@ export default async function DjProfilePage({ params }: PageProps) {
 
   const customUsps = parseCustomUsps(profile);
 
+  const relatedPool = (relatedRes.error ? [] : (relatedRes.data ?? [])) as DjProfileRow[];
+  const relatedDjs = shuffleDjPool(relatedPool).slice(0, 6);
+
   const instagramUrl =
     typeof profile.instagram_url === "string" ? profile.instagram_url : null;
   const soundcloudUrl =
@@ -215,58 +242,48 @@ export default async function DjProfilePage({ params }: PageProps) {
       <div className="mx-auto max-w-[1400px] px-4 pb-16 pt-6 sm:px-6 lg:px-8">
         {/* Photo grid */}
         <div className="relative grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-3">
-          <div className="relative flex min-h-[220px] items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-neutral-800 via-neutral-900 to-black lg:min-h-[420px]">
+          <div
+            className="relative flex min-h-[220px] items-center justify-center overflow-hidden rounded-2xl bg-neutral-900 bg-cover bg-center lg:min-h-[420px]"
+            style={{ backgroundImage: `url(${DJ_GALLERY_MAIN})` }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/20" aria-hidden />
             <button
               type="button"
-              className="flex h-16 w-16 items-center justify-center rounded-full bg-white/15 text-white ring-2 ring-white/40 backdrop-blur-sm transition hover:bg-white/25"
-              aria-label="Video afspelen"
+              className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-white/15 text-white ring-2 ring-white/40 backdrop-blur-sm transition-all duration-200 hover:bg-white/25"
+              aria-label="Video — binnenkort beschikbaar"
             >
               <svg className="ml-1 h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
                 <path d="M8 5v14l11-7z" />
               </svg>
             </button>
-            <span className="absolute bottom-3 left-3 rounded bg-black/50 px-2 py-1 text-xs text-white/90">
-              Video placeholder
+            <span className="absolute bottom-3 left-3 z-10 rounded bg-black/55 px-2 py-1 text-xs text-white/95">
+              Sfeerbeeld · {name}
             </span>
           </div>
           <div className="relative grid min-h-[220px] grid-rows-2 gap-2 lg:min-h-[420px]">
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-300 bg-gradient-to-br from-neutral-100 to-neutral-200/90 p-4 text-center">
-              <svg
-                className="h-10 w-10 text-bookadj/70"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                aria-hidden
-              >
-                <rect x="3" y="5" width="18" height="14" rx="2" />
-                <circle cx="8.5" cy="10.5" r="1.5" fill="currentColor" />
-                <path d="M21 19l-5-5" strokeLinecap="round" />
-              </svg>
-              <p className="mt-2 text-xs font-medium text-neutral-600">
-                Foto volgt
-              </p>
+            <div className="relative overflow-hidden rounded-2xl">
+              <img
+                src={DJ_GALLERY_2}
+                alt={`${name} — DJ-set sfeerbeeld`}
+                className="h-full min-h-[104px] w-full object-cover"
+                width={800}
+                height={600}
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" aria-hidden />
             </div>
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-300 bg-gradient-to-br from-neutral-100 to-neutral-200/90 p-4 text-center">
-              <svg
-                className="h-10 w-10 text-bookadj/70"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                aria-hidden
-              >
-                <rect x="3" y="5" width="18" height="14" rx="2" />
-                <circle cx="8.5" cy="10.5" r="1.5" fill="currentColor" />
-                <path d="M21 19l-5-5" strokeLinecap="round" />
-              </svg>
-              <p className="mt-2 text-xs font-medium text-neutral-600">
-                Nog een impressie
-              </p>
+            <div className="relative overflow-hidden rounded-2xl">
+              <img
+                src={DJ_GALLERY_3}
+                alt={`${name} — publiek en licht`}
+                className="h-full min-h-[104px] w-full object-cover"
+                width={800}
+                height={600}
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" aria-hidden />
             </div>
             <button
               type="button"
-              className="absolute bottom-3 right-3 rounded-lg bg-white/95 px-4 py-2 text-sm font-semibold text-neutral-900 shadow-md ring-1 ring-neutral-200 hover:bg-white"
+              className="absolute bottom-3 right-3 z-10 min-h-[44px] rounded-lg bg-white/95 px-4 py-2 text-sm font-semibold text-neutral-900 shadow-md ring-1 ring-neutral-200 transition-all duration-200 hover:bg-white"
             >
               Alle foto&apos;s tonen
             </button>
@@ -279,9 +296,9 @@ export default async function DjProfilePage({ params }: PageProps) {
 
             {/* Name inline with verified badge */}
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
-                {name}
-              </h1>
+            <h1 className="text-2xl font-bold tracking-tight text-neutral-900 min-[400px]:text-3xl sm:text-4xl">
+              {name}
+            </h1>
               {isVerifiedProfile(profile) ? (
                 <div className="inline-flex items-center gap-1.5 rounded-full bg-bookadj px-3 py-1 text-xs font-bold uppercase tracking-wide text-white shadow-sm">
                   <svg
@@ -347,11 +364,11 @@ export default async function DjProfilePage({ params }: PageProps) {
           </div>
 
           {/* Stel een vraag */}
-          <div className="flex shrink-0 flex-col gap-1 sm:items-end">
+          <div className="flex w-full shrink-0 flex-col gap-1 sm:w-auto sm:items-end">
             <StelVraagButton
               djUserId={djUserId || undefined}
               djProfileId={id}
-              className="rounded-xl bg-black px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-bookadj"
+              className="w-full min-h-[44px] rounded-xl bg-black px-6 py-3 text-center text-sm font-semibold text-white transition-all duration-200 hover:bg-bookadj sm:w-auto"
             >
               Stel {fn} een vraag
             </StelVraagButton>
@@ -560,10 +577,12 @@ export default async function DjProfilePage({ params }: PageProps) {
           </aside>
         </div>
 
+        <RelatedDjsCarousel djs={relatedDjs} />
+
         <p className="mt-12 text-center">
           <Link
             href="/zoeken"
-            className="inline-flex items-center text-sm font-medium text-neutral-600 hover:text-neutral-900"
+            className="inline-flex items-center text-sm font-medium text-neutral-600 transition-colors duration-200 hover:text-neutral-900"
           >
             <ArrowLeftLink />
             Terug naar zoeken

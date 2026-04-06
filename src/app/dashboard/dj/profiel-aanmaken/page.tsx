@@ -2,7 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { DashboardShellSkeleton } from "@/components/skeleton";
 import { supabase } from "@/lib/supabase-browser";
+import { OCCASION_OPTIONS } from "@/lib/occasions";
 
 const LANGUAGE_OPTIONS = [
   "Nederlands",
@@ -83,6 +85,9 @@ export default function DjProfielAanmakenPage() {
   const [genres, setGenres] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(GENRE_OPTIONS.map((g) => [g, false])),
   );
+  const [occasions, setOccasions] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(OCCASION_OPTIONS.map((o) => [o.id, false])),
+  );
   const [hourlyRate, setHourlyRate] = useState("");
   const [ratePerKm, setRatePerKm] = useState("0.42");
   const [vatNumber, setVatNumber] = useState("");
@@ -125,6 +130,11 @@ export default function DjProfielAanmakenPage() {
   const selectedGenres = useMemo(
     () => GENRE_OPTIONS.filter((g) => genres[g]),
     [genres],
+  );
+
+  const selectedOccasions = useMemo(
+    () => OCCASION_OPTIONS.filter((o) => occasions[o.id]).map((o) => o.id),
+    [occasions],
   );
 
   const selectedPresetLanguages = useMemo(
@@ -173,6 +183,15 @@ export default function DjProfielAanmakenPage() {
     });
   };
 
+  const toggleOccasion = (id: string) => {
+    setOccasions((prev) => ({ ...prev, [id]: !prev[id] }));
+    setFieldErrors((p) => {
+      const n = { ...p };
+      delete n.occasions;
+      return n;
+    });
+  };
+
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
@@ -191,6 +210,8 @@ export default function DjProfielAanmakenPage() {
         err.bio = `Maximaal ${BIO_MAX} tekens.`;
       if (!cityTrim) err.city = "Dit veld is verplicht";
       if (selectedGenres.length < 1) err.genres = "Dit veld is verplicht";
+      if (selectedOccasions.length < 1)
+        err.occasions = "Kies minimaal één gelegenheid.";
       if (!Number.isFinite(hourlyNum) || hourlyNum <= 0)
         err.hourlyRate = "Dit veld is verplicht";
       const rpk = parseFloat(ratePerKm.replace(",", "."));
@@ -228,6 +249,7 @@ export default function DjProfielAanmakenPage() {
         bio: bioTrim,
         city: cityTrim,
         genres: selectedGenres,
+        occasions: selectedOccasions,
         hourly_rate: hourlyNum,
         rate_per_km: rpk,
         vat_number: vatTrim,
@@ -260,6 +282,7 @@ export default function DjProfielAanmakenPage() {
       languagesForSave,
       ratePerKm,
       selectedGenres,
+      selectedOccasions,
       stageName,
       vatNumber,
       yearsExperience,
@@ -267,11 +290,7 @@ export default function DjProfielAanmakenPage() {
   );
 
   if (!gateReady) {
-    return (
-      <div className="min-h-[40vh] bg-white py-12 text-center text-neutral-600">
-        Laden…
-      </div>
-    );
+    return <DashboardShellSkeleton />;
   }
 
   if (success) {
@@ -472,6 +491,37 @@ export default function DjProfielAanmakenPage() {
           {fieldErrors.genres ? (
             <p className={`${errCls} mt-2`} role="alert">
               {fieldErrors.genres}
+            </p>
+          ) : null}
+        </section>
+
+        <section className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
+          <div className="flex flex-col gap-2">
+            <h2 className="text-lg font-bold text-neutral-900">Gelegenheden</h2>
+            <p className="text-sm text-neutral-600">
+              Waarvoor wil je geboekt worden?{" "}
+              <span className="text-red-600">*</span>
+            </p>
+          </div>
+          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {OCCASION_OPTIONS.map((o) => (
+              <label
+                key={o.id}
+                className="flex min-h-[44px] cursor-pointer items-center gap-2 rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2.5 text-sm has-[:checked]:border-neutral-900 has-[:checked]:bg-neutral-100"
+              >
+                <input
+                  type="checkbox"
+                  checked={occasions[o.id] ?? false}
+                  onChange={() => toggleOccasion(o.id)}
+                  className="rounded border-neutral-300 text-black focus:ring-black/20"
+                />
+                {o.label}
+              </label>
+            ))}
+          </div>
+          {fieldErrors.occasions ? (
+            <p className={`${errCls} mt-2`} role="alert">
+              {fieldErrors.occasions}
             </p>
           ) : null}
         </section>

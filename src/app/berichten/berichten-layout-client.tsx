@@ -19,7 +19,9 @@ export function BerichtenLayoutClient({
             betaalverzoeken.
           </p>
         </div>
-        <div className="px-4 py-6 sm:px-6 lg:px-10 lg:py-8">{children}</div>
+        <div className="px-4 py-6 pb-24 sm:px-6 md:pb-6 lg:px-10 lg:py-8">
+          {children}
+        </div>
       </div>
     </DashboardAppShell>
   );

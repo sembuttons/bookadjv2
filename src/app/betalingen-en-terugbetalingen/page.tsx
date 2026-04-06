@@ -85,13 +85,28 @@ export default function BetalingenTerugbetalingenPage() {
         <h2 className="text-xl font-bold text-neutral-900">
           Hoe vraag je een terugbetaling aan?
         </h2>
+        <p className="mt-4 text-neutral-600">
+          Stuur een mail naar{" "}
+          <a
+            href="mailto:hallo@bookadj.nl"
+            className="font-semibold text-emerald-700 underline"
+          >
+            hallo@bookadj.nl
+          </a>{" "}
+          met je boekingsreferentie — of gebruik{" "}
+          <Link href="/contact" className="font-semibold underline">
+            het contactformulier
+          </Link>{" "}
+          /{" "}
+          <Link href="/support" className="font-semibold underline">
+            support
+          </Link>
+          .
+        </p>
         <ol className="mt-4 list-decimal space-y-3 pl-5 text-neutral-600">
           <li>
-            Log in en open je boeking in het dashboard, of neem contact op via{" "}
-            <Link href="/contact" className="font-semibold underline">
-              het contactformulier
-            </Link>{" "}
-            met je referentie.
+            Log in en open je boeking in het dashboard waar mogelijk, of mail
+            direct met je referentie.
           </li>
           <li>
             Vermeld duidelijk de reden (bijv. annulering, no-show, andere

@@ -139,15 +139,15 @@ export default async function Home() {
           <p className="mb-4 text-sm font-medium uppercase tracking-widest text-emerald-300">
             De DJ-boekingsmarktplaats van Nederland
           </p>
-          <h1 className="text-balance text-3xl font-bold tracking-tight drop-shadow-sm sm:text-4xl md:text-5xl lg:text-6xl">
+          <h1 className="text-balance text-[1.65rem] font-bold leading-tight tracking-tight drop-shadow-sm min-[400px]:text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
             Vind de perfecte DJ voor jouw evenement
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-pretty text-base text-neutral-200 sm:text-lg">
+          <p className="mx-auto mt-5 max-w-2xl text-pretty text-sm text-neutral-200 min-[400px]:text-base sm:mt-6 sm:text-lg">
             Geverifieerde DJ&apos;s, transparante prijzen en volledige
             betalingsbescherming
           </p>
 
-          <HomeSearchForm genres={genres} />
+          <HomeSearchForm />
         </div>
       </section>
 
@@ -344,7 +344,7 @@ export default async function Home() {
               />
             </div>
           ) : (
-            <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <ul className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {newDjs.map((dj) => {
                 const name = getStageName(dj);
                 const city = getCity(dj);

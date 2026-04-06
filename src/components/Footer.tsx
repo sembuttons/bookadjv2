@@ -10,7 +10,7 @@ export function Footer() {
       style={{ backgroundColor: footerBg }}
     >
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-16">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-10">
           {/* Left: brand + payments */}
           <div className="lg:col-span-4">
             <Link
@@ -32,7 +32,7 @@ export function Footer() {
           </div>
 
           {/* Middle: nav groups */}
-          <div className="grid gap-10 sm:grid-cols-3 lg:col-span-5">
+          <div className="grid grid-cols-1 gap-10 sm:grid-cols-3 lg:col-span-5">
             <div>
               <p className="text-xs font-bold uppercase tracking-wider text-white">
                 Ontdekken
@@ -68,6 +68,14 @@ export function Footer() {
                     className="text-white/70 transition-colors hover:text-white"
                   >
                     Veelgestelde vragen
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/support"
+                    className="text-white/70 transition-colors hover:text-white"
+                  >
+                    Support
                   </Link>
                 </li>
               </ul>
@@ -135,7 +143,7 @@ export function Footer() {
                 <li>
                   <Link
                     href="/blog"
-                    className="text-white/70 transition-colors hover:text-white"
+                    className="text-white/70 transition-all duration-200 hover:text-white"
                   >
                     Blog
                   </Link>

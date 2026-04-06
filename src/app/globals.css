@@ -32,7 +32,7 @@
   }
 
   .card-interactive {
-    @apply rounded-2xl border border-neutral-200 bg-white shadow-sm transition-shadow duration-300 ease-out;
+    @apply rounded-2xl border border-neutral-200 bg-white shadow-sm transition-all duration-200 ease-out;
     @apply hover:shadow-md;
   }
 }
@@ -58,4 +58,13 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+@media (min-width: 640px) {
+  body {
+    font-size: 1rem;
+  }
 }

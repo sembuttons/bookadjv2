@@ -13,6 +13,11 @@ import {
   getStageName,
   type DjProfileRow,
 } from "@/lib/dj-profile-helpers";
+import {
+  OCCASION_OPTIONS,
+  occasionLabel,
+  profileMatchesOccasion,
+} from "@/lib/occasions";
 import { supabase } from "@/lib/supabase-browser";
 
 const FILTER_GENRES = [
@@ -24,6 +29,9 @@ const FILTER_GENRES = [
   "Disco",
   "Latin",
 ] as const;
+
+const ZOEKEN_CARD_IMG =
+  "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&q=80&auto=format&fit=crop";
 
 const PRICE_SLIDER_MIN = 50;
 const PRICE_SLIDER_MAX = 350;
@@ -181,7 +189,7 @@ function DualHourlyRateSlider({
 export default function ZoekenPage() {
   const [stad, setStad] = useState("");
   const [datum, setDatum] = useState("");
-  const [genreSearch, setGenreSearch] = useState("");
+  const [occasion, setOccasion] = useState("");
 
   const [rows, setRows] = useState<DjProfileRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -198,7 +206,7 @@ export default function ZoekenPage() {
     const params = new URLSearchParams(window.location.search);
     setStad(params.get("stad") ?? "");
     setDatum(params.get("datum") ?? "");
-    setGenreSearch(params.get("genre") ?? "");
+    setOccasion(params.get("occasion") ?? "");
   }, []);
 
   const loadDjs = useCallback(async () => {
@@ -236,11 +244,9 @@ export default function ZoekenPage() {
       list = list.filter((r) => getCity(r).toLowerCase().includes(stadQ));
     }
 
-    const gq = genreSearch.trim().toLowerCase();
-    if (gq) {
-      list = list.filter((r) =>
-        getGenres(r).some((x) => x.toLowerCase().includes(gq)),
-      );
+    const occ = occasion.trim();
+    if (occ) {
+      list = list.filter((r) => profileMatchesOccasion(r, occ));
     }
 
     if (selectedGenres.length > 0) {
@@ -294,7 +300,7 @@ export default function ZoekenPage() {
   }, [
     rows,
     stad,
-    genreSearch,
+    occasion,
     selectedGenres,
     priceMin,
     priceMax,
@@ -306,13 +312,33 @@ export default function ZoekenPage() {
     const params = new URLSearchParams();
     if (stad.trim()) params.set("stad", stad.trim());
     if (datum) params.set("datum", datum);
-    if (genreSearch.trim()) params.set("genre", genreSearch.trim());
+    if (occasion.trim()) params.set("occasion", occasion.trim());
     const q = params.toString();
     window.history.replaceState(null, "", q ? `/zoeken?${q}` : "/zoeken");
   };
 
   const FilterBlock = (
     <>
+      <div className="space-y-2 border-b border-neutral-200 py-6">
+        <h2 className="text-sm font-semibold text-neutral-900">Gelegenheid</h2>
+        <p className="text-xs text-neutral-500">
+          Filter op type feest (secundair naast je zoekbalk).
+        </p>
+        <select
+          value={occasion}
+          onChange={(e) => setOccasion(e.target.value)}
+          className="input-field mt-2"
+          aria-label="Filter op gelegenheid"
+        >
+          <option value="">Alle gelegenheden</option>
+          {OCCASION_OPTIONS.map((o) => (
+            <option key={o.id} value={o.id}>
+              {o.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <fieldset className="space-y-3 border-b border-neutral-200 py-6">
         <legend className="text-sm font-semibold text-neutral-900">Genre</legend>
         <ul className="space-y-2">
@@ -388,24 +414,24 @@ export default function ZoekenPage() {
             </label>
             <label className="flex min-w-[140px] flex-1 flex-col gap-1.5">
               <span className="text-xs font-semibold uppercase text-neutral-500">
-                Genre
+                Gelegenheid
               </span>
               <select
-                value={genreSearch}
-                onChange={(e) => setGenreSearch(e.target.value)}
+                value={occasion}
+                onChange={(e) => setOccasion(e.target.value)}
                 className="input-field"
               >
-                <option value="">Alle genres</option>
-                {FILTER_GENRES.map((g) => (
-                  <option key={g} value={g}>
-                    {g}
+                <option value="">Alle gelegenheden</option>
+                {OCCASION_OPTIONS.map((o) => (
+                  <option key={o.id} value={o.id}>
+                    {o.label}
                   </option>
                 ))}
               </select>
             </label>
             <button
               type="submit"
-              className="h-11 min-h-[44px] shrink-0 rounded-lg bg-bookadj px-6 text-sm font-semibold text-white transition-colors hover:bg-bookadj-hover"
+              className="h-11 min-h-[44px] w-full shrink-0 rounded-lg bg-bookadj px-6 text-sm font-semibold text-white transition-all duration-200 hover:bg-bookadj-hover sm:w-auto"
             >
               Zoeken
             </button>
@@ -415,7 +441,12 @@ export default function ZoekenPage() {
 
       <div className="mx-auto grid max-w-[1600px] gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[260px_1fr] lg:gap-10 lg:px-8">
         <details className="rounded-xl border border-neutral-200 bg-neutral-50 p-4 lg:hidden">
-          <summary className="cursor-pointer text-sm font-semibold">Filters</summary>
+          <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between text-sm font-semibold text-neutral-900 [&::-webkit-details-marker]:hidden">
+            <span>Filters</span>
+            <span className="text-xs font-normal text-neutral-500">
+              {occasion ? occasionLabel(occasion) : "Geen"}
+            </span>
+          </summary>
           <div className="mt-4">{FilterBlock}</div>
         </details>
 
@@ -488,10 +519,10 @@ export default function ZoekenPage() {
                 </svg>
               }
               title="Geen DJ’s voor deze filters"
-              description="Pas je stad, datum, genres of prijs aan — of wis een filter om meer profielen te zien."
+              description="Pas je stad, datum, gelegenheid, genres of prijs aan — of wis een filter om meer profielen te zien."
             />
           ) : (
-            <ul className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {filteredSorted.map((row) => {
                 const id = String(row.id);
                 const stage = getStageName(row);
@@ -504,11 +535,15 @@ export default function ZoekenPage() {
                       href={`/dj/${encodeURIComponent(id)}`}
                       className="group card-interactive block h-full overflow-hidden"
                     >
-                      <div className="relative aspect-[4/3] overflow-hidden rounded-t-2xl bg-gradient-to-br from-neutral-800 to-black">
-                        <span className="absolute left-3 top-3 rounded-full bg-bookadj px-2 py-0.5 text-[10px] font-bold uppercase text-white shadow-sm">
+                      <div
+                        className="relative aspect-[4/3] overflow-hidden rounded-t-2xl bg-neutral-900 bg-cover bg-center"
+                        style={{ backgroundImage: `url(${ZOEKEN_CARD_IMG})` }}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/20" />
+                        <span className="absolute left-3 top-3 z-[1] rounded-full bg-bookadj px-2 py-0.5 text-[10px] font-bold uppercase text-white shadow-sm">
                           Geverifieerd
                         </span>
-                        <span className="absolute inset-0 flex items-center justify-center text-3xl font-bold text-white/90">
+                        <span className="absolute inset-0 z-[1] flex items-center justify-center text-3xl font-bold text-white drop-shadow-md">
                           {initials(stage)}
                         </span>
                       </div>
