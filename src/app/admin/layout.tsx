@@ -62,23 +62,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (!ready) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white font-sans text-neutral-900">
-        <p className="text-neutral-600">Laden…</p>
+      <div className="flex min-h-screen items-center justify-center bg-app font-sans text-ink">
+        <p className="text-ink-secondary">Laden…</p>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-white font-sans text-neutral-900">
-      <aside className="flex w-56 shrink-0 flex-col border-r border-neutral-800 bg-neutral-950 text-white lg:w-60">
-        <div className="border-b border-neutral-800 px-4 py-5">
+    <div className="flex min-h-screen bg-app font-sans text-ink">
+      <aside className="flex w-56 shrink-0 flex-col border-r border-line bg-surface lg:w-60">
+        <div className="border-b border-line px-4 py-5">
           <Link
             href="/admin"
-            className="text-lg font-bold tracking-tight text-white"
+            className="text-lg font-bold tracking-tight text-ink"
           >
             bookadj
           </Link>
-          <p className="mt-1 text-xs font-medium text-neutral-500">Admin</p>
+          <p className="mt-1 text-xs font-medium text-ink-muted">Admin</p>
         </div>
         <nav className="flex flex-1 flex-col gap-0.5 p-3" aria-label="Admin navigatie">
           {nav.map((item) => {
@@ -89,8 +89,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 href={item.href}
                 className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                   active
-                    ? "bg-white/10 text-white"
-                    : "text-neutral-400 hover:bg-white/5 hover:text-white"
+                    ? "bg-bookadj/15 text-bookadj-soft ring-1 ring-line-brand/40"
+                    : "text-ink-secondary hover:bg-surface-muted/50 hover:text-ink"
                 }`}
               >
                 {item.label}
@@ -98,18 +98,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             );
           })}
         </nav>
-        <div className="border-t border-neutral-800 p-3">
+        <div className="border-t border-line p-3">
           <button
             type="button"
             onClick={() => void handleLogout()}
             disabled={loggingOut}
-            className="w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-red-300 transition-colors hover:bg-red-950/50 disabled:opacity-50"
+            className="w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-danger transition-colors hover:bg-danger/10 disabled:opacity-50"
           >
             {loggingOut ? "Bezig…" : "Uitloggen"}
           </button>
         </div>
       </aside>
-      <main className="min-w-0 flex-1 overflow-auto bg-white px-4 py-8 sm:px-6 lg:px-10">
+      <main className="min-w-0 flex-1 overflow-auto bg-surface px-4 py-8 sm:px-6 lg:px-10">
         {children}
       </main>
     </div>

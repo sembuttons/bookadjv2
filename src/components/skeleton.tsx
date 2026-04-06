@@ -6,7 +6,7 @@ export function Skeleton({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={`animate-pulse rounded-lg bg-neutral-200/90 ${className}`}
+      className={`animate-pulse rounded-lg bg-line/50/90 ${className}`}
       {...rest}
     />
   );
@@ -17,7 +17,7 @@ export function ZoekenResultsSkeleton() {
     <ul className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3" aria-hidden>
       {Array.from({ length: 6 }, (_, i) => (
         <li key={i}>
-          <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
+          <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-sm">
             <Skeleton className="aspect-[4/3] w-full rounded-none rounded-t-2xl" />
             <div className="space-y-3 p-4">
               <Skeleton className="h-5 w-2/3" />
@@ -40,7 +40,7 @@ export function DashboardBookingsSkeleton({ rows = 3 }: { rows?: number }) {
     <ul className="space-y-4" aria-hidden>
       {Array.from({ length: rows }, (_, i) => (
         <li key={i}>
-          <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-6">
+          <div className="rounded-2xl border border-line bg-surface p-5 shadow-sm sm:p-6">
             <div className="flex flex-col gap-4 sm:flex-row">
               <Skeleton className="h-14 w-14 shrink-0 rounded-full" />
               <div className="min-w-0 flex-1 space-y-3">
@@ -63,7 +63,7 @@ export function DashboardBookingsSkeleton({ rows = 3 }: { rows?: number }) {
 export function DashboardShellSkeleton() {
   return (
     <div className="flex min-h-[50vh] flex-col gap-6 md:flex-row" aria-hidden>
-      <div className="hidden w-56 shrink-0 space-y-2 border-r border-neutral-200 pr-4 md:block">
+      <div className="hidden w-56 shrink-0 space-y-2 border-r border-line pr-4 md:block">
         {Array.from({ length: 5 }, (_, i) => (
           <Skeleton key={i} className="h-10 w-full" />
         ))}
@@ -89,12 +89,12 @@ export function EmptyState({
   action?: ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-neutral-200 bg-gradient-to-b from-neutral-50 to-white px-6 py-12 text-center shadow-sm">
+    <div className="rounded-2xl border border-line bg-gradient-to-b from-surface-muted to-app px-6 py-12 text-center shadow-sm">
       <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-bookadj/10 text-bookadj ring-1 ring-bookadj/20">
         {icon}
       </div>
-      <h2 className="mt-5 text-lg font-semibold text-neutral-900">{title}</h2>
-      <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-neutral-600">
+      <h2 className="mt-5 text-lg font-semibold text-ink">{title}</h2>
+      <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-ink-secondary">
         {description}
       </p>
       {action ? <div className="mt-6">{action}</div> : null}

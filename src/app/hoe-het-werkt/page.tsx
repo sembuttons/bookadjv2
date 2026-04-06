@@ -3,7 +3,7 @@ import { HowItWorksClient } from "./how-it-works-client";
 
 export default function HoeHetWerktPage() {
   return (
-    <div className="min-h-screen bg-white font-sans text-neutral-900">
+    <div className="min-h-screen bg-app font-sans text-ink">
       <Navbar />
       <HowItWorksClient />
     </div>

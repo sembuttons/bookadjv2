@@ -189,7 +189,7 @@ export function DatePickerPopover({
   return (
     <div className="relative flex flex-col gap-1.5 text-left">
       {label ? (
-        <span className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+        <span className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
           {label}
         </span>
       ) : null}
@@ -205,7 +205,7 @@ export function DatePickerPopover({
           "input-field flex items-center justify-start text-left"
         }
       >
-        <span className={labelText ? "" : "text-neutral-400"}>
+        <span className={labelText ? "" : "text-ink-muted"}>
           {labelText ?? placeholder}
         </span>
       </button>
@@ -218,23 +218,23 @@ export function DatePickerPopover({
           ref={popoverRef}
           role="dialog"
           aria-label="Kalender"
-          className={`absolute top-full z-[60] mt-2 w-[min(100vw-2rem,320px)] rounded-2xl border border-neutral-200 bg-white p-4 shadow-2xl ring-1 ring-black/5 ${popAlign}`}
+          className={`absolute top-full z-[60] mt-2 w-[min(100vw-2rem,320px)] rounded-2xl border border-line bg-surface p-4 shadow-2xl ring-1 ring-line/30 ${popAlign}`}
         >
           <div className="mb-4 flex items-center justify-between gap-2">
             <button
               type="button"
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-neutral-700 transition-colors hover:bg-neutral-100"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-ink-secondary transition-colors hover:bg-surface-muted/80"
               aria-label="Vorige maand"
               onClick={() => setCursor(new Date(year, month - 1, 1))}
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
-            <p className="min-w-0 flex-1 text-center text-sm font-semibold capitalize text-neutral-900">
+            <p className="min-w-0 flex-1 text-center text-sm font-semibold capitalize text-ink">
               {MONTHS_NL[month]} {year}
             </p>
             <button
               type="button"
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-neutral-700 transition-colors hover:bg-neutral-100"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-ink-secondary transition-colors hover:bg-surface-muted/80"
               aria-label="Volgende maand"
               onClick={() => setCursor(new Date(year, month + 1, 1))}
             >
@@ -242,7 +242,7 @@ export function DatePickerPopover({
             </button>
           </div>
 
-          <div className="mb-2 grid grid-cols-7 gap-1 text-center text-[11px] font-semibold uppercase tracking-wide text-neutral-400">
+          <div className="mb-2 grid grid-cols-7 gap-1 text-center text-[11px] font-semibold uppercase tracking-wide text-ink-muted">
             {WEEKDAYS_NL.map((d) => (
               <div key={d}>{d}</div>
             ))}
@@ -266,12 +266,12 @@ export function DatePickerPopover({
                       className={[
                         "flex aspect-square items-center justify-center rounded-lg text-sm font-medium transition-colors",
                         blocked
-                          ? "cursor-not-allowed bg-neutral-100 text-neutral-300 line-through"
+                          ? "cursor-not-allowed bg-surface-muted/80 text-ink-secondary line-through"
                           : isSelected(day)
                             ? "bg-bookadj text-white shadow-sm"
                             : isToday(day)
-                              ? "bg-neutral-100 font-semibold text-neutral-900 ring-1 ring-neutral-300"
-                              : "text-neutral-800 hover:bg-neutral-50",
+                              ? "bg-surface-muted/80 font-semibold text-ink ring-1 ring-line"
+                              : "text-ink hover:bg-surface-muted",
                       ].join(" ")}
                     >
                       {day}

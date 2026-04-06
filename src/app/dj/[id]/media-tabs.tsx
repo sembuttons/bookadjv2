@@ -64,13 +64,13 @@ export function MediaTabs({
     <section aria-labelledby="media-heading">
       <h2
         id="media-heading"
-        className="text-xl font-bold text-neutral-900 sm:text-2xl"
+        className="text-xl font-bold text-ink sm:text-2xl"
       >
         {djFirstName} in actie
       </h2>
       {tabs.length > 1 ? (
         <div
-          className="mt-4 flex gap-2 border-b border-neutral-200"
+          className="mt-4 flex gap-2 border-b border-line"
           role="tablist"
           aria-label="Social media"
         >
@@ -83,8 +83,8 @@ export function MediaTabs({
               onClick={() => setActive(t.key)}
               className={`border-b-2 px-3 py-2 text-sm font-semibold transition-colors ${
                 current.key === t.key
-                  ? "border-black text-neutral-900"
-                  : "border-transparent text-neutral-500 hover:text-neutral-800"
+                  ? "border-black text-ink"
+                  : "border-transparent text-ink-muted hover:text-ink"
               }`}
             >
               {t.label}
@@ -98,7 +98,7 @@ export function MediaTabs({
           href={current.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-neutral-900 underline-offset-4 hover:underline"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-ink underline-offset-4 hover:underline"
         >
           {current.label} openen
           <IconExternalLink className="h-4 w-4 shrink-0" />
@@ -110,14 +110,14 @@ export function MediaTabs({
           {Array.from({ length: 4 }, (_, i) => (
             <li
               key={i}
-              className="aspect-[9/16] rounded-xl bg-gradient-to-b from-neutral-200 to-neutral-300 ring-1 ring-neutral-200"
+              className="aspect-[9/16] rounded-xl bg-gradient-to-b from-line/60 to-line ring-1 ring-line"
             />
           ))}
         </ul>
       ) : null}
 
       {current.key === "soundcloud" && scEmbed ? (
-        <div className="mt-4 overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50">
+        <div className="mt-4 overflow-hidden rounded-xl border border-line bg-surface-muted">
           <iframe
             title="SoundCloud"
             width="100%"

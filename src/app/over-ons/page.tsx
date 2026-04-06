@@ -8,22 +8,22 @@ export const metadata = {
 export default function OverOnsPage() {
   return (
     <MarketingPageShell maxWidth="medium">
-      <p className="text-sm font-semibold uppercase tracking-wide text-emerald-600">
+      <p className="text-sm font-semibold uppercase tracking-wide text-bookadj-soft">
         Team bookadj
       </p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
+      <h1 className="mt-2 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
         Over ons
       </h1>
 
-      <p className="mt-6 text-lg font-medium leading-relaxed text-neutral-800">
+      <p className="mt-6 text-lg font-medium leading-relaxed text-ink">
         bookadj is gebouwd voor DJ&apos;s die serieus zijn en klanten die
         zekerheid willen. Geen gedoe, geen onzekerheid — gewoon een betrouwbaar
         platform waar talent en gelegenheid elkaar vinden.
       </p>
 
       <section className="mt-12">
-        <h2 className="text-xl font-bold text-neutral-900">Onze missie</h2>
-        <p className="mt-4 text-neutral-600">
+        <h2 className="text-xl font-bold text-ink">Onze missie</h2>
+        <p className="mt-4 text-ink-secondary">
           Wij willen boeken van een DJ net zo eenvoudig en veilig maken als online
           shoppen: duidelijke profielen, transparante prijzen, betaling via het
           platform en support als er iets misgaat. Tegelijk geven wij DJ&apos;s
@@ -33,8 +33,8 @@ export default function OverOnsPage() {
       </section>
 
       <section className="mt-12">
-        <h2 className="text-xl font-bold text-neutral-900">Het bookadj-verhaal</h2>
-        <div className="mt-4 space-y-4 text-neutral-600">
+        <h2 className="text-xl font-bold text-ink">Het bookadj-verhaal</h2>
+        <div className="mt-4 space-y-4 text-ink-secondary">
           <p>
             Ik ben ooit begonnen omdat ik zag hoe vaak het misging: afspraken via
             Instagram, geen contract, geen duidelijkheid over betaling — en aan
@@ -53,7 +53,7 @@ export default function OverOnsPage() {
         </div>
       </section>
 
-      <figure className="mt-12 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-900 shadow-sm">
+      <figure className="mt-12 overflow-hidden rounded-2xl border border-line bg-surface shadow-sm">
         <img
           src="https://images.unsplash.com/photo-1571266028243-e631f2e28e4b?w=1200&q=80&auto=format&fit=crop"
           alt="Publiek bij een donker verlicht live-evenement"
@@ -62,28 +62,28 @@ export default function OverOnsPage() {
           height={675}
           loading="lazy"
         />
-        <figcaption className="border-t border-neutral-200 bg-white px-4 py-3 text-center text-sm text-neutral-600">
+        <figcaption className="border-t border-line bg-surface px-4 py-3 text-center text-sm text-ink-secondary">
           Sfeerbeeld: waar bookadj voor staat — live muziek, energie en
           professionele uitvoering.{" "}
           <a
             href="https://unsplash.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-emerald-700 underline"
+            className="text-bookadj-soft underline"
           >
             Unsplash
           </a>
         </figcaption>
       </figure>
 
-      <section className="mt-12 rounded-2xl border border-dashed border-neutral-300 bg-neutral-50 p-8 text-center">
-        <h2 className="text-xl font-bold text-neutral-900">Het team</h2>
-        <p className="mt-3 text-sm text-neutral-600">
+      <section className="mt-12 rounded-2xl border border-dashed border-line bg-surface-muted p-8 text-center">
+        <h2 className="text-xl font-bold text-ink">Het team</h2>
+        <p className="mt-3 text-sm text-ink-secondary">
           Hier komen binnenkort namen en rollen. Heb je zin om mee te bouwen?
           Mail{" "}
           <a
             href="mailto:hallo@bookadj.nl"
-            className="font-semibold text-emerald-700 underline"
+            className="font-semibold text-bookadj-soft underline"
           >
             hallo@bookadj.nl
           </a>

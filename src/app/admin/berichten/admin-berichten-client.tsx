@@ -105,41 +105,41 @@ export function AdminBerichtenClient() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-neutral-900">Berichten</h1>
-        <p className="mt-1 text-sm text-neutral-600">
+        <h1 className="text-2xl font-bold text-ink">Berichten</h1>
+        <p className="mt-1 text-sm text-ink-secondary">
           Monitor gemarkeerde berichten en gebruikers.
         </p>
       </div>
 
-      <div className="flex flex-wrap gap-4 rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm">
+      <div className="flex flex-wrap gap-4 rounded-xl border border-line bg-surface-muted px-4 py-3 text-sm">
         <span>
-          <span className="font-semibold text-neutral-900">
+          <span className="font-semibold text-ink">
             {stats.flaggedToday}
           </span>
-          <span className="text-neutral-600"> gemarkeerd vandaag</span>
+          <span className="text-ink-secondary"> gemarkeerd vandaag</span>
         </span>
         <span>
-          <span className="font-semibold text-neutral-900">
+          <span className="font-semibold text-ink">
             {stats.suspendedUsers}
           </span>
-          <span className="text-neutral-600"> opgeschorte accounts</span>
+          <span className="text-ink-secondary"> opgeschorte accounts</span>
         </span>
         <span>
-          <span className="font-semibold text-neutral-900">
+          <span className="font-semibold text-ink">
             {stats.messagesToday}
           </span>
-          <span className="text-neutral-600"> berichten vandaag</span>
+          <span className="text-ink-secondary"> berichten vandaag</span>
         </span>
       </div>
 
-      <div className="flex gap-2 border-b border-neutral-200 pb-2">
+      <div className="flex gap-2 border-b border-line pb-2">
         <button
           type="button"
           onClick={() => setTab("flagged")}
           className={`rounded-lg px-4 py-2 text-sm font-semibold ${
             tab === "flagged"
-              ? "bg-black text-white"
-              : "bg-neutral-100 text-neutral-700"
+              ? "bg-line text-white"
+              : "bg-surface-muted/80 text-ink-secondary"
           }`}
         >
           Gemarkeerd
@@ -149,8 +149,8 @@ export function AdminBerichtenClient() {
           onClick={() => setTab("all")}
           className={`rounded-lg px-4 py-2 text-sm font-semibold ${
             tab === "all"
-              ? "bg-black text-white"
-              : "bg-neutral-100 text-neutral-700"
+              ? "bg-line text-white"
+              : "bg-surface-muted/80 text-ink-secondary"
           }`}
         >
           Alle berichten
@@ -158,17 +158,17 @@ export function AdminBerichtenClient() {
       </div>
 
       {error ? (
-        <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+        <p className="rounded-lg border border-danger/35 bg-danger/10 px-4 py-3 text-sm text-danger">
           {error}
         </p>
       ) : null}
 
       {loading ? (
-        <p className="text-neutral-600">Laden…</p>
+        <p className="text-ink-secondary">Laden…</p>
       ) : (
         <ul className="space-y-4">
           {messages.length === 0 ? (
-            <li className="text-sm text-neutral-500">Geen berichten.</li>
+            <li className="text-sm text-ink-muted">Geen berichten.</li>
           ) : (
             messages.map((m) => (
               <li
@@ -176,35 +176,35 @@ export function AdminBerichtenClient() {
                 className={`rounded-2xl border p-5 ${
                   m.is_flagged
                     ? "border-orange-200 bg-orange-50/50"
-                    : "border-neutral-200 bg-white"
+                    : "border-line bg-surface"
                 }`}
               >
                 {m.is_flagged ? (
-                  <p className="mb-3 inline-block rounded-full bg-orange-500 px-2 py-0.5 text-[10px] font-bold uppercase text-white">
+                  <p className="mb-3 inline-block rounded-full bg-caution px-2 py-0.5 text-[10px] font-bold uppercase text-white">
                     Gemarkeerd
                     {m.flag_reason ? ` — ${m.flag_reason}` : ""}
                   </p>
                 ) : null}
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <p className="text-xs font-semibold uppercase text-neutral-500">
+                    <p className="text-xs font-semibold uppercase text-ink-muted">
                       Afzender
                     </p>
                     <div className="mt-2 flex items-center gap-2">
-                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-900 text-xs font-bold text-white">
+                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-surface text-xs font-bold text-white">
                         {initials(
                           m.sender?.full_name ?? "",
                           m.sender?.email,
                         )}
                       </span>
                       <div>
-                        <p className="text-sm font-semibold text-neutral-900">
+                        <p className="text-sm font-semibold text-ink">
                           {m.sender?.full_name ?? "—"}
                         </p>
-                        <p className="text-xs text-neutral-500">
+                        <p className="text-xs text-ink-muted">
                           {m.sender?.email}
                         </p>
-                        <p className="text-xs text-neutral-600">
+                        <p className="text-xs text-ink-secondary">
                           Overtredingen:{" "}
                           <span className="font-semibold">
                             {m.sender?.offense_count ?? 0}
@@ -214,36 +214,36 @@ export function AdminBerichtenClient() {
                     </div>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold uppercase text-neutral-500">
+                    <p className="text-xs font-semibold uppercase text-ink-muted">
                       Ontvanger
                     </p>
                     <div className="mt-2 flex items-center gap-2">
-                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-200 text-xs font-bold text-neutral-800">
+                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-line/50 text-xs font-bold text-ink">
                         {initials(
                           m.recipient?.full_name ?? "",
                           m.recipient?.email,
                         )}
                       </span>
                       <div>
-                        <p className="text-sm font-semibold text-neutral-900">
+                        <p className="text-sm font-semibold text-ink">
                           {m.recipient?.full_name ?? "—"}
                         </p>
-                        <p className="text-xs text-neutral-500">
+                        <p className="text-xs text-ink-muted">
                           {m.recipient?.email}
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
-                <p className="mt-4 whitespace-pre-wrap rounded-lg bg-white/80 p-3 text-sm text-neutral-800 ring-1 ring-neutral-100">
+                <p className="mt-4 whitespace-pre-wrap rounded-lg bg-surface/80 p-3 text-sm text-ink ring-1 ring-line/60">
                   {m.content ?? "—"}
                 </p>
-                <p className="mt-2 text-xs text-neutral-500">
+                <p className="mt-2 text-xs text-ink-muted">
                   {new Date(m.created_at).toLocaleString("nl-NL")}
                 </p>
                 <Link
                   href={`/admin/berichten/gesprek/${m.sender_id}/${m.recipient_id}`}
-                  className="mt-3 inline-block text-sm font-semibold text-neutral-900 underline"
+                  className="mt-3 inline-block text-sm font-semibold text-ink underline"
                 >
                   Bekijk volledig gesprek
                 </Link>
@@ -253,7 +253,7 @@ export function AdminBerichtenClient() {
                       type="button"
                       disabled={!!acting}
                       onClick={() => void runAction(m.id, "clear_flag")}
-                      className="rounded-lg bg-neutral-200 px-3 py-2 text-sm font-semibold text-neutral-900 hover:bg-neutral-300 disabled:opacity-50"
+                      className="rounded-lg bg-line/50 px-3 py-2 text-sm font-semibold text-ink hover:bg-line/70 disabled:opacity-50"
                     >
                       Geen actie
                     </button>
@@ -261,7 +261,7 @@ export function AdminBerichtenClient() {
                       type="button"
                       disabled={!!acting}
                       onClick={() => void runAction(m.id, "warn_user")}
-                      className="rounded-lg bg-orange-500 px-3 py-2 text-sm font-semibold text-white hover:bg-orange-600 disabled:opacity-50"
+                      className="rounded-lg bg-caution px-3 py-2 text-sm font-semibold text-white hover:bg-orange-600 disabled:opacity-50"
                     >
                       Waarschuw gebruiker
                     </button>

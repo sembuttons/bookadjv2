@@ -9,17 +9,17 @@ export const metadata = {
 export default function CookiebeleidPage() {
   return (
     <MarketingPageShell maxWidth="prose">
-      <p className="text-sm font-semibold uppercase tracking-wide text-emerald-600">
+      <p className="text-sm font-semibold uppercase tracking-wide text-bookadj-soft">
         Juridisch
       </p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
+      <h1 className="mt-2 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
         Cookiebeleid
       </h1>
-      <p className="mt-4 text-sm text-neutral-500">
+      <p className="mt-4 text-sm text-ink-muted">
         Laatst bijgewerkt: april 2026
       </p>
 
-      <div className="prose prose-neutral mt-10 max-w-none text-neutral-600 prose-headings:text-neutral-900 prose-a:text-bookadj">
+      <div className="prose-bookadj mt-10 max-w-none">
         <h2>Wat zijn cookies?</h2>
         <p>
           Cookies zijn kleine tekstbestanden die op je apparaat worden geplaatst

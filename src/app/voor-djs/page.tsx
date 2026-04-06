@@ -129,22 +129,22 @@ const gratisIncludes = [
 
 export default function VoorDjsPage() {
   return (
-    <div className="min-h-screen bg-white font-sans text-neutral-900">
+    <div className="min-h-screen bg-app font-sans text-ink">
       <Navbar />
 
       {/* Hero */}
-      <section className="relative isolate overflow-hidden bg-[#0a0a0b] px-4 pb-20 pt-16 text-white sm:px-6 sm:pb-28 sm:pt-20 lg:px-8 lg:pb-32 lg:pt-24">
+      <section className="relative isolate overflow-hidden bg-app px-4 pb-20 pt-16 text-ink sm:px-6 sm:pb-28 sm:pt-20 lg:px-8 lg:pb-32 lg:pt-24">
         <div
           className="absolute inset-0 -z-30 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${VOOR_DJS_HERO_BG})` }}
           aria-hidden
         />
         <div
-          className="absolute inset-0 -z-20 bg-gradient-to-b from-[#0a0a0b]/92 via-[#0a0a0b]/88 to-[#0a0a0b]/95"
+          className="absolute inset-0 -z-20 bg-gradient-to-b from-app/92 via-app/88 to-app/95"
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(52,211,153,0.18),transparent)]"
+          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(34,197,94,0.22),transparent)]"
           aria-hidden
         />
         <div
@@ -155,35 +155,35 @@ export default function VoorDjsPage() {
           aria-hidden
         />
         <div className="relative mx-auto max-w-5xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-400/90">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-bookadj/90">
             Voor professionele DJ&apos;s
           </p>
           <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl md:leading-[1.08]">
             Jouw talent.
             <br />
-            <span className="bg-gradient-to-r from-white via-white to-emerald-200/90 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-white via-white to-bookadj-soft/90 bg-clip-text text-transparent">
               Jouw podium.
             </span>
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-neutral-400 sm:text-xl">
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted sm:text-xl">
             Meer boekingen, minder moeite. Gratis aanmelden, geen verborgen
             kosten.
           </p>
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
               href={signupHref}
-              className="inline-flex w-full items-center justify-center rounded-xl bg-emerald-500 px-8 py-4 text-base font-semibold text-neutral-950 shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-400 sm:w-auto"
+              className="inline-flex w-full items-center justify-center rounded-xl bg-bookadj px-8 py-4 text-base font-semibold text-white shadow-lg shadow-bookadj/25 transition hover:bg-bookadj-hover sm:w-auto"
             >
               Maak een gratis profiel aan
             </Link>
             <a
               href="#hoe-het-werkt"
-              className="inline-flex w-full items-center justify-center rounded-xl border border-white/15 bg-white/5 px-8 py-4 text-base font-semibold text-white backdrop-blur-sm transition hover:bg-white/10 sm:w-auto"
+              className="inline-flex w-full items-center justify-center rounded-xl border border-line-brand/40 bg-surface-muted/50 px-8 py-4 text-base font-semibold text-ink backdrop-blur-sm transition hover:border-line-brand hover:bg-surface-muted sm:w-auto"
             >
               Zo werkt het
             </a>
           </div>
-          <p className="mt-8 text-sm text-neutral-500">
+          <p className="mt-8 text-sm text-ink-muted">
             Serieuze boekers · Veilige betalingen · Duidelijke afspraken
           </p>
         </div>
@@ -197,11 +197,11 @@ export default function VoorDjsPage() {
         <div className="mx-auto max-w-2xl text-center">
           <h2
             id="usp-heading"
-            className="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl"
+            className="text-3xl font-bold tracking-tight text-ink sm:text-4xl"
           >
             Alles wat je nodig hebt om te groeien
           </h2>
-          <p className="mt-4 text-lg text-neutral-600">
+          <p className="mt-4 text-lg text-ink-secondary">
             Eén platform voor zichtbaarheid, communicatie en betaling — zodat jij
             je kunt focussen op je set.
           </p>
@@ -209,14 +209,14 @@ export default function VoorDjsPage() {
         <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           {usps.map((u) => (
             <li key={u.title}>
-              <article className="group flex h-full flex-col rounded-2xl border border-neutral-200/80 bg-white p-8 shadow-sm transition duration-300 hover:border-emerald-200/80 hover:shadow-md">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 transition group-hover:bg-emerald-100">
+              <article className="group flex h-full flex-col rounded-2xl border border-line/80 bg-surface p-8 shadow-sm transition duration-300 hover:border-line-brand/40 hover:shadow-md">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-bookadj-subtle text-bookadj-soft transition group-hover:bg-bookadj-subtle/70">
                   {u.icon}
                 </div>
-                <h3 className="mt-6 text-lg font-bold text-neutral-900">
+                <h3 className="mt-6 text-lg font-bold text-ink">
                   {u.title}
                 </h3>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-neutral-600">
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-secondary">
                   {u.body}
                 </p>
               </article>
@@ -227,7 +227,7 @@ export default function VoorDjsPage() {
 
       {/* How bookadj helps the artist */}
       <section
-        className="bg-[#0a0a0a] px-4 py-20 text-white sm:px-6 lg:px-8 lg:py-24"
+        className="bg-app px-4 py-20 text-ink sm:px-6 lg:px-8 lg:py-24"
         aria-labelledby="helps-heading"
       >
         <div className="mx-auto max-w-7xl">
@@ -238,7 +238,7 @@ export default function VoorDjsPage() {
             >
               Hoe bookadj jou helpt als artiest
             </h2>
-            <p className="mt-4 text-lg text-white/70">
+            <p className="mt-4 text-lg text-ink-secondary">
               Meer vrijheid, meer vertrouwen en een workflow die klopt.
             </p>
           </div>
@@ -277,14 +277,14 @@ export default function VoorDjsPage() {
               },
             ].map(({ Icon, title, body }) => (
               <li key={title}>
-                <article className="h-full rounded-2xl border border-white/10 bg-white/5 p-7 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-emerald-400/30 hover:bg-white/10">
+                <article className="h-full rounded-2xl border border-line bg-surface p-7 shadow-sm transition-all duration-200 hover:border-line-brand/50 hover:bg-surface-muted/30">
                   <Icon
-                    className="h-7 w-7 text-emerald-400"
+                    className="h-7 w-7 text-bookadj"
                     strokeWidth={1.75}
                     aria-hidden
                   />
-                  <h3 className="mt-5 text-lg font-bold text-white">{title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/75">
+                  <h3 className="mt-5 text-lg font-bold text-ink">{title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
                     {body}
                   </p>
                 </article>
@@ -297,17 +297,17 @@ export default function VoorDjsPage() {
       {/* How it works */}
       <section
         id="hoe-het-werkt"
-        className="border-y border-neutral-200 bg-neutral-50 px-4 py-20 sm:px-6 lg:px-8 lg:py-28"
+        className="border-y border-line bg-surface-muted px-4 py-20 sm:px-6 lg:px-8 lg:py-28"
         aria-labelledby="steps-heading"
       >
         <div className="mx-auto max-w-7xl">
           <h2
             id="steps-heading"
-            className="text-center text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl"
+            className="text-center text-3xl font-bold tracking-tight text-ink sm:text-4xl"
           >
             Zo werkt het
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-center text-neutral-600">
+          <p className="mx-auto mt-4 max-w-xl text-center text-ink-secondary">
             Drie stappen van aanmelden tot je eerste boeking op het podium.
           </p>
 
@@ -320,13 +320,13 @@ export default function VoorDjsPage() {
               >
                 <div className="flex w-full items-start gap-0 lg:gap-4">
                   <div className="flex flex-1 flex-col items-center lg:items-start">
-                    <span className="inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-neutral-900 text-sm font-bold tracking-wide text-emerald-400">
+                    <span className="inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-surface text-sm font-bold tracking-wide text-bookadj">
                       {s.n}
                     </span>
-                    <h3 className="mt-6 text-xl font-bold text-neutral-900">
+                    <h3 className="mt-6 text-xl font-bold text-ink">
                       {s.title}
                     </h3>
-                    <p className="mt-3 text-sm leading-relaxed text-neutral-600">
+                    <p className="mt-3 text-sm leading-relaxed text-ink-secondary">
                       {s.desc}
                     </p>
                   </div>
@@ -335,7 +335,7 @@ export default function VoorDjsPage() {
                       className="hidden shrink-0 self-center pt-7 lg:flex lg:items-center lg:px-2"
                       aria-hidden
                     >
-                      <div className="h-px w-12 bg-gradient-to-r from-emerald-400/50 to-emerald-200/30 xl:w-16" />
+                      <div className="h-px w-12 bg-gradient-to-r from-bookadj/50 to-bookadj-soft/30 xl:w-16" />
                     </div>
                   ) : null}
                 </div>
@@ -353,33 +353,33 @@ export default function VoorDjsPage() {
         <div className="mx-auto max-w-3xl text-center">
           <h2
             id="pricing-heading"
-            className="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl"
+            className="text-3xl font-bold tracking-tight text-ink sm:text-4xl"
           >
             Gratis account
           </h2>
-          <p className="mt-4 text-lg text-neutral-600">
+          <p className="mt-4 text-lg text-ink-secondary">
             Geen maandbedrag. Je betaalt alleen mee als er daadwerkelijk geboekt
             wordt.
           </p>
         </div>
 
         <div className="mx-auto mt-14 max-w-xl">
-          <div className="overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-xl shadow-neutral-900/5 ring-1 ring-black/5">
-            <div className="bg-gradient-to-br from-neutral-900 to-neutral-800 px-8 py-10 text-center text-white">
-              <p className="text-sm font-semibold uppercase tracking-wider text-emerald-400">
+          <div className="overflow-hidden rounded-3xl border border-line bg-surface shadow-xl shadow-black/30 ring-1 ring-line/30">
+            <div className="bg-gradient-to-br from-surface to-surface-muted px-8 py-10 text-center">
+              <p className="text-sm font-semibold uppercase tracking-wider text-bookadj-soft">
                 Altijd starten met
               </p>
-              <p className="mt-2 text-4xl font-bold tracking-tight">€ 0</p>
-              <p className="mt-1 text-sm text-neutral-400">per maand</p>
+              <p className="mt-2 text-4xl font-bold tracking-tight text-ink">€ 0</p>
+              <p className="mt-1 text-sm text-ink-muted">per maand</p>
             </div>
             <div className="px-8 py-10">
-              <p className="text-sm font-semibold text-neutral-900">
+              <p className="text-sm font-semibold text-ink">
                 Dit zit erbij
               </p>
               <ul className="mt-6 space-y-4">
                 {gratisIncludes.map((line) => (
-                  <li key={line} className="flex gap-3 text-sm text-neutral-700">
-                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                  <li key={line} className="flex gap-3 text-sm text-ink-secondary">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-bookadj-subtle/70 text-bookadj-soft">
                       <svg
                         className="h-3 w-3"
                         viewBox="0 0 12 12"
@@ -399,13 +399,13 @@ export default function VoorDjsPage() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-10 rounded-2xl bg-neutral-50 p-5 text-left">
-                <p className="text-sm font-semibold text-neutral-900">
+              <div className="mt-10 rounded-2xl bg-surface-muted p-5 text-left">
+                <p className="text-sm font-semibold text-ink">
                   Platformcommission
                 </p>
-                <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+                <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
                   bookadj houdt per bevestigde boeking een platformcommission in
-                  — gangbaar <strong className="font-semibold text-neutral-800">10–15%</strong> van het
+                  — gangbaar <strong className="font-semibold text-ink">10–15%</strong> van het
                   boekingsbedrag, afhankelijk van het type opdracht en je
                   overeenkomst. Het exacte percentage zie je transparant in je
                   dashboard vóór je een aanvraag accepteert.
@@ -413,7 +413,7 @@ export default function VoorDjsPage() {
               </div>
               <Link
                 href={signupHref}
-                className="mt-8 flex w-full items-center justify-center rounded-xl bg-emerald-500 px-8 py-4 text-base font-semibold text-neutral-950 shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-400"
+                className="mt-8 flex w-full items-center justify-center rounded-xl bg-bookadj px-8 py-4 text-base font-semibold text-white shadow-lg shadow-bookadj/25 transition hover:bg-bookadj-hover"
               >
                 Maak een gratis profiel aan
               </Link>
@@ -424,68 +424,68 @@ export default function VoorDjsPage() {
 
       {/* Testimonial */}
       <section
-        className="border-t border-neutral-200 bg-neutral-50 px-4 py-20 sm:px-6 lg:px-8 lg:py-24"
+        className="border-t border-line bg-surface-muted px-4 py-20 sm:px-6 lg:px-8 lg:py-24"
         aria-labelledby="testimonial-heading"
       >
         <div className="mx-auto max-w-4xl">
           <h2
             id="testimonial-heading"
-            className="text-center text-sm font-semibold uppercase tracking-wider text-emerald-600"
+            className="text-center text-sm font-semibold uppercase tracking-wider text-bookadj-soft"
           >
             Ervaring van een DJ
           </h2>
-          <figure className="mt-10 overflow-hidden rounded-3xl border border-neutral-200 bg-white p-8 shadow-sm sm:p-10 md:flex md:gap-10 md:p-12">
+          <figure className="mt-10 overflow-hidden rounded-3xl border border-line bg-surface p-8 shadow-sm sm:p-10 md:flex md:gap-10 md:p-12">
             <div className="mx-auto flex shrink-0 flex-col items-center md:mx-0">
               <img
                 src="https://images.unsplash.com/photo-1571266028243-e631f2e28e4b?w=200&q=80&auto=format&fit=crop"
                 alt=""
-                className="h-24 w-24 rounded-full object-cover ring-4 ring-white shadow-inner"
+                className="h-24 w-24 rounded-full object-cover ring-4 ring-line-brand/50 shadow-inner"
                 width={96}
                 height={96}
               />
               <figcaption className="mt-4 text-center md:text-left">
-                <p className="font-bold text-neutral-900">DJ Sam Rivers</p>
-                <p className="text-sm text-neutral-500">House &amp; disco · Utrecht</p>
+                <p className="font-bold text-ink">DJ Sam Rivers</p>
+                <p className="text-sm text-ink-muted">House &amp; disco · Utrecht</p>
               </figcaption>
             </div>
             <blockquote className="mt-8 flex-1 md:mt-0">
-              <p className="text-lg leading-relaxed text-neutral-700 sm:text-xl">
-                <span className="text-4xl leading-none text-emerald-500/40">
+              <p className="text-lg leading-relaxed text-ink-secondary sm:text-xl">
+                <span className="text-4xl leading-none text-bookadj/40">
                   &ldquo;
                 </span>
                 Sinds ik op bookadj sta, krijg ik serieuze aanvragen zonder
                 eindeloos te onderhandelen op Instagram. Alles loopt via één
                 plek — en ik weet dat ik betaald word. Dat geeft rust voor een
                 drukke weekendagenda.
-                <span className="text-4xl leading-none text-emerald-500/40">
+                <span className="text-4xl leading-none text-bookadj/40">
                   &rdquo;
                 </span>
               </p>
             </blockquote>
           </figure>
-          <p className="mt-4 text-center text-xs text-neutral-400">
+          <p className="mt-4 text-center text-xs text-ink-muted">
             Fictief voorbeeld — placeholder tot we echte DJ-verhalen publiceren.
           </p>
         </div>
       </section>
 
       {/* Final CTA */}
-      <section className="relative overflow-hidden bg-[#0a0a0b] px-4 py-20 text-center text-white sm:px-6 sm:py-24 lg:px-8">
+      <section className="relative overflow-hidden bg-app px-4 py-20 text-center text-ink sm:px-6 sm:py-24 lg:px-8">
         <div
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_100%,rgba(52,211,153,0.12),transparent)]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_100%,rgba(34,197,94,0.14),transparent)]"
           aria-hidden
         />
         <div className="relative mx-auto max-w-2xl">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">
             Klaar om meer te boeken?
           </h2>
-          <p className="mt-4 text-lg text-neutral-400">
+          <p className="mt-4 text-lg text-ink-muted">
             Maak vandaag nog je gratis profiel aan en word vindbaar voor klanten
             die een betrouwbare DJ zoeken.
           </p>
           <Link
             href={signupHref}
-            className="mt-10 inline-flex w-full items-center justify-center rounded-xl bg-emerald-500 px-8 py-4 text-base font-semibold text-neutral-950 shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-400 sm:w-auto"
+            className="mt-10 inline-flex w-full items-center justify-center rounded-xl bg-bookadj px-8 py-4 text-base font-semibold text-white shadow-lg shadow-bookadj/25 transition hover:bg-bookadj-hover sm:w-auto"
           >
             Maak een gratis profiel aan
           </Link>

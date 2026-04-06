@@ -9,17 +9,17 @@ export const metadata = {
 export default function AlgemeneVoorwaardenPage() {
   return (
     <MarketingPageShell maxWidth="prose">
-      <p className="text-sm font-semibold uppercase tracking-wide text-emerald-600">
+      <p className="text-sm font-semibold uppercase tracking-wide text-bookadj-soft">
         Juridisch
       </p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
+      <h1 className="mt-2 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
         Algemene voorwaarden
       </h1>
-      <p className="mt-4 text-sm text-neutral-500">
+      <p className="mt-4 text-sm text-ink-muted">
         Laatst bijgewerkt: april 2026
       </p>
 
-      <div className="prose prose-neutral mt-10 max-w-none text-neutral-600 prose-headings:text-neutral-900 prose-a:text-bookadj">
+      <div className="prose-bookadj mt-10 max-w-none">
         <h2>1. Toepasselijkheid</h2>
         <p>
           Deze algemene voorwaarden gelden voor het gebruik van het platform
@@ -116,7 +116,7 @@ export default function AlgemeneVoorwaardenPage() {
           worden voorgelegd aan de bevoegde rechter in Nederland.
         </p>
 
-        <p className="text-sm text-neutral-500">
+        <p className="text-sm text-ink-muted">
           Zie ook:{" "}
           <Link href="/privacy">Privacybeleid</Link>,{" "}
           <Link href="/cookiebeleid">Cookiebeleid</Link>.

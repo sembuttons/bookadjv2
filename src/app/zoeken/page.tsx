@@ -137,7 +137,7 @@ function DualHourlyRateSlider({
     <div className="space-y-3">
       <div className="relative h-10 pt-2">
         <div
-          className="pointer-events-none absolute left-0 right-0 top-[calc(50%-2px)] h-px bg-neutral-200"
+          className="pointer-events-none absolute left-0 right-0 top-[calc(50%-2px)] h-px bg-line/50"
           aria-hidden
         />
         <div
@@ -159,7 +159,7 @@ function DualHourlyRateSlider({
             const v = Number(e.target.value);
             onMinChange(Math.min(v, maxVal - PRICE_STEP));
           }}
-          className={`pointer-events-none absolute inset-x-0 top-1/2 w-full -translate-y-1/2 appearance-none bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-bookadj/30 focus-visible:ring-offset-2 ${rangeTrackTransparent} ${rangeThumb}`}
+          className={`pointer-events-none absolute inset-x-0 top-1/2 w-full -translate-y-1/2 appearance-none bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-bookadj/30 focus-visible:ring-offset-app ${rangeTrackTransparent} ${rangeThumb}`}
           style={{ zIndex: minZ }}
           aria-label="Minimum uurtarief"
         />
@@ -173,13 +173,13 @@ function DualHourlyRateSlider({
             const v = Number(e.target.value);
             onMaxChange(Math.max(v, minVal + PRICE_STEP));
           }}
-          className={`pointer-events-none absolute inset-x-0 top-1/2 w-full -translate-y-1/2 appearance-none bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-bookadj/30 focus-visible:ring-offset-2 ${rangeTrackTransparent} ${rangeThumb}`}
+          className={`pointer-events-none absolute inset-x-0 top-1/2 w-full -translate-y-1/2 appearance-none bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-bookadj/30 focus-visible:ring-offset-app ${rangeTrackTransparent} ${rangeThumb}`}
           style={{ zIndex: maxZ }}
           aria-label="Maximum uurtarief"
         />
       </div>
 
-      <div className="flex justify-between text-xs text-neutral-500">
+      <div className="flex justify-between text-xs text-ink-muted">
         <span>{`€${PRICE_SLIDER_MIN}`}</span>
         <span>{`€${PRICE_SLIDER_MAX}`}</span>
       </div>
@@ -329,9 +329,9 @@ export default function ZoekenPage() {
 
   const FilterBlock = (
     <>
-      <div className="space-y-2 border-b border-neutral-200 py-6">
-        <h2 className="text-sm font-semibold text-neutral-900">Gelegenheid</h2>
-        <p className="text-xs text-neutral-500">
+      <div className="space-y-2 border-b border-line py-6">
+        <h2 className="text-sm font-semibold text-ink">Gelegenheid</h2>
+        <p className="text-xs text-ink-muted">
           Filter op type feest (secundair naast je zoekbalk).
         </p>
         <select
@@ -349,15 +349,15 @@ export default function ZoekenPage() {
         </select>
       </div>
 
-      <fieldset className="space-y-3 border-b border-neutral-200 py-6">
-        <legend className="text-sm font-semibold text-neutral-900">Genre</legend>
+      <fieldset className="space-y-3 border-b border-line py-6">
+        <legend className="text-sm font-semibold text-ink">Genre</legend>
         <ul className="space-y-2">
           {FILTER_GENRES.map((g) => (
             <li key={g}>
-              <label className="flex cursor-pointer items-center gap-2 text-sm text-neutral-700">
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-ink-secondary">
                 <input
                   type="checkbox"
-                  className="h-4 w-4 rounded border-neutral-300"
+                  className="h-4 w-4 rounded border-line"
                   checked={genreChecks[g] ?? false}
                   onChange={() =>
                     setGenreChecks((p) => ({ ...p, [g]: !p[g] }))
@@ -370,11 +370,11 @@ export default function ZoekenPage() {
         </ul>
       </fieldset>
 
-      <div className="space-y-2 border-b border-neutral-200 py-6">
-        <h2 className="text-sm font-semibold text-neutral-900">
+      <div className="space-y-2 border-b border-line py-6">
+        <h2 className="text-sm font-semibold text-ink">
           Uurtarief (€)
         </h2>
-        <p className="text-xs text-neutral-500">
+        <p className="text-xs text-ink-muted">
           Toon DJ&apos;s met uurtarief binnen dit bereik. Profielen zonder
           tarief blijven zichtbaar.
         </p>
@@ -391,17 +391,17 @@ export default function ZoekenPage() {
   const resultCount = filteredSorted.length;
 
   return (
-    <div className="min-h-screen bg-white font-sans text-neutral-900">
+    <div className="min-h-screen bg-surface font-sans text-ink">
       <Navbar />
 
-      <header className="border-b border-neutral-200 bg-white text-neutral-900 shadow-sm">
+      <header className="border-b border-line bg-surface text-ink shadow-sm">
         <div className="mx-auto max-w-[1600px]">
           <form
             onSubmit={handleZoeken}
             className="mx-auto flex max-w-[1600px] flex-col gap-4 px-4 py-4 sm:flex-row sm:flex-wrap sm:items-end sm:gap-4 sm:px-6 lg:px-8"
           >
             <label className="flex min-w-[140px] flex-1 flex-col gap-1.5">
-              <span className="text-xs font-semibold uppercase text-neutral-500">
+              <span className="text-xs font-semibold uppercase text-ink-muted">
                 Stad
               </span>
               <input
@@ -412,7 +412,7 @@ export default function ZoekenPage() {
               />
             </label>
             <label className="flex min-w-[140px] flex-1 flex-col gap-1.5">
-              <span className="text-xs font-semibold uppercase text-neutral-500">
+              <span className="text-xs font-semibold uppercase text-ink-muted">
                 Datum
               </span>
               <input
@@ -423,7 +423,7 @@ export default function ZoekenPage() {
               />
             </label>
             <label className="flex min-w-[140px] flex-1 flex-col gap-1.5">
-              <span className="text-xs font-semibold uppercase text-neutral-500">
+              <span className="text-xs font-semibold uppercase text-ink-muted">
                 Gelegenheid
               </span>
               <select
@@ -450,10 +450,10 @@ export default function ZoekenPage() {
       </header>
 
       <div className="mx-auto grid max-w-[1600px] gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[260px_1fr] lg:gap-10 lg:px-8">
-        <details className="rounded-xl border border-neutral-200 bg-neutral-50 p-4 lg:hidden">
-          <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between text-sm font-semibold text-neutral-900 [&::-webkit-details-marker]:hidden">
+        <details className="rounded-xl border border-line bg-surface-muted p-4 lg:hidden">
+          <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between text-sm font-semibold text-ink [&::-webkit-details-marker]:hidden">
             <span>Filters</span>
-            <span className="text-xs font-normal text-neutral-500">
+            <span className="text-xs font-normal text-ink-muted">
               {occasion ? occasionLabel(occasion) : "Geen"}
             </span>
           </summary>
@@ -469,15 +469,15 @@ export default function ZoekenPage() {
 
         <div className="min-w-0">
           {error ? (
-            <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+            <p className="rounded-lg border border-danger/35 bg-danger/10 px-4 py-3 text-sm text-danger">
               {error}
             </p>
           ) : null}
 
           {!loading && !error ? (
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-neutral-700">
-                <span className="font-semibold text-neutral-900">
+              <p className="text-sm text-ink-secondary">
+                <span className="font-semibold text-ink">
                   {resultCount}
                 </span>
                 {resultCount === 1
@@ -486,7 +486,7 @@ export default function ZoekenPage() {
               </p>
               <div className="relative flex min-w-0 flex-1 items-center justify-end sm:max-w-md sm:flex-initial">
                 <label className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
-                  <span className="shrink-0 text-xs font-bold uppercase tracking-wide text-neutral-500 sm:text-sm sm:font-semibold sm:normal-case sm:tracking-normal sm:text-neutral-800">
+                  <span className="shrink-0 text-xs font-bold uppercase tracking-wide text-ink-muted sm:text-sm sm:font-semibold sm:normal-case sm:tracking-normal sm:text-ink">
                     Sorteren
                   </span>
                   <span className="relative inline-flex min-w-0 flex-1 items-center sm:min-w-[240px]">
@@ -494,7 +494,7 @@ export default function ZoekenPage() {
                       value={sort}
                       onChange={(e) => setSort(e.target.value as SortKey)}
                       aria-label="Sorteer resultaten"
-                      className="input-field w-full cursor-pointer appearance-none border-2 border-neutral-900 py-2.5 pl-3 pr-10 text-sm font-semibold shadow-md sm:py-3"
+                      className="input-field w-full cursor-pointer appearance-none border-2 border-line-brand py-2.5 pl-3 pr-10 text-sm font-semibold shadow-md sm:py-3"
                     >
                       {SORT_OPTIONS.map((o) => (
                         <option key={o.value} value={o.value}>
@@ -502,7 +502,7 @@ export default function ZoekenPage() {
                         </option>
                       ))}
                     </select>
-                    <IconChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-600" />
+                    <IconChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-secondary" />
                   </span>
                 </label>
               </div>
@@ -510,7 +510,7 @@ export default function ZoekenPage() {
           ) : null}
 
           {!loading && !error && !hasActiveFilters ? (
-            <div className="mb-6 rounded-xl border border-emerald-200 bg-emerald-50/80 px-4 py-3 text-sm text-emerald-950 ring-1 ring-emerald-100">
+            <div className="mb-6 rounded-xl border border-line-brand/40 bg-bookadj-subtle/80 px-4 py-3 text-sm text-bookadj-soft ring-1 ring-line-brand/35">
               <span className="font-semibold">Geen filters actief.</span> Je ziet nu alle geverifieerde
               DJ&apos;s. Gebruik de filters links (of boven op mobiel) om sneller te vinden wat bij je
               past.
@@ -563,7 +563,7 @@ export default function ZoekenPage() {
                       className="group card-interactive block h-full overflow-hidden"
                     >
                       <div
-                        className="relative aspect-[4/3] overflow-hidden rounded-t-2xl bg-neutral-900 bg-cover bg-center"
+                        className="relative aspect-[4/3] overflow-hidden rounded-t-2xl bg-surface bg-cover bg-center"
                         style={{ backgroundImage: `url(${ZOEKEN_CARD_IMG})` }}
                       >
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/20" />
@@ -578,22 +578,22 @@ export default function ZoekenPage() {
                         <h3 className="text-lg font-semibold group-hover:underline">
                           {stage}
                         </h3>
-                        <p className="text-sm text-neutral-600">{city}</p>
+                        <p className="text-sm text-ink-secondary">{city}</p>
                         <div className="flex flex-wrap gap-2">
                           {genres.slice(0, 4).map((g) => (
                             <span
                               key={g}
-                              className="rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs font-medium text-neutral-800"
+                              className="rounded-full bg-surface-muted/80 px-2.5 py-0.5 text-xs font-medium text-ink"
                             >
                               {g}
                             </span>
                           ))}
                         </div>
-                        <p className="text-xs text-neutral-500">
+                        <p className="text-xs text-ink-muted">
                           Reactietijd: {responseLabel}
                         </p>
-                        <div className="flex items-center justify-between border-t border-neutral-100 pt-3">
-                          <p className="font-bold text-neutral-900">
+                        <div className="flex items-center justify-between border-t border-line/60 pt-3">
+                          <p className="font-bold text-ink">
                             {rate != null
                               ? `v.a. €${rate.toLocaleString("nl-NL")}/uur`
                               : "Tarief op aanvraag"}

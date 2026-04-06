@@ -10,7 +10,7 @@ const ONDERWERPEN = [
 ] as const;
 
 const inputCls = "input-field mt-2";
-const labelCls = "text-sm font-semibold text-neutral-800";
+const labelCls = "text-sm font-semibold text-ink";
 
 export function ContactForm() {
   const [name, setName] = useState("");
@@ -60,11 +60,11 @@ export function ContactForm() {
   if (status === "ok") {
     return (
       <div
-        className="rounded-xl border border-bookadj/25 bg-bookadj/10 px-5 py-6 text-neutral-900"
+        className="rounded-xl border border-bookadj/25 bg-bookadj/10 px-5 py-6 text-ink"
         role="status"
       >
         <p className="font-semibold">Bedankt! Je bericht is verstuurd.</p>
-        <p className="mt-2 text-sm text-neutral-700">
+        <p className="mt-2 text-sm text-ink-secondary">
           We reageren zo snel mogelijk op{" "}
           <span className="font-medium">hallo@bookadj.nl</span>.
         </p>
@@ -83,7 +83,7 @@ export function ContactForm() {
     <form
       noValidate
       onSubmit={(e) => void onSubmit(e)}
-      className="space-y-5 rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8"
+      className="space-y-5 rounded-2xl border border-line bg-surface p-6 shadow-sm sm:p-8"
     >
       <input
         type="text"
@@ -98,7 +98,7 @@ export function ContactForm() {
 
       {errMsg ? (
         <p
-          className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"
+          className="rounded-lg border border-danger/35 bg-danger/10 px-3 py-2 text-sm text-danger"
           role="alert"
         >
           {errMsg}

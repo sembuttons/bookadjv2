@@ -271,8 +271,8 @@ export default function DjDashboardPage() {
   if (loading) {
     return (
       <div>
-        <div className="h-8 w-56 animate-pulse rounded-lg bg-neutral-200" />
-        <div className="mt-2 h-4 w-80 max-w-full animate-pulse rounded bg-neutral-200" />
+        <div className="h-8 w-56 animate-pulse rounded-lg bg-line/50" />
+        <div className="mt-2 h-4 w-80 max-w-full animate-pulse rounded bg-line/50" />
         <div className="mt-10">
           <DashboardBookingsSkeleton rows={3} />
         </div>
@@ -311,10 +311,10 @@ export default function DjDashboardPage() {
   }
 
   return (
-    <div className="space-y-14 bg-white">
+    <div className="space-y-14 bg-surface">
       {loadError ? (
         <p
-          className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"
+          className="rounded-lg border border-danger/35 bg-danger/10 px-3 py-2 text-sm text-danger"
           role="alert"
         >
           {loadError}
@@ -334,11 +334,11 @@ export default function DjDashboardPage() {
       <section aria-labelledby="nieuwe-aanvragen-heading">
         <h1
           id="nieuwe-aanvragen-heading"
-          className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl"
+          className="text-2xl font-bold tracking-tight text-ink sm:text-3xl"
         >
           Nieuwe aanvragen
         </h1>
-        <p className="mt-1 text-sm text-neutral-600">
+        <p className="mt-1 text-sm text-ink-secondary">
           Inbox — klanten die je willen boeken. Reageer voordat de aanvraag
           verloopt.
         </p>
@@ -385,7 +385,7 @@ export default function DjDashboardPage() {
                       <div className="min-w-0 flex-1 space-y-4">
                         <div className="flex flex-wrap items-start justify-between gap-3">
                           <div>
-                            <h2 className="text-lg font-semibold text-neutral-900">
+                            <h2 className="text-lg font-semibold text-ink">
                               {getCustomerName(req)}
                             </h2>
                           </div>
@@ -393,8 +393,8 @@ export default function DjDashboardPage() {
                             <p
                               className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ring-1 ${
                                 h === 0
-                                  ? "bg-red-50 text-red-900 ring-red-500/30"
-                                  : "bg-amber-100 text-amber-950 ring-amber-500/30"
+                                  ? "bg-danger/10 text-red-900 ring-red-500/30"
+                                  : "bg-caution/15 text-caution ring-caution/35"
                               }`}
                             >
                               {h === 0
@@ -406,32 +406,32 @@ export default function DjDashboardPage() {
 
                         <dl className="grid gap-3 text-sm sm:grid-cols-2">
                           <div>
-                            <dt className="text-neutral-500">Datum</dt>
-                            <dd className="font-medium text-neutral-900">
+                            <dt className="text-ink-muted">Datum</dt>
+                            <dd className="font-medium text-ink">
                               {formatEventDate(req.event_date)}
                             </dd>
                           </div>
                           <div>
-                            <dt className="text-neutral-500">Starttijd</dt>
-                            <dd className="font-medium text-neutral-900">
+                            <dt className="text-ink-muted">Starttijd</dt>
+                            <dd className="font-medium text-ink">
                               {start}
                             </dd>
                           </div>
                           <div>
-                            <dt className="text-neutral-500">Duur</dt>
-                            <dd className="font-medium text-neutral-900">
+                            <dt className="text-ink-muted">Duur</dt>
+                            <dd className="font-medium text-ink">
                               {hoursValue(req)} uur
                             </dd>
                           </div>
                           <div>
-                            <dt className="text-neutral-500">Locatie</dt>
-                            <dd className="font-medium text-neutral-900">
+                            <dt className="text-ink-muted">Locatie</dt>
+                            <dd className="font-medium text-ink">
                               {venueLine(req)}
                             </dd>
                           </div>
                           <div className="sm:col-span-2">
-                            <dt className="text-neutral-500">Type evenement</dt>
-                            <dd className="font-medium text-neutral-900">
+                            <dt className="text-ink-muted">Type evenement</dt>
+                            <dd className="font-medium text-ink">
                               {typeof req.event_type === "string" &&
                               req.event_type.trim()
                                 ? req.event_type.trim()
@@ -442,24 +442,24 @@ export default function DjDashboardPage() {
 
                         {msg ? (
                           <div>
-                            <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                            <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
                               Bericht van klant
                             </p>
-                            <p className="mt-1.5 rounded-lg bg-neutral-50 px-3 py-2.5 text-sm text-neutral-800">
+                            <p className="mt-1.5 rounded-lg bg-surface-muted px-3 py-2.5 text-sm text-ink">
                               {msg}
                             </p>
                           </div>
                         ) : null}
 
-                        <div className="flex flex-wrap gap-6 border-t border-neutral-100 pt-4">
+                        <div className="flex flex-wrap gap-6 border-t border-line/60 pt-4">
                           <div>
-                            <p className="text-xs text-neutral-500">Bruto</p>
-                            <p className="text-lg font-bold text-neutral-900">
+                            <p className="text-xs text-ink-muted">Bruto</p>
+                            <p className="text-lg font-bold text-ink">
                               {formatEuroFromCents(req.total_amount)}
                             </p>
                           </div>
                           <div>
-                            <p className="text-xs text-neutral-500">
+                            <p className="text-xs text-ink-muted">
                               Jouw verdienste na 15% platformkosten
                             </p>
                             <p className="text-lg font-bold text-bookadj">
@@ -482,7 +482,7 @@ export default function DjDashboardPage() {
                           type="button"
                           disabled={busy}
                           onClick={() => void handleDecline(req.id)}
-                          className="rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-800 transition-colors hover:bg-red-100 disabled:opacity-50"
+                          className="rounded-lg border border-danger/35 bg-danger/10 px-4 py-2.5 text-sm font-semibold text-danger transition-colors hover:bg-danger/20 disabled:opacity-50"
                         >
                           Afwijzen
                         </button>
@@ -499,11 +499,11 @@ export default function DjDashboardPage() {
       <section aria-labelledby="bevestigde-heading">
         <h2
           id="bevestigde-heading"
-          className="text-xl font-bold tracking-tight text-neutral-900 sm:text-2xl"
+          className="text-xl font-bold tracking-tight text-ink sm:text-2xl"
         >
           Bevestigde boekingen
         </h2>
-        <p className="mt-1 text-sm text-neutral-600">
+        <p className="mt-1 text-sm text-ink-secondary">
           Geplande optredens en verwachte uitbetaling (datum evenement + 2 dagen).
         </p>
 
@@ -538,45 +538,45 @@ export default function DjDashboardPage() {
                 <li key={b.id}>
                   <article className="card-interactive p-5 sm:p-6">
                     <div className="min-w-0 space-y-3">
-                      <h3 className="text-lg font-semibold text-neutral-900">
+                      <h3 className="text-lg font-semibold text-ink">
                         {getCustomerName(b)}
                       </h3>
                       <dl className="grid gap-2 text-sm sm:grid-cols-2">
                         <div>
-                          <dt className="text-neutral-500">Datum evenement</dt>
-                          <dd className="font-medium text-neutral-900">
+                          <dt className="text-ink-muted">Datum evenement</dt>
+                          <dd className="font-medium text-ink">
                             {formatEventDate(b.event_date)}
                           </dd>
                         </div>
                         <div>
-                          <dt className="text-neutral-500">Starttijd</dt>
-                          <dd className="font-medium text-neutral-900">
+                          <dt className="text-ink-muted">Starttijd</dt>
+                          <dd className="font-medium text-ink">
                             {start}
                           </dd>
                         </div>
                         <div>
-                          <dt className="text-neutral-500">Duur</dt>
-                          <dd className="font-medium text-neutral-900">
+                          <dt className="text-ink-muted">Duur</dt>
+                          <dd className="font-medium text-ink">
                             {hoursValue(b)} uur
                           </dd>
                         </div>
                         <div className="sm:col-span-2">
-                          <dt className="text-neutral-500">Locatie</dt>
-                          <dd className="font-medium text-neutral-900">
+                          <dt className="text-ink-muted">Locatie</dt>
+                          <dd className="font-medium text-ink">
                             {venueLine(b)}
                           </dd>
                         </div>
                         <div>
-                          <dt className="text-neutral-500">Netto uitbetaling</dt>
+                          <dt className="text-ink-muted">Netto uitbetaling</dt>
                           <dd className="text-lg font-bold text-bookadj">
                             {formatEuroFromCents(b.dj_payout)}
                           </dd>
                         </div>
                         <div>
-                          <dt className="text-neutral-500">
+                          <dt className="text-ink-muted">
                             Uitbetaling verwacht op
                           </dt>
-                          <dd className="font-medium text-neutral-900">
+                          <dd className="font-medium text-ink">
                             {payoutExpectedLabel(b.event_date)}
                           </dd>
                         </div>

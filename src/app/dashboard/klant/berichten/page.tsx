@@ -9,6 +9,6 @@ export default function KlantBerichtenRedirectPage() {
     router.replace("/berichten");
   }, [router]);
   return (
-    <p className="text-sm text-neutral-600">Doorsturen naar berichten…</p>
+    <p className="text-sm text-ink-secondary">Doorsturen naar berichten…</p>
   );
 }

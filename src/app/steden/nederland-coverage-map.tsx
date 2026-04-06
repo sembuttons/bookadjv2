@@ -18,7 +18,7 @@ const CITIES: { name: string; cx: number; cy: number }[] = [
 
 export function NederlandCoverageMap() {
   return (
-    <div className="mx-auto max-w-2xl rounded-3xl border border-emerald-200/60 bg-white p-6 shadow-sm ring-1 ring-emerald-100 sm:p-10">
+    <div className="mx-auto max-w-2xl rounded-3xl border border-line-brand/50 bg-surface-muted/40 p-6 shadow-sm ring-1 ring-line-brand/35 sm:p-10">
       <svg
         viewBox="0 0 100 100"
         className="mx-auto h-auto w-full max-w-md overflow-visible"
@@ -26,15 +26,15 @@ export function NederlandCoverageMap() {
       >
         <defs>
           <linearGradient id="nl-fill" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#34d399" />
-            <stop offset="100%" stopColor="#059669" />
+            <stop offset="0%" stopColor="#4ade80" />
+            <stop offset="100%" stopColor="#22c55e" />
           </linearGradient>
         </defs>
         <path
           d={NL_PATH}
           fill="url(#nl-fill)"
           fillOpacity={0.85}
-          stroke="#047857"
+          stroke="#166534"
           strokeWidth={0.6}
           strokeLinejoin="round"
         />
@@ -44,17 +44,17 @@ export function NederlandCoverageMap() {
               cx={cx}
               cy={cy}
               r={3.2}
-              fill="#6ee7b7"
-              stroke="#047857"
+              fill="#4ade80"
+              stroke="#166534"
               strokeWidth={0.5}
               className="animate-pulse"
             />
-            <circle cx={cx} cy={cy} r={1.2} fill="#ecfdf5" className="animate-pulse" />
+            <circle cx={cx} cy={cy} r={1.2} fill="#f9fafb" className="animate-pulse" />
             <title>{name}</title>
           </g>
         ))}
       </svg>
-      <p className="mt-6 text-center text-sm font-semibold text-emerald-900 sm:text-base">
+      <p className="mt-6 text-center text-sm font-semibold text-bookadj-soft sm:text-base">
         500+ DJ&apos;s · Heel Nederland gedekt
       </p>
     </div>

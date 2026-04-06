@@ -67,25 +67,25 @@ export function DjOnboardingChecklist({
 
   return (
     <section
-      className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6 shadow-sm ring-1 ring-emerald-100"
+      className="rounded-2xl border border-line-brand/40 bg-gradient-to-br from-bookadj-subtle to-app p-6 shadow-sm ring-1 ring-line-brand/35"
       aria-labelledby="onboarding-heading"
     >
-      <h2 id="onboarding-heading" className="text-lg font-bold text-neutral-900">
+      <h2 id="onboarding-heading" className="text-lg font-bold text-ink">
         Maak je profiel compleet
       </h2>
-      <p className="mt-1 text-sm text-neutral-600">
+      <p className="mt-1 text-sm text-ink-secondary">
         Een volledig profiel trekt meer serieuze boekingen. Je staat op{" "}
-        <span className="font-semibold text-neutral-900">{steps.doneCount}/4</span>.
+        <span className="font-semibold text-ink">{steps.doneCount}/4</span>.
       </p>
-      <div className="mt-4 h-2 overflow-hidden rounded-full bg-emerald-100">
+      <div className="mt-4 h-2 overflow-hidden rounded-full bg-bookadj-subtle/70">
         <div
           className="h-full rounded-full bg-bookadj transition-all duration-500"
           style={{ width: `${pct}%` }}
         />
       </div>
-      <ul className="mt-5 space-y-2 text-sm text-neutral-800">
+      <ul className="mt-5 space-y-2 text-sm text-ink">
         <li className="flex items-start gap-2">
-          <span className="mt-0.5 text-emerald-600" aria-hidden>
+          <span className="mt-0.5 text-bookadj-soft" aria-hidden>
             ✓
           </span>
           <span>
@@ -93,7 +93,7 @@ export function DjOnboardingChecklist({
           </span>
         </li>
         <li className="flex items-start gap-2">
-          <span className="mt-0.5 w-4 text-center text-neutral-400" aria-hidden>
+          <span className="mt-0.5 w-4 text-center text-ink-muted" aria-hidden>
             {steps.s2 ? "✓" : "☐"}
           </span>
           <span>
@@ -104,7 +104,7 @@ export function DjOnboardingChecklist({
           </span>
         </li>
         <li className="flex items-start gap-2">
-          <span className="mt-0.5 w-4 text-center text-neutral-400" aria-hidden>
+          <span className="mt-0.5 w-4 text-center text-ink-muted" aria-hidden>
             {steps.s3 ? "✓" : "☐"}
           </span>
           <span>
@@ -115,7 +115,7 @@ export function DjOnboardingChecklist({
           </span>
         </li>
         <li className="flex items-start gap-2">
-          <span className="mt-0.5 w-4 text-center text-neutral-400" aria-hidden>
+          <span className="mt-0.5 w-4 text-center text-ink-muted" aria-hidden>
             {steps.s4 ? "✓" : "☐"}
           </span>
           <span>

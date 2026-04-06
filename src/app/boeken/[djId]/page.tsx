@@ -390,24 +390,24 @@ export default function BoekenPage() {
 
   if (!authReady) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white font-sans">
-        <p className="text-neutral-600">Laden…</p>
+      <div className="flex min-h-screen items-center justify-center bg-surface font-sans">
+        <p className="text-ink-secondary">Laden…</p>
       </div>
     );
   }
 
   if (profileLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white font-sans">
-        <p className="text-neutral-600">DJ-profiel laden…</p>
+      <div className="flex min-h-screen items-center justify-center bg-surface font-sans">
+        <p className="text-ink-secondary">DJ-profiel laden…</p>
       </div>
     );
   }
 
   if (profileError || !profile) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4 font-sans text-center">
-        <p className="text-neutral-800">{profileError ?? "DJ niet gevonden."}</p>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-surface px-4 font-sans text-center">
+        <p className="text-ink">{profileError ?? "DJ niet gevonden."}</p>
         <Link href="/zoeken" className="mt-4 text-sm font-semibold underline">
           Terug naar zoeken
         </Link>
@@ -416,37 +416,37 @@ export default function BoekenPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white font-sans text-neutral-900">
+    <div className="min-h-screen bg-surface font-sans text-ink">
       <Navbar />
-      <div className="border-b border-neutral-200 bg-neutral-50">
+      <div className="border-b border-line bg-surface-muted">
         <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6">
           <div className="mb-4 flex justify-end">
             <Link
               href={`/dj/${encodeURIComponent(djId)}`}
-              className="text-sm font-medium text-neutral-700 hover:text-neutral-900"
+              className="text-sm font-medium text-ink-secondary hover:text-ink"
             >
               Terug naar profiel
             </Link>
           </div>
           <ol className="flex items-center justify-between gap-2 text-xs font-semibold sm:text-sm">
             <li className="flex flex-1 flex-col items-center gap-2 sm:flex-row sm:justify-center">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-black text-white sm:h-10 sm:w-10">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-bookadj text-white sm:h-10 sm:w-10">
                 1
               </span>
-              <span className="text-center text-neutral-900 sm:text-left">
+              <span className="text-center text-ink sm:text-left">
                 Evenementdetails
               </span>
             </li>
-            <div className="hidden h-px flex-1 bg-neutral-300 sm:block" />
+            <div className="hidden h-px flex-1 bg-line/70 sm:block" />
             <li className="flex flex-1 flex-col items-center gap-2 opacity-50 sm:flex-row sm:justify-center">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-neutral-300 bg-white text-neutral-500 sm:h-10 sm:w-10">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-line bg-surface text-ink-muted sm:h-10 sm:w-10">
                 2
               </span>
               <span className="text-center sm:text-left">Betaling</span>
             </li>
-            <div className="hidden h-px flex-1 bg-neutral-300 sm:block" />
+            <div className="hidden h-px flex-1 bg-line/70 sm:block" />
             <li className="flex flex-1 flex-col items-center gap-2 opacity-50 sm:flex-row sm:justify-center">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-neutral-300 bg-white text-neutral-500 sm:h-10 sm:w-10">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-line bg-surface text-ink-muted sm:h-10 sm:w-10">
                 3
               </span>
               <span className="text-center sm:text-left">Bevestiging</span>
@@ -463,13 +463,13 @@ export default function BoekenPage() {
             onSubmit={handleSubmit}
             className="space-y-8"
           >
-            <div className="flex gap-4 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-neutral-900 text-sm font-bold text-white">
+            <div className="flex gap-4 rounded-2xl border border-line bg-surface p-5 shadow-sm">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-surface text-sm font-bold text-white">
                 {initials(djName)}
               </div>
               <div className="min-w-0">
-                <p className="text-lg font-semibold text-neutral-900">{djName}</p>
-                <p className="text-sm text-neutral-600">
+                <p className="text-lg font-semibold text-ink">{djName}</p>
+                <p className="text-sm text-ink-secondary">
                   {genres.slice(0, 3).join(" · ") || "DJ"}
                   {" · "}
                   {city}
@@ -480,12 +480,12 @@ export default function BoekenPage() {
               </div>
             </div>
 
-            <div className="rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-950 ring-1 ring-emerald-200">
+            <div className="rounded-xl bg-bookadj-subtle px-4 py-3 text-sm font-medium text-bookadj-soft ring-1 ring-line-brand/40">
               <p>
                 Geen betaling tot acceptatie — je kaart wordt pas belast wanneer de DJ je
                 aanvraag accepteert.
               </p>
-              <p className="mt-2 text-emerald-900/90">
+              <p className="mt-2 text-bookadj-soft/90">
                 Je wordt pas in rekening gebracht na acceptatie. Geen acceptatie binnen de
                 termijn? Dan betaal je niets.
               </p>
@@ -493,7 +493,7 @@ export default function BoekenPage() {
 
             {submitError ? (
               <p
-                className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"
+                className="rounded-lg border border-danger/35 bg-danger/10 px-3 py-2 text-sm text-danger"
                 role="alert"
               >
                 {submitError}
@@ -514,19 +514,19 @@ export default function BoekenPage() {
                   }}
                   label="Evenementdatum"
                   placeholder="Kies een datum"
-                  triggerClassName="flex h-[42px] w-full items-center rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-left text-sm text-neutral-900 outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                  triggerClassName="flex h-[42px] w-full items-center rounded-lg border border-line bg-surface px-3 py-2.5 text-left text-sm text-ink outline-none focus:border-line-brand focus:ring-2 focus:ring-bookadj/25"
                   popoverAlign="left"
                   blockedIsoDates={blockedIsoDates}
                 />
                 {fieldErrors.eventDate ? (
-                  <p className="mt-1.5 text-sm text-red-600" role="alert">
+                  <p className="mt-1.5 text-sm text-danger" role="alert">
                     {fieldErrors.eventDate}
                   </p>
                 ) : null}
               </div>
 
               <div>
-                <span className="text-sm font-semibold text-neutral-800">
+                <span className="text-sm font-semibold text-ink">
                   Aantal uren
                 </span>
                 <div className="mt-2 flex flex-nowrap gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -537,8 +537,8 @@ export default function BoekenPage() {
                       onClick={() => setHours(h)}
                       className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
                         hours === h
-                          ? "bg-black text-emerald-400"
-                          : "bg-neutral-100 text-neutral-800 hover:bg-neutral-200"
+                          ? "bg-bookadj-subtle text-bookadj-soft ring-1 ring-line-brand"
+                          : "bg-surface-muted/80 text-ink hover:bg-line/50"
                       }`}
                     >
                       {h} uur
@@ -560,23 +560,23 @@ export default function BoekenPage() {
                   }}
                   label="Starttijd"
                   placeholder="Kies een tijd"
-                  triggerClassName="flex h-[42px] w-full items-center rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-left text-sm text-neutral-900 outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                  triggerClassName="flex h-[42px] w-full items-center rounded-lg border border-line bg-surface px-3 py-2.5 text-left text-sm text-ink outline-none focus:border-line-brand focus:ring-2 focus:ring-bookadj/25"
                   popoverAlign="left"
                 />
                 {fieldErrors.startTime ? (
-                  <p className="mt-1.5 text-sm text-red-600" role="alert">
+                  <p className="mt-1.5 text-sm text-danger" role="alert">
                     {fieldErrors.startTime}
                   </p>
                 ) : null}
               </div>
 
               <label className="block">
-                <span className="text-sm font-semibold text-neutral-800">
+                <span className="text-sm font-semibold text-ink">
                   Locatie evenement
                 </span>
                 <div className="relative mt-2">
                   <div
-                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
+                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted"
                     aria-hidden
                   >
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -614,7 +614,7 @@ export default function BoekenPage() {
                           });
                         }}
                         placeholder="Straat en huisnummer, Stad"
-                        className="h-[42px] w-full rounded-lg border border-neutral-200 bg-white pl-10 pr-3 text-sm outline-none placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                        className="h-[42px] w-full rounded-lg border border-line bg-surface pl-10 pr-3 text-sm outline-none placeholder:text-ink-muted focus:border-line-brand focus:ring-2 focus:ring-bookadj/25"
                       />
                     </Autocomplete>
                   ) : (
@@ -622,39 +622,39 @@ export default function BoekenPage() {
                       type="text"
                       placeholder="Adres laden..."
                       disabled
-                      className="h-[42px] w-full rounded-lg border border-neutral-200 bg-white pl-10 pr-3 text-sm"
+                      className="h-[42px] w-full rounded-lg border border-line bg-surface pl-10 pr-3 text-sm"
                     />
                   )}
                 </div>
                 {travelCost > 0 ? (
-                  <div className="mt-2 rounded-lg bg-neutral-50 px-3 py-2 text-xs text-neutral-700 ring-1 ring-neutral-200">
-                    <span className="font-semibold text-neutral-900">
+                  <div className="mt-2 rounded-lg bg-surface-muted px-3 py-2 text-xs text-ink-secondary ring-1 ring-line">
+                    <span className="font-semibold text-ink">
                       Reiskosten: €{travelCost}
                     </span>{" "}
-                    <span className="text-neutral-600">
+                    <span className="text-ink-secondary">
                       (geschatte afstand: {travelDistance}km retour)
                     </span>
                   </div>
                 ) : venueAddress.trim() ? (
-                  <p className="mt-2 rounded-lg bg-neutral-100 px-3 py-2 text-xs italic text-neutral-600">
+                  <p className="mt-2 rounded-lg bg-surface-muted/80 px-3 py-2 text-xs italic text-ink-secondary">
                     Selecteer een adres uit de lijst om reiskosten te berekenen.
                   </p>
                 ) : null}
                 {fieldErrors.venueAddress ? (
-                  <p className="mt-1.5 text-sm text-red-600" role="alert">
+                  <p className="mt-1.5 text-sm text-danger" role="alert">
                     {fieldErrors.venueAddress}
                   </p>
                 ) : null}
               </label>
 
               <label className="block">
-                <span className="text-sm font-semibold text-neutral-800">
+                <span className="text-sm font-semibold text-ink">
                   Type evenement
                 </span>
                 <select
                   value={eventType}
                   onChange={(e) => setEventType(e.target.value)}
-                  className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                  className="mt-2 w-full rounded-lg border border-line px-3 py-2.5 text-sm outline-none focus:border-line-brand focus:ring-2 focus:ring-bookadj/25"
                 >
                   {EVENT_TYPES.map((t) => (
                     <option key={t} value={t}>
@@ -665,9 +665,9 @@ export default function BoekenPage() {
               </label>
 
               <label className="block">
-                <span className="text-sm font-semibold text-neutral-800">
+                <span className="text-sm font-semibold text-ink">
                   Bericht aan DJ{" "}
-                  <span className="font-normal text-neutral-500">
+                  <span className="font-normal text-ink-muted">
                     (optioneel)
                   </span>
                 </span>
@@ -676,7 +676,7 @@ export default function BoekenPage() {
                   onChange={(e) => setCustomerMessage(e.target.value)}
                   rows={4}
                   placeholder="Bijv. sfeer, verzoeknummers, planning…"
-                  className="mt-2 w-full resize-y rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                  className="mt-2 w-full resize-y rounded-lg border border-line px-3 py-2.5 text-sm outline-none placeholder:text-ink-muted focus:border-line-brand focus:ring-2 focus:ring-bookadj/25"
                 />
               </label>
             </div>
@@ -685,7 +685,7 @@ export default function BoekenPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-black py-3.5 text-sm font-bold text-white disabled:opacity-50"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-bookadj py-3.5 text-sm font-bold text-white hover:bg-bookadj-hover disabled:opacity-50"
               >
                 {submitting ? (
                   <>
@@ -704,15 +704,15 @@ export default function BoekenPage() {
         </div>
 
         <aside className="lg:sticky lg:top-6 lg:self-start">
-          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-bold text-neutral-900">Samenvatting</h2>
+          <div className="rounded-2xl border border-line bg-surface p-6 shadow-sm">
+            <h2 className="text-lg font-bold text-ink">Samenvatting</h2>
 
-            <div className="mt-4 rounded-xl bg-neutral-50 p-4 text-sm">
-              <p className="font-semibold text-neutral-900">{djName}</p>
-              <ul className="mt-2 space-y-1 text-neutral-600">
+            <div className="mt-4 rounded-xl bg-surface-muted p-4 text-sm">
+              <p className="font-semibold text-ink">{djName}</p>
+              <ul className="mt-2 space-y-1 text-ink-secondary">
                 <li>
                   Datum:{" "}
-                  <span className="font-medium text-neutral-800">
+                  <span className="font-medium text-ink">
                     {eventDate
                       ? new Date(eventDate + "T12:00:00").toLocaleDateString(
                           "nl-NL",
@@ -728,36 +728,36 @@ export default function BoekenPage() {
                 </li>
                 <li>
                   Start:{" "}
-                  <span className="font-medium text-neutral-800">
+                  <span className="font-medium text-ink">
                     {startTime || "—"}
                   </span>
                 </li>
                 <li>
                   Duur:{" "}
-                  <span className="font-medium text-neutral-800">
+                  <span className="font-medium text-ink">
                     {hours} uur
                   </span>
                 </li>
                 <li>
                   Locatie:{" "}
-                  <span className="font-medium text-neutral-800">
+                  <span className="font-medium text-ink">
                     {venueAddress.trim() || "—"}
                   </span>
                 </li>
                 <li>
                   Type:{" "}
-                  <span className="font-medium text-neutral-800">
+                  <span className="font-medium text-ink">
                     {eventType}
                   </span>
                 </li>
               </ul>
             </div>
 
-            <div className="mt-5 space-y-2 border-t border-neutral-100 pt-5 text-sm">
-              <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+            <div className="mt-5 space-y-2 border-t border-line/60 pt-5 text-sm">
+              <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
                 Prijsopbouw (indicatie)
               </p>
-              <div className="flex justify-between text-neutral-700">
+              <div className="flex justify-between text-ink-secondary">
                 <span>
                   Uurtarief × uren ({hours} × €{hourlyRate.toLocaleString("nl-NL")})
                 </span>
@@ -765,7 +765,7 @@ export default function BoekenPage() {
                   €{djCostEuro.toLocaleString("nl-NL")}
                 </span>
               </div>
-              <div className="flex justify-between text-neutral-700">
+              <div className="flex justify-between text-ink-secondary">
                 <span>Reiskosten (indicatie)</span>
                 <span className="font-medium">
                   {travelCost > 0
@@ -773,11 +773,11 @@ export default function BoekenPage() {
                     : "€0"}
                 </span>
               </div>
-              <div className="flex justify-between border-t border-neutral-200 pt-2 text-base font-bold text-neutral-900">
+              <div className="flex justify-between border-t border-line pt-2 text-base font-bold text-ink">
                 <span>Totaal (indicatie)</span>
                 <span>€{estimatedTotalEuro.toLocaleString("nl-NL")}</span>
               </div>
-              <p className="text-xs text-neutral-500">
+              <p className="text-xs text-ink-muted">
                 Het uurtarief wordt vastgelegd bij je aanvraag. Reiskosten kunnen door de DJ worden
                 bevestigd.
               </p>
@@ -787,7 +787,7 @@ export default function BoekenPage() {
               type="submit"
               form="boeking-form"
               disabled={submitting}
-              className="mt-6 hidden w-full items-center justify-center gap-2 rounded-xl bg-black py-3.5 text-sm font-bold text-white hover:bg-neutral-900 disabled:opacity-50 lg:flex"
+              className="mt-6 hidden w-full items-center justify-center gap-2 rounded-xl bg-bookadj py-3.5 text-sm font-bold text-white hover:bg-bookadj-hover disabled:opacity-50 lg:flex"
             >
               {submitting ? (
                 <>
@@ -802,8 +802,8 @@ export default function BoekenPage() {
               )}
             </button>
 
-            <p className="mt-4 flex items-center justify-center gap-2 text-xs text-neutral-500">
-              <Lock className="h-3.5 w-3.5 shrink-0 text-neutral-400" aria-hidden />
+            <p className="mt-4 flex items-center justify-center gap-2 text-xs text-ink-muted">
+              <Lock className="h-3.5 w-3.5 shrink-0 text-ink-muted" aria-hidden />
               Beveiligd via Stripe
             </p>
           </div>

@@ -36,12 +36,12 @@ function typeBadge(type: QueueType) {
     case "dj_verification":
       return {
         label: "DJ-verificatie",
-        className: "bg-amber-500/15 text-amber-800 ring-amber-500/30",
+        className: "bg-amber-500/15 text-amber-800 ring-caution/35",
       };
     case "dispute":
       return {
         label: "Geschil",
-        className: "bg-red-500/15 text-red-800 ring-red-500/30",
+        className: "bg-red-500/15 text-danger ring-red-500/30",
       };
     case "booking":
       return {
@@ -51,7 +51,7 @@ function typeBadge(type: QueueType) {
     default:
       return {
         label: type,
-        className: "bg-neutral-100 text-neutral-700 ring-neutral-200",
+        className: "bg-surface-muted/80 text-ink-secondary ring-line",
       };
   }
 }
@@ -229,24 +229,24 @@ export default function AdminDashboardPage() {
 
   if (loading) {
     return (
-      <div className="py-12 text-center text-neutral-600">Dashboard laden…</div>
+      <div className="py-12 text-center text-ink-secondary">Dashboard laden…</div>
     );
   }
 
   return (
     <div className="space-y-10">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
           Dashboard
         </h1>
-        <p className="mt-1 text-sm text-neutral-600">
+        <p className="mt-1 text-sm text-ink-secondary">
           Overzicht en prioriteiten voor vandaag.
         </p>
       </div>
 
       {loadError ? (
         <p
-          className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"
+          className="rounded-lg border border-danger/35 bg-danger/10 px-3 py-2 text-sm text-danger"
           role="alert"
         >
           {loadError}
@@ -254,35 +254,35 @@ export default function AdminDashboardPage() {
       ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
-          <p className="text-sm font-medium text-neutral-500">
+        <div className="rounded-2xl border border-line bg-surface p-5 shadow-sm">
+          <p className="text-sm font-medium text-ink-muted">
             Open geschillen
           </p>
-          <p className="mt-2 text-3xl font-bold tabular-nums text-neutral-900">
+          <p className="mt-2 text-3xl font-bold tabular-nums text-ink">
             {openDisputes}
           </p>
         </div>
-        <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
-          <p className="text-sm font-medium text-neutral-500">
+        <div className="rounded-2xl border border-line bg-surface p-5 shadow-sm">
+          <p className="text-sm font-medium text-ink-muted">
             DJ-verificaties in behandeling
           </p>
-          <p className="mt-2 text-3xl font-bold tabular-nums text-neutral-900">
+          <p className="mt-2 text-3xl font-bold tabular-nums text-ink">
             {pendingVerifications}
           </p>
         </div>
-        <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
-          <p className="text-sm font-medium text-neutral-500">
+        <div className="rounded-2xl border border-line bg-surface p-5 shadow-sm">
+          <p className="text-sm font-medium text-ink-muted">
             Actieve boekingen
           </p>
-          <p className="mt-2 text-3xl font-bold tabular-nums text-neutral-900">
+          <p className="mt-2 text-3xl font-bold tabular-nums text-ink">
             {activeBookings}
           </p>
         </div>
-        <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
-          <p className="text-sm font-medium text-neutral-500">
+        <div className="rounded-2xl border border-line bg-surface p-5 shadow-sm">
+          <p className="text-sm font-medium text-ink-muted">
             Omzet deze maand (platformfee)
           </p>
-          <p className="mt-2 text-3xl font-bold tabular-nums text-neutral-900">
+          <p className="mt-2 text-3xl font-bold tabular-nums text-ink">
             €
             {revenueEuro.toLocaleString("nl-NL", {
               minimumFractionDigits: Number.isInteger(revenueEuro) ? 0 : 2,
@@ -295,44 +295,44 @@ export default function AdminDashboardPage() {
       <section aria-labelledby="priority-heading">
         <h2
           id="priority-heading"
-          className="text-lg font-bold text-neutral-900"
+          className="text-lg font-bold text-ink"
         >
           Prioriteitenwachtrij
         </h2>
-        <p className="mt-1 text-sm text-neutral-600">
+        <p className="mt-1 text-sm text-ink-secondary">
           Openstaande verificaties, geschillen en langlopende aanvragen.
         </p>
 
         {queue.length === 0 ? (
-          <p className="mt-6 rounded-xl border border-dashed border-neutral-200 bg-neutral-50 px-6 py-10 text-center text-sm text-neutral-600">
+          <p className="mt-6 rounded-xl border border-dashed border-line bg-surface-muted px-6 py-10 text-center text-sm text-ink-secondary">
             Geen urgente items in de wachtrij.
           </p>
         ) : (
           <>
-            <div className="mt-6 hidden overflow-hidden rounded-2xl border border-neutral-200 shadow-sm md:block">
+            <div className="mt-6 hidden overflow-hidden rounded-2xl border border-line shadow-sm md:block">
               <table className="w-full text-left text-sm">
-                <thead className="border-b border-neutral-200 bg-neutral-50">
+                <thead className="border-b border-line bg-surface-muted">
                   <tr>
-                    <th className="px-4 py-3 font-semibold text-neutral-700">
+                    <th className="px-4 py-3 font-semibold text-ink-secondary">
                       Omschrijving
                     </th>
-                    <th className="px-4 py-3 font-semibold text-neutral-700">
+                    <th className="px-4 py-3 font-semibold text-ink-secondary">
                       Type
                     </th>
-                    <th className="px-4 py-3 font-semibold text-neutral-700">
+                    <th className="px-4 py-3 font-semibold text-ink-secondary">
                       Leeftijd
                     </th>
-                    <th className="px-4 py-3 font-semibold text-neutral-700">
+                    <th className="px-4 py-3 font-semibold text-ink-secondary">
                       Actie
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-100 bg-white">
+                <tbody className="divide-y divide-line/60 bg-surface">
                   {queue.map((row) => {
                     const badge = typeBadge(row.type);
                     return (
                       <tr key={row.id}>
-                        <td className="px-4 py-3 font-medium text-neutral-900">
+                        <td className="px-4 py-3 font-medium text-ink">
                           {row.description}
                         </td>
                         <td className="px-4 py-3">
@@ -342,13 +342,13 @@ export default function AdminDashboardPage() {
                             {badge.label}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-neutral-600">
+                        <td className="px-4 py-3 text-ink-secondary">
                           {ageLabel(row.createdAt)}
                         </td>
                         <td className="px-4 py-3">
                           <Link
                             href={row.actionHref}
-                            className="inline-flex rounded-lg bg-black px-3 py-1.5 text-xs font-semibold text-white hover:bg-neutral-800"
+                            className="inline-flex rounded-lg bg-line px-3 py-1.5 text-xs font-semibold text-white hover:bg-line/80"
                           >
                             {row.actionLabel}
                           </Link>
@@ -366,9 +366,9 @@ export default function AdminDashboardPage() {
                 return (
                   <li
                     key={row.id}
-                    className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm"
+                    className="rounded-2xl border border-line bg-surface p-4 shadow-sm"
                   >
-                    <p className="font-medium text-neutral-900">
+                    <p className="font-medium text-ink">
                       {row.description}
                     </p>
                     <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -377,13 +377,13 @@ export default function AdminDashboardPage() {
                       >
                         {badge.label}
                       </span>
-                      <span className="text-xs text-neutral-500">
+                      <span className="text-xs text-ink-muted">
                         {ageLabel(row.createdAt)}
                       </span>
                     </div>
                     <Link
                       href={row.actionHref}
-                      className="mt-3 inline-flex rounded-lg bg-black px-3 py-2 text-xs font-semibold text-white hover:bg-neutral-800"
+                      className="mt-3 inline-flex rounded-lg bg-line px-3 py-2 text-xs font-semibold text-white hover:bg-line/80"
                     >
                       {row.actionLabel}
                     </Link>

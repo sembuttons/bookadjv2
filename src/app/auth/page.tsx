@@ -176,19 +176,19 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-surface">
       <Navbar />
 
       <main className="mx-auto max-w-md px-4 py-12 sm:px-6 lg:px-8">
-        <h1 className="text-center text-2xl font-bold tracking-tight text-neutral-900">
+        <h1 className="text-center text-2xl font-bold tracking-tight text-ink">
           Welkom bij bookadj
         </h1>
-        <p className="mt-2 text-center text-sm text-neutral-600">
+        <p className="mt-2 text-center text-sm text-ink-secondary">
           Log in of maak een account aan.
         </p>
 
         <div
-          className="mt-8 flex rounded-lg border border-neutral-200 bg-neutral-50 p-1"
+          className="mt-8 flex rounded-lg border border-line bg-surface-muted p-1"
           role="tablist"
           aria-label="Inloggen of aanmelden"
         >
@@ -205,8 +205,8 @@ export default function AuthPage() {
             }}
             className={`flex-1 rounded-md py-2.5 text-sm font-semibold transition-colors ${
               tab === "login"
-                ? "bg-white text-neutral-900 shadow-sm"
-                : "text-neutral-600 hover:text-neutral-900"
+                ? "bg-surface text-ink shadow-sm"
+                : "text-ink-secondary hover:text-ink"
             }`}
           >
             Inloggen
@@ -223,8 +223,8 @@ export default function AuthPage() {
             }}
             className={`flex-1 rounded-md py-2.5 text-sm font-semibold transition-colors ${
               tab === "signup"
-                ? "bg-white text-neutral-900 shadow-sm"
-                : "text-neutral-600 hover:text-neutral-900"
+                ? "bg-surface text-ink shadow-sm"
+                : "text-ink-secondary hover:text-ink"
             }`}
           >
             Aanmelden
@@ -233,7 +233,7 @@ export default function AuthPage() {
 
         {error ? (
           <p
-            className="mt-6 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"
+            className="mt-6 rounded-lg border border-danger/35 bg-danger/10 px-3 py-2 text-sm text-danger"
             role="alert"
           >
             {error}
@@ -241,7 +241,7 @@ export default function AuthPage() {
         ) : null}
         {resetMessage ? (
           <p
-            className="mt-6 rounded-lg border border-bookadj/25 bg-bookadj/10 px-3 py-2 text-sm text-neutral-800"
+            className="mt-6 rounded-lg border border-bookadj/25 bg-bookadj/10 px-3 py-2 text-sm text-ink"
             role="status"
           >
             {resetMessage}
@@ -257,7 +257,7 @@ export default function AuthPage() {
             <div>
               <label
                 htmlFor="login-email"
-                className="block text-sm font-medium text-neutral-700"
+                className="block text-sm font-medium text-ink-secondary"
               >
                 E-mailadres
               </label>
@@ -279,7 +279,7 @@ export default function AuthPage() {
                 placeholder="naam@voorbeeld.nl"
               />
               {fieldErrors.loginEmail ? (
-                <p className="mt-1.5 text-sm text-red-600" role="alert">
+                <p className="mt-1.5 text-sm text-danger" role="alert">
                   {fieldErrors.loginEmail}
                 </p>
               ) : null}
@@ -287,7 +287,7 @@ export default function AuthPage() {
             <div>
               <label
                 htmlFor="login-password"
-                className="block text-sm font-medium text-neutral-700"
+                className="block text-sm font-medium text-ink-secondary"
               >
                 Wachtwoord
               </label>
@@ -309,7 +309,7 @@ export default function AuthPage() {
                 placeholder="••••••••"
               />
               {fieldErrors.loginPassword ? (
-                <p className="mt-1.5 text-sm text-red-600" role="alert">
+                <p className="mt-1.5 text-sm text-danger" role="alert">
                   {fieldErrors.loginPassword}
                 </p>
               ) : null}
@@ -326,7 +326,7 @@ export default function AuthPage() {
                 type="button"
                 onClick={handleForgotPassword}
                 disabled={loading}
-                className="text-sm font-medium text-neutral-600 underline-offset-2 hover:text-neutral-900 hover:underline disabled:opacity-60"
+                className="text-sm font-medium text-ink-secondary underline-offset-2 hover:text-ink hover:underline disabled:opacity-60"
               >
                 Wachtwoord vergeten?
               </button>
@@ -337,10 +337,10 @@ export default function AuthPage() {
             className="mt-8 rounded-2xl border border-bookadj/25 bg-bookadj/10 px-6 py-8 text-center"
             role="status"
           >
-            <p className="text-lg font-semibold text-neutral-900">
+            <p className="text-lg font-semibold text-ink">
               Check je e-mail
             </p>
-            <p className="mt-2 text-sm text-neutral-700">
+            <p className="mt-2 text-sm text-ink-secondary">
               We hebben je een bevestigingslink gestuurd. Open je inbox om je
               account te activeren.
             </p>
@@ -367,7 +367,7 @@ export default function AuthPage() {
             <div>
               <label
                 htmlFor="full-name"
-                className="block text-sm font-medium text-neutral-700"
+                className="block text-sm font-medium text-ink-secondary"
               >
                 Volledige naam
               </label>
@@ -389,7 +389,7 @@ export default function AuthPage() {
                 placeholder="Jan Jansen"
               />
               {fieldErrors.signupName ? (
-                <p className="mt-1.5 text-sm text-red-600" role="alert">
+                <p className="mt-1.5 text-sm text-danger" role="alert">
                   {fieldErrors.signupName}
                 </p>
               ) : null}
@@ -397,7 +397,7 @@ export default function AuthPage() {
             <div>
               <label
                 htmlFor="signup-email"
-                className="block text-sm font-medium text-neutral-700"
+                className="block text-sm font-medium text-ink-secondary"
               >
                 E-mailadres
               </label>
@@ -419,7 +419,7 @@ export default function AuthPage() {
                 placeholder="naam@voorbeeld.nl"
               />
               {fieldErrors.signupEmail ? (
-                <p className="mt-1.5 text-sm text-red-600" role="alert">
+                <p className="mt-1.5 text-sm text-danger" role="alert">
                   {fieldErrors.signupEmail}
                 </p>
               ) : null}
@@ -427,7 +427,7 @@ export default function AuthPage() {
             <div>
               <label
                 htmlFor="signup-password"
-                className="block text-sm font-medium text-neutral-700"
+                className="block text-sm font-medium text-ink-secondary"
               >
                 Wachtwoord
               </label>
@@ -449,7 +449,7 @@ export default function AuthPage() {
                 placeholder="Minimaal 6 tekens"
               />
               {fieldErrors.signupPassword ? (
-                <p className="mt-1.5 text-sm text-red-600" role="alert">
+                <p className="mt-1.5 text-sm text-danger" role="alert">
                   {fieldErrors.signupPassword}
                 </p>
               ) : null}
@@ -457,7 +457,7 @@ export default function AuthPage() {
             <div>
               <span
                 id="role-label"
-                className="block text-sm font-medium text-neutral-700"
+                className="block text-sm font-medium text-ink-secondary"
               >
                 Ik ben een
               </span>
@@ -466,7 +466,7 @@ export default function AuthPage() {
                 role="group"
                 aria-labelledby="role-label"
               >
-                <label className="flex cursor-pointer items-center justify-center rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm font-medium has-[:checked]:border-bookadj has-[:checked]:bg-bookadj/5">
+                <label className="flex cursor-pointer items-center justify-center rounded-lg border border-line bg-surface px-3 py-2.5 text-sm font-medium has-[:checked]:border-bookadj has-[:checked]:bg-bookadj/5">
                   <input
                     type="radio"
                     name="role"
@@ -477,7 +477,7 @@ export default function AuthPage() {
                   />
                   Klant
                 </label>
-                <label className="flex cursor-pointer items-center justify-center rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm font-medium has-[:checked]:border-bookadj has-[:checked]:bg-bookadj/5">
+                <label className="flex cursor-pointer items-center justify-center rounded-lg border border-line bg-surface px-3 py-2.5 text-sm font-medium has-[:checked]:border-bookadj has-[:checked]:bg-bookadj/5">
                   <input
                     type="radio"
                     name="role"

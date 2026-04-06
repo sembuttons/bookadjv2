@@ -10,41 +10,41 @@ export const metadata = {
 export default function GeschillenPage() {
   return (
     <MarketingPageShell maxWidth="prose">
-      <p className="text-sm font-semibold uppercase tracking-wide text-emerald-600">
+      <p className="text-sm font-semibold uppercase tracking-wide text-bookadj-soft">
         Support
       </p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
+      <h1 className="mt-2 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
         Hulp bij problemen
       </h1>
-      <p className="mt-4 text-lg text-neutral-700">
+      <p className="mt-4 text-lg text-ink-secondary">
         Soms lopen afspraken scheef — tussen klant en DJ of door
         miscommunicatie. bookadj is er om eerlijk mee te kijken en tot een
         oplossing te komen binnen het platform.
       </p>
 
-      <section className="mt-12 space-y-6 text-neutral-600">
-        <h2 className="text-xl font-bold text-neutral-900">
+      <section className="mt-12 space-y-6 text-ink-secondary">
+        <h2 className="text-xl font-bold text-ink">
           Stappenplan
         </h2>
 
-        <div className="rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
-          <p className="text-sm font-bold text-emerald-600">Stap 1</p>
-          <h3 className="mt-1 font-semibold text-neutral-900">
+        <div className="rounded-xl border border-line bg-surface p-5 shadow-sm">
+          <p className="text-sm font-bold text-bookadj-soft">Stap 1</p>
+          <h3 className="mt-1 font-semibold text-ink">
             Neem contact op
           </h3>
           <p className="mt-2 text-sm">
             Probeer eerst via de berichten op bookadj tot elkaar te komen. Blijft
             het spanning? Stuur ons een duidelijke melding via het{" "}
-            <Link href="/contact" className="font-semibold text-neutral-900 underline">
+            <Link href="/contact" className="font-semibold text-ink underline">
               contactformulier
             </Link>{" "}
             met je boekingsreferentie en een korte tijdlijn van wat er gebeurd is.
           </p>
         </div>
 
-        <div className="rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
-          <p className="text-sm font-bold text-emerald-600">Stap 2</p>
-          <h3 className="mt-1 font-semibold text-neutral-900">
+        <div className="rounded-xl border border-line bg-surface p-5 shadow-sm">
+          <p className="text-sm font-bold text-bookadj-soft">Stap 2</p>
+          <h3 className="mt-1 font-semibold text-ink">
             bookadj bekijkt het dossier
           </h3>
           <p className="mt-2 text-sm">
@@ -54,9 +54,9 @@ export default function GeschillenPage() {
           </p>
         </div>
 
-        <div className="rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
-          <p className="text-sm font-bold text-emerald-600">Stap 3</p>
-          <h3 className="mt-1 font-semibold text-neutral-900">
+        <div className="rounded-xl border border-line bg-surface p-5 shadow-sm">
+          <p className="text-sm font-bold text-bookadj-soft">Stap 3</p>
+          <h3 className="mt-1 font-semibold text-ink">
             Oplossing binnen 48 uur
           </h3>
           <p className="mt-2 text-sm">
@@ -68,7 +68,7 @@ export default function GeschillenPage() {
         </div>
       </section>
 
-      <p className="mt-10 text-sm text-neutral-500">
+      <p className="mt-10 text-sm text-ink-muted">
         Juridische kaders: zie ook{" "}
         <Link href="/algemene-voorwaarden" className="underline">
           Algemene voorwaarden

@@ -5,7 +5,7 @@ export default function BerichtenPage() {
   return (
     <Suspense
       fallback={
-        <div className="py-16 text-center text-neutral-600">Laden…</div>
+        <div className="py-16 text-center text-ink-secondary">Laden…</div>
       }
     >
       <BerichtenClient />

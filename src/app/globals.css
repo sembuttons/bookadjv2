@@ -1,26 +1,52 @@
 @import "tailwindcss";
+@config "../../tailwind.config.ts";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --bookadj: #059669;
-  --bookadj-hover: #047857;
+  --background: #0a0a0a;
+  --foreground: #f9fafb;
+  --bookadj: #22c55e;
+  --bookadj-hover: #16a34a;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --color-bookadj: #059669;
-  --color-bookadj-hover: #047857;
 }
 
 @layer components {
-  /* 44px height, 8px radius, brand focus ring — use on inputs, selects, textareas */
+  /* Legal / long-form copy on dark (no @tailwindcss/typography) */
+  .prose-bookadj {
+    @apply text-ink-secondary;
+  }
+  .prose-bookadj :where(h1, h2, h3) {
+    @apply font-bold tracking-tight text-ink;
+  }
+  .prose-bookadj h1 {
+    @apply text-3xl sm:text-4xl;
+  }
+  .prose-bookadj h2 {
+    @apply mt-10 text-xl text-ink;
+  }
+  .prose-bookadj h3 {
+    @apply mt-6 text-lg text-ink;
+  }
+  .prose-bookadj :where(p, ul, ol) {
+    @apply mt-4 leading-relaxed;
+  }
+  .prose-bookadj :where(ul, ol) {
+    @apply list-inside list-disc space-y-2;
+  }
+  .prose-bookadj a {
+    @apply font-medium text-bookadj underline decoration-bookadj/40 underline-offset-2 transition-colors hover:text-bookadj-soft;
+  }
+  .prose-bookadj strong {
+    @apply font-semibold text-ink;
+  }
+
+  /* 44px height, 8px radius, brand focus ring */
   .input-field {
-    @apply h-11 min-h-[44px] w-full rounded-lg border border-neutral-200 bg-white px-3 text-sm text-neutral-900 outline-none transition-[box-shadow,border-color] duration-200;
-    @apply placeholder:text-neutral-400;
-    @apply focus:border-bookadj/50 focus:ring-2 focus:ring-bookadj/25 focus:ring-offset-0;
+    @apply h-11 min-h-[44px] w-full rounded-lg border border-line bg-surface px-3 text-sm text-ink outline-none transition-[box-shadow,border-color] duration-200;
+    @apply placeholder:text-ink-muted;
+    @apply focus:border-line-brand focus:ring-2 focus:ring-bookadj/30 focus:ring-offset-0;
   }
 
   select.input-field {
@@ -32,8 +58,8 @@
   }
 
   .card-interactive {
-    @apply rounded-2xl border border-neutral-200 bg-white shadow-sm transition-all duration-200 ease-out;
-    @apply hover:shadow-md;
+    @apply rounded-2xl border border-line bg-surface shadow-sm transition-all duration-200 ease-out;
+    @apply hover:border-line-brand/60 hover:shadow-md hover:shadow-black/20;
   }
 }
 

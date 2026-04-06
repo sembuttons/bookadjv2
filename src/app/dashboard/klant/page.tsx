@@ -138,7 +138,7 @@ function statusBadge(statusNorm: string) {
     case "pending":
       return {
         className:
-          "bg-amber-100 text-amber-950 ring-amber-500/30",
+          "bg-caution/15 text-caution ring-caution/35",
         label: "Wacht op reactie",
       };
     case "confirmed":
@@ -150,17 +150,17 @@ function statusBadge(statusNorm: string) {
     case "completed":
       return {
         className:
-          "bg-neutral-200 text-neutral-700 ring-neutral-500/15",
+          "bg-line/50 text-ink-secondary ring-line/40",
         label: "Afgerond",
       };
     case "cancelled":
       return {
-        className: "bg-red-100 text-red-800 ring-red-600/20",
+        className: "bg-red-100 text-danger ring-red-600/20",
         label: "Geannuleerd",
       };
     default:
       return {
-        className: "bg-neutral-100 text-neutral-700 ring-neutral-500/20",
+        className: "bg-surface-muted/80 text-ink-secondary ring-line/50",
         label: statusNorm || "Onbekend",
       };
   }
@@ -292,9 +292,9 @@ export default function KlantDashboardPage() {
 
   if (loading) {
     return (
-      <div className="bg-white">
-        <div className="h-8 w-48 animate-pulse rounded-lg bg-neutral-200" />
-        <div className="mt-2 h-4 w-72 max-w-full animate-pulse rounded bg-neutral-200" />
+      <div className="bg-surface">
+        <div className="h-8 w-48 animate-pulse rounded-lg bg-line/50" />
+        <div className="mt-2 h-4 w-72 max-w-full animate-pulse rounded bg-line/50" />
         <div className="mt-10">
           <DashboardBookingsSkeleton rows={4} />
         </div>
@@ -303,17 +303,17 @@ export default function KlantDashboardPage() {
   }
 
   return (
-    <div className="bg-white">
-      <h1 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
+    <div className="bg-surface">
+      <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
         Mijn boekingen
       </h1>
-      <p className="mt-1 text-sm text-neutral-600">
+      <p className="mt-1 text-sm text-ink-secondary">
         Overzicht van je aanvragen en bevestigde optredens.
       </p>
 
       {loadError ? (
         <p
-          className="mt-6 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"
+          className="mt-6 rounded-lg border border-danger/35 bg-danger/10 px-3 py-2 text-sm text-danger"
           role="alert"
         >
           {loadError}
@@ -322,11 +322,11 @@ export default function KlantDashboardPage() {
 
       {upcomingBannerBooking ? (
         <section
-          className="mt-8 overflow-hidden rounded-2xl bg-neutral-950 text-white ring-1 ring-bookadj/40"
+          className="mt-8 overflow-hidden rounded-2xl bg-app text-white ring-1 ring-bookadj/40"
           aria-label="Aankomend evenement"
         >
           <div className="border-b border-bookadj/30 bg-bookadj/15 px-5 py-3">
-            <p className="text-xs font-semibold uppercase tracking-wider text-emerald-200">
+            <p className="text-xs font-semibold uppercase tracking-wider text-bookadj-soft">
               Aankomend evenement
             </p>
           </div>
@@ -340,15 +340,15 @@ export default function KlantDashboardPage() {
                   },
                 )}
               </p>
-              <ul className="grid gap-2 text-sm text-neutral-300 sm:grid-cols-2">
+              <ul className="grid gap-2 text-sm text-ink-secondary sm:grid-cols-2">
                 <li>
-                  <span className="text-neutral-500">Datum</span>{" "}
+                  <span className="text-ink-muted">Datum</span>{" "}
                   <span className="font-medium text-white">
                     {formatEventDate(upcomingBannerBooking.event_date)}
                   </span>
                 </li>
                 <li>
-                  <span className="text-neutral-500">Tijd</span>{" "}
+                  <span className="text-ink-muted">Tijd</span>{" "}
                   <span className="font-medium text-white">
                     {typeof upcomingBannerBooking.start_time === "string" &&
                     upcomingBannerBooking.start_time.trim()
@@ -357,7 +357,7 @@ export default function KlantDashboardPage() {
                   </span>
                 </li>
                 <li className="sm:col-span-2">
-                  <span className="text-neutral-500">Locatie</span>{" "}
+                  <span className="text-ink-muted">Locatie</span>{" "}
                   <span className="font-medium text-white">
                     {venueLine(upcomingBannerBooking)}
                   </span>
@@ -365,7 +365,7 @@ export default function KlantDashboardPage() {
               </ul>
               {typeof upcomingBannerBooking.event_date === "string" &&
               upcomingBannerBooking.event_date ? (
-                <p className="inline-flex items-center rounded-full bg-bookadj/20 px-3 py-1 text-sm font-semibold text-emerald-200 ring-1 ring-bookadj/40">
+                <p className="inline-flex items-center rounded-full bg-bookadj/20 px-3 py-1 text-sm font-semibold text-bookadj-soft ring-1 ring-bookadj/40">
                   {(() => {
                     const days = calendarDaysUntilEvent(
                       upcomingBannerBooking.event_date,
@@ -387,7 +387,7 @@ export default function KlantDashboardPage() {
               </Link>
               <Link
                 href={`/bevestiging/${encodeURIComponent(upcomingBannerBooking.id)}`}
-                className="rounded-lg border border-white/20 bg-white/5 px-5 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-white/10"
+                className="rounded-lg border border-white/20 bg-surface/5 px-5 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-surface/10"
               >
                 Details
               </Link>
@@ -411,7 +411,7 @@ export default function KlantDashboardPage() {
             className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
               filter === tab.id
                 ? "bg-bookadj text-white shadow-sm"
-                : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
+                : "bg-surface-muted/80 text-ink-secondary hover:bg-line/50"
             }`}
           >
             {tab.label}
@@ -461,14 +461,14 @@ export default function KlantDashboardPage() {
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex gap-4">
                       <div
-                        className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-neutral-900 text-sm font-bold text-white"
+                        className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-surface text-sm font-bold text-white"
                         aria-hidden
                       >
                         {initialsFromStage(stageName)}
                       </div>
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <h2 className="text-lg font-semibold text-neutral-900">
+                          <h2 className="text-lg font-semibold text-ink">
                             {stageName}
                           </h2>
                           <span
@@ -479,20 +479,20 @@ export default function KlantDashboardPage() {
                         </div>
                         <dl className="mt-3 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
                           <div>
-                            <dt className="text-neutral-500">Datum & tijd</dt>
-                            <dd className="font-medium text-neutral-900">
+                            <dt className="text-ink-muted">Datum & tijd</dt>
+                            <dd className="font-medium text-ink">
                               {formatEventDate(booking.event_date)} · {start}
                             </dd>
                           </div>
                           <div>
-                            <dt className="text-neutral-500">Locatie</dt>
-                            <dd className="font-medium text-neutral-900">
+                            <dt className="text-ink-muted">Locatie</dt>
+                            <dd className="font-medium text-ink">
                               {venueLine(booking)}
                             </dd>
                           </div>
                           <div>
-                            <dt className="text-neutral-500">Soort evenement</dt>
-                            <dd className="font-medium text-neutral-900">
+                            <dt className="text-ink-muted">Soort evenement</dt>
+                            <dd className="font-medium text-ink">
                               {typeof booking.event_type === "string" &&
                               booking.event_type.trim()
                                 ? booking.event_type.trim()
@@ -500,23 +500,23 @@ export default function KlantDashboardPage() {
                             </dd>
                           </div>
                           <div>
-                            <dt className="text-neutral-500">Duur</dt>
-                            <dd className="font-medium text-neutral-900">
+                            <dt className="text-ink-muted">Duur</dt>
+                            <dd className="font-medium text-ink">
                               {hoursValue(booking)} uur
                             </dd>
                           </div>
                         </dl>
                       </div>
                     </div>
-                    <div className="flex flex-col items-stretch gap-3 border-t border-neutral-100 pt-4 sm:w-52 sm:shrink-0 sm:border-l sm:border-t-0 sm:pl-6 sm:pt-0">
-                      <p className="text-sm text-neutral-500">Totaal</p>
-                      <p className="text-xl font-bold text-neutral-900">
+                    <div className="flex flex-col items-stretch gap-3 border-t border-line/60 pt-4 sm:w-52 sm:shrink-0 sm:border-l sm:border-t-0 sm:pl-6 sm:pt-0">
+                      <p className="text-sm text-ink-muted">Totaal</p>
+                      <p className="text-xl font-bold text-ink">
                         {formatEuroFromCents(booking.total_amount)}
                       </p>
                       <div className="flex flex-wrap gap-2">
                         <Link
                           href={`/bevestiging/${encodeURIComponent(booking.id)}`}
-                          className="rounded-lg border border-neutral-300 bg-white px-3 py-2 text-center text-sm font-medium text-neutral-800 hover:bg-neutral-50"
+                          className="rounded-lg border border-line bg-surface px-3 py-2 text-center text-sm font-medium text-ink hover:bg-surface-muted"
                         >
                           Details
                         </Link>
@@ -525,7 +525,7 @@ export default function KlantDashboardPage() {
                             type="button"
                             disabled={busy}
                             onClick={() => void handleCancel(booking.id)}
-                            className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-800 hover:bg-red-100 disabled:opacity-50"
+                            className="rounded-lg border border-danger/35 bg-danger/10 px-3 py-2 text-sm font-medium text-danger hover:bg-danger/20 disabled:opacity-50"
                           >
                             {busy ? "Bezig…" : "Annuleren"}
                           </button>
@@ -533,7 +533,7 @@ export default function KlantDashboardPage() {
                         {st === "completed" ? (
                           <Link
                             href={`/dashboard/klant/reviews?booking=${encodeURIComponent(booking.id)}`}
-                            className="rounded-lg bg-black px-3 py-2 text-center text-sm font-medium text-white hover:bg-neutral-800"
+                            className="rounded-lg bg-line px-3 py-2 text-center text-sm font-medium text-white hover:bg-line/80"
                           >
                             Review schrijven
                           </Link>

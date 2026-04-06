@@ -28,7 +28,7 @@ export default async function BerichtenThreadPage({ params }: PageProps) {
   return (
     <Suspense
       fallback={
-        <div className="py-16 text-center text-neutral-600">Laden…</div>
+        <div className="py-16 text-center text-ink-secondary">Laden…</div>
       }
     >
       <BerichtenClient initialPartnerId={decoded} threadOnly />

@@ -6,14 +6,14 @@ const SIDE_IMG =
 export default function KlantProfielPage() {
   return (
     <>
-      <h1 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
+      <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
         Profiel
       </h1>
-      <p className="mt-1 text-sm text-neutral-600">
+      <p className="mt-1 text-sm text-ink-secondary">
         Beheer je gegevens en voorkeuren — deze pagina wordt binnenkort
         uitgebreid.
       </p>
-      <div className="mt-8 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-900 shadow-sm">
+      <div className="mt-8 overflow-hidden rounded-2xl border border-line bg-surface shadow-sm">
         <div className="grid md:grid-cols-2">
           <div className="relative min-h-[180px] md:min-h-[240px]">
             <img
@@ -26,7 +26,7 @@ export default function KlantProfielPage() {
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/20" />
           </div>
           <div className="flex flex-col justify-center gap-3 p-6 text-white md:p-10">
-            <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-white ring-2 ring-white/30">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-surface/15 text-white ring-2 ring-white/30">
               <Sparkles className="h-6 w-6" strokeWidth={1.5} aria-hidden />
             </div>
             <p className="text-lg font-semibold">Jouw account</p>

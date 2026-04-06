@@ -222,13 +222,13 @@ export function DashboardAppShell({
           href={item.href}
           className={`relative flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 md:border-l-[3px] ${
             active
-              ? "bg-neutral-900 text-white md:border-bookadj md:bg-bookadj/10 md:text-neutral-900 md:shadow-sm"
-              : "text-neutral-700 hover:bg-neutral-100 md:border-transparent"
+              ? "border-bookadj bg-bookadj/15 text-ink shadow-sm md:border-bookadj md:bg-bookadj/10"
+              : "text-ink-secondary hover:bg-surface-muted/80 md:border-transparent"
           }`}
         >
           <span className="min-w-0 flex-1">{item.label}</span>
           {item.unreadBadge && unreadMessages > 0 ? (
-            <span className="flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-orange-500 px-1.5 text-[10px] font-bold text-white md:bg-orange-500">
+            <span className="flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-caution px-1.5 text-[10px] font-bold text-white md:bg-caution">
               {unreadMessages > 9 ? "9+" : unreadMessages}
             </span>
           ) : null}
@@ -238,7 +238,7 @@ export function DashboardAppShell({
 
   if (!ready || !userEmail) {
     return (
-      <div className="min-h-screen bg-white font-sans text-neutral-900">
+      <div className="min-h-screen bg-app font-sans text-ink">
         <Navbar />
         <div className="mx-auto max-w-[1600px] px-4 py-8 sm:px-6 lg:px-10">
           <DashboardShellSkeleton />
@@ -248,12 +248,12 @@ export function DashboardAppShell({
   }
 
   return (
-    <div className="min-h-screen bg-white pb-[4.5rem] font-sans text-neutral-900 md:pb-0">
+    <div className="min-h-screen bg-app pb-[4.5rem] font-sans text-ink md:pb-0">
       <Navbar />
 
       <div className="mx-auto flex max-w-[1600px] flex-col md:flex-row">
         <aside
-          className="hidden w-56 shrink-0 border-b-0 border-r border-neutral-200 bg-white md:block lg:w-60"
+          className="hidden w-56 shrink-0 border-b-0 border-r border-line bg-surface md:block lg:w-60"
           aria-label={
             sidebarRole === "dj" ? "DJ-dashboard navigatie" : "Dashboard navigatie"
           }
@@ -264,7 +264,7 @@ export function DashboardAppShell({
               type="button"
               onClick={() => void handleLogout()}
               disabled={loggingOut}
-              className="mt-3 border-t border-neutral-200 pt-4 text-left text-sm font-medium text-neutral-700 transition-colors hover:text-neutral-900 disabled:opacity-50"
+              className="mt-3 border-t border-line pt-4 text-left text-sm font-medium text-ink-secondary transition-colors hover:text-ink disabled:opacity-50"
             >
               Uitloggen
             </button>
@@ -283,7 +283,7 @@ export function DashboardAppShell({
       </div>
 
       <nav
-        className="fixed bottom-0 left-0 right-0 z-[60] flex items-stretch justify-around border-t border-neutral-200 bg-white px-1 pt-1 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] md:hidden"
+        className="fixed bottom-0 left-0 right-0 z-[60] flex items-stretch justify-around border-t border-line bg-surface px-1 pt-1 shadow-[0_-4px_24px_rgba(0,0,0,0.35)] md:hidden"
         style={{
           paddingBottom: "max(0.35rem, env(safe-area-inset-bottom, 0px))",
         }}
@@ -301,17 +301,17 @@ export function DashboardAppShell({
               key={item.key}
               href={item.href}
               className={`relative flex min-h-[48px] min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-lg px-1 py-1 text-[10px] font-medium transition-all duration-200 ${
-                active ? "text-bookadj" : "text-neutral-500"
+                active ? "text-bookadj" : "text-ink-muted"
               }`}
             >
               <span className="relative">
                 <Icon
-                  className={`h-6 w-6 ${active ? "text-bookadj" : "text-neutral-600"}`}
+                  className={`h-6 w-6 ${active ? "text-bookadj" : "text-ink-secondary"}`}
                   strokeWidth={1.75}
                   aria-hidden
                 />
                 {item.unreadBadge && unreadMessages > 0 ? (
-                  <span className="absolute -right-1.5 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-orange-500 px-0.5 text-[9px] font-bold text-white">
+                  <span className="absolute -right-1.5 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-caution px-0.5 text-[9px] font-bold text-white">
                     {unreadMessages > 9 ? "9+" : unreadMessages}
                   </span>
                 ) : null}

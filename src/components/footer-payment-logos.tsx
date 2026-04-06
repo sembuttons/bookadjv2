@@ -11,7 +11,7 @@ function LogoShell({
 }) {
   return (
     <li
-      className="flex h-[26px] w-[42px] shrink-0 items-center justify-center rounded border border-neutral-400/35 bg-white/[0.06] px-0.5 py-0.5"
+      className="flex h-[26px] w-[42px] shrink-0 items-center justify-center rounded border border-ink-muted/40 bg-surface/[0.06] px-0.5 py-0.5"
       title={label}
     >
       <span className="sr-only">{label}</span>

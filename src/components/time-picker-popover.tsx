@@ -78,7 +78,7 @@ export function TimePickerPopover({
   return (
     <div className="relative flex flex-col gap-1.5 text-left">
       {label ? (
-        <span className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+        <span className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
           {label}
         </span>
       ) : null}
@@ -91,10 +91,10 @@ export function TimePickerPopover({
         onClick={() => setOpen((v) => !v)}
         className={
           triggerClassName ??
-          "flex h-[42px] w-full items-center rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-left text-sm text-neutral-900 outline-none ring-black transition-[box-shadow] focus:border-neutral-400 focus:ring-2"
+          "flex h-[42px] w-full items-center rounded-lg border border-line bg-surface px-3 py-2.5 text-left text-sm text-ink outline-none ring-black transition-[box-shadow] focus:border-line-brand focus:ring-2"
         }
       >
-        <span className={display ? "" : "text-neutral-400"}>
+        <span className={display ? "" : "text-ink-muted"}>
           {display ?? placeholder}
         </span>
       </button>
@@ -104,7 +104,7 @@ export function TimePickerPopover({
           ref={popoverRef}
           role="dialog"
           aria-label="Tijd kiezen"
-          className={`absolute top-full z-[60] mt-2 max-h-64 w-[min(100vw-2rem,200px)] overflow-y-auto rounded-2xl border border-neutral-200 bg-white p-2 shadow-2xl ring-1 ring-black/5 ${popAlign}`}
+          className={`absolute top-full z-[60] mt-2 max-h-64 w-[min(100vw-2rem,200px)] overflow-y-auto rounded-2xl border border-line bg-surface p-2 shadow-2xl ring-1 ring-line/30 ${popAlign}`}
         >
           <div className="grid grid-cols-1 gap-0.5">
             {SLOTS.map((slot) => (
@@ -118,8 +118,8 @@ export function TimePickerPopover({
                 className={[
                   "rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors",
                   value === slot
-                    ? "bg-black text-white"
-                    : "text-neutral-800 hover:bg-neutral-50",
+                    ? "bg-bookadj text-white"
+                    : "text-ink hover:bg-surface-muted",
                 ].join(" ")}
               >
                 {slot}

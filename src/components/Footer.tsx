@@ -1,30 +1,25 @@
 import Link from "next/link";
 import { FooterPaymentLogos } from "@/components/footer-payment-logos";
 
-const footerBg = "#111111";
-
 export function Footer() {
   return (
-    <footer
-      className="mt-auto text-sm text-white/90"
-      style={{ backgroundColor: footerBg }}
-    >
+    <footer className="mt-auto border-t border-line bg-surface text-sm text-ink-secondary">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-16">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-10">
           {/* Left: brand + payments */}
           <div className="lg:col-span-4">
             <Link
               href="/"
-              className="text-xl font-bold tracking-tight text-white transition-colors hover:text-emerald-300"
+              className="text-xl font-bold tracking-tight text-ink transition-colors hover:text-bookadj-soft"
             >
               bookadj
             </Link>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/65">
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-ink-secondary">
               De DJ-boekingsmarktplaats van Nederland — geverifieerd, transparant,
               veilig betalen.
             </p>
             <div className="mt-8">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-white/45">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-ink-muted">
                 Betaalmethoden
               </p>
               <FooterPaymentLogos />
@@ -34,14 +29,14 @@ export function Footer() {
           {/* Middle: nav groups */}
           <div className="grid grid-cols-1 gap-10 sm:grid-cols-3 lg:col-span-5">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-white">
+              <p className="text-xs font-bold uppercase tracking-wider text-ink">
                 Ontdekken
               </p>
               <ul className="mt-4 space-y-3">
                 <li>
                   <Link
                     href="/zoeken"
-                    className="text-white/70 transition-colors hover:text-white"
+                    className="text-ink-secondary transition-colors hover:text-ink"
                   >
                     DJ&apos;s vinden
                   </Link>
@@ -49,7 +44,7 @@ export function Footer() {
                 <li>
                   <Link
                     href="/hoe-het-werkt"
-                    className="text-white/70 transition-colors hover:text-white"
+                    className="text-ink-secondary transition-colors hover:text-ink"
                   >
                     Hoe het werkt
                   </Link>
@@ -57,7 +52,7 @@ export function Footer() {
                 <li>
                   <Link
                     href="/steden"
-                    className="text-white/70 transition-colors hover:text-white"
+                    className="text-ink-secondary transition-colors hover:text-ink"
                   >
                     Steden
                   </Link>
@@ -65,7 +60,7 @@ export function Footer() {
                 <li>
                   <Link
                     href="/veelgestelde-vragen"
-                    className="text-white/70 transition-colors hover:text-white"
+                    className="text-ink-secondary transition-colors hover:text-ink"
                   >
                     Veelgestelde vragen
                   </Link>
@@ -73,7 +68,7 @@ export function Footer() {
                 <li>
                   <Link
                     href="/support"
-                    className="text-white/70 transition-colors hover:text-white"
+                    className="text-ink-secondary transition-colors hover:text-ink"
                   >
                     Support
                   </Link>
@@ -81,14 +76,14 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-white">
+              <p className="text-xs font-bold uppercase tracking-wider text-ink">
                 Voor DJ&apos;s
               </p>
               <ul className="mt-4 space-y-3">
                 <li>
                   <Link
                     href="/voor-djs"
-                    className="text-white/70 transition-colors hover:text-white"
+                    className="text-ink-secondary transition-colors hover:text-ink"
                   >
                     Aanmelden als DJ
                   </Link>
@@ -96,7 +91,7 @@ export function Footer() {
                 <li>
                   <Link
                     href="/hoe-het-werkt"
-                    className="text-white/70 transition-colors hover:text-white"
+                    className="text-ink-secondary transition-colors hover:text-ink"
                   >
                     Hoe werkt het voor DJ&apos;s
                   </Link>
@@ -104,7 +99,7 @@ export function Footer() {
                 <li>
                   <Link
                     href="/voor-djs#verificatie"
-                    className="text-white/70 transition-colors hover:text-white"
+                    className="text-ink-secondary transition-colors hover:text-ink"
                   >
                     DJ verificatie
                   </Link>
@@ -112,14 +107,14 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-white">
+              <p className="text-xs font-bold uppercase tracking-wider text-ink">
                 Bedrijf
               </p>
               <ul className="mt-4 space-y-3">
                 <li>
                   <Link
                     href="/over-ons"
-                    className="text-white/70 transition-colors hover:text-white"
+                    className="text-ink-secondary transition-colors hover:text-ink"
                   >
                     Over ons
                   </Link>
@@ -127,7 +122,7 @@ export function Footer() {
                 <li>
                   <Link
                     href="/contact"
-                    className="text-white/70 transition-colors hover:text-white"
+                    className="text-ink-secondary transition-colors hover:text-ink"
                   >
                     Contact
                   </Link>
@@ -135,7 +130,7 @@ export function Footer() {
                 <li>
                   <Link
                     href="/geschillen"
-                    className="text-white/70 transition-colors hover:text-white"
+                    className="text-ink-secondary transition-colors hover:text-ink"
                   >
                     Hulp bij problemen
                   </Link>
@@ -143,7 +138,7 @@ export function Footer() {
                 <li>
                   <Link
                     href="/blog"
-                    className="text-white/70 transition-all duration-200 hover:text-white"
+                    className="text-ink-secondary transition-all duration-200 hover:text-ink"
                   >
                     Blog
                   </Link>
@@ -154,14 +149,14 @@ export function Footer() {
 
           {/* Right: legal */}
           <div className="lg:col-span-3">
-            <p className="text-xs font-bold uppercase tracking-wider text-white">
+            <p className="text-xs font-bold uppercase tracking-wider text-ink">
               Juridisch
             </p>
             <ul className="mt-4 space-y-3">
                 <li>
                   <Link
                     href="/privacy"
-                    className="text-white/70 transition-colors hover:text-white"
+                    className="text-ink-secondary transition-colors hover:text-ink"
                   >
                     Privacy beleid
                   </Link>
@@ -169,7 +164,7 @@ export function Footer() {
                 <li>
                   <Link
                     href="/algemene-voorwaarden"
-                    className="text-white/70 transition-colors hover:text-white"
+                    className="text-ink-secondary transition-colors hover:text-ink"
                   >
                     Algemene voorwaarden
                   </Link>
@@ -177,7 +172,7 @@ export function Footer() {
                 <li>
                   <Link
                     href="/cookiebeleid"
-                    className="text-white/70 transition-colors hover:text-white"
+                    className="text-ink-secondary transition-colors hover:text-ink"
                   >
                     Cookiebeleid
                   </Link>
@@ -187,12 +182,12 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-white/10">
+      <div className="border-t border-line">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-          <p className="text-xs text-white/50">
+          <p className="text-xs text-ink-muted">
             © 2026 bookadj. Alle rechten voorbehouden.
           </p>
-          <p className="text-xs text-white/45">KVK: [nog in te vullen]</p>
+          <p className="text-xs text-ink-muted">KVK: [nog in te vullen]</p>
         </div>
       </div>
     </footer>

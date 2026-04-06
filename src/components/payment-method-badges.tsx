@@ -70,8 +70,8 @@ export function PaymentMethodBadges({
 }: Props) {
   const pill =
     variant === "dark"
-      ? "rounded-full border border-white/12 bg-white/[0.07] px-3.5 py-2 shadow-sm backdrop-blur-sm"
-      : "rounded-full border border-neutral-200 bg-white px-4 py-2.5 shadow-sm";
+      ? "rounded-full border border-white/12 bg-surface/[0.07] px-3.5 py-2 shadow-sm backdrop-blur-sm"
+      : "rounded-full border border-line bg-surface px-4 py-2.5 shadow-sm";
 
   return (
     <ul

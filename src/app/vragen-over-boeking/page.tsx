@@ -11,16 +11,16 @@ export const metadata = {
 export default function VragenOverBoekingPage() {
   return (
     <MarketingPageShell maxWidth="wide">
-      <p className="text-sm font-semibold uppercase tracking-wide text-emerald-600">
+      <p className="text-sm font-semibold uppercase tracking-wide text-bookadj-soft">
         Help
       </p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
+      <h1 className="mt-2 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
         Vragen over je boeking
       </h1>
-      <p className="mt-4 max-w-2xl text-neutral-600">
+      <p className="mt-4 max-w-2xl text-ink-secondary">
         Alles over aanvragen, betaling, annulering en wat er gebeurt als er iets
         misgaat. Staat je vraag er niet tussen?{" "}
-        <Link href="/contact" className="font-semibold text-neutral-900 underline">
+        <Link href="/contact" className="font-semibold text-ink underline">
           Neem contact op
         </Link>
         .
@@ -76,7 +76,7 @@ export default function VragenOverBoekingPage() {
                   ons beleid. Lees meer op{" "}
                   <Link
                     href="/als-dj-annuleert"
-                    className="font-semibold text-neutral-900 underline"
+                    className="font-semibold text-ink underline"
                   >
                     Als een DJ annuleert
                   </Link>
@@ -93,7 +93,7 @@ export default function VragenOverBoekingPage() {
                   meldt, hoe meer opties er meestal zijn. Bekijk{" "}
                   <Link
                     href="/betalingen-en-terugbetalingen"
-                    className="font-semibold text-neutral-900 underline"
+                    className="font-semibold text-ink underline"
                   >
                     Betalingen en terugbetalingen
                   </Link>{" "}
@@ -122,7 +122,7 @@ export default function VragenOverBoekingPage() {
                   mee en bemiddelen waar nodig. Zie{" "}
                   <Link
                     href="/geschillen"
-                    className="font-semibold text-neutral-900 underline"
+                    className="font-semibold text-ink underline"
                   >
                     Hulp bij problemen
                   </Link>

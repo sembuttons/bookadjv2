@@ -99,7 +99,7 @@ export function BookingPanel({
     <div className="space-y-5">
       <div className="card-interactive p-5 sm:p-6">
         <div className="mt-0">
-          <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+          <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Aantal uren
           </p>
           <div className="mt-2 flex flex-nowrap gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -111,7 +111,7 @@ export function BookingPanel({
                 className={`shrink-0 rounded-full px-3.5 py-2 text-sm font-semibold transition-colors ${
                   hours === h
                     ? "bg-bookadj text-white shadow-sm"
-                    : "bg-neutral-100 text-neutral-800 hover:bg-neutral-200"
+                    : "bg-surface-muted/80 text-ink hover:bg-line/50"
                 }`}
               >
                 {h} uur
@@ -133,12 +133,12 @@ export function BookingPanel({
         </div>
 
         <label className="mt-4 block">
-          <span className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+          <span className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Locatie evenement
           </span>
           <div className="relative mt-2">
             <div
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted"
               aria-hidden
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -183,26 +183,26 @@ export function BookingPanel({
           </div>
         </label>
         {travelCost > 0 ? (
-          <div className="mt-2 rounded-lg bg-neutral-50 px-3 py-2 text-xs text-neutral-700 ring-1 ring-neutral-200">
-            <span className="font-semibold text-neutral-900">
+          <div className="mt-2 rounded-lg bg-surface-muted px-3 py-2 text-xs text-ink-secondary ring-1 ring-line">
+            <span className="font-semibold text-ink">
               Reiskosten: €{travelCost}
             </span>{" "}
-            <span className="text-neutral-600">
+            <span className="text-ink-secondary">
               (geschatte afstand: {travelDistance}km retour)
             </span>
           </div>
         ) : venueAddress.trim() ? (
-          <p className="mt-2 rounded-lg bg-neutral-100 px-3 py-2 text-xs italic text-neutral-600">
+          <p className="mt-2 rounded-lg bg-surface-muted/80 px-3 py-2 text-xs italic text-ink-secondary">
             Selecteer een adres uit de lijst om reiskosten te berekenen.
           </p>
         ) : (
-          <p className="mt-2 rounded-lg bg-neutral-100 px-3 py-2 text-xs italic text-neutral-600">
+          <p className="mt-2 rounded-lg bg-surface-muted/80 px-3 py-2 text-xs italic text-ink-secondary">
             Vul het adres in om reiskosten te berekenen.
           </p>
         )}
 
-        <div className="mt-6 space-y-2 rounded-xl bg-neutral-50 px-4 py-3 text-sm">
-          <div className="flex justify-between text-neutral-700">
+        <div className="mt-6 space-y-2 rounded-xl bg-surface-muted px-4 py-3 text-sm">
+          <div className="flex justify-between text-ink-secondary">
             <span>
               DJ ({hours} uur × €{hourlyRate})
             </span>
@@ -210,17 +210,17 @@ export function BookingPanel({
               €{djCost.toLocaleString("nl-NL")}
             </span>
           </div>
-          <div className="flex justify-between text-neutral-700">
+          <div className="flex justify-between text-ink-secondary">
             <span>Apparatuur</span>
             <span className="font-medium text-bookadj">Inbegrepen</span>
           </div>
-          <div className="flex justify-between text-neutral-700">
+          <div className="flex justify-between text-ink-secondary">
             <span>Reiskosten</span>
-            <span className="font-medium text-neutral-700">
+            <span className="font-medium text-ink-secondary">
               {travelCost > 0 ? `€${travelCost.toLocaleString("nl-NL")}` : "—"}
             </span>
           </div>
-          <div className="flex justify-between border-t border-neutral-200 pt-2 text-base font-bold text-neutral-900">
+          <div className="flex justify-between border-t border-line pt-2 text-base font-bold text-ink">
             <span>Totaal (indicatie)</span>
             <span>€{total.toLocaleString("nl-NL")}</span>
           </div>
@@ -232,32 +232,32 @@ export function BookingPanel({
             if (!eventDate.trim()) return base;
             return `${base}?${new URLSearchParams({ date: eventDate.trim() }).toString()}`;
           })()}
-          className="mt-5 flex min-h-[44px] w-full items-center justify-center rounded-xl bg-black py-3.5 text-sm font-bold text-white transition-all duration-200 hover:bg-bookadj"
+          className="mt-5 flex min-h-[44px] w-full items-center justify-center rounded-xl bg-bookadj py-3.5 text-sm font-bold text-white transition-all duration-200 hover:bg-bookadj-hover"
         >
           Boeking aanvragen
         </Link>
         <StelVraagButton
           djUserId={djUserId ?? undefined}
           djProfileId={djId}
-          className="mt-3 min-h-[44px] w-full rounded-xl border-2 border-neutral-900 bg-white py-3 text-sm font-semibold text-neutral-900 transition-all duration-200 hover:bg-neutral-50"
+          className="mt-3 min-h-[44px] w-full rounded-xl border-2 border-line-brand bg-surface py-3 text-sm font-semibold text-ink transition-all duration-200 hover:bg-surface-muted"
         >
           {contactButtonLabel}
         </StelVraagButton>
       </div>
 
-      <div className="flex items-center gap-3 rounded-xl bg-bookadj/10 px-4 py-3 text-sm font-medium text-neutral-900 ring-1 ring-bookadj/20">
+      <div className="flex items-center gap-3 rounded-xl bg-bookadj/10 px-4 py-3 text-sm font-medium text-ink ring-1 ring-bookadj/20">
         <ShieldCheck className="h-5 w-5 shrink-0 text-bookadj" aria-hidden />
         Geen betaling tot acceptatie van de boeking.
       </div>
 
       <div className="grid gap-3 text-sm">
-        <div className="rounded-xl border border-neutral-200 bg-white px-4 py-3 shadow-sm transition-shadow duration-300 hover:shadow-md">
-          <p className="text-xs text-neutral-500">Reactietijd</p>
-          <p className="font-semibold text-neutral-900">{responseTimeLabel}</p>
+        <div className="rounded-xl border border-line bg-surface px-4 py-3 shadow-sm transition-shadow duration-300 hover:shadow-md">
+          <p className="text-xs text-ink-muted">Reactietijd</p>
+          <p className="font-semibold text-ink">{responseTimeLabel}</p>
         </div>
-        <div className="rounded-xl border border-neutral-200 bg-white px-4 py-3 shadow-sm transition-shadow duration-300 hover:shadow-md">
-          <p className="text-xs text-neutral-500">Lid sinds</p>
-          <p className="font-semibold text-neutral-900">{memberSinceLabel}</p>
+        <div className="rounded-xl border border-line bg-surface px-4 py-3 shadow-sm transition-shadow duration-300 hover:shadow-md">
+          <p className="text-xs text-ink-muted">Lid sinds</p>
+          <p className="font-semibold text-ink">{memberSinceLabel}</p>
         </div>
       </div>
     </div>

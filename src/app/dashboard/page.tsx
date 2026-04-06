@@ -37,8 +37,8 @@ export default function DashboardPage() {
   }, [router]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-white px-4">
-      <h1 className="text-2xl font-bold text-neutral-900">Dashboard</h1>
+    <div className="flex min-h-screen items-center justify-center bg-surface px-4">
+      <h1 className="text-2xl font-bold text-ink">Dashboard</h1>
     </div>
   );
 }

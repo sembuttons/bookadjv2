@@ -12,7 +12,7 @@ export function HomeSearchForm() {
 
   return (
     <form
-      className="mx-auto mt-8 max-w-4xl rounded-2xl border border-neutral-200/80 bg-white p-4 shadow-xl sm:mt-10 sm:p-6"
+      className="mx-auto mt-8 max-w-4xl rounded-2xl border border-line/80 bg-surface p-4 shadow-xl sm:mt-10 sm:p-6"
       action="/zoeken"
       method="get"
       role="search"
@@ -30,7 +30,7 @@ export function HomeSearchForm() {
         />
 
         <label className="flex flex-col gap-2 text-left">
-          <span className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+          <span className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Gelegenheid
           </span>
           <select name="occasion" className="input-field" defaultValue="">
