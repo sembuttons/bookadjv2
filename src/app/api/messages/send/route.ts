@@ -2,6 +2,11 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { requireUser } from "@/lib/api-auth";
 import {
+  dutchMessageForDbError,
+  ensurePublicUserRow,
+  normalizeMessageUserId,
+} from "@/lib/messages-ensure-user";
+import {
   analyzeMessageContent,
   warningForPriorOffenses,
 } from "@/lib/messages-safety";
@@ -38,24 +43,45 @@ export async function POST(req: Request) {
   }
 
   const content = typeof body.content === "string" ? body.content : "";
-  const sender_id = body.sender_id;
-  const recipient_id = body.recipient_id;
-  if (!content.trim() || !sender_id || !recipient_id) {
+  const sender_id = normalizeMessageUserId(sessionUser.id);
+  const recipient_id = normalizeMessageUserId(body.recipient_id);
+
+  if (!content.trim()) {
     return NextResponse.json(
-      { error: "Verplichte velden ontbreken" },
+      { error: "Schrijf eerst een bericht." },
       { status: 400 },
     );
   }
 
-  if (sender_id !== sessionUser.id) {
-    return NextResponse.json({ error: "Geen toegang." }, { status: 403 });
+  if (!sender_id || !recipient_id) {
+    return NextResponse.json(
+      { error: "Ontvanger ontbreekt of is ongeldig. Vernieuw de pagina en open het gesprek opnieuw." },
+      { status: 400 },
+    );
+  }
+
+  if (typeof body.sender_id === "string" && body.sender_id.trim()) {
+    const claimed = normalizeMessageUserId(body.sender_id);
+    if (claimed && claimed !== sender_id) {
+      return NextResponse.json({ error: "Geen toegang." }, { status: 403 });
+    }
   }
 
   if (sender_id === recipient_id) {
     return NextResponse.json(
-      { error: "Ongeldige ontvanger." },
+      { error: "Je kunt geen bericht aan jezelf sturen." },
       { status: 400 },
     );
+  }
+
+  const senderRowEnsure = await ensurePublicUserRow(sender_id);
+  if (!senderRowEnsure.ok) {
+    return NextResponse.json({ error: senderRowEnsure.nl }, { status: 400 });
+  }
+
+  const recipientEnsure = await ensurePublicUserRow(recipient_id);
+  if (!recipientEnsure.ok) {
+    return NextResponse.json({ error: recipientEnsure.nl }, { status: 400 });
   }
 
   const { data: sender, error: senderErr } = await supabaseAdmin
@@ -65,7 +91,10 @@ export async function POST(req: Request) {
     .maybeSingle();
 
   if (senderErr) {
-    return NextResponse.json({ error: senderErr.message }, { status: 500 });
+    return NextResponse.json(
+      { error: "Kon je account niet laden. Probeer het later opnieuw." },
+      { status: 500 },
+    );
   }
 
   const senderRow = sender as {
@@ -101,7 +130,10 @@ export async function POST(req: Request) {
     .single();
 
   if (insertErr) {
-    return NextResponse.json({ error: insertErr.message }, { status: 500 });
+    return NextResponse.json(
+      { error: dutchMessageForDbError(insertErr.message) },
+      { status: 500 },
+    );
   }
 
   let newOffenseCount = priorOffenses;

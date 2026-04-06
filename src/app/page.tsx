@@ -68,17 +68,17 @@ const reviews = [
 
 const PLACEHOLDER_GOOGLE_REVIEWS = "https://www.google.com";
 
-/** Home hero — dark festival / crowd */
+/** Home hero */
 const HERO_BG_IMAGE =
-  "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1920&q=80&auto=format&fit=crop";
+  "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=1200&q=80";
 
 /** Trust / Fiverr-style column — DJ deck, atmospheric */
 const TRUST_SECTION_IMAGE =
   "https://images.unsplash.com/photo-1598387993784-808f6ee9fa6f?w=1200&q=80&auto=format&fit=crop";
 
-/** Bottom “voor DJ’s” CTA strip */
+/** Bottom CTA strip */
 const VOOR_DJS_SECTION_BG =
-  "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200&q=80&auto=format&fit=crop";
+  "https://images.unsplash.com/photo-1571266028243-d220c6a6fe7e?w=1200&q=80";
 
 const occasionCards = [
   { id: "bruiloft", label: "Bruiloft", Icon: Heart },
@@ -146,7 +146,7 @@ export default async function Home() {
           aria-hidden
         />
         <div
-          className="absolute inset-0 -z-10 bg-gradient-to-b from-black/75 via-black/60 to-black/85"
+          className="absolute inset-0 -z-10 bg-black/60"
           aria-hidden
         />
         <div className="relative mx-auto max-w-4xl">
@@ -157,7 +157,7 @@ export default async function Home() {
             De beste DJ voor jouw feest — geverifieerd en verzekerd
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-pretty text-sm text-neutral-200 min-[400px]:text-base sm:mt-6 sm:text-lg">
-            Boek direct via ons platform. Veilig betalen, eerlijke reviews, altijd een DJ die past.
+            Geverifieerde DJ&apos;s, transparante prijzen en volledige betalingsbescherming
           </p>
 
           <HomeSearchForm />
@@ -623,7 +623,7 @@ export default async function Home() {
           aria-hidden
         />
         <div
-          className="absolute inset-0 -z-10 bg-gradient-to-b from-neutral-950/90 via-neutral-950/88 to-neutral-950/92"
+          className="absolute inset-0 -z-10 bg-black/70"
           aria-hidden
         />
         <div className="relative mx-auto max-w-3xl">
@@ -631,7 +631,7 @@ export default async function Home() {
             id="cta-heading"
             className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl"
           >
-            Klaar om jouw perfecte avond te boeken?
+            Klaar voor jouw perfecte avond?
           </h2>
           <p className="mt-4 text-neutral-300">
             Maak een account en ontdek DJ&apos;s in jouw regio — of meld je aan

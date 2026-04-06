@@ -1,15 +1,7 @@
 import Link from "next/link";
+import { FooterPaymentLogos } from "@/components/footer-payment-logos";
 
 const footerBg = "#111111";
-
-const FOOTER_PAY_LABELS = [
-  "iDEAL",
-  "Visa",
-  "Mastercard",
-  "PayPal",
-  "Apple Pay",
-  "Google Pay",
-] as const;
 
 export function Footer() {
   return (
@@ -35,15 +27,7 @@ export function Footer() {
               <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-white/45">
                 Betaalmethoden
               </p>
-              <ul className="flex flex-wrap gap-2" aria-label="Geaccepteerde betaalmethoden">
-                {FOOTER_PAY_LABELS.map((label) => (
-                  <li key={label}>
-                    <span className="inline-block rounded-full border border-white/15 bg-white/10 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-white/75">
-                      {label}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <FooterPaymentLogos />
             </div>
           </div>
 

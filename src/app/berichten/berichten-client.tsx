@@ -8,6 +8,7 @@ import {
   groupLatestByPartner,
   initials,
   messageText,
+  normalizeUserUuid,
   relativeTime,
   threadDateLabel,
   type MessageRow,
@@ -243,8 +244,23 @@ export function BerichtenClient({
 
   useEffect(() => {
     if (!userId) return;
-    const pid = threadOnly ? initialPartnerId : partnerFromUrl;
+    const rawPid = threadOnly ? initialPartnerId : partnerFromUrl;
+    if (threadOnly && rawPid && !normalizeUserUuid(rawPid)) {
+      setBanner("Deze gesprekslink is ongeldig.");
+      setActivePartner(null);
+      setMobileThread(true);
+      return;
+    }
+    const pid = normalizeUserUuid(rawPid);
+    const self = normalizeUserUuid(userId);
     if (!pid) return;
+    if (self && pid === self) {
+      setBanner("Je kunt geen bericht aan jezelf sturen.");
+      setActivePartner(null);
+      setMobileThread(threadOnly);
+      return;
+    }
+    setBanner(null);
     setActivePartner(pid);
     setMobileThread(true);
     void loadUsers([pid]);
@@ -328,15 +344,28 @@ export function BerichtenClient({
   }, [threadMessages.length, activePartner]);
 
   const selectConversation = (id: string) => {
-    setActivePartner(id);
+    const nid = normalizeUserUuid(id);
+    const self = normalizeUserUuid(userId);
+    if (!nid) return;
+    if (self && nid === self) {
+      setBanner("Je kunt geen bericht aan jezelf sturen.");
+      return;
+    }
+    setActivePartner(nid);
     setMobileThread(true);
     setBanner(null);
-    void loadUsers([id]);
+    void loadUsers([nid]);
   };
 
   const sendMessage = async () => {
     const text = input.trim();
-    if (!text || !userId || !activePartner || sending) return;
+    const partner = normalizeUserUuid(activePartner);
+    const self = normalizeUserUuid(userId);
+    if (!text || !self || !partner || sending) return;
+    if (partner === self) {
+      setBanner("Je kunt geen bericht aan jezelf sturen.");
+      return;
+    }
     setSending(true);
     setBanner(null);
     const {
@@ -354,8 +383,8 @@ export function BerichtenClient({
       },
       body: JSON.stringify({
         content: text,
-        sender_id: userId,
-        recipient_id: activePartner,
+        sender_id: self,
+        recipient_id: partner,
         inbox_type: tabInboxType,
         booking_id: null,
       }),
@@ -539,7 +568,11 @@ export function BerichtenClient({
           <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 py-16 text-center">
             <IconChatEmpty className="text-neutral-300" />
             <p className="text-sm font-medium text-neutral-600">
-              {threadOnly ? "Gesprek laden…" : "Selecteer een gesprek"}
+              {threadOnly && banner
+                ? banner
+                : threadOnly
+                  ? "Gesprek laden…"
+                  : "Selecteer een gesprek"}
             </p>
             {threadOnly ? (
               <Link
@@ -653,7 +686,10 @@ export function BerichtenClient({
                 <div className="flex gap-2">
                   <textarea
                     value={input}
-                    onChange={(e) => setInput(e.target.value)}
+                    onChange={(e) => {
+                      setInput(e.target.value);
+                      setBanner(null);
+                    }}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault();
