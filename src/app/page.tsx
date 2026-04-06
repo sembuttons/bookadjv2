@@ -19,7 +19,6 @@ import {
 import {
   getCity,
   getGenres,
-  getHourlyRate,
   getProfileRating,
   getStageName,
   type DjProfileRow,
@@ -133,12 +132,12 @@ export default async function Home() {
   const newDjs = (newDjRows ?? []) as DjProfileRow[];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] font-sans">
+    <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0b0f0d] to-[#0a0a0a] font-sans">
       <Navbar />
 
       <section
         id="zoeken"
-        className="relative isolate overflow-hidden px-4 pb-20 pt-28 text-center text-white sm:px-6 sm:pb-24 sm:pt-32 lg:px-8 lg:pb-28 lg:pt-36"
+        className="relative isolate overflow-x-clip px-4 pb-20 pt-28 text-center text-white sm:px-6 sm:pb-24 sm:pt-32 lg:px-8 lg:pb-28 lg:pt-36"
       >
         <div
           className="absolute inset-0 -z-20 bg-cover bg-center bg-no-repeat"
@@ -166,7 +165,7 @@ export default async function Home() {
       </section>
 
       <section
-        className="border-b border-gray-800 bg-[#0a0a0a] px-4 py-14 sm:px-6 lg:px-8 lg:py-16"
+        className="bg-gradient-to-b from-[#0a0a0a] via-[#0b100e] to-[#0a0a0a] px-4 py-14 sm:px-6 lg:px-8 lg:py-16"
         aria-labelledby="occasion-heading"
       >
         <div className="mx-auto max-w-7xl">
@@ -205,25 +204,26 @@ export default async function Home() {
       </section>
 
       <section
-        className="border-t border-green-500/20 bg-gradient-to-b from-[#0a0a0a] to-[#111827] px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-24"
+        className="bg-gradient-to-b from-[#0a0a0a] via-[#0c1411] to-[#0a0a0a] px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-24"
         aria-labelledby="trust-pro-heading"
       >
-        <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          <div className="max-w-xl lg:pr-8">
-            <p className="text-sm font-semibold uppercase tracking-widest text-green-400">
-              Kwaliteit &amp; veiligheid
-            </p>
-            <h2
-              id="trust-pro-heading"
-              className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-[2.5rem] lg:leading-tight"
-            >
-              Boek met vertrouwen
-            </h2>
-            <p className="mt-4 text-base leading-relaxed text-gray-400 sm:text-lg">
-              Eerlijke informatie, duidelijke afspraken en een platform dat met je meedenkt — van
-              eerste klik tot na het feest.
-            </p>
-            <ul className="mt-10 grid gap-4 sm:grid-cols-2">
+        <div className="mx-auto max-w-7xl">
+          <p className="text-sm font-semibold uppercase tracking-widest text-green-400">
+            Kwaliteit &amp; veiligheid
+          </p>
+          <h2
+            id="trust-pro-heading"
+            className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-[2.5rem] lg:leading-tight"
+          >
+            Boek met vertrouwen
+          </h2>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-gray-400 sm:text-lg">
+            Eerlijke informatie, duidelijke afspraken en een platform dat met je meedenkt — van
+            eerste klik tot na het feest.
+          </p>
+
+          <div className="mt-10 grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+            <ul className="grid max-w-xl gap-4 sm:grid-cols-2 lg:pr-4">
               {(
                 [
                   {
@@ -260,15 +260,8 @@ export default async function Home() {
                 </li>
               ))}
             </ul>
-            <Link
-              href="/zoeken"
-              className="mt-10 inline-flex rounded-lg bg-green-500 px-6 py-3 text-sm font-bold text-black transition-colors hover:bg-green-400"
-            >
-              Ontdek DJ&apos;s
-            </Link>
-          </div>
 
-          <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
+            <div className="relative mx-auto flex w-full max-w-lg justify-center lg:mx-0 lg:max-w-none lg:justify-end">
             <div
               className="aspect-[4/3] w-full overflow-hidden rounded-2xl bg-gray-900 bg-cover bg-center shadow-2xl ring-1 ring-green-800/30"
               style={{ backgroundImage: `url(${TRUST_SECTION_IMAGE})` }}
@@ -306,16 +299,24 @@ export default async function Home() {
                 </div>
                 <p className="mt-3 text-xs text-gray-500">
                   Zo zie je op het platform dat een DJ gecontroleerd is — met echte
-                  reviews en transparante tarieven.
+                  reviews en duidelijke afspraken.
                 </p>
               </div>
             </div>
+            </div>
           </div>
+
+          <Link
+            href="/zoeken"
+            className="mt-10 inline-flex rounded-lg bg-green-500 px-6 py-3 text-sm font-bold text-black transition-colors hover:bg-green-400"
+          >
+            Ontdek DJ&apos;s
+          </Link>
         </div>
       </section>
 
       <section
-        className="border-b border-gray-800 bg-[#0a0a0a] px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
+        className="bg-gradient-to-b from-[#0a0a0a] via-[#0b0f0d] to-[#0a0a0a] px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
         aria-labelledby="new-heading"
       >
         <div className="mx-auto max-w-7xl">
@@ -362,7 +363,6 @@ export default async function Home() {
                 const name = getStageName(dj);
                 const city = getCity(dj);
                 const djGenres = getGenres(dj).slice(0, 3);
-                const rate = getHourlyRate(dj);
                 const rating = getProfileRating(dj);
                 const displayRating = rating > 0 ? rating : 4.8;
                 return (
@@ -399,18 +399,13 @@ export default async function Home() {
                             </span>
                           )}
                         </div>
-                        <div className="mt-4 flex items-center justify-between border-t border-gray-800/60 pt-4">
-                          <div className="flex items-center gap-2 text-sm">
-                            <StarRow value={Math.round(displayRating)} />
-                            <span className="font-medium text-white">
-                              {displayRating.toFixed(1)}
-                            </span>
-                          </div>
-                          <p className="text-sm font-bold text-green-400">
-                            {rate != null
-                              ? `vanaf €${Math.round(rate)}/u`
-                              : "Tarief op aanvraag"}
-                          </p>
+                        <div className="mt-4 flex items-center gap-2 border-t border-gray-800/60 pt-4 text-sm">
+                          <StarRow value={Math.round(displayRating)} />
+                          <span className="font-medium text-white">
+                            {displayRating.toFixed(1)}
+                          </span>
+                          <span className="text-gray-500">·</span>
+                          <span className="text-gray-400">Profiel bekijken</span>
                         </div>
                       </article>
                     </Link>
@@ -424,7 +419,7 @@ export default async function Home() {
 
       <section
         id="hoe-het-werkt"
-        className="bg-[#0a0a0a] px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
+        className="bg-gradient-to-b from-[#0a0a0a] via-[#0c1210] to-[#0a0a0a] px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
         aria-labelledby="how-heading"
       >
         <div className="mx-auto max-w-7xl">
@@ -455,7 +450,7 @@ export default async function Home() {
                   reviews.
                 </p>
                 <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-gray-400">
-                  <li>Transparante uurtarieven en pakketten</li>
+                  <li>Duidelijke tariefinformatie en pakketten</li>
                   <li>Geverifieerde DJ-profielen</li>
                   <li>Filter op datum en genre</li>
                 </ul>
@@ -504,47 +499,40 @@ export default async function Home() {
       </section>
 
       <section
-        className="border-y border-gray-800 bg-[#0f172a]/80 px-4 py-10 sm:px-6 lg:px-8"
-        aria-label="Cijfers"
+        className="bg-gradient-to-b from-[#0a0a0a] via-[#0d1512] to-[#0a0a0a] px-4 py-12 sm:px-6 lg:px-8 lg:py-14"
+        aria-label="Waarom bookadj"
       >
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-8 text-center sm:gap-12 lg:gap-20">
-          <div>
-            <p className="text-3xl font-bold text-green-400 sm:text-4xl">
-              214+
-            </p>
-            <p className="mt-1 text-sm font-medium text-gray-500">
-              DJ&apos;s
-            </p>
-          </div>
-          <div>
-            <p className="text-3xl font-bold text-green-400 sm:text-4xl">
-              4,9/5
-            </p>
-            <p className="mt-1 text-sm font-medium text-gray-500">
-              gemiddelde beoordeling
-            </p>
-          </div>
-          <div>
-            <p className="text-3xl font-bold text-green-400 sm:text-4xl">
-              1200+
-            </p>
-            <p className="mt-1 text-sm font-medium text-gray-500">
-              boekingen
-            </p>
-          </div>
-          <div>
-            <p className="text-3xl font-bold text-green-400 sm:text-4xl">
-              97%
-            </p>
-            <p className="mt-1 text-sm font-medium text-gray-500">
-              tevreden klanten
-            </p>
-          </div>
+        <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
+          {(
+            [
+              {
+                title: "Geverifieerde profielen",
+                text: "We controleren DJ’s voordat ze zichtbaar worden — minder risico, meer vertrouwen.",
+              },
+              {
+                title: "Betalingsbescherming",
+                text: "Je betaalt via het platform; uitbetaling aan de DJ verloopt volgens duidelijke afspraken.",
+              },
+              {
+                title: "Alles op één plek",
+                text: "Zoeken, berichten en boeking — zonder je telefoonnummer overal te hoeven delen.",
+              },
+              {
+                title: "Support bij vragen",
+                text: "Loop je ergens tegenaan? We helpen je verder met heldere communicatie.",
+              },
+            ] as const
+          ).map(({ title, text }) => (
+            <div key={title} className="text-center sm:text-left">
+              <p className="text-base font-bold text-green-400">{title}</p>
+              <p className="mt-2 text-sm leading-relaxed text-gray-500">{text}</p>
+            </div>
+          ))}
         </div>
       </section>
 
       <section
-        className="px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
+        className="bg-gradient-to-b from-[#0a0a0a] via-[#0c1210] to-[#0a0a0a] px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
         aria-labelledby="reviews-heading"
       >
         <div className="mx-auto max-w-7xl">
@@ -613,7 +601,7 @@ export default async function Home() {
 
       <section
         id="voor-djs"
-        className="relative isolate overflow-hidden border-t border-green-800 bg-[#050505] px-4 py-16 text-center text-white sm:px-6 sm:py-20 lg:px-8"
+        className="relative isolate overflow-hidden bg-gradient-to-b from-[#0a0a0a] via-[#050505] to-[#0a0a0a] px-4 py-16 text-center text-white sm:px-6 sm:py-20 lg:px-8"
         aria-labelledby="cta-heading"
       >
         <div

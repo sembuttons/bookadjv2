@@ -16,8 +16,9 @@ import {
   Wallet,
 } from "lucide-react";
 
+/** Zelfde sfeer als Voor DJ’s: één achtergrond met donkere overlay + groene gloed. */
 const HERO_BG =
-  "https://images.unsplash.com/photo-1598387993441-a364f854cfba?w=1200&q=80";
+  "https://images.unsplash.com/photo-1540039155733-5bb30b53aa88?w=1920&q=80&auto=format&fit=crop";
 
 type FlowKey = "klant" | "dj";
 
@@ -228,16 +229,27 @@ export function HowItWorksClient() {
   );
 
   return (
-    <div className="bg-[#111827]">
-      {/* Hero */}
-      <section className="relative isolate min-h-[min(88vh,720px)] w-full overflow-hidden text-white">
+    <div className="min-h-screen bg-[#0a0a0a]">
+      {/* Hero — aansluitend op Voor DJ’s: één kleurvlak met subtiele gradient */}
+      <section className="relative isolate min-h-[min(88vh,720px)] w-full overflow-x-clip text-white">
         <div
-          className="absolute inset-0 -z-20 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 -z-30 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${HERO_BG})` }}
           aria-hidden
         />
         <div
-          className="absolute inset-0 -z-10 bg-gradient-to-b from-black/70 via-black/50 to-black/30"
+          className="absolute inset-0 -z-20 bg-gradient-to-b from-[#0a0a0a]/92 via-[#0a0a0a]/88 to-[#0a0a0a]/95"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(34,197,94,0.22),transparent)]"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute inset-0 -z-[5] opacity-[0.35]"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          }}
           aria-hidden
         />
 
@@ -252,13 +264,13 @@ export function HowItWorksClient() {
           <div className="mt-10 flex w-full max-w-md flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center sm:gap-4">
             <Link
               href="/zoeken"
-              className="inline-flex min-h-[48px] items-center justify-center rounded-xl bg-gray-800 px-8 py-3 text-sm font-bold text-white shadow-lg ring-1 ring-green-800/40 transition-all duration-200 hover:bg-gray-700"
+              className="inline-flex min-h-[48px] items-center justify-center rounded-xl bg-green-500 px-8 py-3 text-sm font-bold text-black shadow-lg shadow-green-500/25 transition-all duration-200 hover:bg-green-400"
             >
               Ik zoek een DJ
             </Link>
             <Link
               href="/voor-djs"
-              className="inline-flex min-h-[48px] items-center justify-center rounded-xl border-2 border-white bg-transparent px-8 py-3 text-sm font-bold text-white shadow-sm backdrop-blur-sm transition-all duration-200 hover:bg-[#111827]/10"
+              className="inline-flex min-h-[48px] items-center justify-center rounded-xl border border-green-800/40 bg-[#0f172a]/50 px-8 py-3 text-sm font-bold text-white backdrop-blur-sm transition-all duration-200 hover:border-green-800 hover:bg-[#0f172a]"
             >
               Ik ben een DJ
             </Link>
@@ -294,7 +306,7 @@ export function HowItWorksClient() {
       {/* Section 1/2 steps */}
       <section
         id="stap-voor-stap"
-        className="mx-auto max-w-7xl scroll-mt-24 px-4 py-14 sm:px-6 lg:px-8 lg:py-20"
+        className="mx-auto max-w-7xl scroll-mt-24 bg-gradient-to-b from-[#0a0a0a] via-[#0b100e] to-[#0a0a0a] px-4 py-14 sm:px-6 lg:px-8 lg:py-20"
       >
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-green-400">
@@ -313,7 +325,7 @@ export function HowItWorksClient() {
       </section>
 
       {/* Section 3 — betaalflow */}
-      <section className="border-y border-gray-800 bg-[#0f172a] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+      <section className="bg-gradient-to-b from-[#0a0a0a] via-[#0c1411] to-[#0a0a0a] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
@@ -384,7 +396,7 @@ export function HowItWorksClient() {
       </section>
 
       {/* Section 5 — FAQ */}
-      <section className="border-t border-gray-800 bg-[#111827] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+      <section className="bg-gradient-to-b from-[#0a0a0a] via-[#0b100e] to-[#0a0a0a] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-3xl">
           <h2 className="text-center text-2xl font-bold sm:text-3xl">
             Veelgestelde vragen

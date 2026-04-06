@@ -3,13 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
-export function MobileStickyBookingBar({
-  djId,
-  hourlyRate,
-}: {
-  djId: string;
-  hourlyRate: number;
-}) {
+export function MobileStickyBookingBar({ djId }: { djId: string }) {
   const [panelInView, setPanelInView] = useState(false);
 
   useEffect(() => {
@@ -43,18 +37,12 @@ export function MobileStickyBookingBar({
       aria-hidden={panelInView}
     >
       <div className="mx-auto flex max-w-[1400px] items-center gap-3 px-4 py-3">
-        <div className="min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-            Vanaf
-          </p>
-          <p className="truncate text-base font-extrabold text-white">
-            €{Math.round(hourlyRate)}/u
-          </p>
-        </div>
-        <div className="flex-1" />
+        <p className="min-w-0 flex-1 text-sm font-semibold text-white">
+          Klaar om te boeken?
+        </p>
         <Link
           href={boekenHref}
-          className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-green-500 px-6 text-sm font-bold text-black transition-all duration-200 hover:bg-green-400"
+          className="inline-flex min-h-[44px] shrink-0 items-center justify-center rounded-xl bg-green-500 px-6 text-sm font-bold text-black transition-all duration-200 hover:bg-green-400"
         >
           Boek nu
         </Link>

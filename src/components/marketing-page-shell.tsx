@@ -18,7 +18,7 @@ export function MarketingPageShell({
   maxWidth?: Max;
 }) {
   return (
-    <div className="min-h-screen bg-[#0a0a0a] font-sans text-white antialiased">
+    <div className="min-h-screen bg-white font-sans text-slate-900 antialiased">
       <Navbar />
       <main
         className={`mx-auto px-4 py-10 sm:px-6 sm:py-14 lg:px-8 ${maxClass[maxWidth]}`}

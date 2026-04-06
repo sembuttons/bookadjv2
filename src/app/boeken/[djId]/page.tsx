@@ -474,9 +474,6 @@ export default function BoekenPage() {
                   {" · "}
                   {city}
                 </p>
-                <p className="mt-1 text-base font-bold text-green-500 sm:text-lg">
-                  v.a. €{hourlyRate.toLocaleString("nl-NL")} per uur
-                </p>
               </div>
             </div>
 

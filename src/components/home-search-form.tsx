@@ -4,8 +4,9 @@ import { useState } from "react";
 import { DatePickerPopover } from "@/components/date-picker-popover";
 import { OCCASION_OPTIONS } from "@/lib/occasions";
 
-const triggerClass =
-  "input-field flex items-center justify-start border-0 bg-transparent text-left shadow-none focus:ring-0";
+/** Matcht het Gelegenheid-selectveld (input-field = border + achtergrond). */
+const datumTriggerClass =
+  "input-field flex items-center justify-start text-left";
 
 export function HomeSearchForm() {
   const [datum, setDatum] = useState("");
@@ -26,7 +27,7 @@ export function HomeSearchForm() {
           placeholder="Kies een datum"
           hiddenInputName="datum"
           triggerId="home-datum-trigger"
-          triggerClassName={triggerClass}
+          triggerClassName={datumTriggerClass}
         />
 
         <label className="flex flex-col gap-2 text-left">

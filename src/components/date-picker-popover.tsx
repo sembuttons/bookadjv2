@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 const MONTHS_NL = [
   "januari",
@@ -94,6 +96,8 @@ export type DatePickerPopoverProps = {
   triggerId?: string;
   /** ISO yyyy-mm-dd dates that cannot be selected (e.g. DJ blocked). */
   blockedIsoDates?: readonly string[];
+  /** Render calendar in a portal so parent overflow:hidden cannot clip it. */
+  portal?: boolean;
 };
 
 export function DatePickerPopover({
@@ -106,6 +110,7 @@ export function DatePickerPopover({
   popoverAlign = "left",
   triggerId,
   blockedIsoDates,
+  portal = true,
 }: DatePickerPopoverProps) {
   const [open, setOpen] = useState(false);
   const selected = parseISODate(value);
@@ -115,6 +120,7 @@ export function DatePickerPopover({
   });
   const popoverRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const [popoverStyle, setPopoverStyle] = useState<CSSProperties>({});
 
   const blockedSet = blockedIsoDates?.length
     ? new Set(blockedIsoDates)
@@ -138,6 +144,41 @@ export function DatePickerPopover({
     document.addEventListener("mousedown", onDoc);
     return () => document.removeEventListener("mousedown", onDoc);
   }, [open]);
+
+  const updatePopoverPosition = () => {
+    const trig = triggerRef.current;
+    if (!trig) return;
+    const rect = trig.getBoundingClientRect();
+    const margin = 8;
+    const maxW = Math.min(320, window.innerWidth - 2 * margin);
+    let left =
+      popoverAlign === "right" ? rect.right - maxW : rect.left;
+    left = Math.max(margin, Math.min(left, window.innerWidth - maxW - margin));
+    const below = rect.bottom + margin;
+    const approxH = 340;
+    let top = below;
+    if (top + approxH > window.innerHeight - margin) {
+      top = Math.max(margin, rect.top - approxH - margin);
+    }
+    setPopoverStyle({
+      position: "fixed",
+      top,
+      left,
+      width: maxW,
+      zIndex: 200,
+    });
+  };
+
+  useLayoutEffect(() => {
+    if (!open) return;
+    updatePopoverPosition();
+    window.addEventListener("resize", updatePopoverPosition);
+    window.addEventListener("scroll", updatePopoverPosition, true);
+    return () => {
+      window.removeEventListener("resize", updatePopoverPosition);
+      window.removeEventListener("scroll", updatePopoverPosition, true);
+    };
+  }, [open, popoverAlign]);
 
   const today = startOfDay(new Date());
   const year = cursor.getFullYear();
@@ -183,8 +224,84 @@ export function DatePickerPopover({
     ? `${pad2(selected.getDate())}/${pad2(selected.getMonth() + 1)}/${selected.getFullYear()}`
     : null;
 
-  const popAlign =
+  const popAlignClass =
     popoverAlign === "right" ? "right-0 left-auto" : "left-0";
+
+  const calendar = open ? (
+    <div
+      ref={popoverRef}
+      role="dialog"
+      aria-label="Kalender"
+      style={portal ? popoverStyle : undefined}
+      className={
+        portal
+          ? "rounded-2xl border border-gray-800 bg-[#111827] p-4 shadow-2xl ring-1 ring-gray-800/30"
+          : `absolute top-full z-[60] mt-2 w-[min(100vw-2rem,320px)] rounded-2xl border border-gray-800 bg-[#111827] p-4 shadow-2xl ring-1 ring-gray-800/30 ${popAlignClass}`
+      }
+    >
+      <div className="mb-4 flex items-center justify-between gap-2">
+        <button
+          type="button"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-[#0f172a]/80"
+          aria-label="Vorige maand"
+          onClick={() => setCursor(new Date(year, month - 1, 1))}
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+        <p className="min-w-0 flex-1 text-center text-sm font-semibold capitalize text-white">
+          {MONTHS_NL[month]} {year}
+        </p>
+        <button
+          type="button"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-[#0f172a]/80"
+          aria-label="Volgende maand"
+          onClick={() => setCursor(new Date(year, month + 1, 1))}
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
+      </div>
+
+      <div className="mb-2 grid grid-cols-7 gap-1 text-center text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+        {WEEKDAYS_NL.map((d) => (
+          <div key={d}>{d}</div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-7 gap-1">
+        {cells.map((day, i) =>
+          day == null ? (
+            <div key={`e-${i}`} className="aspect-square" />
+          ) : (
+            (() => {
+              const iso = isoForDay(day);
+              const blocked = blockedSet?.has(iso) ?? false;
+              return (
+                <button
+                  key={day}
+                  type="button"
+                  disabled={blocked}
+                  title={blocked ? "Deze datum is niet beschikbaar" : undefined}
+                  onClick={() => selectDay(day)}
+                  className={[
+                    "flex aspect-square items-center justify-center rounded-lg text-sm font-medium transition-colors",
+                    blocked
+                      ? "cursor-not-allowed bg-[#0f172a]/80 text-gray-400 line-through"
+                      : isSelected(day)
+                        ? "bg-green-500 text-black font-bold shadow-sm"
+                        : isToday(day)
+                          ? "bg-[#0f172a]/80 font-semibold text-white ring-1 ring-gray-800"
+                          : "text-white hover:bg-[#0f172a]",
+                  ].join(" ")}
+                >
+                  {day}
+                </button>
+              );
+            })()
+          ),
+        )}
+      </div>
+    </div>
+  ) : null;
 
   return (
     <div className="relative flex flex-col gap-1.5 text-left">
@@ -213,76 +330,9 @@ export function DatePickerPopover({
         <input type="hidden" name={hiddenInputName} value={value} />
       ) : null}
 
-      {open ? (
-        <div
-          ref={popoverRef}
-          role="dialog"
-          aria-label="Kalender"
-          className={`absolute top-full z-[60] mt-2 w-[min(100vw-2rem,320px)] rounded-2xl border border-gray-800 bg-[#111827] p-4 shadow-2xl ring-1 ring-gray-800/30 ${popAlign}`}
-        >
-          <div className="mb-4 flex items-center justify-between gap-2">
-            <button
-              type="button"
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-[#0f172a]/80"
-              aria-label="Vorige maand"
-              onClick={() => setCursor(new Date(year, month - 1, 1))}
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <p className="min-w-0 flex-1 text-center text-sm font-semibold capitalize text-white">
-              {MONTHS_NL[month]} {year}
-            </p>
-            <button
-              type="button"
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-[#0f172a]/80"
-              aria-label="Volgende maand"
-              onClick={() => setCursor(new Date(year, month + 1, 1))}
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-          </div>
-
-          <div className="mb-2 grid grid-cols-7 gap-1 text-center text-[11px] font-semibold uppercase tracking-wide text-gray-500">
-            {WEEKDAYS_NL.map((d) => (
-              <div key={d}>{d}</div>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-7 gap-1">
-            {cells.map((day, i) =>
-              day == null ? (
-                <div key={`e-${i}`} className="aspect-square" />
-              ) : (
-                (() => {
-                  const iso = isoForDay(day);
-                  const blocked = blockedSet?.has(iso) ?? false;
-                  return (
-                    <button
-                      key={day}
-                      type="button"
-                      disabled={blocked}
-                      title={blocked ? "Deze datum is niet beschikbaar" : undefined}
-                      onClick={() => selectDay(day)}
-                      className={[
-                        "flex aspect-square items-center justify-center rounded-lg text-sm font-medium transition-colors",
-                        blocked
-                          ? "cursor-not-allowed bg-[#0f172a]/80 text-gray-400 line-through"
-                          : isSelected(day)
-                            ? "bg-green-500 text-black font-bold shadow-sm"
-                            : isToday(day)
-                              ? "bg-[#0f172a]/80 font-semibold text-white ring-1 ring-gray-800"
-                              : "text-white hover:bg-[#0f172a]",
-                      ].join(" ")}
-                    >
-                      {day}
-                    </button>
-                  );
-                })()
-              ),
-            )}
-          </div>
-        </div>
-      ) : null}
+      {portal && typeof document !== "undefined" && calendar
+        ? createPortal(calendar, document.body)
+        : calendar}
     </div>
   );
 }

@@ -6,7 +6,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   getCity,
   getGenres,
-  getHourlyRate,
   getStageName,
   type DjProfileRow,
 } from "@/lib/dj-profile-helpers";
@@ -78,7 +77,6 @@ export function RelatedDjsCarousel({ djs }: { djs: DjProfileRow[] }) {
           const name = getStageName(row);
           const city = getCity(row);
           const genres = getGenres(row).slice(0, 3);
-          const rate = getHourlyRate(row);
           return (
             <Link
               key={id}
@@ -113,10 +111,8 @@ export function RelatedDjsCarousel({ djs }: { djs: DjProfileRow[] }) {
                     </span>
                   ))}
                 </div>
-                <p className="mt-auto pt-2 text-sm font-bold text-white">
-                  {rate != null
-                    ? `v.a. €${rate.toLocaleString("nl-NL")}/uur`
-                    : "Tarief op aanvraag"}
+                <p className="mt-auto pt-2 text-sm text-gray-400">
+                  Bekijk profiel
                 </p>
               </div>
             </Link>

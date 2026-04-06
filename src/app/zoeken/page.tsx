@@ -554,7 +554,6 @@ export default function ZoekenPage() {
                 const stage = getStageName(row);
                 const city = getCity(row);
                 const genres = getGenres(row);
-                const rate = getHourlyRate(row);
                 const responseLabel = getResponseTimeLabel(row);
                 return (
                   <li key={id}>
@@ -593,11 +592,9 @@ export default function ZoekenPage() {
                           Reactietijd: {responseLabel}
                         </p>
                         <div className="flex items-center justify-between border-t border-gray-800/60 pt-3">
-                          <p className="font-bold text-green-400">
-                            {rate != null
-                              ? `v.a. €${rate.toLocaleString("nl-NL")}/uur`
-                              : "Tarief op aanvraag"}
-                          </p>
+                          <span className="text-sm text-gray-400">
+                            Profiel bekijken
+                          </span>
                           <span className="inline-flex items-center gap-1 text-sm font-medium text-amber-600">
                             <IconSparkleNew className="shrink-0 text-amber-500" />
                             Nieuw

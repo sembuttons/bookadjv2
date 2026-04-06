@@ -161,7 +161,7 @@ export function Navbar() {
     <Link
       href="/berichten"
       role="menuitem"
-      className="flex items-center justify-between gap-2 px-4 py-2.5 text-sm text-white hover:bg-[#0f172a]"
+      className="flex items-center justify-between gap-2 px-4 py-2.5 text-sm text-slate-700 transition-colors hover:bg-gray-50"
       onClick={() => setMenuOpen(false)}
     >
       <span>Berichten</span>
@@ -174,10 +174,10 @@ export function Navbar() {
   );
 
   const navLinkClass =
-    "py-2 text-sm font-medium text-gray-400 transition-all duration-200 hover:text-white md:py-0";
+    "py-2 text-sm font-medium text-gray-400 transition-colors duration-200 hover:text-white md:py-0";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-900 bg-[#0a0a0a]/95 shadow-sm shadow-black/20 backdrop-blur-md supports-[backdrop-filter]:bg-[#0a0a0a]/90">
+    <header className="sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a] shadow-sm shadow-black/10 backdrop-blur-md supports-[backdrop-filter]:bg-[#0a0a0a]/95">
       {mobileNavOpen ? (
         <button
           type="button"
@@ -190,9 +190,9 @@ export function Navbar() {
       <div className="relative mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="shrink-0 text-xl font-semibold tracking-tight text-green-400"
+          className="shrink-0 text-xl font-bold tracking-tight text-white"
         >
-          bookadj
+          book<span className="text-green-400">adj</span>
         </Link>
 
         <nav
@@ -219,17 +219,17 @@ export function Navbar() {
         <div className="flex-1" />
 
         <div
-          className={`fixed inset-y-0 right-0 z-[48] w-[min(20rem,88vw)] max-w-full transform border-l border-gray-800 bg-[#0a0a0a] shadow-xl shadow-black/40 transition-transform duration-200 ease-out md:hidden ${
+          className={`fixed inset-y-0 right-0 z-[48] w-[min(20rem,88vw)] max-w-full transform border-l border-gray-200 bg-white shadow-xl shadow-gray-400/20 transition-transform duration-200 ease-out md:hidden ${
             mobileNavOpen ? "translate-x-0" : "translate-x-full"
           }`}
           aria-hidden={!mobileNavOpen}
           id="site-mobile-nav"
         >
-          <div className="flex h-14 items-center justify-between border-b border-gray-800 px-4">
-            <span className="text-sm font-bold text-white">Menu</span>
+          <div className="flex h-14 items-center justify-between border-b border-gray-100 px-4">
+            <span className="text-sm font-bold text-slate-900">Menu</span>
             <button
               type="button"
-              className="flex h-11 w-11 items-center justify-center rounded-lg text-gray-400 hover:bg-[#0f172a]/80"
+              className="flex h-11 w-11 items-center justify-center rounded-lg text-slate-500 hover:bg-gray-100"
               aria-label="Menu sluiten"
               onClick={() => setMobileNavOpen(false)}
             >
@@ -244,22 +244,46 @@ export function Navbar() {
             </button>
           </div>
           <nav className="flex flex-col gap-1 p-3" aria-label="Mobiel menu">
-            <Link href="/zoeken" className={`rounded-lg px-3 ${navLinkClass}`} onClick={() => setMobileNavOpen(false)}>
+            <Link
+              href="/zoeken"
+              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-gray-50 hover:text-slate-900"
+              onClick={() => setMobileNavOpen(false)}
+            >
               DJ&apos;s vinden
             </Link>
-            <Link href="/hoe-het-werkt" className={`rounded-lg px-3 ${navLinkClass}`} onClick={() => setMobileNavOpen(false)}>
+            <Link
+              href="/hoe-het-werkt"
+              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-gray-50 hover:text-slate-900"
+              onClick={() => setMobileNavOpen(false)}
+            >
               Hoe het werkt
             </Link>
-            <Link href="/voor-djs" className={`rounded-lg px-3 ${navLinkClass}`} onClick={() => setMobileNavOpen(false)}>
+            <Link
+              href="/voor-djs"
+              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-gray-50 hover:text-slate-900"
+              onClick={() => setMobileNavOpen(false)}
+            >
               Voor DJ&apos;s
             </Link>
-            <Link href="/over-ons" className={`rounded-lg px-3 ${navLinkClass}`} onClick={() => setMobileNavOpen(false)}>
+            <Link
+              href="/over-ons"
+              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-gray-50 hover:text-slate-900"
+              onClick={() => setMobileNavOpen(false)}
+            >
               Over ons
             </Link>
-            <Link href="/support" className={`rounded-lg px-3 ${navLinkClass}`} onClick={() => setMobileNavOpen(false)}>
+            <Link
+              href="/support"
+              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-gray-50 hover:text-slate-900"
+              onClick={() => setMobileNavOpen(false)}
+            >
               Support
             </Link>
-            <Link href="/contact" className={`rounded-lg px-3 ${navLinkClass}`} onClick={() => setMobileNavOpen(false)}>
+            <Link
+              href="/contact"
+              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-gray-50 hover:text-slate-900"
+              onClick={() => setMobileNavOpen(false)}
+            >
               Contact
             </Link>
           </nav>
@@ -268,7 +292,7 @@ export function Navbar() {
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <button
             type="button"
-            className="flex h-11 w-11 items-center justify-center rounded-lg border border-gray-800 text-white shadow-sm transition-all duration-200 hover:bg-[#0f172a] md:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 text-white shadow-sm transition-all duration-200 hover:bg-white/10 md:hidden"
             aria-expanded={mobileNavOpen}
             aria-controls="site-mobile-nav"
             aria-label="Menu openen"
@@ -287,13 +311,13 @@ export function Navbar() {
             <>
               <Link
                 href="/auth"
-                className="rounded-lg border border-gray-700 px-3 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:bg-gray-700 min-[380px]:px-4"
+                className="rounded-xl px-3 py-2 text-sm font-medium text-gray-400 transition-colors hover:text-white min-[380px]:px-4"
               >
                 Inloggen
               </Link>
               <Link
                 href="/auth?tab=aanmelden"
-                className="rounded-lg bg-green-500 px-3 py-2 text-sm font-bold text-black shadow-sm transition-all duration-200 hover:bg-green-400 min-[380px]:px-4"
+                className="rounded-xl bg-gradient-to-br from-[#22c55e] to-[#16a34a] px-5 py-2 text-sm font-bold text-black shadow-sm transition-all duration-150 hover:brightness-110 active:scale-[0.98] min-[380px]:px-5"
               >
                 Aanmelden
               </Link>
@@ -304,7 +328,7 @@ export function Navbar() {
                 ref={buttonRef}
                 type="button"
                 onClick={() => setMenuOpen((o) => !o)}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-[#052e16] text-sm font-bold text-green-400 outline-none ring-offset-[#0a0a0a] focus-visible:ring-2 focus-visible:ring-green-500/50"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-green-500/20 to-green-600/30 text-sm font-bold text-green-400 outline-none ring-offset-[#0a0a0a] focus-visible:ring-2 focus-visible:ring-green-400/50"
                 aria-expanded={menuOpen}
                 aria-haspopup="menu"
                 aria-label="Accountmenu"

@@ -369,10 +369,6 @@ export default async function DjProfilePage({ params }: PageProps) {
               ) : null}
             </div>
 
-            <p className="text-xl font-bold text-green-500 sm:text-2xl">
-              v.a. €{hourly.toLocaleString("nl-NL")} per uur
-            </p>
-
             <div className="flex flex-wrap items-center gap-2 text-sm font-semibold text-white">
               <StarRow value={displayRating} size="sm" />
               <span>{displayRating.toFixed(1)}</span>
@@ -664,7 +660,7 @@ export default async function DjProfilePage({ params }: PageProps) {
           </aside>
         </div>
 
-        <MobileStickyBookingBar djId={id} hourlyRate={hourly} />
+        <MobileStickyBookingBar djId={id} />
 
         <RelatedDjsCarousel djs={relatedDjs} />
 
