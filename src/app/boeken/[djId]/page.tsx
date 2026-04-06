@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
 import { Navbar } from "@/components/Navbar";
+import { DatePickerPopover } from "@/components/date-picker-popover";
 import {
   getCity,
   getDisplayName,
@@ -12,7 +13,7 @@ import {
   getHourlyRate,
   type DjProfileRow,
 } from "@/lib/dj-profile-helpers";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase-browser";
 
 const EVENT_TYPES = [
   "Verjaardagsfeest",
@@ -426,18 +427,16 @@ export default function BoekenPage() {
             ) : null}
 
             <div className="space-y-6">
-              <label className="block">
-                <span className="text-sm font-semibold text-neutral-800">
-                  Evenementdatum
-                </span>
-                <input
-                  type="date"
-                  required
+              <div className="block">
+                <DatePickerPopover
                   value={eventDate}
-                  onChange={(e) => setEventDate(e.target.value)}
-                  className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                  onChange={setEventDate}
+                  label="Evenementdatum"
+                  placeholder="Kies een datum"
+                  triggerClassName="flex h-[42px] w-full items-center rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-left text-sm text-neutral-900 outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                  popoverAlign="left"
                 />
-              </label>
+              </div>
 
               <div>
                 <span className="text-sm font-semibold text-neutral-800">
@@ -478,34 +477,65 @@ export default function BoekenPage() {
                 <span className="text-sm font-semibold text-neutral-800">
                   Locatie evenement
                 </span>
-                {isLoaded ? (
-                  <Autocomplete
-                    onLoad={(ac) => setAutocomplete(ac)}
-                    onPlaceChanged={onPlaceChanged}
-                    options={{ componentRestrictions: { country: "nl" } }}
+                <div className="relative mt-2">
+                  <div
+                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
+                    aria-hidden
                   >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M12 21s7-4.35 7-10a7 7 0 10-14 0c0 5.65 7 10 7 10z"
+                        stroke="currentColor"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <circle
+                        cx="12"
+                        cy="11"
+                        r="2.25"
+                        stroke="currentColor"
+                        strokeWidth="1.75"
+                      />
+                    </svg>
+                  </div>
+                  {isLoaded ? (
+                    <Autocomplete
+                      onLoad={(ac) => setAutocomplete(ac)}
+                      onPlaceChanged={onPlaceChanged}
+                      options={{ componentRestrictions: { country: "nl" } }}
+                    >
+                      <input
+                        type="text"
+                        required
+                        value={venueAddress}
+                        onChange={(e) => setVenueAddress(e.target.value)}
+                        placeholder="Straat en huisnummer, Stad"
+                        className="h-[42px] w-full rounded-lg border border-neutral-200 bg-white pl-10 pr-3 text-sm outline-none placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                      />
+                    </Autocomplete>
+                  ) : (
                     <input
                       type="text"
-                      required
-                      value={venueAddress}
-                      onChange={(e) => setVenueAddress(e.target.value)}
-                      placeholder="Straat en huisnummer, Stad"
-                      className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm outline-none placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                      placeholder="Adres laden..."
+                      disabled
+                      className="h-[42px] w-full rounded-lg border border-neutral-200 bg-white pl-10 pr-3 text-sm"
                     />
-                  </Autocomplete>
-                ) : (
-                  <input
-                    type="text"
-                    placeholder="Adres laden..."
-                    disabled
-                    className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm"
-                  />
-                )}
+                  )}
+                </div>
                 {travelCost > 0 ? (
-                  <div className="mt-2 text-xs italic text-neutral-600">
-                    Reiskosten: €{travelCost} (geschatte afstand: {travelDistance}
-                    km retour)
+                  <div className="mt-2 rounded-lg bg-neutral-50 px-3 py-2 text-xs text-neutral-700 ring-1 ring-neutral-200">
+                    <span className="font-semibold text-neutral-900">
+                      Reiskosten: €{travelCost}
+                    </span>{" "}
+                    <span className="text-neutral-600">
+                      (geschatte afstand: {travelDistance}km retour)
+                    </span>
                   </div>
+                ) : venueAddress.trim() ? (
+                  <p className="mt-2 rounded-lg bg-neutral-100 px-3 py-2 text-xs italic text-neutral-600">
+                    Selecteer een adres uit de lijst om reiskosten te berekenen.
+                  </p>
                 ) : null}
               </label>
 

@@ -77,8 +77,7 @@ function StarSvg({ filled }: { filled: boolean }) {
 
 function StarRow({ value, size = "md" }: { value: number; size?: "sm" | "md" }) {
   const full = Math.min(5, Math.max(0, Math.round(value)));
-  const starClass =
-    size === "sm" ? "h-3 w-3" : "h-3.5 w-3.5";
+  const starClass = size === "sm" ? "h-3 w-3" : "h-3.5 w-3.5";
   return (
     <span className="flex gap-0.5" aria-hidden>
       {Array.from({ length: 5 }, (_, i) => (
@@ -185,24 +184,26 @@ export default async function DjProfilePage({ params }: PageProps) {
       `Van intieme borrels tot volle dansvloeren: altijd afgestemd op jouw publiek en sfeer.`;
 
   const fn = firstName(name);
+
+  // Fix: also try user_id from the profile row directly
   const djUserId =
-    typeof profile.user_id === "string" ? profile.user_id : "";
+    typeof profile.user_id === "string" && profile.user_id.trim()
+      ? profile.user_id.trim()
+      : "";
+
   const customUsps = parseCustomUsps(profile);
 
   const instagramUrl =
-    typeof profile.instagram_url === "string"
-      ? profile.instagram_url
-      : null;
+    typeof profile.instagram_url === "string" ? profile.instagram_url : null;
   const soundcloudUrl =
-    typeof profile.soundcloud_url === "string"
-      ? profile.soundcloud_url
-      : null;
+    typeof profile.soundcloud_url === "string" ? profile.soundcloud_url : null;
 
   return (
     <div className="min-h-screen bg-white font-sans text-neutral-900">
       <Navbar />
 
       <div className="mx-auto max-w-[1400px] px-4 pb-16 pt-6 sm:px-6 lg:px-8">
+        {/* Photo grid */}
         <div className="relative grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-3">
           <div className="relative flex min-h-[220px] items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-neutral-800 via-neutral-900 to-black lg:min-h-[420px]">
             <button
@@ -210,12 +211,7 @@ export default async function DjProfilePage({ params }: PageProps) {
               className="flex h-16 w-16 items-center justify-center rounded-full bg-white/15 text-white ring-2 ring-white/40 backdrop-blur-sm transition hover:bg-white/25"
               aria-label="Video afspelen"
             >
-              <svg
-                className="ml-1 h-8 w-8"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden
-              >
+              <svg className="ml-1 h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
                 <path d="M8 5v14l11-7z" />
               </svg>
             </button>
@@ -235,36 +231,41 @@ export default async function DjProfilePage({ params }: PageProps) {
           </div>
         </div>
 
+        {/* Name + badge + location + genres — all in one block */}
         <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0 space-y-3">
-            <h1 className="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
-              {name}
-            </h1>
 
-            {isVerifiedProfile(profile) ? (
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
-                <svg
-                  className="h-3.5 w-3.5 shrink-0"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  aria-hidden
-                >
-                  <path
-                    d="M5 10l3 3 7-7"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                Geverifieerde DJ
-              </div>
-            ) : null}
+            {/* Name inline with verified badge */}
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
+                {name}
+              </h1>
+              {isVerifiedProfile(profile) ? (
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                  <svg
+                    className="h-3.5 w-3.5 shrink-0"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    aria-hidden
+                  >
+                    <path
+                      d="M5 10l3 3 7-7"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  Geverifieerde DJ
+                </div>
+              ) : null}
+            </div>
 
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm font-medium text-[#111110]">
+            {/* Location — forced dark */}
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm font-medium text-neutral-900">
               <span className="inline-flex items-center gap-1.5">
                 <svg
-                  className="h-4 w-4 shrink-0 text-[#111110]"
+                  className="h-4 w-4 shrink-0 text-neutral-900"
                   viewBox="0 0 24 24"
                   fill="none"
                   aria-hidden
@@ -287,6 +288,8 @@ export default async function DjProfilePage({ params }: PageProps) {
                 {city}
               </span>
             </div>
+
+            {/* Genres */}
             {genres.length > 0 ? (
               <div className="flex flex-wrap gap-2">
                 {genres.map((g) => (
@@ -300,6 +303,8 @@ export default async function DjProfilePage({ params }: PageProps) {
               </div>
             ) : null}
           </div>
+
+          {/* Stel een vraag */}
           <div className="flex shrink-0 flex-col gap-1 sm:items-end">
             {djUserId ? (
               <StelVraagButton
@@ -362,9 +367,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                     key={card.t}
                     className="rounded-xl border border-neutral-200 bg-neutral-50/80 p-4"
                   >
-                    <p className="text-sm font-semibold text-neutral-900">
-                      {card.t}
-                    </p>
+                    <p className="text-sm font-semibold text-neutral-900">{card.t}</p>
                     <p className="mt-1 text-sm text-neutral-600">{card.d}</p>
                   </li>
                 ))}
@@ -396,10 +399,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                       const count = dist[star];
                       const pct = Math.round((count / maxBar) * 100);
                       return (
-                        <div
-                          key={star}
-                          className="flex items-center gap-3 text-sm"
-                        >
+                        <div key={star} className="flex items-center gap-3 text-sm">
                           <span className="flex w-14 items-center gap-1 text-neutral-600">
                             {star}
                             <StarSvg filled />
@@ -410,9 +410,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                               style={{ width: `${pct}%` }}
                             />
                           </div>
-                          <span className="w-8 text-right text-neutral-500">
-                            {count}
-                          </span>
+                          <span className="w-8 text-right text-neutral-500">{count}</span>
                         </div>
                       );
                     })}
@@ -505,7 +503,6 @@ export default async function DjProfilePage({ params }: PageProps) {
             </section>
 
             <DjHelpSection />
-
             <DjProfileFaq />
           </div>
 

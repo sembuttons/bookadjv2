@@ -8,7 +8,7 @@ import {
   getDisplayName,
   type DjProfileRow,
 } from "@/lib/dj-profile-helpers";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase-browser";
 
 type BookingRow = Record<string, unknown> & { id: string };
 

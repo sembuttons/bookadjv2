@@ -12,7 +12,7 @@ import {
   getStageName,
   type DjProfileRow,
 } from "@/lib/dj-profile-helpers";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase-browser";
 
 const FILTER_GENRES = [
   "House",

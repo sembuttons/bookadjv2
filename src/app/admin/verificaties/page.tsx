@@ -6,7 +6,7 @@ import {
   getHourlyRate,
   type DjProfileRow,
 } from "@/lib/dj-profile-helpers";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase-browser";
 
 function formatCreatedAt(iso: string | null | undefined): string {
   if (!iso) return "—";

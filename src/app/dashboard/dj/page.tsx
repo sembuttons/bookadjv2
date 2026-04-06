@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase-browser";
 
 function formatEuroFromCents(cents: number | null | undefined): string {
   if (typeof cents !== "number" || Number.isNaN(cents)) {

@@ -16,7 +16,7 @@ import {
   getDisplayName,
   type DjProfileRow,
 } from "@/lib/dj-profile-helpers";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase-browser";
 
 const stripePublishableKey =
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "";

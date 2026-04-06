@@ -13,7 +13,7 @@ import {
   type MessageRow,
   type UserPreview,
 } from "@/lib/messaging-utils";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase-browser";
 
 function IconChatEmpty({ className }: { className?: string }) {
   return (

@@ -6,7 +6,7 @@ import {
   getStageName,
   type DjProfileRow,
 } from "@/lib/dj-profile-helpers";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase-browser";
 
 type FilterTab = "alle" | "pending" | "confirmed" | "completed" | "cancelled";
 

@@ -167,12 +167,7 @@ export function DatePickerPopover({
   }
 
   const labelText = selected
-    ? selected.toLocaleDateString("nl-NL", {
-        weekday: "short",
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      })
+    ? `${pad2(selected.getDate())}/${pad2(selected.getMonth() + 1)}/${selected.getFullYear()}`
     : null;
 
   const popAlign =

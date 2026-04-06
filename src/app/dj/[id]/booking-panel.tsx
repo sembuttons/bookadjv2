@@ -133,6 +133,28 @@ export function BookingPanel({
           <span className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
             Locatie evenement
           </span>
+          <div className="relative mt-2">
+            <div
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
+              aria-hidden
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M12 21s7-4.35 7-10a7 7 0 10-14 0c0 5.65 7 10 7 10z"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <circle
+                  cx="12"
+                  cy="11"
+                  r="2.25"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                />
+              </svg>
+            </div>
           {isLoaded ? (
             <Autocomplete
               onLoad={(ac) => setAutocomplete(ac)}
@@ -144,7 +166,7 @@ export function BookingPanel({
                 value={venueAddress}
                 onChange={(e) => setVenueAddress(e.target.value)}
                 placeholder="Straat en huisnummer, Stad"
-                className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                className="h-[42px] w-full rounded-lg border border-neutral-200 bg-white pl-10 pr-3 text-sm text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
               />
             </Autocomplete>
           ) : (
@@ -152,17 +174,27 @@ export function BookingPanel({
               type="text"
               placeholder="Adres laden..."
               disabled
-              className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-900 outline-none placeholder:text-neutral-400"
+              className="h-[42px] w-full rounded-lg border border-neutral-200 bg-white pl-10 pr-3 text-sm text-neutral-900 outline-none placeholder:text-neutral-400"
             />
           )}
+          </div>
         </label>
         {travelCost > 0 ? (
-          <div className="mt-2 text-xs italic text-neutral-600">
-            Reiskosten: €{travelCost} (geschatte afstand: {travelDistance}km retour)
+          <div className="mt-2 rounded-lg bg-neutral-50 px-3 py-2 text-xs text-neutral-700 ring-1 ring-neutral-200">
+            <span className="font-semibold text-neutral-900">
+              Reiskosten: €{travelCost}
+            </span>{" "}
+            <span className="text-neutral-600">
+              (geschatte afstand: {travelDistance}km retour)
+            </span>
           </div>
+        ) : venueAddress.trim() ? (
+          <p className="mt-2 rounded-lg bg-neutral-100 px-3 py-2 text-xs italic text-neutral-600">
+            Selecteer een adres uit de lijst om reiskosten te berekenen.
+          </p>
         ) : (
           <p className="mt-2 rounded-lg bg-neutral-100 px-3 py-2 text-xs italic text-neutral-600">
-            Reiskosten worden berekend na bevestiging van de DJ
+            Vul het adres in om reiskosten te berekenen.
           </p>
         )}
 
