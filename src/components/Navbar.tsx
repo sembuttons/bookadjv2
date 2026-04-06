@@ -226,7 +226,7 @@ export function Navbar() {
           id="site-mobile-nav"
         >
           <div className="flex h-14 items-center justify-between border-b border-gray-800 px-4">
-            <span className="text-sm font-bold">Menu</span>
+            <span className="text-sm font-bold text-white">Menu</span>
             <button
               type="button"
               className="flex h-11 w-11 items-center justify-center rounded-lg text-gray-400 hover:bg-[#0f172a]/80"
