@@ -53,19 +53,26 @@ export default function OverOnsPage() {
         </div>
       </section>
 
-      <figure className="mt-12 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-100 shadow-sm">
-        <div
-          className="flex aspect-[16/9] w-full items-center justify-center bg-gradient-to-br from-emerald-100 to-neutral-200"
-          role="img"
-          aria-label="Placeholder teamfoto"
-        >
-          <span className="text-sm font-medium text-neutral-500">
-            Foto: team / kantoor — binnenkort
-          </span>
-        </div>
+      <figure className="mt-12 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-900 shadow-sm">
+        <img
+          src="https://images.unsplash.com/photo-1571266028243-e631f2e28e4b?w=1200&q=80&auto=format&fit=crop"
+          alt="Publiek bij een donker verlicht live-evenement"
+          className="aspect-[16/9] w-full object-cover"
+          width={1200}
+          height={675}
+          loading="lazy"
+        />
         <figcaption className="border-t border-neutral-200 bg-white px-4 py-3 text-center text-sm text-neutral-600">
-          Team bookadj aan het werk — placeholder tot we de echte foto
-          plaatsen.
+          Sfeerbeeld: waar bookadj voor staat — live muziek, energie en
+          professionele uitvoering.{" "}
+          <a
+            href="https://unsplash.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-emerald-700 underline"
+          >
+            Unsplash
+          </a>
         </figcaption>
       </figure>
 

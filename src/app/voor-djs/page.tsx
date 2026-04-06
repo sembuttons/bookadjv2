@@ -3,6 +3,9 @@ import { Navbar } from "@/components/Navbar";
 
 const signupHref = "/auth?tab=aanmelden&role=dj";
 
+const VOOR_DJS_HERO_BG =
+  "https://images.unsplash.com/photo-1540039155733-5bb30b53aa88?w=1920&q=80&auto=format&fit=crop";
+
 const usps = [
   {
     title: "Meer boekingen, minder moeite",
@@ -122,9 +125,18 @@ export default function VoorDjsPage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-[#0a0a0b] px-4 pb-20 pt-16 text-white sm:px-6 sm:pb-28 sm:pt-20 lg:px-8 lg:pb-32 lg:pt-24">
+      <section className="relative isolate overflow-hidden bg-[#0a0a0b] px-4 pb-20 pt-16 text-white sm:px-6 sm:pb-28 sm:pt-20 lg:px-8 lg:pb-32 lg:pt-24">
         <div
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(52,211,153,0.18),transparent)]"
+          className="absolute inset-0 -z-30 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${VOOR_DJS_HERO_BG})` }}
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 -z-20 bg-gradient-to-b from-[#0a0a0b]/92 via-[#0a0a0b]/88 to-[#0a0a0b]/95"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(52,211,153,0.18),transparent)]"
           aria-hidden
         />
         <div
@@ -318,6 +330,12 @@ export default function VoorDjsPage() {
                   dashboard vóór je een aanvraag accepteert.
                 </p>
               </div>
+              <Link
+                href={signupHref}
+                className="mt-8 flex w-full items-center justify-center rounded-xl bg-emerald-500 px-8 py-4 text-base font-semibold text-neutral-950 shadow-lg shadow-emerald-500/20 transition hover:bg-emerald-400"
+              >
+                Maak een gratis profiel aan
+              </Link>
             </div>
           </div>
         </div>

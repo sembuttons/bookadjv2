@@ -65,13 +65,17 @@ const reviews = [
 
 const PLACEHOLDER_GOOGLE_REVIEWS = "https://www.google.com";
 
-/** Placeholder hero — replace with branded asset when ready */
+/** Home hero — dark festival / crowd */
 const HERO_BG_IMAGE =
-  "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1920&q=80&auto=format&fit=crop";
+  "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1920&q=80&auto=format&fit=crop";
 
-/** Trust section — DJ / crowd placeholder */
+/** Trust / Fiverr-style column — DJ deck, atmospheric */
 const TRUST_SECTION_IMAGE =
-  "https://images.unsplash.com/photo-1571266028243-e631f2e28e4b?w=1200&q=80&auto=format&fit=crop";
+  "https://images.unsplash.com/photo-1598387993784-808f6ee9fa6f?w=1200&q=80&auto=format&fit=crop";
+
+/** Bottom “voor DJ’s” CTA strip */
+const VOOR_DJS_SECTION_BG =
+  "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200&q=80&auto=format&fit=crop";
 
 function initialsFromName(name: string) {
   const parts = name
@@ -617,10 +621,19 @@ export default async function Home() {
 
       <section
         id="voor-djs"
-        className="bg-neutral-950 px-4 py-16 text-center text-white sm:px-6 sm:py-20 lg:px-8"
+        className="relative isolate overflow-hidden px-4 py-16 text-center text-white sm:px-6 sm:py-20 lg:px-8"
         aria-labelledby="cta-heading"
       >
-        <div className="mx-auto max-w-3xl">
+        <div
+          className="absolute inset-0 -z-20 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${VOOR_DJS_SECTION_BG})` }}
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 -z-10 bg-gradient-to-b from-neutral-950/90 via-neutral-950/88 to-neutral-950/92"
+          aria-hidden
+        />
+        <div className="relative mx-auto max-w-3xl">
           <h2
             id="cta-heading"
             className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl"
