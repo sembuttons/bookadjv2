@@ -348,18 +348,13 @@ export default async function DjProfilePage({ params }: PageProps) {
 
           {/* Stel een vraag */}
           <div className="flex shrink-0 flex-col gap-1 sm:items-end">
-            {djUserId ? (
-              <StelVraagButton
-                djUserId={djUserId}
-                className="rounded-xl bg-black px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-bookadj"
-              >
-                Stel {fn} een vraag
-              </StelVraagButton>
-            ) : (
-              <span className="rounded-xl bg-neutral-200 px-6 py-3 text-sm font-medium text-neutral-500">
-                Stel een vraag
-              </span>
-            )}
+            <StelVraagButton
+              djUserId={djUserId || undefined}
+              djProfileId={id}
+              className="rounded-xl bg-black px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-bookadj"
+            >
+              Stel {fn} een vraag
+            </StelVraagButton>
             <p className="text-xs text-neutral-500 sm:text-right">
               Reageert binnen 2 uur
             </p>

@@ -233,18 +233,13 @@ export function BookingPanel({
         >
           Boeking aanvragen
         </Link>
-        {djUserId ? (
-          <StelVraagButton
-            djUserId={djUserId}
-            className="mt-3 w-full rounded-xl border-2 border-neutral-900 bg-white py-3 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50"
-          >
-            {contactButtonLabel}
-          </StelVraagButton>
-        ) : (
-          <span className="mt-3 block w-full rounded-xl border-2 border-neutral-200 py-3 text-center text-sm font-medium text-neutral-400">
-            Stel een vraag
-          </span>
-        )}
+        <StelVraagButton
+          djUserId={djUserId ?? undefined}
+          djProfileId={djId}
+          className="mt-3 w-full rounded-xl border-2 border-neutral-900 bg-white py-3 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50"
+        >
+          {contactButtonLabel}
+        </StelVraagButton>
       </div>
 
       <div className="flex items-center gap-3 rounded-xl bg-bookadj/10 px-4 py-3 text-sm font-medium text-neutral-900 ring-1 ring-bookadj/20">

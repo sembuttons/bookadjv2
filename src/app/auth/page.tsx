@@ -117,7 +117,7 @@ export default function AuthPage() {
     if (Object.keys(fe).length > 0) return;
 
     setLoading(true);
-    const { error: signError } = await supabase.auth.signUp({
+    const { data: signData, error: signError } = await supabase.auth.signUp({
       email: signupEmail,
       password: signupPassword,
       options: {
@@ -132,6 +132,23 @@ export default function AuthPage() {
       setError(signError.message);
       return;
     }
+
+    if (signData.session) {
+      const params = new URLSearchParams(window.location.search);
+      const redirectRaw = params.get("redirect") ?? params.get("returnTo");
+      const redirectTo =
+        redirectRaw &&
+        redirectRaw.startsWith("/") &&
+        !redirectRaw.startsWith("//")
+          ? redirectRaw
+          : null;
+      if (redirectTo) {
+        router.push(redirectTo);
+        router.refresh();
+        return;
+      }
+    }
+
     setSignupDone(true);
   }
 
