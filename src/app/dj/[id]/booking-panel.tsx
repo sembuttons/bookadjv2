@@ -95,7 +95,7 @@ export function BookingPanel({
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+      <div className="card-interactive p-6">
         <div className="mt-0">
           <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
             Aantal uren
@@ -108,7 +108,7 @@ export function BookingPanel({
                 onClick={() => setHours(h)}
                 className={`shrink-0 rounded-full px-3.5 py-2 text-sm font-semibold transition-colors ${
                   hours === h
-                    ? "bg-black text-emerald-400"
+                    ? "bg-bookadj text-white shadow-sm"
                     : "bg-neutral-100 text-neutral-800 hover:bg-neutral-200"
                 }`}
               >
@@ -125,7 +125,7 @@ export function BookingPanel({
             label="Datum evenement"
             placeholder="Kies een datum"
             popoverAlign="right"
-            triggerClassName="flex h-[42px] w-full items-center rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-left text-sm text-neutral-900 outline-none focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+            triggerClassName="input-field flex items-center justify-start text-left"
           />
         </div>
 
@@ -166,7 +166,7 @@ export function BookingPanel({
                 value={venueAddress}
                 onChange={(e) => setVenueAddress(e.target.value)}
                 placeholder="Straat en huisnummer, Stad"
-                className="h-[42px] w-full rounded-lg border border-neutral-200 bg-white pl-10 pr-3 text-sm text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2 focus:ring-black/10"
+                className="input-field pl-10"
               />
             </Autocomplete>
           ) : (
@@ -174,7 +174,7 @@ export function BookingPanel({
               type="text"
               placeholder="Adres laden..."
               disabled
-              className="h-[42px] w-full rounded-lg border border-neutral-200 bg-white pl-10 pr-3 text-sm text-neutral-900 outline-none placeholder:text-neutral-400"
+              className="input-field pl-10"
             />
           )}
           </div>
@@ -209,7 +209,7 @@ export function BookingPanel({
           </div>
           <div className="flex justify-between text-neutral-700">
             <span>Apparatuur</span>
-            <span className="font-medium text-emerald-700">Inbegrepen</span>
+            <span className="font-medium text-bookadj">Inbegrepen</span>
           </div>
           <div className="flex justify-between text-neutral-700">
             <span>Reiskosten</span>
@@ -229,7 +229,7 @@ export function BookingPanel({
             if (!eventDate.trim()) return base;
             return `${base}?${new URLSearchParams({ date: eventDate.trim() }).toString()}`;
           })()}
-          className="mt-5 flex w-full items-center justify-center rounded-xl bg-black py-3.5 text-sm font-bold text-emerald-400 transition-colors hover:bg-neutral-900"
+          className="mt-5 flex w-full items-center justify-center rounded-xl bg-black py-3.5 text-sm font-bold text-white transition-colors hover:bg-bookadj"
         >
           Boeking aanvragen
         </Link>
@@ -247,17 +247,17 @@ export function BookingPanel({
         )}
       </div>
 
-      <div className="flex items-center gap-3 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-950 ring-1 ring-emerald-200">
-        <ShieldCheck className="h-5 w-5 shrink-0 text-emerald-700" aria-hidden />
+      <div className="flex items-center gap-3 rounded-xl bg-bookadj/10 px-4 py-3 text-sm font-medium text-neutral-900 ring-1 ring-bookadj/20">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-bookadj" aria-hidden />
         Geen betaling tot acceptatie van de boeking.
       </div>
 
       <div className="grid gap-3 text-sm">
-        <div className="rounded-xl border border-neutral-200 bg-white px-4 py-3">
+        <div className="rounded-xl border border-neutral-200 bg-white px-4 py-3 shadow-sm transition-shadow duration-300 hover:shadow-md">
           <p className="text-xs text-neutral-500">Reactietijd</p>
           <p className="font-semibold text-neutral-900">{responseTimeLabel}</p>
         </div>
-        <div className="rounded-xl border border-neutral-200 bg-white px-4 py-3">
+        <div className="rounded-xl border border-neutral-200 bg-white px-4 py-3 shadow-sm transition-shadow duration-300 hover:shadow-md">
           <p className="text-xs text-neutral-500">Lid sinds</p>
           <p className="font-semibold text-neutral-900">{memberSinceLabel}</p>
         </div>

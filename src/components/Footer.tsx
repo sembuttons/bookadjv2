@@ -15,7 +15,7 @@ export function Footer() {
           <div className="lg:col-span-4">
             <Link
               href="/"
-              className="text-xl font-bold tracking-tight text-white hover:text-emerald-400"
+              className="text-xl font-bold tracking-tight text-white transition-colors hover:text-emerald-300"
             >
               bookadj
             </Link>
@@ -122,6 +122,14 @@ export function Footer() {
                     className="text-white/70 transition-colors hover:text-white"
                   >
                     Contact
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/geschillen"
+                    className="text-white/70 transition-colors hover:text-white"
+                  >
+                    Hulp bij problemen
                   </Link>
                 </li>
                 <li>

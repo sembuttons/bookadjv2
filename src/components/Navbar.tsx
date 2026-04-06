@@ -156,19 +156,19 @@ export function Navbar() {
           className="order-last flex w-full justify-center gap-6 text-sm font-medium text-neutral-700 md:order-none md:absolute md:left-1/2 md:w-auto md:-translate-x-1/2 md:gap-8"
           aria-label="Hoofdnavigatie"
         >
-          <Link href="/zoeken" className="transition-colors hover:text-neutral-900">
+          <Link href="/zoeken" className="transition-colors hover:text-bookadj">
             DJ&apos;s vinden
           </Link>
-          <Link href="/hoe-het-werkt" className="transition-colors hover:text-neutral-900">
+          <Link href="/hoe-het-werkt" className="transition-colors hover:text-bookadj">
             Hoe het werkt
           </Link>
-          <Link href="/contact" className="transition-colors hover:text-neutral-900">
+          <Link href="/contact" className="transition-colors hover:text-bookadj">
             Contact
           </Link>
-          <Link href="/voor-djs" className="transition-colors hover:text-neutral-900">
+          <Link href="/voor-djs" className="transition-colors hover:text-bookadj">
             Voor DJ&apos;s
           </Link>
-          <Link href="/over-ons" className="transition-colors hover:text-neutral-900">
+          <Link href="/over-ons" className="transition-colors hover:text-bookadj">
             Over ons
           </Link>
         </nav>
@@ -178,13 +178,13 @@ export function Navbar() {
             <>
               <Link
                 href="/auth"
-                className="text-sm font-medium text-neutral-800 transition-colors hover:text-neutral-900"
+                className="text-sm font-medium text-neutral-800 transition-colors hover:text-bookadj"
               >
                 Inloggen
               </Link>
               <Link
                 href="/auth?tab=aanmelden"
-                className="rounded-lg bg-neutral-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-neutral-800"
+                className="rounded-lg bg-bookadj px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-bookadj-hover"
               >
                 Aanmelden
               </Link>

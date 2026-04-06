@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Navbar } from "@/components/Navbar";
+import { EmptyState, ZoekenResultsSkeleton } from "@/components/skeleton";
 import {
   getCity,
   getGenres,
@@ -98,8 +99,8 @@ function IconSparkleNew({ className }: { className?: string }) {
 }
 
 const rangeThumb =
-  "[&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:relative [&::-webkit-slider-thumb]:z-10 [&::-webkit-slider-thumb]:mt-[-6px] [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-grab [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:bg-black [&::-webkit-slider-thumb]:shadow-sm [&::-webkit-slider-thumb]:active:cursor-grabbing " +
-  "[&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-grab [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-black [&::-moz-range-thumb]:shadow-sm [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:active:cursor-grabbing";
+  "[&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:relative [&::-webkit-slider-thumb]:z-10 [&::-webkit-slider-thumb]:mt-[-6px] [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-grab [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:bg-bookadj [&::-webkit-slider-thumb]:shadow-sm [&::-webkit-slider-thumb]:active:cursor-grabbing " +
+  "[&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-grab [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-bookadj [&::-moz-range-thumb]:shadow-sm [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:active:cursor-grabbing";
 
 const rangeTrackTransparent =
   "[&::-webkit-slider-runnable-track]:h-1 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-transparent " +
@@ -131,7 +132,7 @@ function DualHourlyRateSlider({
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute top-[calc(50%-2px)] h-0.5 rounded-full bg-black"
+          className="pointer-events-none absolute top-[calc(50%-2px)] h-0.5 rounded-full bg-bookadj"
           style={{
             left: `${leftPct}%`,
             width: `${Math.max(widthPct, 0)}%`,
@@ -149,7 +150,7 @@ function DualHourlyRateSlider({
             const v = Number(e.target.value);
             onMinChange(Math.min(v, maxVal - PRICE_STEP));
           }}
-          className={`pointer-events-none absolute inset-x-0 top-1/2 w-full -translate-y-1/2 appearance-none bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 ${rangeTrackTransparent} ${rangeThumb}`}
+          className={`pointer-events-none absolute inset-x-0 top-1/2 w-full -translate-y-1/2 appearance-none bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-bookadj/30 focus-visible:ring-offset-2 ${rangeTrackTransparent} ${rangeThumb}`}
           style={{ zIndex: minZ }}
           aria-label="Minimum uurtarief"
         />
@@ -163,7 +164,7 @@ function DualHourlyRateSlider({
             const v = Number(e.target.value);
             onMaxChange(Math.max(v, minVal + PRICE_STEP));
           }}
-          className={`pointer-events-none absolute inset-x-0 top-1/2 w-full -translate-y-1/2 appearance-none bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2 ${rangeTrackTransparent} ${rangeThumb}`}
+          className={`pointer-events-none absolute inset-x-0 top-1/2 w-full -translate-y-1/2 appearance-none bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-bookadj/30 focus-visible:ring-offset-2 ${rangeTrackTransparent} ${rangeThumb}`}
           style={{ zIndex: maxZ }}
           aria-label="Maximum uurtarief"
         />
@@ -371,7 +372,7 @@ export default function ZoekenPage() {
                 value={stad}
                 onChange={(e) => setStad(e.target.value)}
                 placeholder="Bijv. Amsterdam"
-                className="rounded-lg border border-neutral-200 px-3 py-2.5 text-sm"
+                className="input-field"
               />
             </label>
             <label className="flex min-w-[140px] flex-1 flex-col gap-1.5">
@@ -382,7 +383,7 @@ export default function ZoekenPage() {
                 type="date"
                 value={datum}
                 onChange={(e) => setDatum(e.target.value)}
-                className="rounded-lg border border-neutral-200 px-3 py-2.5 text-sm"
+                className="input-field"
               />
             </label>
             <label className="flex min-w-[140px] flex-1 flex-col gap-1.5">
@@ -392,7 +393,7 @@ export default function ZoekenPage() {
               <select
                 value={genreSearch}
                 onChange={(e) => setGenreSearch(e.target.value)}
-                className="rounded-lg border border-neutral-200 px-3 py-2.5 text-sm"
+                className="input-field"
               >
                 <option value="">Alle genres</option>
                 {FILTER_GENRES.map((g) => (
@@ -404,7 +405,7 @@ export default function ZoekenPage() {
             </label>
             <button
               type="submit"
-              className="h-[42px] shrink-0 rounded-lg bg-black px-6 text-sm font-semibold text-white hover:bg-neutral-800"
+              className="h-11 min-h-[44px] shrink-0 rounded-lg bg-bookadj px-6 text-sm font-semibold text-white transition-colors hover:bg-bookadj-hover"
             >
               Zoeken
             </button>
@@ -419,7 +420,7 @@ export default function ZoekenPage() {
         </details>
 
         <aside className="hidden lg:block" aria-label="Filters">
-          <div className="rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
+          <div className="card-interactive p-5">
             <h2 className="mb-4 text-base font-bold">Filters</h2>
             {FilterBlock}
           </div>
@@ -452,7 +453,7 @@ export default function ZoekenPage() {
                       value={sort}
                       onChange={(e) => setSort(e.target.value as SortKey)}
                       aria-label="Sorteer resultaten"
-                      className="w-full cursor-pointer appearance-none rounded-lg border border-neutral-200 bg-white py-2.5 pl-3 pr-10 text-sm font-medium text-neutral-900 shadow-sm transition-colors hover:border-neutral-300 focus:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-black/10"
+                      className="input-field w-full cursor-pointer appearance-none py-0 pl-3 pr-10 font-medium shadow-sm"
                     >
                       {SORT_OPTIONS.map((o) => (
                         <option key={o.value} value={o.value}>
@@ -468,11 +469,27 @@ export default function ZoekenPage() {
           ) : null}
 
           {loading ? (
-            <p className="py-16 text-center text-neutral-600">Laden…</p>
+            <div className="py-6">
+              <ZoekenResultsSkeleton />
+            </div>
           ) : !error && filteredSorted.length === 0 ? (
-            <p className="rounded-xl border border-dashed border-neutral-200 bg-neutral-50 py-16 text-center text-neutral-600">
-              Geen DJ&apos;s gevonden
-            </p>
+            <EmptyState
+              icon={
+                <svg
+                  className="h-7 w-7"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  aria-hidden
+                >
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="M20 20l-3.5-3.5" strokeLinecap="round" />
+                </svg>
+              }
+              title="Geen DJ’s voor deze filters"
+              description="Pas je stad, datum, genres of prijs aan — of wis een filter om meer profielen te zien."
+            />
           ) : (
             <ul className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {filteredSorted.map((row) => {
@@ -485,10 +502,10 @@ export default function ZoekenPage() {
                   <li key={id}>
                     <Link
                       href={`/dj/${encodeURIComponent(id)}`}
-                      className="group block h-full rounded-2xl border border-neutral-200 bg-white shadow-sm hover:shadow-md"
+                      className="group card-interactive block h-full overflow-hidden"
                     >
                       <div className="relative aspect-[4/3] overflow-hidden rounded-t-2xl bg-gradient-to-br from-neutral-800 to-black">
-                        <span className="absolute left-3 top-3 rounded-full bg-emerald-500 px-2 py-0.5 text-[10px] font-bold uppercase text-white">
+                        <span className="absolute left-3 top-3 rounded-full bg-bookadj px-2 py-0.5 text-[10px] font-bold uppercase text-white shadow-sm">
                           Geverifieerd
                         </span>
                         <span className="absolute inset-0 flex items-center justify-center text-3xl font-bold text-white/90">

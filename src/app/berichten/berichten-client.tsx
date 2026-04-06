@@ -13,6 +13,7 @@ import {
   type MessageRow,
   type UserPreview,
 } from "@/lib/messaging-utils";
+import { Skeleton } from "@/components/skeleton";
 import { supabase } from "@/lib/supabase-browser";
 
 function IconChatEmpty({ className }: { className?: string }) {
@@ -395,8 +396,23 @@ export function BerichtenClient({
 
   if (loading || !userId) {
     return (
-      <div className="flex min-h-[40vh] items-center justify-center text-neutral-600">
-        Laden…
+      <div
+        className="flex min-h-[40vh] flex-col gap-4 md:flex-row md:rounded-2xl md:border md:border-neutral-200 md:bg-white md:p-4"
+        aria-busy
+        aria-label="Berichten laden"
+      >
+        <div className="hidden w-full space-y-3 md:block md:w-[280px] md:shrink-0">
+          <Skeleton className="h-10 w-full rounded-lg" />
+          <Skeleton className="h-10 w-full rounded-lg" />
+          {Array.from({ length: 5 }, (_, i) => (
+            <Skeleton key={i} className="h-16 w-full rounded-xl" />
+          ))}
+        </div>
+        <div className="flex flex-1 flex-col items-center justify-center gap-3 py-12 md:py-0">
+          <Skeleton className="h-12 w-12 rounded-full" />
+          <Skeleton className="h-4 w-40" />
+          <Skeleton className="h-3 w-56" />
+        </div>
       </div>
     );
   }

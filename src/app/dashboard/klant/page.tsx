@@ -6,6 +6,7 @@ import {
   getStageName,
   type DjProfileRow,
 } from "@/lib/dj-profile-helpers";
+import { DashboardBookingsSkeleton, EmptyState } from "@/components/skeleton";
 import { supabase } from "@/lib/supabase-browser";
 
 type FilterTab = "alle" | "pending" | "confirmed" | "completed" | "cancelled";
@@ -143,7 +144,7 @@ function statusBadge(statusNorm: string) {
     case "confirmed":
       return {
         className:
-          "bg-emerald-100 text-emerald-800 ring-emerald-600/20",
+          "bg-bookadj/10 text-bookadj-hover ring-bookadj/25",
         label: "Bevestigd",
       };
     case "completed":
@@ -291,7 +292,13 @@ export default function KlantDashboardPage() {
 
   if (loading) {
     return (
-      <div className="bg-white py-12 text-center text-neutral-600">Laden…</div>
+      <div className="bg-white">
+        <div className="h-8 w-48 animate-pulse rounded-lg bg-neutral-200" />
+        <div className="mt-2 h-4 w-72 max-w-full animate-pulse rounded bg-neutral-200" />
+        <div className="mt-10">
+          <DashboardBookingsSkeleton rows={4} />
+        </div>
+      </div>
     );
   }
 
@@ -315,11 +322,11 @@ export default function KlantDashboardPage() {
 
       {upcomingBannerBooking ? (
         <section
-          className="mt-8 overflow-hidden rounded-2xl bg-neutral-950 text-white ring-1 ring-emerald-500/40"
+          className="mt-8 overflow-hidden rounded-2xl bg-neutral-950 text-white ring-1 ring-bookadj/40"
           aria-label="Aankomend evenement"
         >
-          <div className="border-b border-emerald-500/30 bg-emerald-500/15 px-5 py-3">
-            <p className="text-xs font-semibold uppercase tracking-wider text-emerald-300">
+          <div className="border-b border-bookadj/30 bg-bookadj/15 px-5 py-3">
+            <p className="text-xs font-semibold uppercase tracking-wider text-emerald-200">
               Aankomend evenement
             </p>
           </div>
@@ -358,7 +365,7 @@ export default function KlantDashboardPage() {
               </ul>
               {typeof upcomingBannerBooking.event_date === "string" &&
               upcomingBannerBooking.event_date ? (
-                <p className="inline-flex items-center rounded-full bg-emerald-500/20 px-3 py-1 text-sm font-semibold text-emerald-300 ring-1 ring-emerald-500/40">
+                <p className="inline-flex items-center rounded-full bg-bookadj/20 px-3 py-1 text-sm font-semibold text-emerald-200 ring-1 ring-bookadj/40">
                   {(() => {
                     const days = calendarDaysUntilEvent(
                       upcomingBannerBooking.event_date,
@@ -374,7 +381,7 @@ export default function KlantDashboardPage() {
             <div className="flex shrink-0 flex-col gap-3 sm:flex-row lg:flex-col">
               <Link
                 href={`/dashboard/klant/berichten?booking=${encodeURIComponent(upcomingBannerBooking.id)}`}
-                className="rounded-lg bg-emerald-500 px-5 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-600"
+                className="rounded-lg bg-bookadj px-5 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition-colors hover:bg-bookadj-hover"
               >
                 Bericht DJ
               </Link>
@@ -403,7 +410,7 @@ export default function KlantDashboardPage() {
             onClick={() => setFilter(tab.id)}
             className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
               filter === tab.id
-                ? "bg-black text-white"
+                ? "bg-bookadj text-white shadow-sm"
                 : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
             }`}
           >
@@ -413,9 +420,25 @@ export default function KlantDashboardPage() {
       </div>
 
       {filteredBookings.length === 0 ? (
-        <p className="mt-8 rounded-xl border border-dashed border-neutral-200 bg-neutral-50 px-6 py-10 text-center text-sm text-neutral-600">
-          Geen boekingen gevonden
-        </p>
+        <div className="mt-8">
+          <EmptyState
+            icon={
+              <svg
+                className="h-7 w-7"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                aria-hidden
+              >
+                <rect x="4" y="5" width="16" height="14" rx="2" />
+                <path d="M8 10h8M8 14h4" strokeLinecap="round" />
+              </svg>
+            }
+            title="Geen boekingen in deze weergave"
+            description="Kies een andere tab of maak een nieuwe aanvraag via een DJ-profiel. Al je aanvragen en bevestigingen blijven hier bij elkaar."
+          />
+        </div>
       ) : (
         <ul className="mt-6 space-y-4" aria-label="Boekingen">
           {filteredBookings.map((booking) => {
@@ -434,7 +457,7 @@ export default function KlantDashboardPage() {
 
             return (
               <li key={booking.id}>
-                <article className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md sm:p-6">
+                <article className="card-interactive p-5 sm:p-6">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex gap-4">
                       <div

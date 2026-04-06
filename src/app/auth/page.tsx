@@ -224,7 +224,7 @@ export default function AuthPage() {
         ) : null}
         {resetMessage ? (
           <p
-            className="mt-6 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900"
+            className="mt-6 rounded-lg border border-bookadj/25 bg-bookadj/10 px-3 py-2 text-sm text-neutral-800"
             role="status"
           >
             {resetMessage}
@@ -258,7 +258,7 @@ export default function AuthPage() {
                     return n;
                   });
                 }}
-                className="mt-1.5 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-900 outline-none ring-black placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2"
+                className="input-field mt-1.5"
                 placeholder="naam@voorbeeld.nl"
               />
               {fieldErrors.loginEmail ? (
@@ -288,7 +288,7 @@ export default function AuthPage() {
                     return n;
                   });
                 }}
-                className="mt-1.5 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-900 outline-none ring-black focus:border-neutral-400 focus:ring-2"
+                className="input-field mt-1.5"
                 placeholder="••••••••"
               />
               {fieldErrors.loginPassword ? (
@@ -300,7 +300,7 @@ export default function AuthPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-black py-3 text-sm font-semibold text-white transition-colors hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="h-11 min-h-[44px] w-full rounded-lg bg-bookadj py-3 text-sm font-semibold text-white transition-colors hover:bg-bookadj-hover disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? "Bezig…" : "Inloggen"}
             </button>
@@ -317,13 +317,13 @@ export default function AuthPage() {
           </form>
         ) : signupDone ? (
           <div
-            className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50 px-6 py-8 text-center"
+            className="mt-8 rounded-2xl border border-bookadj/25 bg-bookadj/10 px-6 py-8 text-center"
             role="status"
           >
-            <p className="text-lg font-semibold text-emerald-950">
+            <p className="text-lg font-semibold text-neutral-900">
               Check je e-mail
             </p>
-            <p className="mt-2 text-sm text-emerald-900">
+            <p className="mt-2 text-sm text-neutral-700">
               We hebben je een bevestigingslink gestuurd. Open je inbox om je
               account te activeren.
             </p>
@@ -336,7 +336,7 @@ export default function AuthPage() {
                 setSignupPassword("");
                 setTab("login");
               }}
-              className="mt-6 text-sm font-medium text-emerald-950 underline-offset-2 hover:underline"
+              className="mt-6 text-sm font-medium text-bookadj underline-offset-2 hover:underline"
             >
               Terug naar inloggen
             </button>
@@ -368,7 +368,7 @@ export default function AuthPage() {
                     return n;
                   });
                 }}
-                className="mt-1.5 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-900 outline-none ring-black placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2"
+                className="input-field mt-1.5"
                 placeholder="Jan Jansen"
               />
               {fieldErrors.signupName ? (
@@ -398,7 +398,7 @@ export default function AuthPage() {
                     return n;
                   });
                 }}
-                className="mt-1.5 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-900 outline-none ring-black placeholder:text-neutral-400 focus:border-neutral-400 focus:ring-2"
+                className="input-field mt-1.5"
                 placeholder="naam@voorbeeld.nl"
               />
               {fieldErrors.signupEmail ? (
@@ -428,7 +428,7 @@ export default function AuthPage() {
                     return n;
                   });
                 }}
-                className="mt-1.5 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-900 outline-none ring-black focus:border-neutral-400 focus:ring-2"
+                className="input-field mt-1.5"
                 placeholder="Minimaal 6 tekens"
               />
               {fieldErrors.signupPassword ? (
@@ -449,7 +449,7 @@ export default function AuthPage() {
                 role="group"
                 aria-labelledby="role-label"
               >
-                <label className="flex cursor-pointer items-center justify-center rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm font-medium has-[:checked]:border-black has-[:checked]:bg-neutral-50">
+                <label className="flex cursor-pointer items-center justify-center rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm font-medium has-[:checked]:border-bookadj has-[:checked]:bg-bookadj/5">
                   <input
                     type="radio"
                     name="role"
@@ -460,7 +460,7 @@ export default function AuthPage() {
                   />
                   Klant
                 </label>
-                <label className="flex cursor-pointer items-center justify-center rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm font-medium has-[:checked]:border-black has-[:checked]:bg-neutral-50">
+                <label className="flex cursor-pointer items-center justify-center rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm font-medium has-[:checked]:border-bookadj has-[:checked]:bg-bookadj/5">
                   <input
                     type="radio"
                     name="role"
@@ -476,7 +476,7 @@ export default function AuthPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-black py-3 text-sm font-semibold text-white transition-colors hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="h-11 min-h-[44px] w-full rounded-lg bg-bookadj py-3 text-sm font-semibold text-white transition-colors hover:bg-bookadj-hover disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? "Bezig…" : "Aanmelden"}
             </button>

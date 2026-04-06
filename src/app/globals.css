@@ -3,12 +3,55 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --bookadj: #059669;
+  --bookadj-hover: #047857;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --color-bookadj: #059669;
+  --color-bookadj-hover: #047857;
+}
+
+@layer components {
+  /* 44px height, 8px radius, brand focus ring — use on inputs, selects, textareas */
+  .input-field {
+    @apply h-11 min-h-[44px] w-full rounded-lg border border-neutral-200 bg-white px-3 text-sm text-neutral-900 outline-none transition-[box-shadow,border-color] duration-200;
+    @apply placeholder:text-neutral-400;
+    @apply focus:border-bookadj/50 focus:ring-2 focus:ring-bookadj/25 focus:ring-offset-0;
+  }
+
+  select.input-field {
+    @apply cursor-pointer py-0;
+  }
+
+  textarea.input-field {
+    @apply min-h-[88px] resize-y py-2.5;
+  }
+
+  .card-interactive {
+    @apply rounded-2xl border border-neutral-200 bg-white shadow-sm transition-shadow duration-300 ease-out;
+    @apply hover:shadow-md;
+  }
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-page-enter {
+  animation: page-enter 0.4s ease-out forwards;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {

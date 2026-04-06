@@ -189,7 +189,7 @@ export function DatePickerPopover({
         onClick={() => setOpen((v) => !v)}
         className={
           triggerClassName ??
-          "flex h-[42px] w-full items-center rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-left text-sm text-neutral-900 outline-none ring-black transition-[box-shadow] focus:border-neutral-400 focus:ring-2"
+          "input-field flex items-center justify-start text-left"
         }
       >
         <span className={labelText ? "" : "text-neutral-400"}>
@@ -247,7 +247,7 @@ export function DatePickerPopover({
                   className={[
                     "flex aspect-square items-center justify-center rounded-lg text-sm font-medium transition-colors",
                     isSelected(day)
-                      ? "bg-black text-white"
+                      ? "bg-bookadj text-white shadow-sm"
                       : isToday(day)
                         ? "bg-neutral-100 font-semibold text-neutral-900 ring-1 ring-neutral-300"
                         : "text-neutral-800 hover:bg-neutral-50",

@@ -9,8 +9,7 @@ const ONDERWERPEN = [
   "Anders",
 ] as const;
 
-const inputCls =
-  "mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2.5 text-sm text-neutral-900 outline-none focus:border-emerald-500/60 focus:ring-2 focus:ring-emerald-500/20";
+const inputCls = "input-field mt-2";
 const labelCls = "text-sm font-semibold text-neutral-800";
 
 export function ContactForm() {
@@ -61,18 +60,18 @@ export function ContactForm() {
   if (status === "ok") {
     return (
       <div
-        className="rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-6 text-emerald-950"
+        className="rounded-xl border border-bookadj/25 bg-bookadj/10 px-5 py-6 text-neutral-900"
         role="status"
       >
         <p className="font-semibold">Bedankt! Je bericht is verstuurd.</p>
-        <p className="mt-2 text-sm text-emerald-900/90">
+        <p className="mt-2 text-sm text-neutral-700">
           We reageren zo snel mogelijk op{" "}
           <span className="font-medium">hallo@bookadj.nl</span>.
         </p>
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="mt-4 text-sm font-semibold text-emerald-900 underline-offset-2 hover:underline"
+          className="mt-4 text-sm font-semibold text-bookadj underline-offset-2 hover:underline"
         >
           Nog een bericht sturen
         </button>
@@ -152,7 +151,7 @@ export function ContactForm() {
           rows={6}
           value={bericht}
           onChange={(e) => setBericht(e.target.value)}
-          className={`${inputCls} resize-y`}
+          className={inputCls}
           placeholder="Beschrijf je vraag of probleem…"
         />
       </label>
@@ -160,7 +159,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="w-full rounded-lg bg-black px-5 py-3 text-sm font-semibold text-emerald-400 transition-colors hover:bg-neutral-900 disabled:opacity-50 sm:w-auto"
+        className="w-full rounded-lg bg-bookadj px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-bookadj-hover disabled:opacity-50 sm:w-auto"
       >
         {status === "sending" ? "Versturen…" : "Verstuur bericht"}
       </button>

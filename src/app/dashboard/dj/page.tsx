@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { DashboardBookingsSkeleton, EmptyState } from "@/components/skeleton";
 import { supabase } from "@/lib/supabase-browser";
 
 function formatEuroFromCents(cents: number | null | undefined): string {
@@ -256,21 +257,43 @@ export default function DjDashboardPage() {
 
   if (loading) {
     return (
-      <div className="py-12 text-center text-neutral-600">Laden…</div>
+      <div>
+        <div className="h-8 w-56 animate-pulse rounded-lg bg-neutral-200" />
+        <div className="mt-2 h-4 w-80 max-w-full animate-pulse rounded bg-neutral-200" />
+        <div className="mt-10">
+          <DashboardBookingsSkeleton rows={3} />
+        </div>
+      </div>
     );
   }
 
   if (noProfile) {
     return (
-      <div className="rounded-2xl border border-neutral-200 bg-white p-8 text-center shadow-sm">
-        <p className="text-lg font-semibold text-neutral-900">Nog geen DJ profiel</p>
-        <Link
-          href="/dashboard/dj/profiel-aanmaken"
-          className="mt-6 inline-flex rounded-xl bg-black px-5 py-3 text-sm font-bold text-white hover:bg-neutral-900"
-        >
-          Profiel aanmaken
-        </Link>
-      </div>
+      <EmptyState
+        icon={
+          <svg
+            className="h-7 w-7"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            aria-hidden
+          >
+            <path d="M12 3v4M12 17v4M4.5 7.5l3 3M16.5 13.5l3 3M3 12h4M17 12h4M4.5 16.5l3-3M16.5 10.5l3-3" />
+            <circle cx="12" cy="12" r="3.5" />
+          </svg>
+        }
+        title="Nog geen DJ-profiel"
+        description="Maak je profiel aan om vindbaar te worden, aanvragen te ontvangen en veilig uitbetaald te worden via bookadj."
+        action={
+          <Link
+            href="/dashboard/dj/profiel-aanmaken"
+            className="inline-flex rounded-xl bg-bookadj px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-bookadj-hover"
+          >
+            Profiel aanmaken
+          </Link>
+        }
+      />
     );
   }
 
@@ -298,9 +321,25 @@ export default function DjDashboardPage() {
         </p>
 
         {pending.length === 0 ? (
-          <p className="mt-6 rounded-2xl border border-dashed border-neutral-200 bg-neutral-50 px-6 py-10 text-center text-sm text-neutral-600">
-            Geen openstaande aanvragen.
-          </p>
+          <div className="mt-6">
+            <EmptyState
+              icon={
+                <svg
+                  className="h-7 w-7"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  aria-hidden
+                >
+                  <path d="M4 6h16v10H4z" />
+                  <path d="M8 10h8M8 14h5" strokeLinecap="round" />
+                </svg>
+              }
+              title="Inbox is leeg"
+              description="Zodra een klant een aanvraag stuurt, verschijnt die hier. Zorg dat je profiel compleet en live is."
+            />
+          </div>
         ) : (
           <ul className="mt-6 space-y-4">
             {pending.map((req) => {
@@ -318,7 +357,7 @@ export default function DjDashboardPage() {
 
               return (
                 <li key={req.id}>
-                  <article className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-6">
+                  <article className="card-interactive p-5 sm:p-6">
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                       <div className="min-w-0 flex-1 space-y-4">
                         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -400,7 +439,7 @@ export default function DjDashboardPage() {
                             <p className="text-xs text-neutral-500">
                               Jouw verdienste na 15% platformkosten
                             </p>
-                            <p className="text-lg font-bold text-emerald-700">
+                            <p className="text-lg font-bold text-bookadj">
                               {formatEuroFromCents(req.dj_payout)}
                             </p>
                           </div>
@@ -412,7 +451,7 @@ export default function DjDashboardPage() {
                           type="button"
                           disabled={busy}
                           onClick={() => void handleAccept(req.id)}
-                          className="rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-700 disabled:opacity-50"
+                          className="rounded-lg bg-bookadj px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-bookadj-hover disabled:opacity-50"
                         >
                           {busy ? "Bezig…" : "Accepteren"}
                         </button>
@@ -446,9 +485,25 @@ export default function DjDashboardPage() {
         </p>
 
         {confirmed.length === 0 ? (
-          <p className="mt-6 rounded-2xl border border-dashed border-neutral-200 bg-neutral-50 px-6 py-10 text-center text-sm text-neutral-600">
-            Nog geen bevestigde boekingen.
-          </p>
+          <div className="mt-6">
+            <EmptyState
+              icon={
+                <svg
+                  className="h-7 w-7"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  aria-hidden
+                >
+                  <path d="M8 2v4M16 2v4M4 8h16v12H4z" strokeLinejoin="round" />
+                  <path d="M8 14h8" strokeLinecap="round" />
+                </svg>
+              }
+              title="Nog geen bevestigde boekingen"
+              description="Na acceptatie van een aanvraag verschijnen geplande optredens hier, inclusief verwachte uitbetaling."
+            />
+          </div>
         ) : (
           <ul className="mt-6 space-y-4">
             {confirmed.map((b) => {
@@ -458,7 +513,7 @@ export default function DjDashboardPage() {
                   : "—";
               return (
                 <li key={b.id}>
-                  <article className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-6">
+                  <article className="card-interactive p-5 sm:p-6">
                     <div className="min-w-0 space-y-3">
                       <h3 className="text-lg font-semibold text-neutral-900">
                         {getCustomerName(b)}
@@ -490,7 +545,7 @@ export default function DjDashboardPage() {
                         </div>
                         <div>
                           <dt className="text-neutral-500">Netto uitbetaling</dt>
-                          <dd className="text-lg font-bold text-emerald-700">
+                          <dd className="text-lg font-bold text-bookadj">
                             {formatEuroFromCents(b.dj_payout)}
                           </dd>
                         </div>

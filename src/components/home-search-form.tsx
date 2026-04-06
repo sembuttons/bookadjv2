@@ -4,7 +4,7 @@ import { useState } from "react";
 import { DatePickerPopover } from "@/components/date-picker-popover";
 
 const triggerClass =
-  "flex h-[42px] w-full items-center rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-left text-sm text-neutral-900 outline-none focus:border-emerald-500/60 focus:ring-2 focus:ring-emerald-500/20";
+  "input-field flex items-center justify-start text-left";
 
 export function HomeSearchForm({ genres }: { genres: readonly string[] }) {
   const [datum, setDatum] = useState("");
@@ -34,7 +34,7 @@ export function HomeSearchForm({ genres }: { genres: readonly string[] }) {
           </span>
           <select
             name="genre"
-            className="h-[42px] rounded-lg border border-neutral-200 bg-white px-3 py-2.5 text-sm text-neutral-900 outline-none focus:border-emerald-500/60 focus:ring-2 focus:ring-emerald-500/20"
+            className="input-field"
             defaultValue=""
           >
             <option value="">Alle genres</option>
@@ -49,7 +49,7 @@ export function HomeSearchForm({ genres }: { genres: readonly string[] }) {
         <div className="flex sm:col-span-2 lg:col-span-1">
           <button
             type="submit"
-            className="h-[42px] w-full rounded-lg bg-black px-5 text-sm font-semibold text-emerald-400 transition-colors hover:bg-neutral-900"
+            className="h-11 min-h-[44px] w-full rounded-lg bg-bookadj px-5 text-sm font-semibold text-white transition-colors hover:bg-bookadj-hover"
           >
             DJ&apos;s zoeken
           </button>

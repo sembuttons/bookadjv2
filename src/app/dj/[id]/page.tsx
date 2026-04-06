@@ -230,8 +230,40 @@ export default async function DjProfilePage({ params }: PageProps) {
             </span>
           </div>
           <div className="relative grid min-h-[220px] grid-rows-2 gap-2 lg:min-h-[420px]">
-            <div className="rounded-2xl bg-gradient-to-br from-neutral-300 to-neutral-500" />
-            <div className="rounded-2xl bg-gradient-to-br from-neutral-400 to-neutral-600" />
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-300 bg-gradient-to-br from-neutral-100 to-neutral-200/90 p-4 text-center">
+              <svg
+                className="h-10 w-10 text-bookadj/70"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                aria-hidden
+              >
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <circle cx="8.5" cy="10.5" r="1.5" fill="currentColor" />
+                <path d="M21 19l-5-5" strokeLinecap="round" />
+              </svg>
+              <p className="mt-2 text-xs font-medium text-neutral-600">
+                Foto volgt
+              </p>
+            </div>
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-300 bg-gradient-to-br from-neutral-100 to-neutral-200/90 p-4 text-center">
+              <svg
+                className="h-10 w-10 text-bookadj/70"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                aria-hidden
+              >
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <circle cx="8.5" cy="10.5" r="1.5" fill="currentColor" />
+                <path d="M21 19l-5-5" strokeLinecap="round" />
+              </svg>
+              <p className="mt-2 text-xs font-medium text-neutral-600">
+                Nog een impressie
+              </p>
+            </div>
             <button
               type="button"
               className="absolute bottom-3 right-3 rounded-lg bg-white/95 px-4 py-2 text-sm font-semibold text-neutral-900 shadow-md ring-1 ring-neutral-200 hover:bg-white"
@@ -251,7 +283,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                 {name}
               </h1>
               {isVerifiedProfile(profile) ? (
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-bookadj px-3 py-1 text-xs font-bold uppercase tracking-wide text-white shadow-sm">
                   <svg
                     className="h-3.5 w-3.5 shrink-0"
                     viewBox="0 0 20 20"
@@ -319,7 +351,7 @@ export default async function DjProfilePage({ params }: PageProps) {
             {djUserId ? (
               <StelVraagButton
                 djUserId={djUserId}
-                className="rounded-xl bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-900"
+                className="rounded-xl bg-black px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-bookadj"
               >
                 Stel {fn} een vraag
               </StelVraagButton>
@@ -375,7 +407,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                 ].map((card) => (
                   <li
                     key={card.t}
-                    className="rounded-xl border border-neutral-200 bg-neutral-50/80 p-4"
+                    className="rounded-xl border border-neutral-200 bg-neutral-50/80 p-4 shadow-sm transition-shadow duration-300 hover:shadow-md"
                   >
                     <p className="text-sm font-semibold text-neutral-900">{card.t}</p>
                     <p className="mt-1 text-sm text-neutral-600">{card.d}</p>
@@ -416,7 +448,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                           </span>
                           <div className="h-2 flex-1 overflow-hidden rounded-full bg-neutral-100">
                             <div
-                              className="h-full rounded-full bg-emerald-500"
+                              className="h-full rounded-full bg-bookadj"
                               style={{ width: `${pct}%` }}
                             />
                           </div>
@@ -437,7 +469,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                     return (
                       <article
                         key={rid}
-                        className="min-w-[min(100%,280px)] max-w-xs shrink-0 snap-start rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm"
+                        className="card-interactive min-w-[min(100%,280px)] max-w-xs shrink-0 snap-start p-5"
                       >
                         <div className="flex items-center justify-between gap-2">
                           <p className="font-semibold text-neutral-900">
@@ -496,7 +528,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                 ].map(({ Icon, t, d }) => (
                   <li
                     key={t}
-                    className="flex gap-4 rounded-2xl border border-neutral-200 bg-neutral-50 p-5"
+                    className="flex gap-4 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 shadow-sm transition-shadow duration-300 hover:shadow-md"
                   >
                     <Icon
                       className="h-8 w-8 shrink-0 text-neutral-900"
@@ -516,7 +548,7 @@ export default async function DjProfilePage({ params }: PageProps) {
             <DjProfileFaq />
           </div>
 
-          <aside className="lg:sticky lg:top-24 lg:self-start">
+          <aside className="lg:sticky lg:top-24 lg:max-h-[calc(100vh-6.5rem)] lg:overflow-y-auto lg:overscroll-contain lg:self-start">
             <BookingPanel
               djId={id}
               djUserId={djUserId || null}

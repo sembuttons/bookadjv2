@@ -2,6 +2,7 @@ import Link from "next/link";
 import { HomeGenreGrid } from "@/components/home-genre-grid";
 import { HomeSearchForm } from "@/components/home-search-form";
 import { Navbar } from "@/components/Navbar";
+import { EmptyState } from "@/components/skeleton";
 import { PaymentMethodBadges } from "@/components/payment-method-badges";
 import {
   getCity,
@@ -131,7 +132,7 @@ export default async function Home() {
           aria-hidden
         />
         <div className="relative mx-auto max-w-4xl">
-          <p className="mb-4 text-sm font-medium uppercase tracking-widest text-emerald-400">
+          <p className="mb-4 text-sm font-medium uppercase tracking-widest text-emerald-300">
             De DJ-boekingsmarktplaats van Nederland
           </p>
           <h1 className="text-balance text-3xl font-bold tracking-tight drop-shadow-sm sm:text-4xl md:text-5xl lg:text-6xl">
@@ -147,12 +148,12 @@ export default async function Home() {
       </section>
 
       <section
-        className="border-t border-emerald-500/25 bg-neutral-950 px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-24"
+        className="border-t border-bookadj/25 bg-neutral-950 px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-24"
         aria-labelledby="trust-pro-heading"
       >
         <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="max-w-xl lg:pr-8">
-            <p className="text-sm font-semibold uppercase tracking-widest text-emerald-400">
+            <p className="text-sm font-semibold uppercase tracking-widest text-emerald-300">
               Kwaliteit &amp; veiligheid
             </p>
             <h2
@@ -169,7 +170,7 @@ export default async function Home() {
             <ul className="mt-8 space-y-3 text-sm text-neutral-300">
               <li className="flex gap-3">
                 <span
-                  className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-black"
+                  className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-bookadj text-white"
                   aria-hidden
                 >
                   <svg className="h-3 w-3" viewBox="0 0 12 12" fill="none">
@@ -186,7 +187,7 @@ export default async function Home() {
               </li>
               <li className="flex gap-3">
                 <span
-                  className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-black"
+                  className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-bookadj text-white"
                   aria-hidden
                 >
                   <svg className="h-3 w-3" viewBox="0 0 12 12" fill="none">
@@ -203,7 +204,7 @@ export default async function Home() {
               </li>
               <li className="flex gap-3">
                 <span
-                  className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-black"
+                  className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-bookadj text-white"
                   aria-hidden
                 >
                   <svg className="h-3 w-3" viewBox="0 0 12 12" fill="none">
@@ -221,7 +222,7 @@ export default async function Home() {
             </ul>
             <Link
               href="/zoeken"
-              className="mt-10 inline-flex rounded-lg bg-emerald-500 px-6 py-3 text-sm font-bold text-black transition-colors hover:bg-emerald-400"
+              className="mt-10 inline-flex rounded-lg bg-bookadj px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-bookadj-hover"
             >
               Ontdek DJ&apos;s
             </Link>
@@ -237,16 +238,16 @@ export default async function Home() {
               <div className="rounded-xl border border-white/20 bg-black/75 p-4 shadow-xl backdrop-blur-md sm:p-5">
                 <div className="flex items-center gap-3">
                   <div
-                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 text-sm font-bold text-black"
+                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-bookadj to-bookadj-hover text-sm font-bold text-white"
                     aria-hidden
                   >
                     NV
                   </div>
                   <div className="min-w-0 text-left">
                     <p className="truncate font-semibold text-white">DJ Nova</p>
-                    <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-emerald-300 ring-1 ring-emerald-500/40">
+                    <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-bookadj/25 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-emerald-200 ring-1 ring-bookadj/40">
                       <svg
-                        className="h-3 w-3 text-emerald-400"
+                        className="h-3 w-3 text-emerald-200"
                         viewBox="0 0 20 20"
                         fill="none"
                         aria-hidden
@@ -286,7 +287,7 @@ export default async function Home() {
             Zoek op genre
           </h2>
           <div
-            className="mx-auto mt-4 h-1 w-16 rounded-full bg-emerald-500"
+            className="mx-auto mt-4 h-1 w-16 rounded-full bg-bookadj"
             aria-hidden
           />
           <p className="mx-auto mt-4 max-w-xl text-center text-neutral-600">
@@ -311,12 +312,33 @@ export default async function Home() {
             De meest recente geverifieerde DJ&apos;s op bookadj.
           </p>
           {newDjs.length === 0 ? (
-            <p className="mt-10 text-center text-sm text-neutral-500">
-              Er zijn nog geen openbare profielen om te tonen.{" "}
-              <Link href="/zoeken" className="font-medium text-neutral-900 underline">
-                Bekijk alle DJ&apos;s
-              </Link>
-            </p>
+            <div className="mt-10">
+              <EmptyState
+                icon={
+                  <svg
+                    className="h-7 w-7"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.75"
+                    aria-hidden
+                  >
+                    <circle cx="12" cy="8" r="3.5" />
+                    <path d="M5 20v-1a5 5 0 0110 0v1" strokeLinecap="round" />
+                  </svg>
+                }
+                title="Nog geen profielen om te tonen"
+                description="Zodra geverifieerde DJ’s live gaan, verschijnen ze hier. Ontdek intussen het volledige aanbod op de zoekpagina."
+                action={
+                  <Link
+                    href="/zoeken"
+                    className="inline-flex rounded-lg bg-bookadj px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-bookadj-hover"
+                  >
+                    DJ&apos;s zoeken
+                  </Link>
+                }
+              />
+            </div>
           ) : (
             <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {newDjs.map((dj) => {
@@ -329,7 +351,7 @@ export default async function Home() {
                 return (
                   <li key={dj.id}>
                     <Link href={`/dj/${dj.id}`}>
-                      <article className="flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all hover:border-emerald-200 hover:shadow-md">
+                      <article className="card-interactive flex h-full flex-col p-5 transition-colors hover:border-bookadj/25">
                         <div className="flex items-start gap-4">
                           <div
                             className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-neutral-900 text-sm font-bold text-white"
@@ -349,7 +371,7 @@ export default async function Home() {
                             djGenres.map((tag) => (
                               <span
                                 key={tag}
-                                className="rounded-full border border-emerald-100 bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-neutral-800"
+                                className="rounded-full border border-bookadj/20 bg-bookadj/10 px-2.5 py-0.5 text-xs font-medium text-neutral-800"
                               >
                                 {tag}
                               </span>
@@ -399,13 +421,13 @@ export default async function Home() {
             In drie stappen van idee naar geboekte DJ — zonder gedoe.
           </p>
           <div
-            className="mx-auto mt-4 h-1 w-16 rounded-full bg-emerald-500"
+            className="mx-auto mt-4 h-1 w-16 rounded-full bg-bookadj"
             aria-hidden
           />
           <ol className="mt-12 grid gap-8 lg:grid-cols-3">
             <li>
-              <article className="h-full rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-lg font-bold text-emerald-400 ring-2 ring-emerald-500/50">
+              <article className="card-interactive h-full p-8">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-lg font-bold text-white ring-2 ring-bookadj/60">
                   1
                 </span>
                 <h3 className="mt-6 text-xl font-semibold text-neutral-900">
@@ -423,8 +445,8 @@ export default async function Home() {
               </article>
             </li>
             <li>
-              <article className="h-full rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-lg font-bold text-emerald-400 ring-2 ring-emerald-500/50">
+              <article className="card-interactive h-full p-8">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-lg font-bold text-white ring-2 ring-bookadj/60">
                   2
                 </span>
                 <h3 className="mt-6 text-xl font-semibold text-neutral-900">
@@ -442,8 +464,8 @@ export default async function Home() {
               </article>
             </li>
             <li>
-              <article className="h-full rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-lg font-bold text-emerald-400 ring-2 ring-emerald-500/50">
+              <article className="card-interactive h-full p-8">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-lg font-bold text-white ring-2 ring-bookadj/60">
                   3
                 </span>
                 <h3 className="mt-6 text-xl font-semibold text-neutral-900">
@@ -470,7 +492,7 @@ export default async function Home() {
       >
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-8 text-center sm:gap-12 lg:gap-20">
           <div>
-            <p className="text-3xl font-bold text-emerald-700 sm:text-4xl">
+            <p className="text-3xl font-bold text-bookadj sm:text-4xl">
               214+
             </p>
             <p className="mt-1 text-sm font-medium text-neutral-600">
@@ -478,7 +500,7 @@ export default async function Home() {
             </p>
           </div>
           <div>
-            <p className="text-3xl font-bold text-emerald-700 sm:text-4xl">
+            <p className="text-3xl font-bold text-bookadj sm:text-4xl">
               4,9/5
             </p>
             <p className="mt-1 text-sm font-medium text-neutral-600">
@@ -486,7 +508,7 @@ export default async function Home() {
             </p>
           </div>
           <div>
-            <p className="text-3xl font-bold text-emerald-700 sm:text-4xl">
+            <p className="text-3xl font-bold text-bookadj sm:text-4xl">
               1200+
             </p>
             <p className="mt-1 text-sm font-medium text-neutral-600">
@@ -494,7 +516,7 @@ export default async function Home() {
             </p>
           </div>
           <div>
-            <p className="text-3xl font-bold text-emerald-700 sm:text-4xl">
+            <p className="text-3xl font-bold text-bookadj sm:text-4xl">
               97%
             </p>
             <p className="mt-1 text-sm font-medium text-neutral-600">
@@ -540,14 +562,14 @@ export default async function Home() {
             Echte ervaringen van organisatoren en DJ&apos;s.
           </p>
           <div
-            className="mt-4 h-1 w-16 rounded-full bg-emerald-500"
+            className="mt-4 h-1 w-16 rounded-full bg-bookadj"
             aria-hidden
           />
           <div className="mt-10 -mx-4 flex gap-4 overflow-x-auto px-4 pb-2 snap-x snap-mandatory sm:mx-0 sm:px-0">
             {reviews.map((r) => (
               <blockquote
                 key={r.name}
-                className="min-w-[min(100%,280px)] max-w-sm shrink-0 snap-start rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-colors hover:border-emerald-200 sm:min-w-[300px]"
+                className="card-interactive min-w-[min(100%,280px)] max-w-sm shrink-0 snap-start p-6 transition-colors hover:border-bookadj/30 sm:min-w-[300px]"
               >
                 <StarRow value={r.rating} />
                 <p className="mt-4 text-sm leading-relaxed text-neutral-700">
@@ -562,7 +584,7 @@ export default async function Home() {
             <div className="min-w-[min(100%,280px)] max-w-sm shrink-0 snap-start sm:min-w-[300px]">
               <Link
                 href="/reviews"
-                className="flex h-full min-h-[200px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-300 bg-neutral-50 px-6 py-8 text-center transition-colors hover:border-emerald-500 hover:bg-emerald-50/50"
+                className="flex h-full min-h-[200px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-300 bg-neutral-50 px-6 py-8 text-center transition-colors hover:border-bookadj/50 hover:bg-bookadj/5"
               >
                 <span className="text-sm font-semibold text-neutral-900">
                   Lees alle reviews
@@ -585,7 +607,7 @@ export default async function Home() {
               href={PLACEHOLDER_GOOGLE_REVIEWS}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-emerald-400 transition-colors hover:bg-neutral-900"
+              className="inline-flex items-center justify-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-bookadj"
             >
               Reviews op Google
             </a>
@@ -612,13 +634,13 @@ export default async function Home() {
           <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
             <Link
               href="/zoeken"
-              className="rounded-lg bg-emerald-500 px-6 py-3 text-sm font-bold text-black transition-colors hover:bg-emerald-400"
+              className="rounded-lg bg-bookadj px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-bookadj-hover"
             >
               Zoek een DJ
             </Link>
             <Link
               href="/aanmelden"
-              className="rounded-lg border-2 border-white/40 bg-transparent px-6 py-3 text-sm font-semibold text-white transition-colors hover:border-emerald-400/60 hover:text-emerald-200"
+              className="rounded-lg border-2 border-white/40 bg-transparent px-6 py-3 text-sm font-semibold text-white transition-colors hover:border-bookadj/70 hover:text-emerald-200"
             >
               Account aanmaken
             </Link>
