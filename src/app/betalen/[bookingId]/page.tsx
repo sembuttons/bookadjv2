@@ -118,7 +118,7 @@ function PaymentForm({
       <PaymentElement />
       {localError ? (
         <p
-          className="rounded-lg border border-danger/35 bg-danger/10 px-3 py-2 text-sm text-danger"
+          className="rounded-lg border border-red-500/35 bg-red-500/10 px-3 py-2 text-sm text-red-400"
           role="alert"
         >
           {localError}
@@ -127,7 +127,7 @@ function PaymentForm({
       <button
         type="submit"
         disabled={!stripe || processing}
-        className="w-full rounded-xl bg-bookadj py-3.5 text-sm font-bold text-white hover:bg-bookadj-hover disabled:opacity-50"
+        className="w-full rounded-xl bg-green-500 py-3.5 text-sm font-bold text-black hover:bg-green-400 disabled:opacity-50"
       >
         {processing ? "Bezig met betalen…" : "Betaal nu"}
       </button>
@@ -440,24 +440,24 @@ export default function BetalenPage() {
 
   if (!authReady) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-surface font-sans">
-        <p className="text-ink-secondary">Laden…</p>
+      <div className="flex min-h-screen items-center justify-center bg-[#111827] font-sans">
+        <p className="text-gray-400">Laden…</p>
       </div>
     );
   }
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-surface font-sans">
-        <p className="text-ink-secondary">Boeking laden…</p>
+      <div className="flex min-h-screen items-center justify-center bg-[#111827] font-sans">
+        <p className="text-gray-400">Boeking laden…</p>
       </div>
     );
   }
 
   if (loadError || !booking) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-surface px-4 font-sans text-center">
-        <p className="text-ink">{loadError ?? "Boeking niet gevonden."}</p>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#111827] px-4 font-sans text-center">
+        <p className="text-white">{loadError ?? "Boeking niet gevonden."}</p>
         <Link href="/dashboard/klant" className="mt-4 text-sm font-semibold underline">
           Naar dashboard
         </Link>
@@ -466,32 +466,32 @@ export default function BetalenPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface font-sans text-ink">
+    <div className="min-h-screen bg-[#111827] font-sans text-white">
       <Navbar />
 
-      <div className="border-b border-line bg-surface-muted">
+      <div className="border-b border-gray-800 bg-[#0f172a]">
         <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
           <ol className="flex items-center justify-between gap-2 text-xs font-semibold sm:text-sm">
             <li className="flex flex-1 flex-col items-center gap-2 sm:flex-row sm:justify-center">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-bookadj text-white sm:h-10 sm:w-10">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-green-500 text-black font-bold sm:h-10 sm:w-10">
                 ✓
               </span>
-              <span className="text-center text-ink-secondary sm:text-left">
+              <span className="text-center text-gray-400 sm:text-left">
                 Evenementdetails
               </span>
             </li>
-            <div className="hidden h-px flex-1 bg-line/70 sm:block" />
+            <div className="hidden h-px flex-1 bg-gray-800/70 sm:block" />
             <li className="flex flex-1 flex-col items-center gap-2 sm:flex-row sm:justify-center">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-bookadj text-white sm:h-10 sm:w-10">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-green-500 text-black font-bold sm:h-10 sm:w-10">
                 2
               </span>
-              <span className="text-center text-ink sm:text-left">
+              <span className="text-center text-white sm:text-left">
                 Betaling
               </span>
             </li>
-            <div className="hidden h-px flex-1 bg-line/70 sm:block" />
+            <div className="hidden h-px flex-1 bg-gray-800/70 sm:block" />
             <li className="flex flex-1 flex-col items-center gap-2 opacity-50 sm:flex-row sm:justify-center">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-line bg-surface text-ink-muted sm:h-10 sm:w-10">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-gray-800 bg-[#111827] text-gray-500 sm:h-10 sm:w-10">
                 3
               </span>
               <span className="text-center sm:text-left">Bevestiging</span>
@@ -502,84 +502,84 @@ export default function BetalenPage() {
 
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_340px] lg:items-start lg:gap-12">
         <div className="space-y-8">
-          <section className="rounded-2xl border border-line bg-surface p-6 shadow-sm">
-            <h2 className="text-lg font-bold text-ink">Jouw boeking</h2>
+          <section className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm">
+            <h2 className="text-lg font-bold text-white">Jouw boeking</h2>
             <dl className="mt-4 space-y-2 text-sm">
               <div className="flex justify-between gap-4">
-                <dt className="text-ink-muted">DJ</dt>
-                <dd className="font-medium text-ink">{djName}</dd>
+                <dt className="text-gray-500">DJ</dt>
+                <dd className="font-medium text-white">{djName}</dd>
               </div>
               <div className="flex justify-between gap-4">
-                <dt className="text-ink-muted">Datum</dt>
-                <dd className="font-medium text-ink text-right">
+                <dt className="text-gray-500">Datum</dt>
+                <dd className="font-medium text-white text-right">
                   {formatEventDate(eventDate)}
                 </dd>
               </div>
               {startTime ? (
                 <div className="flex justify-between gap-4">
-                  <dt className="text-ink-muted">Starttijd</dt>
-                  <dd className="font-medium text-ink">{startTime}</dd>
+                  <dt className="text-gray-500">Starttijd</dt>
+                  <dd className="font-medium text-white">{startTime}</dd>
                 </div>
               ) : null}
               <div className="flex justify-between gap-4">
-                <dt className="text-ink-muted">Duur</dt>
-                <dd className="font-medium text-ink">{hours} uur</dd>
+                <dt className="text-gray-500">Duur</dt>
+                <dd className="font-medium text-white">{hours} uur</dd>
               </div>
               <div className="flex justify-between gap-4">
-                <dt className="text-ink-muted">Locatie</dt>
-                <dd className="max-w-[60%] text-right font-medium text-ink">
+                <dt className="text-gray-500">Locatie</dt>
+                <dd className="max-w-[60%] text-right font-medium text-white">
                   {venue}
                 </dd>
               </div>
-              <div className="flex justify-between gap-4 border-t border-line/60 pt-3">
-                <dt className="font-semibold text-ink">Totaal</dt>
-                <dd className="text-lg font-bold text-ink">
+              <div className="flex justify-between gap-4 border-t border-gray-800/60 pt-3">
+                <dt className="font-semibold text-white">Totaal</dt>
+                <dd className="text-lg font-bold text-white">
                   {totalDisplay}
                 </dd>
               </div>
             </dl>
           </section>
 
-          <div className="rounded-xl bg-bookadj-subtle px-4 py-3 text-sm font-medium text-bookadj-soft ring-1 ring-line-brand/40">
+          <div className="rounded-xl bg-[#052e16] px-4 py-3 text-sm font-medium text-green-400 ring-1 ring-green-800/40">
             Betaling verloopt veilig via Stripe. Na een geslaagde betaling wordt
             je boeking bevestigd en ga je door naar de bevestigingspagina.
           </div>
 
           {alreadyConfirmed ? (
             <div
-              className="rounded-2xl border border-line-brand/40 bg-bookadj-subtle px-6 py-8 text-center"
+              className="rounded-2xl border border-green-800/40 bg-[#052e16] px-6 py-8 text-center"
               role="status"
             >
-              <p className="text-xl font-bold text-bookadj-soft">
+              <p className="text-xl font-bold text-green-400">
                 Boeking al bevestigd
               </p>
-              <p className="mt-2 text-sm text-bookadj-soft">
+              <p className="mt-2 text-sm text-green-400">
                 Deze boeking is betaald en bevestigd.
               </p>
               <Link
                 href={`/bevestiging/${encodeURIComponent(bookingId)}`}
-                className="mt-6 inline-flex rounded-xl bg-bookadj px-6 py-3 text-sm font-semibold text-white hover:bg-bookadj-hover"
+                className="mt-6 inline-flex rounded-xl bg-green-500 px-6 py-3 text-sm font-bold text-black hover:bg-green-400"
               >
                 Naar bevestiging
               </Link>
             </div>
           ) : canPay ? (
             <>
-              <section className="rounded-2xl border border-line bg-surface p-6 shadow-sm">
-                <h2 className="text-lg font-bold text-ink">Betalen</h2>
-                <p className="mt-1 text-sm text-ink-muted">
+              <section className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm">
+                <h2 className="text-lg font-bold text-white">Betalen</h2>
+                <p className="mt-1 text-sm text-gray-500">
                   Kies je betaalmethode en rond de betaling af.
                 </p>
 
                 <div className="mt-4 flex flex-wrap gap-2">
-                  <span className="inline-flex items-center gap-1 rounded border border-line bg-surface-muted px-3 py-1 text-xs font-semibold text-ink-secondary">
+                  <span className="inline-flex items-center gap-1 rounded border border-gray-800 bg-[#0f172a] px-3 py-1 text-xs font-semibold text-gray-400">
                     🔒 Stripe
                   </span>
                 </div>
 
                 {submitError ? (
                   <p
-                    className="mt-4 rounded-lg border border-danger/35 bg-danger/10 px-3 py-2 text-sm text-danger"
+                    className="mt-4 rounded-lg border border-red-500/35 bg-red-500/10 px-3 py-2 text-sm text-red-400"
                     role="alert"
                   >
                     {submitError}
@@ -591,18 +591,18 @@ export default function BetalenPage() {
                   !clientSecret &&
                   !piError &&
                   !submitError ? (
-                    <p className="text-sm text-ink-secondary">
+                    <p className="text-sm text-gray-400">
                       Betaling controleren…
                     </p>
                   ) : piError ? (
                     <p
-                      className="rounded-lg border border-danger/35 bg-danger/10 px-3 py-2 text-sm text-danger"
+                      className="rounded-lg border border-red-500/35 bg-red-500/10 px-3 py-2 text-sm text-red-400"
                       role="alert"
                     >
                       {piError}
                     </p>
                   ) : piLoading || !clientSecret ? (
-                    <p className="text-sm text-ink-secondary">
+                    <p className="text-sm text-gray-400">
                       Betaling voorbereiden…
                     </p>
                   ) : stripePromise && elementsOptions?.clientSecret ? (
@@ -637,17 +637,17 @@ export default function BetalenPage() {
                 ].map((x) => (
                   <li
                     key={x.t}
-                    className="rounded-xl border border-line bg-surface-muted p-4 text-sm"
+                    className="rounded-xl border border-gray-800 bg-[#0f172a] p-4 text-sm"
                   >
-                    <p className="font-semibold text-ink">{x.t}</p>
-                    <p className="mt-1 text-ink-secondary">{x.d}</p>
+                    <p className="font-semibold text-white">{x.t}</p>
+                    <p className="mt-1 text-gray-400">{x.d}</p>
                   </li>
                 ))}
               </ul>
             </>
           ) : (
             <div className="rounded-2xl border border-amber-200 bg-amber-50 px-6 py-8 text-center">
-              <p className="font-semibold text-caution">
+              <p className="font-semibold text-amber-400">
                 Deze boeking kan niet worden betaald.
               </p>
               <p className="mt-2 text-sm text-amber-900">
@@ -655,7 +655,7 @@ export default function BetalenPage() {
               </p>
               <Link
                 href="/dashboard/klant"
-                className="mt-6 inline-flex rounded-xl bg-bookadj px-6 py-3 text-sm font-semibold text-white hover:bg-bookadj-hover"
+                className="mt-6 inline-flex rounded-xl bg-green-500 px-6 py-3 text-sm font-bold text-black hover:bg-green-400"
               >
                 Naar mijn boekingen
               </Link>
@@ -664,35 +664,35 @@ export default function BetalenPage() {
         </div>
 
         <aside className="lg:sticky lg:top-6 lg:self-start">
-          <div className="rounded-2xl border border-line bg-surface p-6 shadow-sm">
-            <h2 className="text-lg font-bold text-ink">Overzicht</h2>
+          <div className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm">
+            <h2 className="text-lg font-bold text-white">Overzicht</h2>
 
-            <div className="mt-4 flex gap-3 rounded-xl bg-surface-muted p-3">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-surface text-xs font-bold text-white">
+            <div className="mt-4 flex gap-3 rounded-xl bg-[#0f172a] p-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#111827] text-xs font-bold text-white">
                 {initials(djName)}
               </div>
               <div className="min-w-0">
-                <p className="font-semibold text-ink">{djName}</p>
-                <p className="text-xs text-ink-muted">
+                <p className="font-semibold text-white">{djName}</p>
+                <p className="text-xs text-gray-500">
                   {formatEventDate(eventDate)}
                   {startTime ? ` · ${startTime}` : ""} · {hours} uur
                 </p>
               </div>
             </div>
 
-            <div className="mt-5 space-y-2 border-t border-line/60 pt-5 text-sm">
-              <div className="flex justify-between border-t border-line pt-2 text-base font-bold text-ink">
+            <div className="mt-5 space-y-2 border-t border-gray-800/60 pt-5 text-sm">
+              <div className="flex justify-between border-t border-gray-800 pt-2 text-base font-bold text-white">
                 <span>Totaal</span>
                 <span>{totalDisplay}</span>
               </div>
             </div>
 
             {canPay ? (
-              <p className="mt-6 text-center text-xs text-ink-muted">
+              <p className="mt-6 text-center text-xs text-gray-500">
                 Voltooi de betaling in het formulier links.
               </p>
             ) : alreadyConfirmed ? (
-              <p className="mt-6 text-center text-sm font-medium text-bookadj-soft">
+              <p className="mt-6 text-center text-sm font-medium text-green-400">
                 Boeking is bevestigd.
               </p>
             ) : null}

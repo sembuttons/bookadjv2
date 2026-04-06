@@ -68,32 +68,32 @@ const timelineSteps = [
   {
     when: "Binnen 24 uur",
     text: "DJ accepteert (of reageert op je aanvraag)",
-    dot: "bg-bookadj",
-    ring: "ring-line-brand/40",
+    dot: "bg-green-500",
+    ring: "ring-green-800/40",
   },
   {
     when: "7 dagen voor het evenement",
     text: "Vroege herinnering",
-    dot: "bg-caution",
+    dot: "bg-amber-500",
     ring: "ring-orange-200",
   },
   {
     when: "24 uur voor het evenement",
     text: "Dag-van herinnering",
-    dot: "bg-caution",
+    dot: "bg-amber-500",
     ring: "ring-orange-200",
   },
   {
     when: "2 uur na afloop",
     text: "Review-uitnodiging",
-    dot: "bg-bookadj",
-    ring: "ring-line-brand/40",
+    dot: "bg-green-500",
+    ring: "ring-green-800/40",
   },
   {
     when: "48 uur na afloop",
     text: "Uitbetaling aan DJ",
-    dot: "bg-bookadj",
-    ring: "ring-line-brand/40",
+    dot: "bg-green-500",
+    ring: "ring-green-800/40",
   },
 ] as const;
 
@@ -208,16 +208,16 @@ export default function BevestigingPage() {
 
   if (!authReady || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-surface font-sans">
-        <p className="text-ink-secondary">Laden…</p>
+      <div className="flex min-h-screen items-center justify-center bg-[#111827] font-sans">
+        <p className="text-gray-400">Laden…</p>
       </div>
     );
   }
 
   if (loadError || !booking) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-surface px-4 font-sans text-center">
-        <p className="text-ink">{loadError ?? "Boeking niet gevonden."}</p>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#111827] px-4 font-sans text-center">
+        <p className="text-white">{loadError ?? "Boeking niet gevonden."}</p>
         <Link href="/" className="mt-4 text-sm font-semibold underline">
           Terug naar home
         </Link>
@@ -226,11 +226,11 @@ export default function BevestigingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface font-sans text-ink">
+    <div className="min-h-screen bg-[#111827] font-sans text-white">
       <Navbar />
 
       {/* Alle stappen voltooid */}
-      <div className="border-b border-line bg-surface-muted">
+      <div className="border-b border-gray-800 bg-[#0f172a]">
         <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6">
           <ol className="flex items-center justify-between gap-2 text-xs font-semibold sm:text-sm">
             {(
@@ -246,7 +246,7 @@ export default function BevestigingPage() {
                 aria-label={label}
               >
                 <div className="flex flex-1 flex-col items-center gap-2 sm:flex-row sm:justify-center">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-bookadj text-white sm:h-10 sm:w-10">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-green-500 text-black font-bold sm:h-10 sm:w-10">
                     <svg
                       className="h-5 w-5"
                       fill="none"
@@ -262,13 +262,13 @@ export default function BevestigingPage() {
                       />
                     </svg>
                   </span>
-                  <span className="text-center text-ink sm:text-left">
+                  <span className="text-center text-white sm:text-left">
                     {label}
                   </span>
                 </div>
                 {i < 2 ? (
                   <div
-                    className="hidden h-px min-w-[1rem] flex-1 bg-bookadj-soft sm:block"
+                    className="hidden h-px min-w-[1rem] flex-1 bg-green-500-soft sm:block"
                     aria-hidden
                   />
                 ) : null}
@@ -279,9 +279,9 @@ export default function BevestigingPage() {
       </div>
 
       <main className="mx-auto max-w-2xl px-4 py-10 sm:px-6 sm:py-14">
-        <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-lg">
-          <div className="bg-app px-6 py-8 text-center sm:px-10">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-bookadj text-white shadow-lg shadow-bookadj/30">
+        <div className="overflow-hidden rounded-2xl border border-gray-800 bg-[#111827] shadow-lg">
+          <div className="bg-[#0a0a0a] px-6 py-8 text-center sm:px-10">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-black font-bold shadow-lg shadow-green-500/30">
               <svg
                 className="h-8 w-8"
                 fill="none"
@@ -300,58 +300,58 @@ export default function BevestigingPage() {
             <h1 className="mt-5 text-2xl font-bold text-white sm:text-3xl">
               Aanvraag verstuurd!
             </h1>
-            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-ink-secondary">
+            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-gray-400">
               De DJ heeft maximaal 24 uur om te reageren. Je ontvangt een
               e-mail zodra er nieuws is — houd je inbox in de gaten.
             </p>
           </div>
 
-          <div className="border-t border-line/60 px-6 py-8 sm:px-10">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-ink-muted">
+          <div className="border-t border-gray-800/60 px-6 py-8 sm:px-10">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500">
               Boekingsgegevens
             </h2>
             <dl className="mt-4 grid gap-4 sm:grid-cols-2">
               <div>
-                <dt className="text-xs text-ink-muted">DJ</dt>
-                <dd className="mt-0.5 font-semibold text-ink">
+                <dt className="text-xs text-gray-500">DJ</dt>
+                <dd className="mt-0.5 font-semibold text-white">
                   {djName}
                 </dd>
               </div>
               <div>
-                <dt className="text-xs text-ink-muted">Referentie</dt>
-                <dd className="mt-0.5 font-mono text-sm font-semibold text-ink">
+                <dt className="text-xs text-gray-500">Referentie</dt>
+                <dd className="mt-0.5 font-mono text-sm font-semibold text-white">
                   {reference}
                 </dd>
               </div>
               <div>
-                <dt className="text-xs text-ink-muted">Datum</dt>
-                <dd className="mt-0.5 font-medium text-ink">
+                <dt className="text-xs text-gray-500">Datum</dt>
+                <dd className="mt-0.5 font-medium text-white">
                   {formatEventDate(eventDate)}
                 </dd>
               </div>
               <div>
-                <dt className="text-xs text-ink-muted">Tijd</dt>
-                <dd className="mt-0.5 font-medium text-ink">
+                <dt className="text-xs text-gray-500">Tijd</dt>
+                <dd className="mt-0.5 font-medium text-white">
                   {startTime || "—"}
                 </dd>
               </div>
               <div className="sm:col-span-2">
-                <dt className="text-xs text-ink-muted">Locatie</dt>
-                <dd className="mt-0.5 font-medium text-ink">
+                <dt className="text-xs text-gray-500">Locatie</dt>
+                <dd className="mt-0.5 font-medium text-white">
                   {location}
                 </dd>
               </div>
               <div className="sm:col-span-2">
-                <dt className="text-xs text-ink-muted">Totaalbedrag</dt>
-                <dd className="mt-0.5 text-lg font-bold text-ink">
+                <dt className="text-xs text-gray-500">Totaalbedrag</dt>
+                <dd className="mt-0.5 text-lg font-bold text-white">
                   €{totalEuro.toLocaleString("nl-NL")}
                 </dd>
               </div>
             </dl>
           </div>
 
-          <div className="border-t border-line/60 px-6 py-8 sm:px-10">
-            <h2 className="text-lg font-bold text-ink">
+          <div className="border-t border-gray-800/60 px-6 py-8 sm:px-10">
+            <h2 className="text-lg font-bold text-white">
               Wat gebeurt er nu?
             </h2>
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
@@ -362,12 +362,12 @@ export default function BevestigingPage() {
               ].map((t, i) => (
                 <div
                   key={t}
-                  className="rounded-xl border border-line bg-surface px-4 py-3 text-sm text-ink shadow-sm"
+                  className="rounded-xl border border-gray-800 bg-[#111827] px-4 py-3 text-sm text-white shadow-sm"
                 >
-                  <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
                     Stap {i + 1}
                   </p>
-                  <p className="mt-1 font-semibold text-ink">{t}</p>
+                  <p className="mt-1 font-semibold text-white">{t}</p>
                 </div>
               ))}
             </div>
@@ -376,7 +376,7 @@ export default function BevestigingPage() {
                 <li key={step.when} className="relative flex gap-4 pb-8 last:pb-0">
                   {index < timelineSteps.length - 1 ? (
                     <div
-                      className="absolute left-[11px] top-6 h-[calc(100%-0.5rem)] w-px bg-line/50"
+                      className="absolute left-[11px] top-6 h-[calc(100%-0.5rem)] w-px bg-gray-800/50"
                       aria-hidden
                     />
                   ) : null}
@@ -386,10 +386,10 @@ export default function BevestigingPage() {
                     />
                   </div>
                   <div className="min-w-0 pt-0.5">
-                    <p className="text-xs font-bold uppercase tracking-wide text-ink-muted">
+                    <p className="text-xs font-bold uppercase tracking-wide text-gray-500">
                       {step.when}
                     </p>
-                    <p className="mt-1 text-sm font-medium text-ink">
+                    <p className="mt-1 text-sm font-medium text-white">
                       {step.text}
                     </p>
                   </div>
@@ -398,25 +398,25 @@ export default function BevestigingPage() {
             </ul>
           </div>
 
-          <div className="flex flex-col gap-3 border-t border-line/60 bg-surface-muted px-6 py-8 sm:flex-row sm:px-10">
+          <div className="flex flex-col gap-3 border-t border-gray-800/60 bg-[#0f172a] px-6 py-8 sm:flex-row sm:px-10">
             <Link
               href="/dashboard/klant"
-              className="flex flex-1 items-center justify-center rounded-xl bg-line px-6 py-3.5 text-center text-sm font-bold text-white hover:bg-line/80"
+              className="flex flex-1 items-center justify-center rounded-xl bg-gray-800 px-6 py-3.5 text-center text-sm font-bold text-white hover:bg-gray-700"
             >
               Naar mijn boekingen
             </Link>
             <Link
               href="/"
-              className="flex flex-1 items-center justify-center rounded-xl border-2 border-line-brand bg-surface px-6 py-3.5 text-center text-sm font-bold text-ink hover:bg-surface-muted"
+              className="flex flex-1 items-center justify-center rounded-xl border-2 border-green-800 bg-[#111827] px-6 py-3.5 text-center text-sm font-bold text-white hover:bg-[#0f172a]"
             >
               Terug naar home
             </Link>
           </div>
 
-          <div className="border-t border-line bg-surface px-6 py-5 sm:px-10">
-            <p className="text-center text-sm text-ink-secondary">
+          <div className="border-t border-gray-800 bg-[#111827] px-6 py-5 sm:px-10">
+            <p className="text-center text-sm text-gray-400">
               We hebben een bevestiging gestuurd naar{" "}
-              <span className="font-semibold text-ink">
+              <span className="font-semibold text-white">
                 {userEmail ?? "je e-mailadres"}
               </span>
               . Controleer ook je spamfolder.

@@ -10,7 +10,7 @@ const ONDERWERPEN = [
 ] as const;
 
 const inputCls = "input-field mt-2";
-const labelCls = "text-sm font-semibold text-ink";
+const labelCls = "text-sm font-semibold text-white";
 
 export function ContactForm() {
   const [name, setName] = useState("");
@@ -60,18 +60,18 @@ export function ContactForm() {
   if (status === "ok") {
     return (
       <div
-        className="rounded-xl border border-bookadj/25 bg-bookadj/10 px-5 py-6 text-ink"
+        className="rounded-xl border border-green-500/25 bg-green-500/10 px-5 py-6 text-white"
         role="status"
       >
         <p className="font-semibold">Bedankt! Je bericht is verstuurd.</p>
-        <p className="mt-2 text-sm text-ink-secondary">
+        <p className="mt-2 text-sm text-gray-400">
           We reageren zo snel mogelijk op{" "}
           <span className="font-medium">hallo@bookadj.nl</span>.
         </p>
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="mt-4 text-sm font-semibold text-bookadj underline-offset-2 hover:underline"
+          className="mt-4 text-sm font-semibold text-green-500 underline-offset-2 hover:underline"
         >
           Nog een bericht sturen
         </button>
@@ -83,7 +83,7 @@ export function ContactForm() {
     <form
       noValidate
       onSubmit={(e) => void onSubmit(e)}
-      className="space-y-5 rounded-2xl border border-line bg-surface p-6 shadow-sm sm:p-8"
+      className="space-y-5 rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm sm:p-8"
     >
       <input
         type="text"
@@ -98,7 +98,7 @@ export function ContactForm() {
 
       {errMsg ? (
         <p
-          className="rounded-lg border border-danger/35 bg-danger/10 px-3 py-2 text-sm text-danger"
+          className="rounded-lg border border-red-500/35 bg-red-500/10 px-3 py-2 text-sm text-red-400"
           role="alert"
         >
           {errMsg}
@@ -159,7 +159,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="w-full rounded-lg bg-bookadj px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-bookadj-hover disabled:opacity-50 sm:w-auto"
+        className="w-full rounded-lg bg-green-500 px-5 py-3 text-sm font-bold text-black transition-colors hover:bg-green-400 disabled:opacity-50 sm:w-auto"
       >
         {status === "sending" ? "Versturen…" : "Verstuur bericht"}
       </button>

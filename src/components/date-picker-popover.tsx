@@ -189,7 +189,7 @@ export function DatePickerPopover({
   return (
     <div className="relative flex flex-col gap-1.5 text-left">
       {label ? (
-        <span className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
+        <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
           {label}
         </span>
       ) : null}
@@ -205,7 +205,7 @@ export function DatePickerPopover({
           "input-field flex items-center justify-start text-left"
         }
       >
-        <span className={labelText ? "" : "text-ink-muted"}>
+        <span className={labelText ? "" : "text-gray-500"}>
           {labelText ?? placeholder}
         </span>
       </button>
@@ -218,23 +218,23 @@ export function DatePickerPopover({
           ref={popoverRef}
           role="dialog"
           aria-label="Kalender"
-          className={`absolute top-full z-[60] mt-2 w-[min(100vw-2rem,320px)] rounded-2xl border border-line bg-surface p-4 shadow-2xl ring-1 ring-line/30 ${popAlign}`}
+          className={`absolute top-full z-[60] mt-2 w-[min(100vw-2rem,320px)] rounded-2xl border border-gray-800 bg-[#111827] p-4 shadow-2xl ring-1 ring-gray-800/30 ${popAlign}`}
         >
           <div className="mb-4 flex items-center justify-between gap-2">
             <button
               type="button"
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-ink-secondary transition-colors hover:bg-surface-muted/80"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-[#0f172a]/80"
               aria-label="Vorige maand"
               onClick={() => setCursor(new Date(year, month - 1, 1))}
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
-            <p className="min-w-0 flex-1 text-center text-sm font-semibold capitalize text-ink">
+            <p className="min-w-0 flex-1 text-center text-sm font-semibold capitalize text-white">
               {MONTHS_NL[month]} {year}
             </p>
             <button
               type="button"
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-ink-secondary transition-colors hover:bg-surface-muted/80"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-[#0f172a]/80"
               aria-label="Volgende maand"
               onClick={() => setCursor(new Date(year, month + 1, 1))}
             >
@@ -242,7 +242,7 @@ export function DatePickerPopover({
             </button>
           </div>
 
-          <div className="mb-2 grid grid-cols-7 gap-1 text-center text-[11px] font-semibold uppercase tracking-wide text-ink-muted">
+          <div className="mb-2 grid grid-cols-7 gap-1 text-center text-[11px] font-semibold uppercase tracking-wide text-gray-500">
             {WEEKDAYS_NL.map((d) => (
               <div key={d}>{d}</div>
             ))}
@@ -266,12 +266,12 @@ export function DatePickerPopover({
                       className={[
                         "flex aspect-square items-center justify-center rounded-lg text-sm font-medium transition-colors",
                         blocked
-                          ? "cursor-not-allowed bg-surface-muted/80 text-ink-secondary line-through"
+                          ? "cursor-not-allowed bg-[#0f172a]/80 text-gray-400 line-through"
                           : isSelected(day)
-                            ? "bg-bookadj text-white shadow-sm"
+                            ? "bg-green-500 text-black font-bold shadow-sm"
                             : isToday(day)
-                              ? "bg-surface-muted/80 font-semibold text-ink ring-1 ring-line"
-                              : "text-ink hover:bg-surface-muted",
+                              ? "bg-[#0f172a]/80 font-semibold text-white ring-1 ring-gray-800"
+                              : "text-white hover:bg-[#0f172a]",
                       ].join(" ")}
                     >
                       {day}

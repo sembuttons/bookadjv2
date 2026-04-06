@@ -109,7 +109,7 @@ function StarRow({ value }: { value: number }) {
         <svg
           key={i}
           className={
-            i < full ? "h-4 w-4 text-amber-400" : "h-4 w-4 text-ink-secondary"
+            i < full ? "h-4 w-4 text-green-500" : "h-4 w-4 text-gray-800"
           }
           viewBox="0 0 20 20"
           fill="currentColor"
@@ -133,7 +133,7 @@ export default async function Home() {
   const newDjs = (newDjRows ?? []) as DjProfileRow[];
 
   return (
-    <div className="min-h-screen bg-surface font-sans">
+    <div className="min-h-screen bg-[#0a0a0a] font-sans">
       <Navbar />
 
       <section
@@ -150,13 +150,14 @@ export default async function Home() {
           aria-hidden
         />
         <div className="relative mx-auto max-w-4xl">
-          <p className="mb-4 text-sm font-medium uppercase tracking-widest text-bookadj-soft">
+          <p className="mb-4 text-sm font-medium uppercase tracking-widest text-green-400">
             De DJ-boekingsmarktplaats van Nederland
           </p>
-          <h1 className="text-balance text-[1.65rem] font-bold leading-tight tracking-tight drop-shadow-sm min-[400px]:text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
-            De beste DJ voor jouw feest — geverifieerd en verzekerd
+          <h1 className="text-balance text-[1.65rem] font-bold leading-tight tracking-tight text-white drop-shadow-sm min-[400px]:text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
+            De beste DJ voor jouw feest —{" "}
+            <span className="text-green-400">geverifieerd</span> en verzekerd
           </h1>
-          <p className="mx-auto mt-5 max-w-2xl text-pretty text-sm text-ink-secondary min-[400px]:text-base sm:mt-6 sm:text-lg">
+          <p className="mx-auto mt-5 max-w-2xl text-pretty text-sm text-gray-400 min-[400px]:text-base sm:mt-6 sm:text-lg">
             Geverifieerde DJ&apos;s, transparante prijzen en volledige betalingsbescherming
           </p>
 
@@ -165,18 +166,18 @@ export default async function Home() {
       </section>
 
       <section
-        className="border-b border-line bg-[#faf8f4] px-4 py-14 sm:px-6 lg:px-8 lg:py-16"
+        className="border-b border-gray-800 bg-[#0a0a0a] px-4 py-14 sm:px-6 lg:px-8 lg:py-16"
         aria-labelledby="occasion-heading"
       >
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
             <h2
               id="occasion-heading"
-              className="text-2xl font-bold tracking-tight text-ink sm:text-3xl"
+              className="text-2xl font-bold tracking-tight text-white sm:text-3xl"
             >
               Wat wil je boeken?
             </h2>
-            <p className="mt-3 text-ink-secondary">
+            <p className="mt-3 text-gray-400">
               Kies je gelegenheid en zie meteen de beste DJ&apos;s voor jouw
               type event.
             </p>
@@ -188,14 +189,12 @@ export default async function Home() {
                 <Link
                   key={id}
                   href={`/zoeken?${new URLSearchParams({ occasion: id }).toString()}`}
-                  className="group card-interactive flex min-w-[min(100%,220px)] shrink-0 snap-start flex-col items-center justify-center gap-3 p-6 text-center transition-all duration-200 hover:border-bookadj/40 hover:shadow-md sm:min-w-0"
+                  className="group flex min-w-[min(100%,220px)] shrink-0 snap-start flex-col items-center justify-center gap-3 rounded-2xl border border-gray-800 bg-[#111827] p-6 text-center shadow-sm transition-all duration-200 hover:border-green-600 hover:bg-[#0f1f0f] hover:shadow-md sm:min-w-0"
                 >
-                  <Icon
-                    className="h-8 w-8 text-bookadj-soft"
-                    strokeWidth={1.75}
-                    aria-hidden
-                  />
-                  <span className="text-sm font-semibold text-ink">
+                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#052e16] text-green-500 ring-1 ring-green-800/50">
+                    <Icon className="h-7 w-7" strokeWidth={1.75} aria-hidden />
+                  </span>
+                  <span className="text-sm font-semibold text-gray-200">
                     {label}
                   </span>
                 </Link>
@@ -206,12 +205,12 @@ export default async function Home() {
       </section>
 
       <section
-        className="border-t border-bookadj/20 bg-gradient-to-b from-app to-surface px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-24"
+        className="border-t border-green-500/20 bg-gradient-to-b from-[#0a0a0a] to-[#111827] px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-24"
         aria-labelledby="trust-pro-heading"
       >
         <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="max-w-xl lg:pr-8">
-            <p className="text-sm font-semibold uppercase tracking-widest text-bookadj-soft">
+            <p className="text-sm font-semibold uppercase tracking-widest text-green-400">
               Kwaliteit &amp; veiligheid
             </p>
             <h2
@@ -220,7 +219,7 @@ export default async function Home() {
             >
               Boek met vertrouwen
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-ink-secondary sm:text-lg">
+            <p className="mt-4 text-base leading-relaxed text-gray-400 sm:text-lg">
               Eerlijke informatie, duidelijke afspraken en een platform dat met je meedenkt — van
               eerste klik tot na het feest.
             </p>
@@ -251,19 +250,19 @@ export default async function Home() {
               ).map(({ Icon, title, text }) => (
                 <li
                   key={title}
-                  className="rounded-2xl border border-white/10 bg-surface/5 p-5 backdrop-blur-sm"
+                  className="rounded-2xl border border-gray-800 bg-[#111827] p-5"
                 >
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-bookadj/15 text-bookadj-soft ring-1 ring-bookadj/30">
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-green-500/15 text-green-400 ring-1 ring-green-500/30">
                     <Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden />
                   </span>
                   <h3 className="mt-4 font-bold text-white">{title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-ink-secondary">{text}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-400">{text}</p>
                 </li>
               ))}
             </ul>
             <Link
               href="/zoeken"
-              className="mt-10 inline-flex rounded-lg bg-bookadj px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-bookadj-hover"
+              className="mt-10 inline-flex rounded-lg bg-green-500 px-6 py-3 text-sm font-bold text-black transition-colors hover:bg-green-400"
             >
               Ontdek DJ&apos;s
             </Link>
@@ -271,24 +270,24 @@ export default async function Home() {
 
           <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
             <div
-              className="aspect-[4/3] w-full overflow-hidden rounded-2xl bg-line bg-cover bg-center shadow-2xl ring-1 ring-line-brand/30"
+              className="aspect-[4/3] w-full overflow-hidden rounded-2xl bg-gray-900 bg-cover bg-center shadow-2xl ring-1 ring-green-800/30"
               style={{ backgroundImage: `url(${TRUST_SECTION_IMAGE})` }}
               aria-hidden
             />
             <div className="absolute -bottom-4 left-4 right-4 sm:-bottom-6 sm:left-auto sm:right-8 sm:w-[min(100%,320px)]">
-              <div className="rounded-xl border border-line-brand/40 bg-surface/95 p-4 shadow-xl shadow-black/40 backdrop-blur-md sm:p-5">
+              <div className="rounded-xl border border-green-800/40 bg-[#111827]/95 p-4 shadow-xl shadow-black/40 backdrop-blur-md sm:p-5">
                 <div className="flex items-center gap-3">
                   <div
-                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-bookadj to-bookadj-hover text-sm font-bold text-white"
+                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-green-500 text-sm font-bold text-black"
                     aria-hidden
                   >
                     NV
                   </div>
                   <div className="min-w-0 text-left">
-                    <p className="truncate font-semibold text-ink">DJ Nova</p>
-                    <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-bookadj/25 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-bookadj-soft ring-1 ring-bookadj/40">
+                    <p className="truncate font-semibold text-white">DJ Nova</p>
+                    <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-green-500/25 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-green-400 ring-1 ring-green-500/40">
                       <svg
-                        className="h-3 w-3 text-bookadj-soft"
+                        className="h-3 w-3 text-green-400"
                         viewBox="0 0 20 20"
                         fill="none"
                         aria-hidden
@@ -305,7 +304,7 @@ export default async function Home() {
                     </span>
                   </div>
                 </div>
-                <p className="mt-3 text-xs text-ink-muted">
+                <p className="mt-3 text-xs text-gray-500">
                   Zo zie je op het platform dat een DJ gecontroleerd is — met echte
                   reviews en transparante tarieven.
                 </p>
@@ -316,17 +315,17 @@ export default async function Home() {
       </section>
 
       <section
-        className="border-b border-line bg-surface-muted px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
+        className="border-b border-gray-800 bg-[#0a0a0a] px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
         aria-labelledby="new-heading"
       >
         <div className="mx-auto max-w-7xl">
           <h2
             id="new-heading"
-            className="text-2xl font-bold tracking-tight text-ink sm:text-3xl"
+            className="text-2xl font-bold tracking-tight text-white sm:text-3xl"
           >
             Nieuw toegevoegd
           </h2>
-          <p className="mt-2 text-ink-secondary">
+          <p className="mt-2 text-gray-400">
             De meest recente geverifieerde DJ&apos;s op bookadj.
           </p>
           {newDjs.length === 0 ? (
@@ -350,7 +349,7 @@ export default async function Home() {
                 action={
                   <Link
                     href="/zoeken"
-                    className="inline-flex rounded-lg bg-bookadj px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-bookadj-hover"
+                    className="inline-flex rounded-lg bg-green-500 px-5 py-2.5 text-sm font-bold text-black transition-colors hover:bg-green-400"
                   >
                     DJ&apos;s zoeken
                   </Link>
@@ -369,19 +368,19 @@ export default async function Home() {
                 return (
                   <li key={dj.id}>
                     <Link href={`/dj/${dj.id}`}>
-                      <article className="card-interactive flex h-full flex-col p-5 transition-colors hover:border-bookadj/25">
+                      <article className="card-interactive flex h-full flex-col p-5 transition-colors hover:border-green-800 hover:shadow-lg hover:shadow-green-900/20">
                         <div className="flex items-start gap-4">
                           <div
-                            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-surface text-sm font-bold text-white"
+                            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#111827] text-sm font-bold text-white"
                             aria-hidden
                           >
                             {initialsFromName(name)}
                           </div>
                           <div className="min-w-0 flex-1">
-                            <h3 className="truncate font-semibold text-ink">
+                            <h3 className="truncate font-semibold text-white">
                               {name}
                             </h3>
-                            <p className="text-sm text-ink-muted">{city}</p>
+                            <p className="text-sm text-gray-400">{city}</p>
                           </div>
                         </div>
                         <div className="mt-4 flex flex-wrap gap-2">
@@ -389,25 +388,25 @@ export default async function Home() {
                             djGenres.map((tag) => (
                               <span
                                 key={tag}
-                                className="rounded-full border border-bookadj/20 bg-bookadj/10 px-2.5 py-0.5 text-xs font-medium text-ink"
+                                className="rounded-full bg-gray-800 px-2.5 py-0.5 text-xs font-medium text-gray-300"
                               >
                                 {tag}
                               </span>
                             ))
                           ) : (
-                            <span className="rounded-full bg-surface-muted/80 px-2.5 py-0.5 text-xs font-medium text-ink-muted">
+                            <span className="rounded-full bg-[#0f172a]/80 px-2.5 py-0.5 text-xs font-medium text-gray-500">
                               Diverse stijlen
                             </span>
                           )}
                         </div>
-                        <div className="mt-4 flex items-center justify-between border-t border-line/60 pt-4">
+                        <div className="mt-4 flex items-center justify-between border-t border-gray-800/60 pt-4">
                           <div className="flex items-center gap-2 text-sm">
                             <StarRow value={Math.round(displayRating)} />
-                            <span className="font-medium text-ink">
+                            <span className="font-medium text-white">
                               {displayRating.toFixed(1)}
                             </span>
                           </div>
-                          <p className="text-sm font-semibold text-ink">
+                          <p className="text-sm font-bold text-green-400">
                             {rate != null
                               ? `vanaf €${Math.round(rate)}/u`
                               : "Tarief op aanvraag"}
@@ -425,37 +424,37 @@ export default async function Home() {
 
       <section
         id="hoe-het-werkt"
-        className="px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
+        className="bg-[#0a0a0a] px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
         aria-labelledby="how-heading"
       >
         <div className="mx-auto max-w-7xl">
           <h2
             id="how-heading"
-            className="text-center text-2xl font-bold tracking-tight text-ink sm:text-3xl"
+            className="text-center text-2xl font-bold tracking-tight text-white sm:text-3xl"
           >
             Hoe het werkt
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-center text-ink-secondary">
+          <p className="mx-auto mt-3 max-w-2xl text-center text-gray-400">
             In drie stappen van idee naar geboekte DJ — zonder gedoe.
           </p>
           <div
-            className="mx-auto mt-4 h-1 w-16 rounded-full bg-bookadj"
+            className="mx-auto mt-4 h-1 w-16 rounded-full bg-green-500"
             aria-hidden
           />
           <ol className="mt-12 grid gap-8 lg:grid-cols-3">
             <li>
               <article className="card-interactive h-full p-8">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-bookadj-subtle text-lg font-bold text-bookadj-soft ring-2 ring-line-brand/50">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#052e16] text-lg font-bold text-green-400 ring-2 ring-green-800/50">
                   1
                 </span>
-                <h3 className="mt-6 text-xl font-semibold text-ink">
+                <h3 className="mt-6 text-xl font-semibold text-white">
                   Zoek en vergelijk
                 </h3>
-                <p className="mt-2 text-ink-secondary">
+                <p className="mt-2 text-gray-400">
                   Kies datum en genre en bekijk profielen, voorbeelden en
                   reviews.
                 </p>
-                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-ink-secondary">
+                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-gray-400">
                   <li>Transparante uurtarieven en pakketten</li>
                   <li>Geverifieerde DJ-profielen</li>
                   <li>Filter op datum en genre</li>
@@ -464,17 +463,17 @@ export default async function Home() {
             </li>
             <li>
               <article className="card-interactive h-full p-8">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-bookadj-subtle text-lg font-bold text-bookadj-soft ring-2 ring-line-brand/50">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#052e16] text-lg font-bold text-green-400 ring-2 ring-green-800/50">
                   2
                 </span>
-                <h3 className="mt-6 text-xl font-semibold text-ink">
+                <h3 className="mt-6 text-xl font-semibold text-white">
                   Stuur een aanvraag
                 </h3>
-                <p className="mt-2 text-ink-secondary">
+                <p className="mt-2 text-gray-400">
                   Beschrijf je evenement en ontvang een voorstel dat past bij
                   jouw budget.
                 </p>
-                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-ink-secondary">
+                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-gray-400">
                   <li>Eén plek voor alle berichten</li>
                   <li>Snelle reacties van DJ&apos;s</li>
                   <li>Geen verplichting tot boeking</li>
@@ -483,17 +482,17 @@ export default async function Home() {
             </li>
             <li>
               <article className="card-interactive h-full p-8">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-bookadj-subtle text-lg font-bold text-bookadj-soft ring-2 ring-line-brand/50">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#052e16] text-lg font-bold text-green-400 ring-2 ring-green-800/50">
                   3
                 </span>
-                <h3 className="mt-6 text-xl font-semibold text-ink">
+                <h3 className="mt-6 text-xl font-semibold text-white">
                   Boek met vertrouwen
                 </h3>
-                <p className="mt-2 text-ink-secondary">
+                <p className="mt-2 text-gray-400">
                   Betaal veilig via het platform en geniet van
                   betalingsbescherming tot na je evenement.
                 </p>
-                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-ink-secondary">
+                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-gray-400">
                   <li>Beveiligde betalingen</li>
                   <li>Duidelijke annuleringsvoorwaarden</li>
                   <li>Support bij vragen</li>
@@ -505,39 +504,39 @@ export default async function Home() {
       </section>
 
       <section
-        className="border-y border-line bg-surface-muted/80 px-4 py-10 sm:px-6 lg:px-8"
+        className="border-y border-gray-800 bg-[#0f172a]/80 px-4 py-10 sm:px-6 lg:px-8"
         aria-label="Cijfers"
       >
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-8 text-center sm:gap-12 lg:gap-20">
           <div>
-            <p className="text-3xl font-bold text-bookadj sm:text-4xl">
+            <p className="text-3xl font-bold text-green-400 sm:text-4xl">
               214+
             </p>
-            <p className="mt-1 text-sm font-medium text-ink-secondary">
+            <p className="mt-1 text-sm font-medium text-gray-500">
               DJ&apos;s
             </p>
           </div>
           <div>
-            <p className="text-3xl font-bold text-bookadj sm:text-4xl">
+            <p className="text-3xl font-bold text-green-400 sm:text-4xl">
               4,9/5
             </p>
-            <p className="mt-1 text-sm font-medium text-ink-secondary">
+            <p className="mt-1 text-sm font-medium text-gray-500">
               gemiddelde beoordeling
             </p>
           </div>
           <div>
-            <p className="text-3xl font-bold text-bookadj sm:text-4xl">
+            <p className="text-3xl font-bold text-green-400 sm:text-4xl">
               1200+
             </p>
-            <p className="mt-1 text-sm font-medium text-ink-secondary">
+            <p className="mt-1 text-sm font-medium text-gray-500">
               boekingen
             </p>
           </div>
           <div>
-            <p className="text-3xl font-bold text-bookadj sm:text-4xl">
+            <p className="text-3xl font-bold text-green-400 sm:text-4xl">
               97%
             </p>
-            <p className="mt-1 text-sm font-medium text-ink-secondary">
+            <p className="mt-1 text-sm font-medium text-gray-500">
               tevreden klanten
             </p>
           </div>
@@ -551,42 +550,42 @@ export default async function Home() {
         <div className="mx-auto max-w-7xl">
           <h2
             id="reviews-heading"
-            className="text-2xl font-bold tracking-tight text-ink sm:text-3xl"
+            className="text-2xl font-bold tracking-tight text-white sm:text-3xl"
           >
             Wat klanten zeggen
           </h2>
-          <p className="mt-2 text-ink-secondary">
+          <p className="mt-2 text-gray-400">
             Echte ervaringen van organisatoren en DJ&apos;s.
           </p>
           <div
-            className="mt-4 h-1 w-16 rounded-full bg-bookadj"
+            className="mt-4 h-1 w-16 rounded-full bg-green-500"
             aria-hidden
           />
           <div className="mt-10 -mx-4 flex gap-4 overflow-x-auto px-4 pb-2 snap-x snap-mandatory sm:mx-0 sm:px-0">
             {reviews.map((r) => (
               <blockquote
                 key={r.name}
-                className="card-interactive min-w-[min(100%,280px)] max-w-sm shrink-0 snap-start p-6 transition-colors hover:border-bookadj/30 sm:min-w-[300px]"
+                className="card-interactive min-w-[min(100%,280px)] max-w-sm shrink-0 snap-start p-6 transition-colors hover:border-green-500/30 sm:min-w-[300px]"
               >
                 <StarRow value={r.rating} />
-                <p className="mt-4 text-sm leading-relaxed text-ink-secondary">
+                <p className="mt-4 text-sm leading-relaxed text-gray-400">
                   &ldquo;{r.quote}&rdquo;
                 </p>
-                <footer className="mt-4 border-t border-line/60 pt-4">
-                  <p className="font-semibold text-ink">{r.name}</p>
-                  <p className="text-sm text-ink-muted">{r.role}</p>
+                <footer className="mt-4 border-t border-gray-800/60 pt-4">
+                  <p className="font-semibold text-white">{r.name}</p>
+                  <p className="text-sm text-gray-500">{r.role}</p>
                 </footer>
               </blockquote>
             ))}
             <div className="min-w-[min(100%,280px)] max-w-sm shrink-0 snap-start sm:min-w-[300px]">
               <Link
                 href="/reviews"
-                className="flex h-full min-h-[200px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-line bg-surface-muted px-6 py-8 text-center transition-colors hover:border-bookadj/50 hover:bg-bookadj/5"
+                className="flex h-full min-h-[200px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-800 bg-[#0f172a] px-6 py-8 text-center transition-colors hover:border-green-500/50 hover:bg-green-500/5"
               >
-                <span className="text-sm font-semibold text-ink">
+                <span className="text-sm font-semibold text-white">
                   Lees alle reviews
                 </span>
-                <span className="mt-2 text-xs text-ink-muted">
+                <span className="mt-2 text-xs text-gray-500">
                   Bekijk het volledige overzicht
                 </span>
               </Link>
@@ -596,7 +595,7 @@ export default async function Home() {
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
             <Link
               href="/reviews"
-              className="inline-flex items-center justify-center rounded-lg border-2 border-black bg-surface px-6 py-3 text-sm font-semibold text-ink shadow-sm transition-colors hover:bg-surface-muted"
+              className="inline-flex items-center justify-center rounded-lg border-2 border-black bg-[#111827] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#0f172a]"
             >
               Bekijk alle reviews
             </Link>
@@ -604,7 +603,7 @@ export default async function Home() {
               href={PLACEHOLDER_GOOGLE_REVIEWS}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-lg bg-bookadj px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-bookadj-hover"
+              className="inline-flex items-center justify-center rounded-lg bg-green-500 px-6 py-3 text-sm font-bold text-black transition-colors hover:bg-green-400"
             >
               Reviews op Google
             </a>
@@ -614,39 +613,36 @@ export default async function Home() {
 
       <section
         id="voor-djs"
-        className="relative isolate overflow-hidden px-4 py-16 text-center text-white sm:px-6 sm:py-20 lg:px-8"
+        className="relative isolate overflow-hidden border-t border-green-800 bg-[#050505] px-4 py-16 text-center text-white sm:px-6 sm:py-20 lg:px-8"
         aria-labelledby="cta-heading"
       >
         <div
-          className="absolute inset-0 -z-20 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 -z-20 bg-cover bg-center bg-no-repeat opacity-40"
           style={{ backgroundImage: `url(${VOOR_DJS_SECTION_BG})` }}
           aria-hidden
         />
-        <div
-          className="absolute inset-0 -z-10 bg-black/70"
-          aria-hidden
-        />
+        <div className="absolute inset-0 -z-10 bg-[#050505]/90" aria-hidden />
         <div className="relative mx-auto max-w-3xl">
           <h2
             id="cta-heading"
-            className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl"
+            className="text-2xl font-bold tracking-tight text-white sm:text-3xl md:text-4xl"
           >
-            Klaar voor jouw perfecte avond?
+            Klaar voor jouw perfecte <span className="text-green-400">avond</span>?
           </h2>
-          <p className="mt-4 text-ink-secondary">
+          <p className="mt-4 text-gray-500">
             Maak een account en ontdek DJ&apos;s in jouw regio — of meld je aan
             als DJ en ontvang serieuze aanvragen.
           </p>
           <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
             <Link
               href="/zoeken"
-              className="rounded-lg bg-bookadj px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-bookadj-hover"
+              className="rounded-lg bg-green-500 px-6 py-3 text-sm font-bold text-black transition-colors hover:bg-green-400"
             >
               Zoek een DJ
             </Link>
             <Link
               href="/aanmelden"
-              className="rounded-lg border-2 border-white/40 bg-transparent px-6 py-3 text-sm font-semibold text-white transition-colors hover:border-bookadj/70 hover:text-bookadj-soft"
+              className="rounded-lg border border-gray-700 bg-transparent px-6 py-3 text-sm font-semibold text-gray-300 transition-colors hover:border-gray-600 hover:bg-gray-900 hover:text-white"
             >
               Account aanmaken
             </Link>

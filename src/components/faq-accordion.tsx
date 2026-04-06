@@ -29,13 +29,13 @@ export function FaqAccordion({ items }: { items: FaqItem[] }) {
       {items.map((item, i) => (
         <details
           key={i}
-          className="group rounded-xl border border-line bg-surface shadow-sm open:border-line open:shadow-md"
+          className="group rounded-xl border border-gray-800 bg-[#111827] shadow-sm open:border-l-2 open:border-l-green-500 open:border-gray-800 open:shadow-md"
         >
-          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 text-left text-base font-semibold text-ink [&::-webkit-details-marker]:hidden">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 text-left text-base font-semibold text-white [&::-webkit-details-marker]:hidden">
             <span className="pr-2">{item.question}</span>
-            <Chevron className="shrink-0 text-ink-muted transition-transform duration-200 group-open:rotate-180" />
+            <Chevron className="shrink-0 text-green-400 transition-transform duration-200 group-open:rotate-180" />
           </summary>
-          <div className="border-t border-line/60 px-5 py-4 text-sm leading-relaxed text-ink-secondary">
+          <div className="border-t border-gray-800 px-5 py-4 text-sm leading-relaxed text-gray-400">
             {item.answer}
           </div>
         </details>

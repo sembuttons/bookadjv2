@@ -108,8 +108,8 @@ function IconSparkleNew({ className }: { className?: string }) {
 }
 
 const rangeThumb =
-  "[&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:relative [&::-webkit-slider-thumb]:z-10 [&::-webkit-slider-thumb]:mt-[-6px] [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-grab [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:bg-bookadj [&::-webkit-slider-thumb]:shadow-sm [&::-webkit-slider-thumb]:active:cursor-grabbing " +
-  "[&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-grab [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-bookadj [&::-moz-range-thumb]:shadow-sm [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:active:cursor-grabbing";
+  "[&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:relative [&::-webkit-slider-thumb]:z-10 [&::-webkit-slider-thumb]:mt-[-6px] [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-grab [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:bg-green-500 [&::-webkit-slider-thumb]:shadow-sm [&::-webkit-slider-thumb]:active:cursor-grabbing " +
+  "[&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-grab [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-green-500 [&::-moz-range-thumb]:shadow-sm [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:active:cursor-grabbing";
 
 const rangeTrackTransparent =
   "[&::-webkit-slider-runnable-track]:h-1 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-transparent " +
@@ -137,11 +137,11 @@ function DualHourlyRateSlider({
     <div className="space-y-3">
       <div className="relative h-10 pt-2">
         <div
-          className="pointer-events-none absolute left-0 right-0 top-[calc(50%-2px)] h-px bg-line/50"
+          className="pointer-events-none absolute left-0 right-0 top-[calc(50%-2px)] h-px bg-gray-800/50"
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute top-[calc(50%-2px)] h-0.5 rounded-full bg-bookadj"
+          className="pointer-events-none absolute top-[calc(50%-2px)] h-0.5 rounded-full bg-green-500"
           style={{
             left: `${leftPct}%`,
             width: `${Math.max(widthPct, 0)}%`,
@@ -159,7 +159,7 @@ function DualHourlyRateSlider({
             const v = Number(e.target.value);
             onMinChange(Math.min(v, maxVal - PRICE_STEP));
           }}
-          className={`pointer-events-none absolute inset-x-0 top-1/2 w-full -translate-y-1/2 appearance-none bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-bookadj/30 focus-visible:ring-offset-app ${rangeTrackTransparent} ${rangeThumb}`}
+          className={`pointer-events-none absolute inset-x-0 top-1/2 w-full -translate-y-1/2 appearance-none bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500/30 focus-visible:ring-offset-[#0a0a0a] ${rangeTrackTransparent} ${rangeThumb}`}
           style={{ zIndex: minZ }}
           aria-label="Minimum uurtarief"
         />
@@ -173,13 +173,13 @@ function DualHourlyRateSlider({
             const v = Number(e.target.value);
             onMaxChange(Math.max(v, minVal + PRICE_STEP));
           }}
-          className={`pointer-events-none absolute inset-x-0 top-1/2 w-full -translate-y-1/2 appearance-none bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-bookadj/30 focus-visible:ring-offset-app ${rangeTrackTransparent} ${rangeThumb}`}
+          className={`pointer-events-none absolute inset-x-0 top-1/2 w-full -translate-y-1/2 appearance-none bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500/30 focus-visible:ring-offset-[#0a0a0a] ${rangeTrackTransparent} ${rangeThumb}`}
           style={{ zIndex: maxZ }}
           aria-label="Maximum uurtarief"
         />
       </div>
 
-      <div className="flex justify-between text-xs text-ink-muted">
+      <div className="flex justify-between text-xs text-gray-500">
         <span>{`€${PRICE_SLIDER_MIN}`}</span>
         <span>{`€${PRICE_SLIDER_MAX}`}</span>
       </div>
@@ -329,9 +329,9 @@ export default function ZoekenPage() {
 
   const FilterBlock = (
     <>
-      <div className="space-y-2 border-b border-line py-6">
-        <h2 className="text-sm font-semibold text-ink">Gelegenheid</h2>
-        <p className="text-xs text-ink-muted">
+      <div className="space-y-2 border-b border-gray-800 py-6">
+        <h2 className="text-sm font-semibold text-white">Gelegenheid</h2>
+        <p className="text-xs text-gray-500">
           Filter op type feest (secundair naast je zoekbalk).
         </p>
         <select
@@ -349,15 +349,15 @@ export default function ZoekenPage() {
         </select>
       </div>
 
-      <fieldset className="space-y-3 border-b border-line py-6">
-        <legend className="text-sm font-semibold text-ink">Genre</legend>
+      <fieldset className="space-y-3 border-b border-gray-800 py-6">
+        <legend className="text-sm font-semibold text-white">Genre</legend>
         <ul className="space-y-2">
           {FILTER_GENRES.map((g) => (
             <li key={g}>
-              <label className="flex cursor-pointer items-center gap-2 text-sm text-ink-secondary">
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-400">
                 <input
                   type="checkbox"
-                  className="h-4 w-4 rounded border-line"
+                  className="h-4 w-4 rounded border-gray-800"
                   checked={genreChecks[g] ?? false}
                   onChange={() =>
                     setGenreChecks((p) => ({ ...p, [g]: !p[g] }))
@@ -370,11 +370,11 @@ export default function ZoekenPage() {
         </ul>
       </fieldset>
 
-      <div className="space-y-2 border-b border-line py-6">
-        <h2 className="text-sm font-semibold text-ink">
+      <div className="space-y-2 border-b border-gray-800 py-6">
+        <h2 className="text-sm font-semibold text-white">
           Uurtarief (€)
         </h2>
-        <p className="text-xs text-ink-muted">
+        <p className="text-xs text-gray-500">
           Toon DJ&apos;s met uurtarief binnen dit bereik. Profielen zonder
           tarief blijven zichtbaar.
         </p>
@@ -391,17 +391,17 @@ export default function ZoekenPage() {
   const resultCount = filteredSorted.length;
 
   return (
-    <div className="min-h-screen bg-surface font-sans text-ink">
+    <div className="min-h-screen bg-[#0a0a0a] font-sans text-white">
       <Navbar />
 
-      <header className="border-b border-line bg-surface text-ink shadow-sm">
+      <header className="border-b border-gray-900 bg-[#0a0a0a] text-white shadow-sm">
         <div className="mx-auto max-w-[1600px]">
           <form
             onSubmit={handleZoeken}
             className="mx-auto flex max-w-[1600px] flex-col gap-4 px-4 py-4 sm:flex-row sm:flex-wrap sm:items-end sm:gap-4 sm:px-6 lg:px-8"
           >
             <label className="flex min-w-[140px] flex-1 flex-col gap-1.5">
-              <span className="text-xs font-semibold uppercase text-ink-muted">
+              <span className="text-xs font-semibold uppercase text-gray-500">
                 Stad
               </span>
               <input
@@ -412,7 +412,7 @@ export default function ZoekenPage() {
               />
             </label>
             <label className="flex min-w-[140px] flex-1 flex-col gap-1.5">
-              <span className="text-xs font-semibold uppercase text-ink-muted">
+              <span className="text-xs font-semibold uppercase text-gray-500">
                 Datum
               </span>
               <input
@@ -423,7 +423,7 @@ export default function ZoekenPage() {
               />
             </label>
             <label className="flex min-w-[140px] flex-1 flex-col gap-1.5">
-              <span className="text-xs font-semibold uppercase text-ink-muted">
+              <span className="text-xs font-semibold uppercase text-gray-500">
                 Gelegenheid
               </span>
               <select
@@ -441,7 +441,7 @@ export default function ZoekenPage() {
             </label>
             <button
               type="submit"
-              className="h-11 min-h-[44px] w-full shrink-0 rounded-lg bg-bookadj px-6 text-sm font-semibold text-white transition-all duration-200 hover:bg-bookadj-hover sm:w-auto"
+              className="h-11 min-h-[44px] w-full shrink-0 rounded-lg bg-green-500 px-6 text-sm font-bold text-black transition-all duration-200 hover:bg-green-400 sm:w-auto"
             >
               Zoeken
             </button>
@@ -450,10 +450,10 @@ export default function ZoekenPage() {
       </header>
 
       <div className="mx-auto grid max-w-[1600px] gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[260px_1fr] lg:gap-10 lg:px-8">
-        <details className="rounded-xl border border-line bg-surface-muted p-4 lg:hidden">
-          <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between text-sm font-semibold text-ink [&::-webkit-details-marker]:hidden">
+        <details className="rounded-xl border border-gray-800 bg-[#0f172a] p-4 lg:hidden">
+          <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between text-sm font-semibold text-white [&::-webkit-details-marker]:hidden">
             <span>Filters</span>
-            <span className="text-xs font-normal text-ink-muted">
+            <span className="text-xs font-normal text-gray-500">
               {occasion ? occasionLabel(occasion) : "Geen"}
             </span>
           </summary>
@@ -469,15 +469,15 @@ export default function ZoekenPage() {
 
         <div className="min-w-0">
           {error ? (
-            <p className="rounded-lg border border-danger/35 bg-danger/10 px-4 py-3 text-sm text-danger">
+            <p className="rounded-lg border border-red-500/35 bg-red-500/10 px-4 py-3 text-sm text-red-400">
               {error}
             </p>
           ) : null}
 
           {!loading && !error ? (
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-ink-secondary">
-                <span className="font-semibold text-ink">
+              <p className="text-sm text-gray-400">
+                <span className="font-semibold text-white">
                   {resultCount}
                 </span>
                 {resultCount === 1
@@ -486,7 +486,7 @@ export default function ZoekenPage() {
               </p>
               <div className="relative flex min-w-0 flex-1 items-center justify-end sm:max-w-md sm:flex-initial">
                 <label className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
-                  <span className="shrink-0 text-xs font-bold uppercase tracking-wide text-ink-muted sm:text-sm sm:font-semibold sm:normal-case sm:tracking-normal sm:text-ink">
+                  <span className="shrink-0 text-xs font-bold uppercase tracking-wide text-gray-500 sm:text-sm sm:font-semibold sm:normal-case sm:tracking-normal sm:text-white">
                     Sorteren
                   </span>
                   <span className="relative inline-flex min-w-0 flex-1 items-center sm:min-w-[240px]">
@@ -494,7 +494,7 @@ export default function ZoekenPage() {
                       value={sort}
                       onChange={(e) => setSort(e.target.value as SortKey)}
                       aria-label="Sorteer resultaten"
-                      className="input-field w-full cursor-pointer appearance-none border-2 border-line-brand py-2.5 pl-3 pr-10 text-sm font-semibold shadow-md sm:py-3"
+                      className="input-field w-full cursor-pointer appearance-none border-2 border-green-800 py-2.5 pl-3 pr-10 text-sm font-semibold shadow-md sm:py-3"
                     >
                       {SORT_OPTIONS.map((o) => (
                         <option key={o.value} value={o.value}>
@@ -502,7 +502,7 @@ export default function ZoekenPage() {
                         </option>
                       ))}
                     </select>
-                    <IconChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-secondary" />
+                    <IconChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                   </span>
                 </label>
               </div>
@@ -510,7 +510,7 @@ export default function ZoekenPage() {
           ) : null}
 
           {!loading && !error && !hasActiveFilters ? (
-            <div className="mb-6 rounded-xl border border-line-brand/40 bg-bookadj-subtle/80 px-4 py-3 text-sm text-bookadj-soft ring-1 ring-line-brand/35">
+            <div className="mb-6 rounded-xl border border-green-800/40 bg-[#052e16]/80 px-4 py-3 text-sm text-green-400 ring-1 ring-green-800/35">
               <span className="font-semibold">Geen filters actief.</span> Je ziet nu alle geverifieerde
               DJ&apos;s. Gebruik de filters links (of boven op mobiel) om sneller te vinden wat bij je
               past.
@@ -541,7 +541,7 @@ export default function ZoekenPage() {
               action={
                 <Link
                   href="/zoeken"
-                  className="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-bookadj px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-bookadj-hover"
+                  className="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-green-500 px-5 py-2.5 text-sm font-bold text-black transition-all duration-200 hover:bg-green-400"
                 >
                   Bekijk alle DJ&apos;s
                 </Link>
@@ -563,11 +563,11 @@ export default function ZoekenPage() {
                       className="group card-interactive block h-full overflow-hidden"
                     >
                       <div
-                        className="relative aspect-[4/3] overflow-hidden rounded-t-2xl bg-surface bg-cover bg-center"
+                        className="relative aspect-[4/3] overflow-hidden rounded-t-2xl bg-[#111827] bg-cover bg-center"
                         style={{ backgroundImage: `url(${ZOEKEN_CARD_IMG})` }}
                       >
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/20" />
-                        <span className="absolute left-3 top-3 z-[1] rounded-full bg-bookadj px-2 py-0.5 text-[10px] font-bold uppercase text-white shadow-sm">
+                        <span className="absolute left-3 top-3 z-[1] rounded-full bg-green-500 px-2 py-0.5 text-xs font-bold uppercase text-black shadow-sm">
                           Geverifieerd
                         </span>
                         <span className="absolute inset-0 z-[1] flex items-center justify-center text-3xl font-bold text-white drop-shadow-md">
@@ -575,25 +575,25 @@ export default function ZoekenPage() {
                         </span>
                       </div>
                       <div className="space-y-2 p-4">
-                        <h3 className="text-lg font-semibold group-hover:underline">
+                        <h3 className="text-lg font-semibold text-white group-hover:underline">
                           {stage}
                         </h3>
-                        <p className="text-sm text-ink-secondary">{city}</p>
+                        <p className="text-sm text-gray-400">{city}</p>
                         <div className="flex flex-wrap gap-2">
                           {genres.slice(0, 4).map((g) => (
                             <span
                               key={g}
-                              className="rounded-full bg-surface-muted/80 px-2.5 py-0.5 text-xs font-medium text-ink"
+                              className="rounded-full bg-gray-800 px-2.5 py-0.5 text-xs font-medium text-gray-300"
                             >
                               {g}
                             </span>
                           ))}
                         </div>
-                        <p className="text-xs text-ink-muted">
+                        <p className="text-xs text-gray-500">
                           Reactietijd: {responseLabel}
                         </p>
-                        <div className="flex items-center justify-between border-t border-line/60 pt-3">
-                          <p className="font-bold text-ink">
+                        <div className="flex items-center justify-between border-t border-gray-800/60 pt-3">
+                          <p className="font-bold text-green-400">
                             {rate != null
                               ? `v.a. €${rate.toLocaleString("nl-NL")}/uur`
                               : "Tarief op aanvraag"}

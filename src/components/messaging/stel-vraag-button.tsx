@@ -80,7 +80,7 @@ export function StelVraagButton({
         {busy ? "Even geduld…" : (children ?? "Stel een vraag")}
       </button>
       {error ? (
-        <p className="max-w-sm text-center text-xs text-danger sm:text-right">
+        <p className="max-w-sm text-center text-xs text-red-400 sm:text-right">
           {error}
         </p>
       ) : null}

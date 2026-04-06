@@ -123,24 +123,24 @@ export default function AdminVerificatiesPage() {
 
   if (loading) {
     return (
-      <div className="py-12 text-center text-ink-secondary">Laden…</div>
+      <div className="py-12 text-center text-gray-400">Laden…</div>
     );
   }
 
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
           DJ-verificaties
         </h1>
-        <p className="mt-1 text-sm text-ink-secondary">
+        <p className="mt-1 text-sm text-gray-400">
           Beoordeel nieuwe DJ-profielen voordat ze zichtbaar worden.
         </p>
       </div>
 
       {loadError ? (
         <p
-          className="rounded-lg border border-danger/35 bg-danger/10 px-3 py-2 text-sm text-danger"
+          className="rounded-lg border border-red-500/35 bg-red-500/10 px-3 py-2 text-sm text-red-400"
           role="alert"
         >
           {loadError}
@@ -148,7 +148,7 @@ export default function AdminVerificatiesPage() {
       ) : null}
 
       {profiles.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-line bg-surface-muted px-6 py-12 text-center text-sm text-ink-secondary">
+        <p className="rounded-xl border border-dashed border-gray-800 bg-[#0f172a] px-6 py-12 text-center text-sm text-gray-400">
           Geen verificaties in behandeling
         </p>
       ) : (
@@ -183,13 +183,13 @@ export default function AdminVerificatiesPage() {
 
             return (
               <li key={id}>
-                <article className="rounded-2xl border border-line bg-surface p-6 shadow-sm sm:p-8">
+                <article className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm sm:p-8">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div>
-                      <h2 className="text-xl font-bold text-ink">
+                      <h2 className="text-xl font-bold text-white">
                         {stage}
                       </h2>
-                      <p className="mt-1 text-sm text-ink-muted">
+                      <p className="mt-1 text-sm text-gray-500">
                         Aangemeld {formatCreatedAt(created)}
                       </p>
                     </div>
@@ -198,7 +198,7 @@ export default function AdminVerificatiesPage() {
                         type="button"
                         disabled={busy}
                         onClick={() => void approve(id)}
-                        className="rounded-lg bg-bookadj px-4 py-2.5 text-sm font-semibold text-white hover:bg-bookadj-hover disabled:opacity-50"
+                        className="rounded-lg bg-green-500 px-4 py-2.5 text-sm font-bold text-black hover:bg-green-400 disabled:opacity-50"
                       >
                         {busy ? "Bezig…" : "Goedkeuren"}
                       </button>
@@ -206,7 +206,7 @@ export default function AdminVerificatiesPage() {
                         type="button"
                         disabled={busy}
                         onClick={() => void reject(id)}
-                        className="rounded-lg border border-danger/35 bg-danger/10 px-4 py-2.5 text-sm font-semibold text-danger hover:bg-danger/20 disabled:opacity-50"
+                        className="rounded-lg border border-red-800 bg-red-500/10 px-4 py-2.5 text-sm font-semibold text-red-400 hover:bg-red-500/20 disabled:opacity-50"
                       >
                         Afwijzen
                       </button>
@@ -215,40 +215,40 @@ export default function AdminVerificatiesPage() {
 
                   <dl className="mt-6 grid gap-4 text-sm sm:grid-cols-2">
                     <div>
-                      <dt className="text-ink-muted">Stad</dt>
-                      <dd className="mt-0.5 font-medium text-ink">
+                      <dt className="text-gray-500">Stad</dt>
+                      <dd className="mt-0.5 font-medium text-white">
                         {city}
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-ink-muted">Uurtarief</dt>
-                      <dd className="mt-0.5 font-medium text-ink">
+                      <dt className="text-gray-500">Uurtarief</dt>
+                      <dd className="mt-0.5 font-medium text-white">
                         {rate != null
                           ? `€${rate.toLocaleString("nl-NL")}/uur`
                           : "—"}
                       </dd>
                     </div>
                     <div className="sm:col-span-2">
-                      <dt className="text-ink-muted">Genres</dt>
-                      <dd className="mt-0.5 font-medium text-ink">
+                      <dt className="text-gray-500">Genres</dt>
+                      <dd className="mt-0.5 font-medium text-white">
                         {genres.length ? genres.join(", ") : "—"}
                       </dd>
                     </div>
                     <div className="sm:col-span-2">
-                      <dt className="text-ink-muted">Bio</dt>
-                      <dd className="mt-0.5 whitespace-pre-wrap text-ink">
+                      <dt className="text-gray-500">Bio</dt>
+                      <dd className="mt-0.5 whitespace-pre-wrap text-white">
                         {bio}
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-ink-muted">BTW-nummer</dt>
-                      <dd className="mt-0.5 font-mono text-sm font-medium text-ink">
+                      <dt className="text-gray-500">BTW-nummer</dt>
+                      <dd className="mt-0.5 font-mono text-sm font-medium text-white">
                         {vat}
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-ink-muted">KVK-nummer</dt>
-                      <dd className="mt-0.5 font-mono text-sm font-medium text-ink">
+                      <dt className="text-gray-500">KVK-nummer</dt>
+                      <dd className="mt-0.5 font-mono text-sm font-medium text-white">
                         {kvk}
                       </dd>
                     </div>

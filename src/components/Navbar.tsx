@@ -161,12 +161,12 @@ export function Navbar() {
     <Link
       href="/berichten"
       role="menuitem"
-      className="flex items-center justify-between gap-2 px-4 py-2.5 text-sm text-ink hover:bg-surface-muted"
+      className="flex items-center justify-between gap-2 px-4 py-2.5 text-sm text-white hover:bg-[#0f172a]"
       onClick={() => setMenuOpen(false)}
     >
       <span>Berichten</span>
       {unread > 0 ? (
-        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-caution px-1.5 text-[10px] font-bold text-white">
+        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-500 px-1.5 text-[10px] font-bold text-white">
           {unread > 9 ? "9+" : unread}
         </span>
       ) : null}
@@ -174,14 +174,14 @@ export function Navbar() {
   );
 
   const navLinkClass =
-    "py-2 text-sm font-medium text-ink transition-all duration-200 hover:text-bookadj md:py-0";
+    "py-2 text-sm font-medium text-gray-400 transition-all duration-200 hover:text-white md:py-0";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-surface/95 shadow-sm shadow-black/20 backdrop-blur-md supports-[backdrop-filter]:bg-surface/90">
+    <header className="sticky top-0 z-50 border-b border-gray-900 bg-[#0a0a0a]/95 shadow-sm shadow-black/20 backdrop-blur-md supports-[backdrop-filter]:bg-[#0a0a0a]/90">
       {mobileNavOpen ? (
         <button
           type="button"
-          className="fixed inset-0 z-[45] bg-app/80 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-[45] bg-[#0a0a0a]/80 backdrop-blur-sm md:hidden"
           aria-label="Menu sluiten"
           onClick={() => setMobileNavOpen(false)}
         />
@@ -190,13 +190,13 @@ export function Navbar() {
       <div className="relative mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="shrink-0 text-xl font-semibold tracking-tight text-ink"
+          className="shrink-0 text-xl font-semibold tracking-tight text-green-400"
         >
           bookadj
         </Link>
 
         <nav
-          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 text-sm font-medium text-ink-secondary md:flex"
+          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 text-sm font-medium text-gray-400 md:flex"
           aria-label="Hoofdnavigatie"
         >
           <Link href="/zoeken" className={navLinkClass}>
@@ -219,17 +219,17 @@ export function Navbar() {
         <div className="flex-1" />
 
         <div
-          className={`fixed inset-y-0 right-0 z-[48] w-[min(20rem,88vw)] max-w-full transform border-l border-line bg-app shadow-xl shadow-black/40 transition-transform duration-200 ease-out md:hidden ${
+          className={`fixed inset-y-0 right-0 z-[48] w-[min(20rem,88vw)] max-w-full transform border-l border-gray-800 bg-[#0a0a0a] shadow-xl shadow-black/40 transition-transform duration-200 ease-out md:hidden ${
             mobileNavOpen ? "translate-x-0" : "translate-x-full"
           }`}
           aria-hidden={!mobileNavOpen}
           id="site-mobile-nav"
         >
-          <div className="flex h-14 items-center justify-between border-b border-line px-4">
+          <div className="flex h-14 items-center justify-between border-b border-gray-800 px-4">
             <span className="text-sm font-bold">Menu</span>
             <button
               type="button"
-              className="flex h-11 w-11 items-center justify-center rounded-lg text-ink-secondary hover:bg-surface-muted/80"
+              className="flex h-11 w-11 items-center justify-center rounded-lg text-gray-400 hover:bg-[#0f172a]/80"
               aria-label="Menu sluiten"
               onClick={() => setMobileNavOpen(false)}
             >
@@ -268,7 +268,7 @@ export function Navbar() {
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <button
             type="button"
-            className="flex h-11 w-11 items-center justify-center rounded-lg border border-line text-ink shadow-sm transition-all duration-200 hover:bg-surface-muted md:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-lg border border-gray-800 text-white shadow-sm transition-all duration-200 hover:bg-[#0f172a] md:hidden"
             aria-expanded={mobileNavOpen}
             aria-controls="site-mobile-nav"
             aria-label="Menu openen"
@@ -287,13 +287,13 @@ export function Navbar() {
             <>
               <Link
                 href="/auth"
-                className="text-sm font-medium text-ink transition-all duration-200 hover:text-bookadj"
+                className="rounded-lg border border-gray-700 px-3 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:bg-gray-700 min-[380px]:px-4"
               >
                 Inloggen
               </Link>
               <Link
                 href="/auth?tab=aanmelden"
-                className="rounded-lg bg-bookadj px-3 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-bookadj-hover min-[380px]:px-4"
+                className="rounded-lg bg-green-500 px-3 py-2 text-sm font-bold text-black shadow-sm transition-all duration-200 hover:bg-green-400 min-[380px]:px-4"
               >
                 Aanmelden
               </Link>
@@ -304,7 +304,7 @@ export function Navbar() {
                 ref={buttonRef}
                 type="button"
                 onClick={() => setMenuOpen((o) => !o)}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-bookadj-subtle text-sm font-bold text-bookadj-soft outline-none ring-offset-app focus-visible:ring-2 focus-visible:ring-bookadj/40"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-[#052e16] text-sm font-bold text-green-400 outline-none ring-offset-[#0a0a0a] focus-visible:ring-2 focus-visible:ring-green-500/50"
                 aria-expanded={menuOpen}
                 aria-haspopup="menu"
                 aria-label="Accountmenu"
@@ -315,21 +315,21 @@ export function Navbar() {
                 <div
                   ref={menuRef}
                   role="menu"
-                  className="absolute right-0 top-full z-50 mt-2 min-w-[260px] rounded-xl border border-line bg-surface py-2 shadow-lg"
+                  className="absolute right-0 top-full z-50 mt-2 min-w-[260px] rounded-xl border border-gray-800 bg-[#111827] py-2 shadow-lg"
                 >
                   <div className="px-4 py-2 text-left">
-                    <p className="text-sm font-semibold text-ink-muted">
+                    <p className="text-sm font-semibold text-gray-500">
                       {fullName || "Account"}
                     </p>
-                    <p className="truncate text-xs text-ink-muted">{email}</p>
+                    <p className="truncate text-xs text-gray-500">{email}</p>
                   </div>
-                  <div className="my-2 border-t border-line/60" role="separator" />
+                  <div className="my-2 border-t border-gray-800/60" role="separator" />
                   {isAdmin ? (
                     <>
                       <Link
                         href="/admin"
                         role="menuitem"
-                        className="block px-4 py-2.5 text-sm text-ink hover:bg-surface-muted"
+                        className="block px-4 py-2.5 text-sm text-white hover:bg-[#0f172a]"
                         onClick={() => setMenuOpen(false)}
                       >
                         Admin panel
@@ -342,7 +342,7 @@ export function Navbar() {
                       <Link
                         href="/dashboard/dj"
                         role="menuitem"
-                        className="block px-4 py-2.5 text-sm text-ink hover:bg-surface-muted"
+                        className="block px-4 py-2.5 text-sm text-white hover:bg-[#0f172a]"
                         onClick={() => setMenuOpen(false)}
                       >
                         Mijn boekingen
@@ -351,7 +351,7 @@ export function Navbar() {
                       <Link
                         href="/dashboard/dj"
                         role="menuitem"
-                        className="block px-4 py-2.5 text-sm text-ink hover:bg-surface-muted"
+                        className="block px-4 py-2.5 text-sm text-white hover:bg-[#0f172a]"
                         onClick={() => setMenuOpen(false)}
                       >
                         DJ Dashboard
@@ -359,7 +359,7 @@ export function Navbar() {
                       <Link
                         href="/dashboard/dj/profiel"
                         role="menuitem"
-                        className="block px-4 py-2.5 text-sm text-ink hover:bg-surface-muted"
+                        className="block px-4 py-2.5 text-sm text-white hover:bg-[#0f172a]"
                         onClick={() => setMenuOpen(false)}
                       >
                         Mijn profiel
@@ -371,7 +371,7 @@ export function Navbar() {
                       <Link
                         href="/dashboard/klant"
                         role="menuitem"
-                        className="block px-4 py-2.5 text-sm text-ink hover:bg-surface-muted"
+                        className="block px-4 py-2.5 text-sm text-white hover:bg-[#0f172a]"
                         onClick={() => setMenuOpen(false)}
                       >
                         Mijn boekingen
@@ -380,7 +380,7 @@ export function Navbar() {
                       <Link
                         href="/dashboard/klant/reviews"
                         role="menuitem"
-                        className="block px-4 py-2.5 text-sm text-ink hover:bg-surface-muted"
+                        className="block px-4 py-2.5 text-sm text-white hover:bg-[#0f172a]"
                         onClick={() => setMenuOpen(false)}
                       >
                         Mijn reviews
@@ -388,18 +388,18 @@ export function Navbar() {
                       <Link
                         href="/dashboard/klant/profiel"
                         role="menuitem"
-                        className="block px-4 py-2.5 text-sm text-ink hover:bg-surface-muted"
+                        className="block px-4 py-2.5 text-sm text-white hover:bg-[#0f172a]"
                         onClick={() => setMenuOpen(false)}
                       >
                         Profiel
                       </Link>
                     </>
                   ) : null}
-                  <div className="my-2 border-t border-line/60" role="separator" />
+                  <div className="my-2 border-t border-gray-800/60" role="separator" />
                   <button
                     type="button"
                     role="menuitem"
-                    className="w-full px-4 py-2.5 text-left text-sm text-ink hover:bg-surface-muted"
+                    className="w-full px-4 py-2.5 text-left text-sm text-white hover:bg-[#0f172a]"
                     onClick={() => void handleSignOut()}
                   >
                     Uitloggen

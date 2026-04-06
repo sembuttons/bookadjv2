@@ -10,11 +10,11 @@ export function BerichtenLayoutClient({
   return (
     <DashboardAppShell expectedRole="auto" defaultContentPadding={false}>
       <div className="min-w-0">
-        <div className="border-b border-line px-4 pb-4 pt-6 sm:px-6 lg:px-10 lg:pt-10">
-          <h1 className="text-2xl font-bold tracking-tight text-ink">
+        <div className="border-b border-gray-800 px-4 pb-4 pt-6 sm:px-6 lg:px-10 lg:pt-10">
+          <h1 className="text-2xl font-bold tracking-tight text-white">
             Berichten
           </h1>
-          <p className="mt-1 text-sm text-ink-secondary">
+          <p className="mt-1 text-sm text-gray-400">
             Veilige berichten binnen bookadj — deel geen telefoonnummers of
             betaalverzoeken.
           </p>

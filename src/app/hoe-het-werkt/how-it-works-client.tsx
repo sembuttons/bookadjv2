@@ -90,7 +90,7 @@ function FlowToggle({
   onChange: (v: FlowKey) => void;
 }) {
   return (
-    <div className="mt-8 inline-flex w-full max-w-md rounded-2xl bg-surface/10 p-1.5 ring-1 ring-white/15 backdrop-blur-sm sm:w-auto">
+    <div className="mt-8 inline-flex w-full max-w-md rounded-2xl bg-[#111827]/10 p-1.5 ring-1 ring-white/15 backdrop-blur-sm sm:w-auto">
       {(
         [
           { key: "klant" as const, label: "Voor klanten" },
@@ -104,7 +104,7 @@ function FlowToggle({
             type="button"
             onClick={() => onChange(t.key)}
             className={`min-h-[44px] flex-1 rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-200 sm:flex-initial sm:px-6 ${
-              active ? "bg-surface text-ink" : "text-white/80 hover:text-white"
+              active ? "bg-[#111827] text-white" : "text-white/80 hover:text-white"
             }`}
             aria-pressed={active}
           >
@@ -122,7 +122,7 @@ function StepTimeline({ steps }: { steps: Step[] }) {
       {/* Desktop: horizontal connector */}
       <div className="relative mt-12 hidden lg:block">
         <div
-          className="pointer-events-none absolute left-6 right-6 top-10 h-px bg-line-brand/50"
+          className="pointer-events-none absolute left-6 right-6 top-10 h-px bg-green-800/50"
           aria-hidden
         />
         <div className="grid gap-6 lg:grid-cols-4">
@@ -132,17 +132,17 @@ function StepTimeline({ steps }: { steps: Step[] }) {
               className="card-interactive relative z-10 flex h-full flex-col p-7"
             >
               <div className="flex items-start justify-between gap-4">
-                <span className="text-2xl font-extrabold tracking-tight text-bookadj-soft">
+                <span className="text-2xl font-extrabold tracking-tight text-green-400">
                   {s.n}
                 </span>
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-bookadj-subtle text-bookadj-soft ring-1 ring-line-brand/35">
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#052e16] text-green-400 ring-1 ring-green-800/35">
                   <s.Icon className="h-6 w-6" strokeWidth={1.75} aria-hidden />
                 </span>
               </div>
-              <h3 className="mt-5 text-lg font-bold text-ink">
+              <h3 className="mt-5 text-lg font-bold text-white">
                 {s.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
+              <p className="mt-2 text-sm leading-relaxed text-gray-500">
                 {s.desc}
               </p>
             </article>
@@ -156,24 +156,24 @@ function StepTimeline({ steps }: { steps: Step[] }) {
           <li key={s.n} className="relative">
             {idx < steps.length - 1 ? (
               <div
-                className="pointer-events-none absolute left-7 top-14 h-[calc(100%-1rem)] w-px bg-line-brand/50"
+                className="pointer-events-none absolute left-7 top-14 h-[calc(100%-1rem)] w-px bg-green-800/50"
                 aria-hidden
               />
             ) : null}
             <article className="card-interactive flex gap-4 p-5">
               <div className="flex shrink-0 flex-col items-center">
-                <span className="text-xl font-extrabold text-bookadj-soft">
+                <span className="text-xl font-extrabold text-green-400">
                   {s.n}
                 </span>
-                <span className="mt-3 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-bookadj-subtle text-bookadj-soft ring-1 ring-line-brand/35">
+                <span className="mt-3 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-[#052e16] text-green-400 ring-1 ring-green-800/35">
                   <s.Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden />
                 </span>
               </div>
               <div className="min-w-0">
-                <h3 className="text-base font-bold text-ink">
+                <h3 className="text-base font-bold text-white">
                   {s.title}
                 </h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-ink-secondary">
+                <p className="mt-1.5 text-sm leading-relaxed text-gray-500">
                   {s.desc}
                 </p>
               </div>
@@ -228,7 +228,7 @@ export function HowItWorksClient() {
   );
 
   return (
-    <div className="bg-surface">
+    <div className="bg-[#111827]">
       {/* Hero */}
       <section className="relative isolate min-h-[min(88vh,720px)] w-full overflow-hidden text-white">
         <div
@@ -252,13 +252,13 @@ export function HowItWorksClient() {
           <div className="mt-10 flex w-full max-w-md flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center sm:gap-4">
             <Link
               href="/zoeken"
-              className="inline-flex min-h-[48px] items-center justify-center rounded-xl bg-line px-8 py-3 text-sm font-bold text-white shadow-lg ring-1 ring-line-brand/40 transition-all duration-200 hover:bg-line/80"
+              className="inline-flex min-h-[48px] items-center justify-center rounded-xl bg-gray-800 px-8 py-3 text-sm font-bold text-white shadow-lg ring-1 ring-green-800/40 transition-all duration-200 hover:bg-gray-700"
             >
               Ik zoek een DJ
             </Link>
             <Link
               href="/voor-djs"
-              className="inline-flex min-h-[48px] items-center justify-center rounded-xl border-2 border-white bg-transparent px-8 py-3 text-sm font-bold text-white shadow-sm backdrop-blur-sm transition-all duration-200 hover:bg-surface/10"
+              className="inline-flex min-h-[48px] items-center justify-center rounded-xl border-2 border-white bg-transparent px-8 py-3 text-sm font-bold text-white shadow-sm backdrop-blur-sm transition-all duration-200 hover:bg-[#111827]/10"
             >
               Ik ben een DJ
             </Link>
@@ -274,7 +274,7 @@ export function HowItWorksClient() {
           >
             <span className="sr-only">Scroll naar uitleg</span>
             <span
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-surface/10 ring-1 ring-white/20 backdrop-blur-sm"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-[#111827]/10 ring-1 ring-white/20 backdrop-blur-sm"
               aria-hidden
             >
               <svg
@@ -297,29 +297,29 @@ export function HowItWorksClient() {
         className="mx-auto max-w-7xl scroll-mt-24 px-4 py-14 sm:px-6 lg:px-8 lg:py-20"
       >
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-bookadj-soft">
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-green-400">
             {flow === "klant" ? "Voor klanten" : "Voor DJ's"}
           </p>
-          <h2 className="mt-3 text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+          <h2 className="mt-3 text-2xl font-bold tracking-tight text-white sm:text-3xl">
             Stap voor stap
           </h2>
-          <p className="mt-3 text-ink-secondary">
+          <p className="mt-3 text-gray-400">
             Duidelijk proces, premium ervaring — zonder verrassingen.
           </p>
-          <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-bookadj" aria-hidden />
+          <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-green-500" aria-hidden />
         </div>
 
         <StepTimeline steps={steps} />
       </section>
 
       {/* Section 3 — betaalflow */}
-      <section className="border-y border-line bg-surface-muted px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+      <section className="border-y border-gray-800 bg-[#0f172a] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+            <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
               Betaalflow (in het kort)
             </h2>
-            <p className="mt-3 text-ink-secondary">
+            <p className="mt-3 text-gray-400">
               Transparant en veilig: je weet precies waar je geld is.
             </p>
           </div>
@@ -335,13 +335,13 @@ export function HowItWorksClient() {
             ).map((b, i) => (
               <div key={b.t} className="contents">
                 <div className="card-interactive flex h-full flex-col gap-2 p-6">
-                  <b.Icon className="h-6 w-6 text-bookadj-soft" strokeWidth={1.75} aria-hidden />
-                  <p className="font-bold text-ink">{b.t}</p>
-                  <p className="text-sm text-ink-secondary">{b.d}</p>
+                  <b.Icon className="h-6 w-6 text-green-400" strokeWidth={1.75} aria-hidden />
+                  <p className="font-bold text-white">{b.t}</p>
+                  <p className="text-sm text-gray-400">{b.d}</p>
                 </div>
                 {i < 3 ? (
                   <div className="hidden justify-center lg:flex" aria-hidden>
-                    <ArrowRight className="h-6 w-6 text-bookadj" strokeWidth={2} />
+                    <ArrowRight className="h-6 w-6 text-green-500" strokeWidth={2} />
                   </div>
                 ) : null}
               </div>
@@ -353,28 +353,28 @@ export function HowItWorksClient() {
       {/* Section 4 — annuleringsbeleid */}
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+          <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
             Annuleringsbeleid (indicatie)
           </h2>
-          <p className="mt-3 text-ink-secondary">
+          <p className="mt-3 text-gray-400">
             Richtlijnen ten opzichte van de datum van je evenement.
           </p>
         </div>
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
-          <div className="rounded-2xl border border-line-brand/40 bg-bookadj-subtle p-6">
-            <p className="font-bold text-bookadj-soft">30+ dagen voor event</p>
-            <p className="mt-2 text-sm text-bookadj-soft/80">
+          <div className="rounded-2xl border border-green-800/40 bg-[#052e16] p-6">
+            <p className="font-bold text-green-400">30+ dagen voor event</p>
+            <p className="mt-2 text-sm text-green-400/80">
               Volledige terugbetaling
             </p>
           </div>
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6">
-            <p className="font-bold text-caution">14–30 dagen</p>
+            <p className="font-bold text-amber-400">14–30 dagen</p>
             <p className="mt-2 text-sm text-amber-900/80">
               Gedeeltelijke terugbetaling
             </p>
           </div>
-          <div className="rounded-2xl border border-danger/35 bg-danger/10 p-6">
+          <div className="rounded-2xl border border-red-500/35 bg-red-500/10 p-6">
             <p className="font-bold text-red-950">Minder dan 14 dagen</p>
             <p className="mt-2 text-sm text-red-900/80">
               Geen terugbetaling
@@ -384,19 +384,19 @@ export function HowItWorksClient() {
       </section>
 
       {/* Section 5 — FAQ */}
-      <section className="border-t border-line bg-surface px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+      <section className="border-t border-gray-800 bg-[#111827] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-3xl">
           <h2 className="text-center text-2xl font-bold sm:text-3xl">
             Veelgestelde vragen
           </h2>
-          <div className="mt-10 divide-y divide-line rounded-2xl border border-line bg-surface">
+          <div className="mt-10 divide-y divide-gray-800 rounded-2xl border border-gray-800 bg-[#111827]">
             {faq.map((item) => (
               <details key={item.q} className="group px-5 py-4">
-                <summary className="cursor-pointer list-none text-left font-semibold text-ink outline-none marker:content-none [&::-webkit-details-marker]:hidden">
+                <summary className="cursor-pointer list-none text-left font-semibold text-white outline-none marker:content-none [&::-webkit-details-marker]:hidden">
                   <span className="flex items-center justify-between gap-2">
                     {item.q}
                     <svg
-                      className="h-5 w-5 shrink-0 text-ink-muted transition-transform group-open:rotate-180"
+                      className="h-5 w-5 shrink-0 text-gray-500 transition-transform group-open:rotate-180"
                       viewBox="0 0 20 20"
                       fill="none"
                       aria-hidden
@@ -411,7 +411,7 @@ export function HowItWorksClient() {
                     </svg>
                   </span>
                 </summary>
-                <p className="mt-3 text-sm leading-relaxed text-ink-secondary">
+                <p className="mt-3 text-sm leading-relaxed text-gray-400">
                   {item.a}
                 </p>
               </details>
@@ -421,15 +421,15 @@ export function HowItWorksClient() {
       </section>
 
       {/* Section 6 — Contact CTA */}
-      <section className="bg-app px-4 py-14 text-center text-ink sm:px-6 lg:px-8 lg:py-20">
+      <section className="bg-[#0a0a0a] px-4 py-14 text-center text-white sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-2xl">
-          <h2 className="text-2xl font-bold text-ink sm:text-3xl">Nog vragen?</h2>
-          <p className="mt-3 text-ink-secondary">
+          <h2 className="text-2xl font-bold text-white sm:text-3xl">Nog vragen?</h2>
+          <p className="mt-3 text-gray-400">
             Ons team staat voor je klaar. We reageren binnen 24 uur op werkdagen.
           </p>
           <a
             href="mailto:hallo@bookadj.nl"
-            className="mt-8 inline-flex min-h-[44px] items-center justify-center rounded-xl bg-surface px-7 text-sm font-semibold text-ink transition-all duration-200 hover:bg-surface-muted/80"
+            className="mt-8 inline-flex min-h-[44px] items-center justify-center rounded-xl bg-[#111827] px-7 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#0f172a]/80"
           >
             <Mail className="mr-2 h-5 w-5" strokeWidth={1.75} aria-hidden />
             hallo@bookadj.nl
@@ -437,7 +437,7 @@ export function HowItWorksClient() {
           <div className="mt-8">
             <Link
               href="/zoeken"
-              className="text-sm font-semibold text-bookadj-soft underline underline-offset-4"
+              className="text-sm font-semibold text-green-400 underline underline-offset-4"
             >
               Of: bekijk DJ’s
             </Link>

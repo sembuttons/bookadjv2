@@ -161,10 +161,10 @@ export default function DjMediaPage() {
   if (loading) {
     return (
       <>
-        <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
           Media &amp; links
         </h1>
-        <p className="mt-2 text-sm text-ink-secondary">Laden…</p>
+        <p className="mt-2 text-sm text-gray-400">Laden…</p>
       </>
     );
   }
@@ -172,10 +172,10 @@ export default function DjMediaPage() {
   if (!djProfileId) {
     return (
       <>
-        <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
           Media &amp; links
         </h1>
-        <p className="mt-2 text-sm text-ink-secondary">
+        <p className="mt-2 text-sm text-gray-400">
           Je hebt nog geen DJ-profiel. Maak eerst een profiel aan.
         </p>
       </>
@@ -185,29 +185,29 @@ export default function DjMediaPage() {
   return (
     <div className="space-y-10">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
           Media &amp; links
         </h1>
-        <p className="mt-1 text-sm text-ink-secondary">
+        <p className="mt-1 text-sm text-gray-400">
           Voeg foto-URL&apos;s, een video en je social links toe. Alles wordt op je openbare profiel
           getoond zodra je live bent.
         </p>
       </div>
 
       {error ? (
-        <p className="rounded-lg border border-danger/35 bg-danger/10 px-3 py-2 text-sm text-danger">
+        <p className="rounded-lg border border-red-500/35 bg-red-500/10 px-3 py-2 text-sm text-red-400">
           {error}
         </p>
       ) : null}
       {success ? (
-        <p className="rounded-lg border border-line-brand/40 bg-bookadj-subtle px-3 py-2 text-sm text-bookadj-soft">
+        <p className="rounded-lg border border-green-800/40 bg-[#052e16] px-3 py-2 text-sm text-green-400">
           {success}
         </p>
       ) : null}
 
-      <section className="rounded-2xl border border-line bg-surface p-6 shadow-sm">
-        <h2 className="text-lg font-bold text-ink">Foto&apos;s</h2>
-        <p className="mt-1 text-sm text-ink-secondary">
+      <section className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm">
+        <h2 className="text-lg font-bold text-white">Foto&apos;s</h2>
+        <p className="mt-1 text-sm text-gray-400">
           Plak URL&apos;s van Unsplash of je eigen hosting (max. 6).
         </p>
         <div className="mt-4 flex flex-col gap-3 sm:flex-row">
@@ -225,7 +225,7 @@ export default function DjMediaPage() {
             type="button"
             disabled={saving || photos.length >= 6}
             onClick={() => void addPhoto()}
-            className="rounded-xl bg-bookadj px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-bookadj-hover disabled:opacity-50"
+            className="rounded-xl bg-green-500 px-5 py-2.5 text-sm font-bold text-black transition-colors hover:bg-green-400 disabled:opacity-50"
           >
             Toevoegen
           </button>
@@ -235,7 +235,7 @@ export default function DjMediaPage() {
             {photos.map((url, i) => (
               <li
                 key={`${url}-${i}`}
-                className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-line bg-surface-muted/80"
+                className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-gray-800 bg-[#0f172a]/80"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={url} alt="" className="absolute inset-0 h-full w-full object-cover" />
@@ -243,7 +243,7 @@ export default function DjMediaPage() {
                   type="button"
                   disabled={saving}
                   onClick={() => void removePhoto(i)}
-                  className="absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded-lg bg-app/80 text-white opacity-0 ring-1 ring-line transition-opacity hover:bg-line group-hover:opacity-100 disabled:opacity-40"
+                  className="absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded-lg bg-[#0a0a0a]/80 text-white opacity-0 ring-1 ring-gray-800 transition-opacity hover:bg-gray-700 group-hover:opacity-100 disabled:opacity-40"
                   aria-label="Foto verwijderen"
                 >
                   <Trash2 className="h-4 w-4" aria-hidden />
@@ -252,13 +252,13 @@ export default function DjMediaPage() {
             ))}
           </ul>
         ) : (
-          <p className="mt-4 text-sm text-ink-muted">Nog geen foto&apos;s toegevoegd.</p>
+          <p className="mt-4 text-sm text-gray-500">Nog geen foto&apos;s toegevoegd.</p>
         )}
       </section>
 
-      <section className="rounded-2xl border border-line bg-surface p-6 shadow-sm">
-        <h2 className="text-lg font-bold text-ink">Video</h2>
-        <p className="mt-1 text-sm text-ink-secondary">YouTube- of Vimeo-link naar je showcase-set.</p>
+      <section className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm">
+        <h2 className="text-lg font-bold text-white">Video</h2>
+        <p className="mt-1 text-sm text-gray-400">YouTube- of Vimeo-link naar je showcase-set.</p>
         <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
           <input
             type="url"
@@ -274,13 +274,13 @@ export default function DjMediaPage() {
             type="button"
             disabled={saving}
             onClick={() => void saveVideo()}
-            className="rounded-xl bg-bookadj px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-bookadj-hover disabled:opacity-50"
+            className="rounded-xl bg-green-500 px-5 py-2.5 text-sm font-bold text-black transition-colors hover:bg-green-400 disabled:opacity-50"
           >
             Video opslaan
           </button>
         </div>
         {embedSrc ? (
-          <div className="mt-6 aspect-video w-full max-w-2xl overflow-hidden rounded-xl border border-line bg-black">
+          <div className="mt-6 aspect-video w-full max-w-2xl overflow-hidden rounded-xl border border-gray-800 bg-black">
             <iframe
               title="Video preview"
               src={embedSrc}
@@ -292,13 +292,13 @@ export default function DjMediaPage() {
         ) : null}
       </section>
 
-      <section className="rounded-2xl border border-line bg-surface p-6 shadow-sm">
-        <h2 className="text-lg font-bold text-ink">Instagram &amp; SoundCloud</h2>
-        <p className="mt-1 text-sm text-ink-secondary">
+      <section className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm">
+        <h2 className="text-lg font-bold text-white">Instagram &amp; SoundCloud</h2>
+        <p className="mt-1 text-sm text-gray-400">
           Wordt op je profiel getoond zodra beide kloppen (optioneel per link).
         </p>
         <label className="mt-4 block">
-          <span className="text-xs font-semibold uppercase text-ink-muted">Instagram</span>
+          <span className="text-xs font-semibold uppercase text-gray-500">Instagram</span>
           <div className="mt-1.5 flex items-center gap-2">
             <input
               type="url"
@@ -311,7 +311,7 @@ export default function DjMediaPage() {
               className="input-field flex-1"
             />
             {instagramUrl.trim() ? (
-              <span className="flex shrink-0 items-center gap-1 text-sm font-medium text-bookadj-soft">
+              <span className="flex shrink-0 items-center gap-1 text-sm font-medium text-green-400">
                 <Check className="h-4 w-4" aria-hidden />
                 Gekoppeld
               </span>
@@ -319,7 +319,7 @@ export default function DjMediaPage() {
           </div>
         </label>
         <label className="mt-4 block">
-          <span className="text-xs font-semibold uppercase text-ink-muted">SoundCloud</span>
+          <span className="text-xs font-semibold uppercase text-gray-500">SoundCloud</span>
           <div className="mt-1.5 flex items-center gap-2">
             <input
               type="url"
@@ -332,7 +332,7 @@ export default function DjMediaPage() {
               className="input-field flex-1"
             />
             {soundcloudUrl.trim() ? (
-              <span className="flex shrink-0 items-center gap-1 text-sm font-medium text-bookadj-soft">
+              <span className="flex shrink-0 items-center gap-1 text-sm font-medium text-green-400">
                 <Check className="h-4 w-4" aria-hidden />
                 Gekoppeld
               </span>
@@ -343,7 +343,7 @@ export default function DjMediaPage() {
           type="button"
           disabled={saving}
           onClick={() => void saveSocial()}
-          className="mt-6 rounded-xl bg-bookadj px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-bookadj-hover disabled:opacity-50"
+          className="mt-6 rounded-xl bg-green-500 px-5 py-2.5 text-sm font-bold text-black transition-colors hover:bg-green-400 disabled:opacity-50"
         >
           Social links opslaan
         </button>

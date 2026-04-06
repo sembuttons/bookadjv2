@@ -9,13 +9,13 @@ export const metadata = {
 export default function PrivacyPage() {
   return (
     <MarketingPageShell maxWidth="prose">
-      <p className="text-sm font-semibold uppercase tracking-wide text-bookadj-soft">
+      <p className="text-sm font-semibold uppercase tracking-wide text-green-400">
         Juridisch
       </p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+      <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
         Privacybeleid
       </h1>
-      <p className="mt-4 text-sm text-ink-muted">
+      <p className="mt-4 text-sm text-gray-500">
         Laatst bijgewerkt: april 2026
       </p>
 
@@ -150,7 +150,7 @@ export default function PrivacyPage() {
           het platform of per e-mail.
         </p>
 
-        <p className="text-sm text-ink-muted">
+        <p className="text-sm text-gray-500">
           Zie ook:{" "}
           <Link href="/algemene-voorwaarden">Algemene voorwaarden</Link>,{" "}
           <Link href="/cookiebeleid">Cookiebeleid</Link>.

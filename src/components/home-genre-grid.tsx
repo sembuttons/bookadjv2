@@ -18,8 +18,8 @@ export function HomeGenreGrid({ genres }: { genres: readonly string[] }) {
               className={[
                 "flex h-28 items-center justify-center rounded-xl border-2 text-lg font-semibold shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md",
                 isActive
-                  ? "border-bookadj bg-bookadj text-white ring-2 ring-bookadj/35"
-                  : "border-bookadj/25 bg-surface text-ink hover:border-bookadj/60 active:border-bookadj active:bg-bookadj active:text-white",
+                  ? "border-green-500 bg-green-500 text-black font-bold ring-2 ring-green-500/35"
+                  : "border-green-500/25 bg-[#111827] text-white hover:border-green-500/60 active:border-green-500 active:bg-green-500 active:text-black",
               ].join(" ")}
             >
               {g}

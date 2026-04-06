@@ -48,24 +48,24 @@ export function SupportFaqAccordion() {
         return (
           <div
             key={item.q}
-            className="overflow-hidden rounded-xl border border-line bg-surface shadow-sm transition-all duration-200"
+            className="overflow-hidden rounded-xl border border-gray-800 bg-[#111827] shadow-sm transition-all duration-200"
           >
             <button
               type="button"
-              className="flex w-full min-h-[44px] items-center justify-between gap-3 px-4 py-3 text-left text-sm font-semibold text-ink md:px-5 md:py-4 md:text-base"
+              className="flex w-full min-h-[44px] items-center justify-between gap-3 px-4 py-3 text-left text-sm font-semibold text-white md:px-5 md:py-4 md:text-base"
               aria-expanded={isOpen}
               onClick={() => setOpen(isOpen ? null : i)}
             >
               {item.q}
               <ChevronDown
-                className={`h-5 w-5 shrink-0 text-ink-muted transition-transform duration-200 ${
+                className={`h-5 w-5 shrink-0 text-gray-500 transition-transform duration-200 ${
                   isOpen ? "rotate-180" : ""
                 }`}
                 aria-hidden
               />
             </button>
             {isOpen ? (
-              <div className="border-t border-line/60 px-4 py-3 text-sm leading-relaxed text-ink-secondary md:px-5 md:py-4">
+              <div className="border-t border-gray-800/60 px-4 py-3 text-sm leading-relaxed text-gray-400 md:px-5 md:py-4">
                 {item.a}
               </div>
             ) : null}
@@ -118,17 +118,17 @@ export function SupportContactForm() {
   return (
     <form
       onSubmit={(e) => void onSubmit(e)}
-      className="space-y-4 rounded-2xl border border-line bg-surface p-5 shadow-sm md:p-8"
+      className="space-y-4 rounded-2xl border border-gray-800 bg-[#111827] p-5 shadow-sm md:p-8"
     >
-      <h2 className="text-lg font-bold text-ink md:text-xl">
+      <h2 className="text-lg font-bold text-white md:text-xl">
         Contact opnemen
       </h2>
-      <p className="text-sm text-ink-secondary">
+      <p className="text-sm text-gray-400">
         Vul het formulier in. We beantwoorden je bericht zo snel mogelijk.
       </p>
 
       <label className="flex flex-col gap-2">
-        <span className="text-sm font-semibold text-ink">Naam</span>
+        <span className="text-sm font-semibold text-white">Naam</span>
         <input
           name="name"
           value={name}
@@ -139,7 +139,7 @@ export function SupportContactForm() {
         />
       </label>
       <label className="flex flex-col gap-2">
-        <span className="text-sm font-semibold text-ink">E-mail</span>
+        <span className="text-sm font-semibold text-white">E-mail</span>
         <input
           name="email"
           type="email"
@@ -151,7 +151,7 @@ export function SupportContactForm() {
         />
       </label>
       <label className="flex flex-col gap-2">
-        <span className="text-sm font-semibold text-ink">Bericht</span>
+        <span className="text-sm font-semibold text-white">Bericht</span>
         <textarea
           name="message"
           value={message}
@@ -174,12 +174,12 @@ export function SupportContactForm() {
       />
 
       {errMsg ? (
-        <p className="text-sm text-danger" role="alert">
+        <p className="text-sm text-red-400" role="alert">
           {errMsg}
         </p>
       ) : null}
       {status === "ok" ? (
-        <p className="text-sm font-medium text-bookadj-soft" role="status">
+        <p className="text-sm font-medium text-green-400" role="status">
           Bedankt! Je bericht is verstuurd.
         </p>
       ) : null}
@@ -187,7 +187,7 @@ export function SupportContactForm() {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="inline-flex min-h-[44px] w-full items-center justify-center rounded-lg bg-line px-6 text-sm font-semibold text-white transition-all duration-200 hover:bg-line/80 disabled:opacity-60 sm:w-auto"
+        className="inline-flex min-h-[44px] w-full items-center justify-center rounded-lg bg-gray-800 px-6 text-sm font-semibold text-white transition-all duration-200 hover:bg-gray-700 disabled:opacity-60 sm:w-auto"
       >
         {status === "sending" ? "Versturen…" : "Verstuur bericht"}
       </button>

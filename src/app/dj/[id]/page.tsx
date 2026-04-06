@@ -92,7 +92,7 @@ function avgResponseHoursText(row: DjProfileRow): string {
 function StarSvg({ filled }: { filled: boolean }) {
   return (
     <svg
-      className={filled ? "h-3.5 w-3.5 text-amber-400" : "h-3.5 w-3.5 text-ink-secondary"}
+      className={filled ? "h-3.5 w-3.5 text-amber-400" : "h-3.5 w-3.5 text-gray-400"}
       viewBox="0 0 20 20"
       fill="currentColor"
       aria-hidden
@@ -110,7 +110,7 @@ function StarRow({ value, size = "md" }: { value: number; size?: "sm" | "md" }) 
       {Array.from({ length: 5 }, (_, i) => (
         <svg
           key={i}
-          className={`${starClass} ${i < full ? "text-amber-400" : "text-ink-secondary"}`}
+          className={`${starClass} ${i < full ? "text-amber-400" : "text-gray-400"}`}
           viewBox="0 0 20 20"
           fill="currentColor"
         >
@@ -260,21 +260,21 @@ export default async function DjProfilePage({ params }: PageProps) {
   const videoIframeSrc = videoRaw ? videoEmbedSrc(videoRaw) : null;
 
   return (
-    <div className="min-h-screen bg-surface font-sans text-ink">
+    <div className="min-h-screen bg-[#111827] font-sans text-white">
       <Navbar />
 
       <div className="mx-auto max-w-[1400px] px-4 pb-16 pt-6 sm:px-6 lg:px-8">
         {/* Photo grid */}
         <div className="relative grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-3">
           <div
-            className="relative flex min-h-[220px] items-center justify-center overflow-hidden rounded-2xl bg-surface bg-cover bg-center lg:min-h-[420px]"
+            className="relative flex min-h-[220px] items-center justify-center overflow-hidden rounded-2xl bg-[#111827] bg-cover bg-center lg:min-h-[420px]"
             style={{ backgroundImage: `url(${galleryMain})` }}
           >
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/20" aria-hidden />
             {videoIframeSrc ? (
               <a
                 href="#dj-video"
-                className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-surface/15 text-white ring-2 ring-white/40 backdrop-blur-sm transition-all duration-200 hover:bg-surface/25"
+                className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-[#111827]/15 text-white ring-2 ring-white/40 backdrop-blur-sm transition-all duration-200 hover:bg-[#111827]/25"
                 aria-label="Bekijk video"
               >
                 <svg className="ml-1 h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -283,7 +283,7 @@ export default async function DjProfilePage({ params }: PageProps) {
               </a>
             ) : (
               <span
-                className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-surface/10 text-white/50 ring-2 ring-white/20"
+                className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-[#111827]/10 text-white/50 ring-2 ring-white/20"
                 aria-hidden
               >
                 <svg className="ml-1 h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
@@ -321,8 +321,8 @@ export default async function DjProfilePage({ params }: PageProps) {
 
         {videoIframeSrc ? (
           <div id="dj-video" className="mt-6 scroll-mt-24">
-            <h2 className="text-lg font-bold text-ink">Video</h2>
-            <div className="mt-3 aspect-video w-full max-w-4xl overflow-hidden rounded-2xl border border-line bg-black shadow-sm">
+            <h2 className="text-lg font-bold text-white">Video</h2>
+            <div className="mt-3 aspect-video w-full max-w-4xl overflow-hidden rounded-2xl border border-gray-800 bg-black shadow-sm">
               <iframe
                 title={`Video van ${name}`}
                 src={videoIframeSrc}
@@ -340,11 +340,11 @@ export default async function DjProfilePage({ params }: PageProps) {
 
             {/* Name inline with verified badge */}
             <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-2xl font-bold tracking-tight text-ink min-[400px]:text-3xl sm:text-4xl">
+            <h1 className="text-2xl font-bold tracking-tight text-white min-[400px]:text-3xl sm:text-4xl">
               {name}
             </h1>
               {isVerifiedProfile(profile) ? (
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-bookadj px-3 py-1 text-xs font-bold uppercase tracking-wide text-white shadow-sm">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-green-500 px-3 py-1 text-xs font-bold uppercase tracking-wide text-black shadow-sm">
                   <svg
                     className="h-3.5 w-3.5 shrink-0"
                     viewBox="0 0 20 20"
@@ -363,30 +363,30 @@ export default async function DjProfilePage({ params }: PageProps) {
                 </div>
               ) : null}
               {totalReviews > 5 ? (
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-caution/15 px-3 py-1 text-xs font-bold uppercase tracking-wide text-caution ring-1 ring-amber-200">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-400 ring-1 ring-amber-200">
                   Veel geboekt
                 </div>
               ) : null}
             </div>
 
-            <p className="text-xl font-bold text-bookadj sm:text-2xl">
+            <p className="text-xl font-bold text-green-500 sm:text-2xl">
               v.a. €{hourly.toLocaleString("nl-NL")} per uur
             </p>
 
-            <div className="flex flex-wrap items-center gap-2 text-sm font-semibold text-ink">
+            <div className="flex flex-wrap items-center gap-2 text-sm font-semibold text-white">
               <StarRow value={displayRating} size="sm" />
               <span>{displayRating.toFixed(1)}</span>
-              <span className="text-ink-muted">·</span>
-              <span className="text-ink-secondary">
+              <span className="text-gray-500">·</span>
+              <span className="text-gray-400">
                 {totalReviews} {totalReviews === 1 ? "review" : "reviews"}
               </span>
             </div>
 
             {/* Location — forced dark */}
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm font-medium text-ink">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm font-medium text-white">
               <span className="inline-flex items-center gap-1.5">
                 <svg
-                  className="h-4 w-4 shrink-0 text-ink"
+                  className="h-4 w-4 shrink-0 text-white"
                   viewBox="0 0 24 24"
                   fill="none"
                   aria-hidden
@@ -416,7 +416,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                 {genres.map((g) => (
                   <span
                     key={g}
-                    className="rounded-full bg-surface px-3 py-1 text-xs font-medium text-white"
+                    className="rounded-full bg-[#111827] px-3 py-1 text-xs font-medium text-white"
                   >
                     {g}
                   </span>
@@ -430,11 +430,11 @@ export default async function DjProfilePage({ params }: PageProps) {
             <StelVraagButton
               djUserId={djUserId || undefined}
               djProfileId={id}
-              className="w-full min-h-[44px] rounded-xl bg-bookadj px-6 py-3 text-center text-sm font-semibold text-white transition-all duration-200 hover:bg-bookadj-hover sm:w-auto"
+              className="w-full min-h-[44px] rounded-xl bg-green-500 px-6 py-3 text-center text-sm font-bold text-black transition-all duration-200 hover:bg-green-400 sm:w-auto"
             >
               Stel {fn} een vraag
             </StelVraagButton>
-            <p className="text-xs text-ink-muted sm:text-right">
+            <p className="text-xs text-gray-500 sm:text-right">
               Gemiddelde reactietijd: {avgResponseHoursText(profile)}
             </p>
           </div>
@@ -451,11 +451,11 @@ export default async function DjProfilePage({ params }: PageProps) {
             <section aria-labelledby="over-heading">
               <h2
                 id="over-heading"
-                className="text-xl font-bold text-ink sm:text-2xl"
+                className="text-xl font-bold text-white sm:text-2xl"
               >
                 Over {displayForBio}
               </h2>
-              <p className="mt-4 max-w-3xl text-base leading-relaxed text-ink-secondary">
+              <p className="mt-4 max-w-3xl text-base leading-relaxed text-gray-400">
                 {bio}
               </p>
               <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -481,10 +481,10 @@ export default async function DjProfilePage({ params }: PageProps) {
                 ].map((card) => (
                   <li
                     key={card.t}
-                    className="rounded-xl border border-line bg-surface-muted/80 p-4 shadow-sm transition-shadow duration-300 hover:shadow-md"
+                    className="rounded-xl border border-gray-800 bg-[#0f172a]/80 p-4 shadow-sm transition-shadow duration-300 hover:shadow-md"
                   >
-                    <p className="text-sm font-semibold text-ink">{card.t}</p>
-                    <p className="mt-1 text-sm text-ink-secondary">{card.d}</p>
+                    <p className="text-sm font-semibold text-white">{card.t}</p>
+                    <p className="mt-1 text-sm text-gray-400">{card.d}</p>
                   </li>
                 ))}
               </ul>
@@ -520,16 +520,16 @@ export default async function DjProfilePage({ params }: PageProps) {
               <section aria-labelledby="reviews-heading">
                 <h2
                   id="reviews-heading"
-                  className="text-xl font-bold text-ink sm:text-2xl"
+                  className="text-xl font-bold text-white sm:text-2xl"
                 >
                   Reviews
                 </h2>
                 <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-start">
-                  <div className="flex shrink-0 flex-col items-center rounded-2xl border border-line bg-surface px-8 py-6 lg:items-start">
-                    <p className="text-5xl font-bold text-ink">
+                  <div className="flex shrink-0 flex-col items-center rounded-2xl border border-gray-800 bg-[#111827] px-8 py-6 lg:items-start">
+                    <p className="text-5xl font-bold text-white">
                       {displayRating.toFixed(1)}
                     </p>
-                    <p className="mt-1 text-sm text-ink-muted">
+                    <p className="mt-1 text-sm text-gray-500">
                       op basis van {totalReviews}{" "}
                       {totalReviews === 1 ? "beoordeling" : "beoordelingen"}
                     </p>
@@ -540,17 +540,17 @@ export default async function DjProfilePage({ params }: PageProps) {
                       const pct = Math.round((count / maxBar) * 100);
                       return (
                         <div key={star} className="flex items-center gap-3 text-sm">
-                          <span className="flex w-14 items-center gap-1 text-ink-secondary">
+                          <span className="flex w-14 items-center gap-1 text-gray-400">
                             {star}
                             <StarSvg filled />
                           </span>
-                          <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface-muted/80">
+                          <div className="h-2 flex-1 overflow-hidden rounded-full bg-[#0f172a]/80">
                             <div
-                              className="h-full rounded-full bg-bookadj"
+                              className="h-full rounded-full bg-green-500"
                               style={{ width: `${pct}%` }}
                             />
                           </div>
-                          <span className="w-8 text-right text-ink-muted">{count}</span>
+                          <span className="w-8 text-right text-gray-500">{count}</span>
                         </div>
                       );
                     })}
@@ -570,13 +570,13 @@ export default async function DjProfilePage({ params }: PageProps) {
                         className="card-interactive min-w-[min(100%,280px)] max-w-xs shrink-0 snap-start p-5"
                       >
                         <div className="flex items-center justify-between gap-2">
-                          <p className="font-semibold text-ink">
+                          <p className="font-semibold text-white">
                             {getReviewAuthor(r)}
                           </p>
                           <StarRow value={rating} size="sm" />
                         </div>
                         {dt ? (
-                          <p className="mt-1 text-xs text-ink-muted">
+                          <p className="mt-1 text-xs text-gray-500">
                             {dt.toLocaleDateString("nl-NL", {
                               day: "numeric",
                               month: "long",
@@ -584,7 +584,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                             })}
                           </p>
                         ) : null}
-                        <p className="mt-3 text-sm leading-relaxed text-ink-secondary">
+                        <p className="mt-3 text-sm leading-relaxed text-gray-400">
                           {getReviewBody(r) || "—"}
                         </p>
                       </article>
@@ -597,7 +597,7 @@ export default async function DjProfilePage({ params }: PageProps) {
             <section aria-labelledby="trust-heading">
               <h2
                 id="trust-heading"
-                className="text-xl font-bold text-ink sm:text-2xl"
+                className="text-xl font-bold text-white sm:text-2xl"
               >
                 Waarom bookadj
               </h2>
@@ -626,16 +626,16 @@ export default async function DjProfilePage({ params }: PageProps) {
                 ].map(({ Icon, t, d }) => (
                   <li
                     key={t}
-                    className="flex gap-4 rounded-2xl border border-line bg-surface-muted p-5 shadow-sm transition-shadow duration-300 hover:shadow-md"
+                    className="flex gap-4 rounded-2xl border border-gray-800 bg-[#0f172a] p-5 shadow-sm transition-shadow duration-300 hover:shadow-md"
                   >
                     <Icon
-                      className="h-8 w-8 shrink-0 text-ink"
+                      className="h-8 w-8 shrink-0 text-white"
                       strokeWidth={1.5}
                       aria-hidden
                     />
                     <div>
-                      <p className="font-semibold text-ink">{t}</p>
-                      <p className="mt-1 text-sm text-ink-secondary">{d}</p>
+                      <p className="font-semibold text-white">{t}</p>
+                      <p className="mt-1 text-sm text-gray-400">{d}</p>
                     </div>
                   </li>
                 ))}
@@ -671,7 +671,7 @@ export default async function DjProfilePage({ params }: PageProps) {
         <p className="mt-12 text-center">
           <Link
             href="/zoeken"
-            className="inline-flex items-center text-sm font-medium text-ink-secondary transition-colors duration-200 hover:text-ink"
+            className="inline-flex items-center text-sm font-medium text-gray-400 transition-colors duration-200 hover:text-white"
           >
             <ArrowLeftLink />
             Terug naar zoeken

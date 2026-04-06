@@ -66,7 +66,7 @@ export function AdminGesprekClient({
     <div className="space-y-6">
       <Link
         href="/admin/berichten"
-        className="inline-flex items-center gap-2 text-sm font-semibold text-ink-secondary hover:text-ink"
+        className="inline-flex items-center gap-2 text-sm font-semibold text-gray-400 hover:text-white"
       >
         <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden>
           <path
@@ -79,30 +79,30 @@ export function AdminGesprekClient({
         Terug naar berichten
       </Link>
 
-      <h1 className="text-2xl font-bold text-ink">Gesprek</h1>
+      <h1 className="text-2xl font-bold text-white">Gesprek</h1>
 
       <div className="grid gap-4 sm:grid-cols-2">
         {[userA, userB].map((u) =>
           u ? (
             <div
               key={u.id}
-              className="rounded-xl border border-line bg-surface-muted p-4 text-sm"
+              className="rounded-xl border border-gray-800 bg-[#0f172a] p-4 text-sm"
             >
-              <p className="font-semibold text-ink">
+              <p className="font-semibold text-white">
                 {u.full_name ?? u.email}
               </p>
-              <p className="text-ink-secondary">{u.email}</p>
-              <p className="mt-2 text-ink-secondary">
+              <p className="text-gray-400">{u.email}</p>
+              <p className="mt-2 text-gray-400">
                 Overtredingen: {u.offense_count ?? 0}
               </p>
-              <p className="text-ink-secondary">
+              <p className="text-gray-400">
                 Status:{" "}
                 {u.is_suspended ? (
-                  <span className="font-semibold text-danger">
+                  <span className="font-semibold text-red-400">
                     Opgeschort
                   </span>
                 ) : (
-                  <span className="text-bookadj-soft">Actief</span>
+                  <span className="text-green-400">Actief</span>
                 )}
               </p>
             </div>
@@ -111,28 +111,28 @@ export function AdminGesprekClient({
       </div>
 
       {error ? (
-        <p className="text-sm text-danger">{error}</p>
+        <p className="text-sm text-red-400">{error}</p>
       ) : loading ? (
-        <p className="text-ink-secondary">Laden…</p>
+        <p className="text-gray-400">Laden…</p>
       ) : (
-        <ul className="space-y-3 rounded-2xl border border-line bg-surface p-4">
+        <ul className="space-y-3 rounded-2xl border border-gray-800 bg-[#111827] p-4">
           {messages.map((m) => (
             <li
               key={m.id}
               className={`rounded-xl px-3 py-2 text-sm ${
                 m.is_flagged
                   ? "bg-orange-50 ring-1 ring-orange-200"
-                  : "bg-surface-muted"
+                  : "bg-[#0f172a]"
               }`}
             >
-              <p className="text-xs font-medium text-ink-muted">
+              <p className="text-xs font-medium text-gray-500">
                 {m.sender_id === senderId ? "Afzender A" : "Afzender B"} ·{" "}
                 {new Date(m.created_at).toLocaleString("nl-NL")}
                 {m.is_flagged ? (
                   <span className="ml-2 text-orange-600">Gemarkeerd</span>
                 ) : null}
               </p>
-              <p className="mt-1 whitespace-pre-wrap text-ink">
+              <p className="mt-1 whitespace-pre-wrap text-white">
                 {messageText(m)}
               </p>
             </li>

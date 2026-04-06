@@ -37,12 +37,12 @@ const VAT_PATTERN = /^NL\d{9}B\d{2}$/i;
 const KVK_PATTERN = /^\d{8}$/;
 
 /** Consistent label → control spacing across the form */
-const labelCls = "text-sm font-semibold text-ink";
+const labelCls = "text-sm font-semibold text-white";
 const fieldStack = "flex flex-col gap-2";
 const inputCls =
-  "w-full rounded-lg border border-line px-3 py-2.5 text-sm text-ink outline-none focus:border-line-brand focus:ring-2 focus:ring-bookadj/25";
-const hintCls = "text-xs text-ink-muted";
-const errCls = "text-sm text-danger";
+  "w-full rounded-lg border border-gray-800 px-3 py-2.5 text-sm text-white outline-none focus:border-green-800 focus:ring-2 focus:ring-green-500/25";
+const hintCls = "text-xs text-gray-500";
+const errCls = "text-sm text-red-400";
 
 function netAfterPlatformFee(hourly: number): string {
   const net = hourly * 0.85;
@@ -313,44 +313,44 @@ export default function DjProfielAanmakenPage() {
 
   if (success) {
     return (
-      <div className="mx-auto max-w-2xl overflow-hidden rounded-2xl border border-line-brand/40 bg-surface shadow-sm">
-        <div className="bg-bookadj-subtle px-6 py-10 text-center sm:px-10">
-          <p className="text-sm font-semibold uppercase tracking-wide text-bookadj-soft">
+      <div className="mx-auto max-w-2xl overflow-hidden rounded-2xl border border-green-800/40 bg-[#111827] shadow-sm">
+        <div className="bg-[#052e16] px-6 py-10 text-center sm:px-10">
+          <p className="text-sm font-semibold uppercase tracking-wide text-green-400">
             Ingediend
           </p>
-          <p className="mt-3 text-2xl font-bold tracking-tight text-bookadj-soft">
+          <p className="mt-3 text-2xl font-bold tracking-tight text-green-400">
             Je profiel is ingediend ter verificatie
           </p>
-          <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-bookadj-soft/80">
+          <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-green-400/80">
             Dit duurt meestal <strong>1–2 werkdagen</strong>. Je ontvangt een
             e-mail zodra je geverifieerd bent.
           </p>
         </div>
         <div className="px-6 py-8 sm:px-10">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-ink-muted">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500">
             Wat kun je nu doen?
           </h2>
-          <ol className="mt-4 space-y-3 text-sm text-ink-secondary">
+          <ol className="mt-4 space-y-3 text-sm text-gray-400">
             <li className="flex gap-3">
-              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-bookadj-subtle/70 text-bookadj-soft">
+              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#052e16]/70 text-green-400">
                 1
               </span>
               Wacht op verificatie (we houden je op de hoogte per e-mail).
             </li>
             <li className="flex gap-3">
-              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-bookadj-subtle/70 text-bookadj-soft">
+              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#052e16]/70 text-green-400">
                 2
               </span>
               Houd je inbox in de gaten voor vragen van ons team.
             </li>
             <li className="flex gap-3">
-              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-bookadj-subtle/70 text-bookadj-soft">
+              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#052e16]/70 text-green-400">
                 3
               </span>
               Na goedkeuring word je zichtbaar in de zoekresultaten.
             </li>
           </ol>
-          <p className="mt-6 text-xs text-ink-muted">
+          <p className="mt-6 text-xs text-gray-500">
             Je wordt zo doorgestuurd naar je dashboard…
           </p>
         </div>
@@ -359,11 +359,11 @@ export default function DjProfielAanmakenPage() {
   }
 
   return (
-    <div className="bg-surface pb-16">
-      <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+    <div className="bg-[#111827] pb-16">
+      <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
         DJ-profiel aanmaken
       </h1>
-      <p className="mt-2 max-w-2xl text-sm text-ink-secondary">
+      <p className="mt-2 max-w-2xl text-sm text-gray-400">
         Vul je gegevens in. Je profiel wordt pas zichtbaar na goedkeuring door
         ons team.
       </p>
@@ -375,19 +375,19 @@ export default function DjProfielAanmakenPage() {
       >
         {submitError ? (
           <p
-            className="rounded-lg border border-danger/35 bg-danger/10 px-3 py-2 text-sm text-danger"
+            className="rounded-lg border border-red-500/35 bg-red-500/10 px-3 py-2 text-sm text-red-400"
             role="alert"
           >
             {submitError}
           </p>
         ) : null}
 
-        <section className="rounded-2xl border border-line bg-surface p-6 shadow-sm sm:p-8">
-          <h2 className="text-lg font-bold text-ink">Basisinformatie</h2>
+        <section className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm sm:p-8">
+          <h2 className="text-lg font-bold text-white">Basisinformatie</h2>
           <div className="mt-6 flex flex-col gap-6">
             <div className={fieldStack}>
               <span className={labelCls}>
-                Artiestennaam <span className="text-danger">*</span>
+                Artiestennaam <span className="text-red-400">*</span>
               </span>
               <input
                 type="text"
@@ -412,7 +412,7 @@ export default function DjProfielAanmakenPage() {
 
             <div className={fieldStack}>
               <span className={labelCls}>
-                Bio <span className="text-danger">*</span>
+                Bio <span className="text-red-400">*</span>
               </span>
               <textarea
                 value={bio}
@@ -441,7 +441,7 @@ export default function DjProfielAanmakenPage() {
 
             <div className={fieldStack}>
               <span className={labelCls}>
-                Stad <span className="text-danger">*</span>
+                Stad <span className="text-red-400">*</span>
               </span>
               <input
                 type="text"
@@ -487,13 +487,13 @@ export default function DjProfielAanmakenPage() {
                 {LANGUAGE_OPTIONS.map((lang) => (
                   <label
                     key={lang}
-                    className="flex cursor-pointer items-center gap-2 rounded-lg border border-line bg-surface-muted px-3 py-2 text-sm has-[:checked]:border-line-brand has-[:checked]:bg-surface-muted/80"
+                    className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-800 bg-[#0f172a] px-3 py-2 text-sm has-[:checked]:border-green-800 has-[:checked]:bg-[#0f172a]/80"
                   >
                     <input
                       type="checkbox"
                       checked={languages[lang] ?? false}
                       onChange={() => toggleLanguage(lang)}
-                      className="rounded border-line text-ink focus:ring-bookadj/30"
+                      className="rounded border-gray-800 text-white focus:ring-green-500/30"
                     />
                     {lang}
                   </label>
@@ -517,24 +517,24 @@ export default function DjProfielAanmakenPage() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-line bg-surface p-6 shadow-sm sm:p-8">
+        <section className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm sm:p-8">
           <div className="flex flex-col gap-2">
-            <h2 className="text-lg font-bold text-ink">Genres</h2>
-            <p className="text-sm text-ink-secondary">
-              Kies minimaal één genre <span className="text-danger">*</span>
+            <h2 className="text-lg font-bold text-white">Genres</h2>
+            <p className="text-sm text-gray-400">
+              Kies minimaal één genre <span className="text-red-400">*</span>
             </p>
           </div>
           <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
             {GENRE_OPTIONS.map((g) => (
               <label
                 key={g}
-                className="flex cursor-pointer items-center gap-2 rounded-lg border border-line bg-surface-muted px-3 py-2.5 text-sm has-[:checked]:border-line-brand has-[:checked]:bg-surface-muted/80"
+                className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-800 bg-[#0f172a] px-3 py-2.5 text-sm has-[:checked]:border-green-800 has-[:checked]:bg-[#0f172a]/80"
               >
                 <input
                   type="checkbox"
                   checked={genres[g] ?? false}
                   onChange={() => toggleGenre(g)}
-                  className="rounded border-line text-ink focus:ring-bookadj/30"
+                  className="rounded border-gray-800 text-white focus:ring-green-500/30"
                 />
                 {g}
               </label>
@@ -547,25 +547,25 @@ export default function DjProfielAanmakenPage() {
           ) : null}
         </section>
 
-        <section className="rounded-2xl border border-line bg-surface p-6 shadow-sm sm:p-8">
+        <section className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm sm:p-8">
           <div className="flex flex-col gap-2">
-            <h2 className="text-lg font-bold text-ink">Gelegenheden</h2>
-            <p className="text-sm text-ink-secondary">
+            <h2 className="text-lg font-bold text-white">Gelegenheden</h2>
+            <p className="text-sm text-gray-400">
               Waarvoor wil je geboekt worden?{" "}
-              <span className="text-danger">*</span>
+              <span className="text-red-400">*</span>
             </p>
           </div>
           <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {OCCASION_OPTIONS.map((o) => (
               <label
                 key={o.id}
-                className="flex min-h-[44px] cursor-pointer items-center gap-2 rounded-lg border border-line bg-surface-muted px-3 py-2.5 text-sm has-[:checked]:border-line-brand has-[:checked]:bg-surface-muted/80"
+                className="flex min-h-[44px] cursor-pointer items-center gap-2 rounded-lg border border-gray-800 bg-[#0f172a] px-3 py-2.5 text-sm has-[:checked]:border-green-800 has-[:checked]:bg-[#0f172a]/80"
               >
                 <input
                   type="checkbox"
                   checked={occasions[o.id] ?? false}
                   onChange={() => toggleOccasion(o.id)}
-                  className="rounded border-line text-ink focus:ring-bookadj/30"
+                  className="rounded border-gray-800 text-white focus:ring-green-500/30"
                 />
                 {o.label}
               </label>
@@ -578,12 +578,12 @@ export default function DjProfielAanmakenPage() {
           ) : null}
         </section>
 
-        <section className="rounded-2xl border border-line bg-surface p-6 shadow-sm sm:p-8">
-          <h2 className="text-lg font-bold text-ink">Tarieven</h2>
+        <section className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm sm:p-8">
+          <h2 className="text-lg font-bold text-white">Tarieven</h2>
           <div className="mt-6 flex flex-col gap-6">
             <div className={fieldStack}>
               <span className={labelCls}>
-                Uurtarief (€ per uur) <span className="text-danger">*</span>
+                Uurtarief (€ per uur) <span className="text-red-400">*</span>
               </span>
               <input
                 type="number"
@@ -633,7 +633,7 @@ export default function DjProfielAanmakenPage() {
               ) : null}
             </div>
 
-            <div className="rounded-xl border border-line-brand/40 bg-bookadj-subtle px-4 py-3 text-sm text-bookadj-soft">
+            <div className="rounded-xl border border-green-800/40 bg-[#052e16] px-4 py-3 text-sm text-green-400">
               {previewHourly != null ? (
                 <p>
                   Je ontvangt <strong>85%</strong> van elke boeking. Bij een
@@ -651,7 +651,7 @@ export default function DjProfielAanmakenPage() {
                   uur na platformkosten.
                 </p>
               ) : (
-                <p className="text-bookadj-soft/90">
+                <p className="text-green-400/90">
                   Vul hierboven je uurtarief in om te zien wat je per uur netto
                   ontvangt na platformkosten (85%).
                 </p>
@@ -660,19 +660,19 @@ export default function DjProfielAanmakenPage() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-line bg-surface p-6 shadow-sm sm:p-8">
+        <section className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm sm:p-8">
           <div className="flex flex-col gap-2">
-            <h2 className="text-lg font-bold text-ink">
+            <h2 className="text-lg font-bold text-white">
               Zakelijke gegevens
             </h2>
-            <p className="text-sm text-ink-secondary">
+            <p className="text-sm text-gray-400">
               Vereist voor uitbetalingen en facturatie.
             </p>
           </div>
           <div className="mt-6 flex flex-col gap-6">
             <div className={fieldStack}>
               <span className={labelCls}>
-                BTW-nummer <span className="text-danger">*</span>
+                BTW-nummer <span className="text-red-400">*</span>
               </span>
               <input
                 type="text"
@@ -697,7 +697,7 @@ export default function DjProfielAanmakenPage() {
 
             <div className={fieldStack}>
               <span className={labelCls}>
-                KVK-nummer <span className="text-danger">*</span>
+                KVK-nummer <span className="text-red-400">*</span>
               </span>
               <input
                 type="text"
@@ -727,7 +727,7 @@ export default function DjProfielAanmakenPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full rounded-xl bg-bookadj py-3.5 text-sm font-bold text-white hover:bg-bookadj-hover disabled:opacity-50 sm:w-auto sm:px-10"
+          className="w-full rounded-xl bg-green-500 py-3.5 text-sm font-bold text-black hover:bg-green-400 disabled:opacity-50 sm:w-auto sm:px-10"
         >
           {submitting ? "Bezig…" : "Profiel aanmaken"}
         </button>

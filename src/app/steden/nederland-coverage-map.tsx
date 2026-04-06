@@ -18,7 +18,7 @@ const CITIES: { name: string; cx: number; cy: number }[] = [
 
 export function NederlandCoverageMap() {
   return (
-    <div className="mx-auto max-w-2xl rounded-3xl border border-line-brand/50 bg-surface-muted/40 p-6 shadow-sm ring-1 ring-line-brand/35 sm:p-10">
+    <div className="mx-auto max-w-2xl rounded-3xl border border-green-800/50 bg-[#0f172a]/40 p-6 shadow-sm ring-1 ring-green-800/35 sm:p-10">
       <svg
         viewBox="0 0 100 100"
         className="mx-auto h-auto w-full max-w-md overflow-visible"
@@ -54,7 +54,7 @@ export function NederlandCoverageMap() {
           </g>
         ))}
       </svg>
-      <p className="mt-6 text-center text-sm font-semibold text-bookadj-soft sm:text-base">
+      <p className="mt-6 text-center text-sm font-semibold text-green-400 sm:text-base">
         500+ DJ&apos;s · Heel Nederland gedekt
       </p>
     </div>

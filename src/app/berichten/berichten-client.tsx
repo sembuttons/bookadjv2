@@ -426,7 +426,7 @@ export function BerichtenClient({
   if (loading || !userId) {
     return (
       <div
-        className="flex min-h-[40vh] flex-col gap-4 md:flex-row md:rounded-2xl md:border md:border-line md:bg-surface md:p-4"
+        className="flex min-h-[40vh] flex-col gap-4 md:flex-row md:rounded-2xl md:border md:border-gray-800 md:bg-[#111827] md:p-4"
         aria-busy
         aria-label="Berichten laden"
       >
@@ -448,17 +448,17 @@ export function BerichtenClient({
 
   return (
     <div
-      className={`flex min-h-[calc(100vh-8rem)] flex-col bg-surface md:flex-row md:rounded-2xl md:border md:border-line md:shadow-sm ${
+      className={`flex min-h-[calc(100vh-8rem)] flex-col bg-[#0a0a0a] md:flex-row md:rounded-2xl md:border md:border-gray-800 md:shadow-sm ${
         threadOnly ? "min-h-[60vh] md:min-h-[520px]" : ""
       }`}
     >
       {!threadOnly ? (
       <div
-        className={`flex w-full flex-col border-line md:w-[320px] md:shrink-0 md:border-r ${
+        className={`flex w-full flex-col border-gray-800 bg-[#111827] md:w-[320px] md:shrink-0 md:border-r ${
           mobileThread && activePartner ? "hidden md:flex" : "flex"
         }`}
       >
-        <div className="flex gap-1 border-b border-line p-3">
+        <div className="flex gap-1 border-b border-gray-800 p-3">
           <button
             type="button"
             onClick={() => {
@@ -468,13 +468,13 @@ export function BerichtenClient({
             }}
             className={`relative flex-1 rounded-lg px-3 py-2 text-sm font-semibold ${
               tab === "booking"
-                ? "bg-bookadj text-white"
-                : "bg-surface-muted/80 text-ink-secondary"
+                ? "bg-green-500 text-black font-bold"
+                : "bg-[#0f172a]/80 text-gray-400"
             }`}
           >
             Boekingsberichten
             {unreadByTab.booking > 0 ? (
-              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-caution px-1 text-[10px] font-bold text-white">
+              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-500 px-1 text-[10px] font-bold text-white">
                 {unreadByTab.booking > 9 ? "9+" : unreadByTab.booking}
               </span>
             ) : null}
@@ -488,30 +488,30 @@ export function BerichtenClient({
             }}
             className={`relative flex-1 rounded-lg px-3 py-2 text-sm font-semibold ${
               tab === "ask"
-                ? "bg-bookadj text-white"
-                : "bg-surface-muted/80 text-ink-secondary"
+                ? "bg-green-500 text-black font-bold"
+                : "bg-[#0f172a]/80 text-gray-400"
             }`}
           >
             Vragen
             {unreadByTab.ask > 0 ? (
-              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-caution px-1 text-[10px] font-bold text-white">
+              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-500 px-1 text-[10px] font-bold text-white">
                 {unreadByTab.ask > 9 ? "9+" : unreadByTab.ask}
               </span>
             ) : null}
           </button>
         </div>
-        <div className="border-b border-line p-3">
+        <div className="border-b border-gray-800 p-3">
           <input
             type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Zoek op naam…"
-            className="w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-line-brand focus:ring-2 focus:ring-bookadj/25"
+            className="w-full rounded-lg border border-gray-700 bg-[#0a0a0a] px-3 py-2 text-sm text-white outline-none placeholder:text-gray-500 focus:border-green-500 focus:ring-2 focus:ring-green-500/50"
           />
         </div>
         <ul className="max-h-[50vh] flex-1 overflow-y-auto md:max-h-none">
           {conversations.length === 0 ? (
-            <li className="px-4 py-8 text-center text-sm text-ink-muted">
+            <li className="px-4 py-8 text-center text-sm text-gray-500">
               Geen gesprekken in deze tab.
             </li>
           ) : (
@@ -520,30 +520,32 @@ export function BerichtenClient({
                 <button
                   type="button"
                   onClick={() => selectConversation(partnerId)}
-                  className={`flex w-full gap-3 border-b border-line/60 px-3 py-3 text-left transition-colors hover:bg-surface-muted ${
-                    activePartner === partnerId ? "bg-surface-muted/80" : ""
+                  className={`flex w-full gap-3 border-b border-gray-800/60 px-3 py-3 text-left transition-colors hover:bg-[#0f172a] ${
+                    activePartner === partnerId
+                      ? "border-l-2 border-l-green-500 bg-green-500/10"
+                      : ""
                   }`}
                 >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-bookadj-subtle text-xs font-bold text-bookadj-soft">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#052e16] text-xs font-bold text-green-400">
                     {initials(name)}
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="flex items-center justify-between gap-2">
-                      <span className="truncate font-semibold text-ink">
+                      <span className="truncate font-semibold text-white">
                         {name}
                       </span>
                       {partnerHasUnread(partnerId) ? (
                         <span
-                          className="h-2 w-2 shrink-0 rounded-full bg-caution"
+                          className="h-2 w-2 shrink-0 rounded-full bg-amber-500"
                           aria-label="Ongelezen"
                         />
                       ) : null}
                     </span>
-                    <span className="mt-0.5 line-clamp-1 text-xs text-ink-muted">
+                    <span className="mt-0.5 line-clamp-1 text-xs text-gray-500">
                       {messageText(last).slice(0, 40)}
                       {messageText(last).length > 40 ? "…" : ""}
                     </span>
-                    <span className="mt-1 text-[11px] text-ink-muted">
+                    <span className="mt-1 text-[11px] text-gray-500">
                       {relativeTime(last.created_at)}
                     </span>
                   </span>
@@ -556,7 +558,7 @@ export function BerichtenClient({
       ) : null}
 
       <div
-        className={`flex min-h-[50vh] flex-1 flex-col bg-surface-muted/50 ${
+        className={`flex min-h-[50vh] flex-1 flex-col bg-[#0a0a0a] ${
           threadOnly
             ? "flex"
             : !mobileThread || !activePartner
@@ -566,8 +568,8 @@ export function BerichtenClient({
       >
         {!activePartner ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 py-16 text-center">
-            <IconChatEmpty className="text-ink-secondary" />
-            <p className="text-sm font-medium text-ink-secondary">
+            <IconChatEmpty className="text-gray-400" />
+            <p className="text-sm font-medium text-gray-400">
               {threadOnly && banner
                 ? banner
                 : threadOnly
@@ -577,7 +579,7 @@ export function BerichtenClient({
             {threadOnly ? (
               <Link
                 href="/berichten"
-                className="text-sm font-semibold text-ink underline"
+                className="text-sm font-semibold text-white underline"
               >
                 Naar alle berichten
               </Link>
@@ -585,11 +587,11 @@ export function BerichtenClient({
           </div>
         ) : (
           <>
-            <div className="flex items-center gap-3 border-b border-line bg-surface px-3 py-3">
+            <div className="flex items-center gap-3 border-b border-gray-800 bg-[#111827] px-3 py-3">
               {threadOnly ? (
                 <a
                   href="/berichten"
-                  className="rounded-lg p-2 text-ink-secondary hover:bg-surface-muted/80"
+                  className="rounded-lg p-2 text-gray-400 hover:bg-[#0f172a]/80"
                   aria-label="Terug naar berichten"
                 >
                   <IconBack />
@@ -597,7 +599,7 @@ export function BerichtenClient({
               ) : (
                 <button
                   type="button"
-                  className="rounded-lg p-2 text-ink-secondary hover:bg-surface-muted/80 md:hidden"
+                  className="rounded-lg p-2 text-gray-400 hover:bg-[#0f172a]/80 md:hidden"
                   aria-label="Terug"
                   onClick={() => {
                     setMobileThread(false);
@@ -607,20 +609,20 @@ export function BerichtenClient({
                   <IconBack />
                 </button>
               )}
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-bookadj-subtle text-xs font-bold text-bookadj-soft">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#052e16] text-xs font-bold text-green-400">
                 {initials(partnerName(activePartner))}
               </span>
               <div className="min-w-0 flex-1">
-                <p className="truncate font-semibold text-ink">
+                <p className="truncate font-semibold text-white">
                   {partnerName(activePartner)}
                 </p>
-                <p className="text-xs text-bookadj-soft">Online</p>
+                <p className="text-sm text-gray-400">Online</p>
               </div>
             </div>
 
             {banner ? (
-              <div className="mx-3 mt-3 flex gap-2 rounded-xl border border-orange-200 bg-orange-50 px-3 py-2 text-sm text-orange-950">
-                <IconWarning className="mt-0.5 shrink-0 text-orange-600" />
+              <div className="mx-3 mt-3 flex gap-2 rounded-xl border border-amber-800 bg-amber-500/10 px-3 py-2 text-sm text-amber-400">
+                <IconWarning className="mt-0.5 shrink-0 text-amber-400" />
                 <span>{banner}</span>
               </div>
             ) : null}
@@ -637,7 +639,7 @@ export function BerichtenClient({
                   return (
                     <div key={m.id}>
                       {showDate ? (
-                        <p className="mb-3 text-center text-xs font-medium text-ink-muted">
+                        <p className="mb-3 text-center text-xs font-medium text-gray-500">
                           {threadDateLabel(m.created_at)}
                         </p>
                       ) : null}
@@ -647,8 +649,8 @@ export function BerichtenClient({
                         <div
                           className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm ${
                             mine
-                              ? "bg-bookadj text-white"
-                              : "bg-surface text-ink ring-1 ring-line"
+                              ? "bg-green-500 text-black"
+                              : "bg-[#1f2937] text-gray-200 ring-1 ring-gray-800"
                           }`}
                         >
                           <p className="whitespace-pre-wrap break-words">
@@ -660,8 +662,8 @@ export function BerichtenClient({
                             </p>
                           ) : null}
                           <p
-                            className={`mt-1 text-[10px] ${
-                              mine ? "text-white/60" : "text-ink-muted"
+                            className={`mt-1 text-xs ${
+                              mine ? "text-black/60" : "text-gray-500"
                             }`}
                           >
                             {formatTime(m.created_at)}
@@ -674,14 +676,14 @@ export function BerichtenClient({
                 <div ref={threadEndRef} />
               </div>
 
-              <div className="border-t border-line bg-surface px-3 py-3">
+              <div className="border-t border-gray-800 bg-[#111827] px-3 py-3">
                 <div
                   className="mb-2 flex gap-1 px-1"
                   aria-hidden
                 >
-                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-line/70 [animation-delay:0ms]" />
-                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-line/70 [animation-delay:150ms]" />
-                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-line/70 [animation-delay:300ms]" />
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-gray-800/70 [animation-delay:0ms]" />
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-gray-800/70 [animation-delay:150ms]" />
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-gray-800/70 [animation-delay:300ms]" />
                 </div>
                 <div className="flex gap-2">
                   <textarea
@@ -698,13 +700,13 @@ export function BerichtenClient({
                     }}
                     rows={Math.min(4, Math.max(1, input.split("\n").length))}
                     placeholder="Schrijf een bericht…"
-                    className="min-h-[44px] flex-1 resize-none rounded-xl border border-line px-3 py-2 text-sm outline-none focus:border-line-brand focus:ring-2 focus:ring-bookadj/25"
+                    className="min-h-[44px] flex-1 resize-none rounded-xl border border-gray-700 bg-[#0a0a0a] px-3 py-2 text-sm text-white outline-none placeholder:text-gray-500 focus:border-green-500 focus:ring-2 focus:ring-green-500/50"
                   />
                   <button
                     type="button"
                     disabled={sending || !input.trim()}
                     onClick={() => void sendMessage()}
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-bookadj text-white transition-colors hover:bg-bookadj-hover disabled:opacity-40"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-green-500 text-black font-bold transition-colors hover:bg-green-400 disabled:opacity-40"
                     aria-label="Verstuur"
                   >
                     <IconSend />

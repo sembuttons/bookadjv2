@@ -12,22 +12,22 @@ export const metadata = {
 export default function SupportPage() {
   return (
     <MarketingPageShell maxWidth="wide">
-      <p className="text-sm font-semibold uppercase tracking-wide text-bookadj-soft">
+      <p className="text-sm font-semibold uppercase tracking-wide text-green-400">
         Helpcentrum
       </p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+      <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
         Support
       </h1>
-      <p className="mt-4 max-w-2xl text-base text-ink-secondary">
+      <p className="mt-4 max-w-2xl text-base text-gray-400">
         Antwoorden op veelgestelde vragen en een directe lijn naar ons team.
       </p>
 
-      <div className="mt-10 rounded-2xl border border-line-brand/40 bg-bookadj-subtle/80 p-5 text-center md:p-8">
-        <p className="text-sm font-semibold text-bookadj-soft md:text-base">
+      <div className="mt-10 rounded-2xl border border-green-800/40 bg-[#052e16]/80 p-5 text-center md:p-8">
+        <p className="text-sm font-semibold text-green-400 md:text-base">
           Mail ons op{" "}
           <a
             href="mailto:hallo@bookadj.nl"
-            className="font-bold underline decoration-bookadj underline-offset-2"
+            className="font-bold underline decoration-green-500 underline-offset-2"
           >
             hallo@bookadj.nl
           </a>{" "}
@@ -38,7 +38,7 @@ export default function SupportPage() {
       <section className="mt-14" aria-labelledby="faq-heading">
         <h2
           id="faq-heading"
-          className="text-xl font-bold text-ink md:text-2xl"
+          className="text-xl font-bold text-white md:text-2xl"
         >
           Veelgestelde vragen
         </h2>

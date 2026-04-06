@@ -3,9 +3,9 @@
 
 :root {
   --background: #0a0a0a;
-  --foreground: #f9fafb;
+  --foreground: #ffffff;
   --bookadj: #22c55e;
-  --bookadj-hover: #16a34a;
+  --bookadj-hover: #4ade80;
 }
 
 @theme inline {
@@ -13,21 +13,20 @@
 }
 
 @layer components {
-  /* Legal / long-form copy on dark (no @tailwindcss/typography) */
   .prose-bookadj {
-    @apply text-ink-secondary;
+    @apply text-gray-400;
   }
   .prose-bookadj :where(h1, h2, h3) {
-    @apply font-bold tracking-tight text-ink;
+    @apply font-bold tracking-tight text-white;
   }
   .prose-bookadj h1 {
     @apply text-3xl sm:text-4xl;
   }
   .prose-bookadj h2 {
-    @apply mt-10 text-xl text-ink;
+    @apply mt-10 text-xl text-white;
   }
   .prose-bookadj h3 {
-    @apply mt-6 text-lg text-ink;
+    @apply mt-6 text-lg text-white;
   }
   .prose-bookadj :where(p, ul, ol) {
     @apply mt-4 leading-relaxed;
@@ -36,17 +35,17 @@
     @apply list-inside list-disc space-y-2;
   }
   .prose-bookadj a {
-    @apply font-medium text-bookadj underline decoration-bookadj/40 underline-offset-2 transition-colors hover:text-bookadj-soft;
+    @apply text-base font-medium text-green-400 underline decoration-green-500/40 underline-offset-2 transition-colors hover:text-green-300;
   }
   .prose-bookadj strong {
-    @apply font-semibold text-ink;
+    @apply font-semibold text-white;
   }
 
-  /* 44px height, 8px radius, brand focus ring */
+  /* Inputs: spec + visible focus for a11y */
   .input-field {
-    @apply h-11 min-h-[44px] w-full rounded-lg border border-line bg-surface px-3 text-sm text-ink outline-none transition-[box-shadow,border-color] duration-200;
-    @apply placeholder:text-ink-muted;
-    @apply focus:border-line-brand focus:ring-2 focus:ring-bookadj/30 focus:ring-offset-0;
+    @apply h-11 min-h-[44px] w-full rounded-lg border border-gray-700 bg-[#111827] px-3 text-sm text-white outline-none transition-[box-shadow,border-color] duration-200;
+    @apply placeholder:text-gray-500;
+    @apply focus:border-green-500 focus:ring-2 focus:ring-green-500/50 focus:ring-offset-0;
   }
 
   select.input-field {
@@ -58,8 +57,8 @@
   }
 
   .card-interactive {
-    @apply rounded-2xl border border-line bg-surface shadow-sm transition-all duration-200 ease-out;
-    @apply hover:border-line-brand/60 hover:shadow-md hover:shadow-black/20;
+    @apply rounded-2xl border border-gray-800 bg-[#111827] shadow-sm transition-all duration-200 ease-out;
+    @apply hover:border-green-800 hover:bg-[#0f1f0f] hover:shadow-lg hover:shadow-green-900/20;
   }
 }
 
@@ -78,10 +77,11 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: #0a0a0a;
 }
 
 body {
-  background: var(--background);
+  background-color: #0a0a0a;
   color: var(--foreground);
   font-family: var(--font-sans);
   font-size: 0.9375rem;

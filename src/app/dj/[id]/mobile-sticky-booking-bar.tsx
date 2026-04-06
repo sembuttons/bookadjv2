@@ -34,7 +34,7 @@ export function MobileStickyBookingBar({
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 z-[70] border-t border-line bg-surface/95 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] backdrop-blur-sm transition-transform duration-200 lg:hidden ${
+      className={`fixed bottom-0 left-0 right-0 z-[70] border-t border-gray-800 bg-[#111827]/95 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] backdrop-blur-sm transition-transform duration-200 lg:hidden ${
         panelInView ? "translate-y-full" : "translate-y-0"
       }`}
       style={{
@@ -44,17 +44,17 @@ export function MobileStickyBookingBar({
     >
       <div className="mx-auto flex max-w-[1400px] items-center gap-3 px-4 py-3">
         <div className="min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
             Vanaf
           </p>
-          <p className="truncate text-base font-extrabold text-ink">
+          <p className="truncate text-base font-extrabold text-white">
             €{Math.round(hourlyRate)}/u
           </p>
         </div>
         <div className="flex-1" />
         <Link
           href={boekenHref}
-          className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-bookadj px-6 text-sm font-bold text-white transition-all duration-200 hover:bg-bookadj-hover"
+          className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-green-500 px-6 text-sm font-bold text-black transition-all duration-200 hover:bg-green-400"
         >
           Boek nu
         </Link>

@@ -192,9 +192,9 @@ export default function DjBeschikbaarheidPage() {
 
   const legend = useMemo(
     () => (
-      <div className="mt-6 flex flex-wrap gap-4 text-sm text-ink-secondary">
+      <div className="mt-6 flex flex-wrap gap-4 text-sm text-gray-400">
         <span className="inline-flex items-center gap-2">
-          <span className="h-4 w-4 rounded bg-bookadj-subtle/70 ring-1 ring-line-brand/40" />
+          <span className="h-4 w-4 rounded bg-[#052e16]/70 ring-1 ring-green-800/40" />
           Beschikbaar
         </span>
         <span className="inline-flex items-center gap-2">
@@ -202,7 +202,7 @@ export default function DjBeschikbaarheidPage() {
           Niet beschikbaar
         </span>
         <span className="inline-flex items-center gap-2">
-          <span className="h-4 w-4 rounded bg-surface-muted/80 ring-1 ring-line" />
+          <span className="h-4 w-4 rounded bg-[#0f172a]/80 ring-1 ring-gray-800" />
           Verleden
         </span>
       </div>
@@ -213,10 +213,10 @@ export default function DjBeschikbaarheidPage() {
   if (loading) {
     return (
       <>
-        <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
           Beschikbaarheid
         </h1>
-        <p className="mt-2 text-sm text-ink-secondary">Kalender laden…</p>
+        <p className="mt-2 text-sm text-gray-400">Kalender laden…</p>
       </>
     );
   }
@@ -224,10 +224,10 @@ export default function DjBeschikbaarheidPage() {
   if (!djProfileId) {
     return (
       <>
-        <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
           Beschikbaarheid
         </h1>
-        <p className="mt-2 text-sm text-ink-secondary">
+        <p className="mt-2 text-sm text-gray-400">
           Je hebt nog geen DJ-profiel. Maak eerst een profiel aan om data te blokkeren.
         </p>
       </>
@@ -236,36 +236,36 @@ export default function DjBeschikbaarheidPage() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+      <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
         Beschikbaarheid
       </h1>
-      <p className="mt-1 text-sm text-ink-secondary">
+      <p className="mt-1 text-sm text-gray-400">
         Tik op een dag om deze als niet beschikbaar te markeren. Boekers kunnen die datum niet meer
         kiezen. Tik opnieuw om de blokkering op te heffen.
       </p>
 
       {error ? (
-        <p className="mt-4 rounded-lg border border-danger/35 bg-danger/10 px-3 py-2 text-sm text-danger">
+        <p className="mt-4 rounded-lg border border-red-500/35 bg-red-500/10 px-3 py-2 text-sm text-red-400">
           {error}
         </p>
       ) : null}
 
-      <div className="mt-8 max-w-lg rounded-2xl border border-line bg-surface p-4 shadow-sm sm:p-6">
+      <div className="mt-8 max-w-lg rounded-2xl border border-gray-800 bg-[#111827] p-4 shadow-sm sm:p-6">
         <div className="mb-4 flex items-center justify-between gap-2">
           <button
             type="button"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-ink-secondary transition-colors hover:bg-surface-muted/80"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-[#0f172a]/80"
             aria-label="Vorige maand"
             onClick={() => setCursor(new Date(year, month - 1, 1))}
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
-          <p className="min-w-0 flex-1 text-center text-sm font-semibold capitalize text-ink">
+          <p className="min-w-0 flex-1 text-center text-sm font-semibold capitalize text-white">
             {MONTHS_NL[month]} {year}
           </p>
           <button
             type="button"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-ink-secondary transition-colors hover:bg-surface-muted/80"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-[#0f172a]/80"
             aria-label="Volgende maand"
             onClick={() => setCursor(new Date(year, month + 1, 1))}
           >
@@ -273,7 +273,7 @@ export default function DjBeschikbaarheidPage() {
           </button>
         </div>
 
-        <div className="mb-2 grid grid-cols-7 gap-1 text-center text-[11px] font-semibold uppercase tracking-wide text-ink-muted">
+        <div className="mb-2 grid grid-cols-7 gap-1 text-center text-[11px] font-semibold uppercase tracking-wide text-gray-500">
           {WEEKDAYS_NL.map((d) => (
             <div key={d}>{d}</div>
           ))}
@@ -298,10 +298,10 @@ export default function DjBeschikbaarheidPage() {
                 className={[
                   "flex aspect-square items-center justify-center rounded-lg text-sm font-medium transition-colors",
                   isPast
-                    ? "cursor-not-allowed bg-surface-muted text-ink-secondary"
+                    ? "cursor-not-allowed bg-[#0f172a] text-gray-400"
                     : isBlocked
                       ? "bg-red-100 font-semibold text-red-900 ring-1 ring-red-200 hover:bg-red-200/80"
-                      : "bg-bookadj-subtle text-bookadj-soft ring-1 ring-line-brand/35 hover:bg-bookadj-subtle/70",
+                      : "bg-[#052e16] text-green-400 ring-1 ring-green-800/35 hover:bg-[#052e16]/70",
                 ].join(" ")}
               >
                 {isWorking ? "…" : day}

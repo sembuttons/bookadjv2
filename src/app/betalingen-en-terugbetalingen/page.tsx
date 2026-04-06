@@ -10,13 +10,13 @@ export const metadata = {
 export default function BetalingenTerugbetalingenPage() {
   return (
     <MarketingPageShell maxWidth="prose">
-      <p className="text-sm font-semibold uppercase tracking-wide text-bookadj-soft">
+      <p className="text-sm font-semibold uppercase tracking-wide text-green-400">
         Beleid
       </p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+      <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
         Betalingen en terugbetalingen
       </h1>
-      <p className="mt-4 text-ink-secondary">
+      <p className="mt-4 text-gray-400">
         Op deze pagina lees je in het kort hoe betalingen verlopen en welke
         regels we hanteren voor terugbetaling bij annulering door jou als
         klant. Exacte afspraken kunnen per boeking verschillen; bij twijfel
@@ -27,11 +27,11 @@ export default function BetalingenTerugbetalingenPage() {
         .
       </p>
 
-      <section className="mt-12 border-t border-line pt-10">
-        <h2 className="text-xl font-bold text-ink">
+      <section className="mt-12 border-t border-gray-800 pt-10">
+        <h2 className="text-xl font-bold text-white">
           Hoe betalen werkt
         </h2>
-        <div className="mt-4 space-y-4 text-ink-secondary">
+        <div className="mt-4 space-y-4 text-gray-400">
           <p>
             Betalingen verlopen via <strong>Stripe</strong>. Je kunt onder meer
             gebruikmaken van betaalmethoden zoals iDEAL en creditcard (Visa,
@@ -50,30 +50,30 @@ export default function BetalingenTerugbetalingenPage() {
         </div>
       </section>
 
-      <section className="mt-12 border-t border-line pt-10">
-        <h2 className="text-xl font-bold text-ink">
+      <section className="mt-12 border-t border-gray-800 pt-10">
+        <h2 className="text-xl font-bold text-white">
           Terugbetalingsbeleid (indicatie annulering klant)
         </h2>
-        <p className="mt-4 text-ink-secondary">
+        <p className="mt-4 text-gray-400">
           Onderstaande termijnen zijn een <strong>richtlijn</strong> ten
           opzichte van de datum van je evenement. Afwijkingen zijn mogelijk als
           dat in je boeking of in de voorwaarden staat.
         </p>
-        <ul className="mt-6 space-y-4 rounded-xl border border-line-brand/35 bg-bookadj-subtle/50 p-5 text-ink">
+        <ul className="mt-6 space-y-4 rounded-xl border border-green-800/35 bg-[#052e16]/50 p-5 text-white">
           <li>
-            <strong className="text-ink">Meer dan 30 dagen</strong> voor
+            <strong className="text-white">Meer dan 30 dagen</strong> voor
             de evenementdatum: in principe <strong>volledige terugbetaling</strong>{" "}
             van het door jou betaalde boekingsbedrag (exclusief eventuele
             niet-restitueerbare kosten zoals vermeld bij de boeking).
           </li>
           <li>
-            <strong className="text-ink">Tussen 14 en 30 dagen</strong>{" "}
+            <strong className="text-white">Tussen 14 en 30 dagen</strong>{" "}
             voor de evenementdatum: <strong>gedeeltelijke terugbetaling</strong>
             — een deel van het bedrag kan ingehouden worden voor
             gemaakte kosten en de gereserveerde tijd van de DJ.
           </li>
           <li>
-            <strong className="text-ink">Minder dan 14 dagen</strong>{" "}
+            <strong className="text-white">Minder dan 14 dagen</strong>{" "}
             voor de evenementdatum: in principe <strong>geen terugbetaling</strong>
             , omdat de DJ en planning dan vaak volledig zijn ingezet. Uitzondering
             bij overmacht of in overleg met support.
@@ -81,15 +81,15 @@ export default function BetalingenTerugbetalingenPage() {
         </ul>
       </section>
 
-      <section className="mt-12 border-t border-line pt-10">
-        <h2 className="text-xl font-bold text-ink">
+      <section className="mt-12 border-t border-gray-800 pt-10">
+        <h2 className="text-xl font-bold text-white">
           Hoe vraag je een terugbetaling aan?
         </h2>
-        <p className="mt-4 text-ink-secondary">
+        <p className="mt-4 text-gray-400">
           Stuur een mail naar{" "}
           <a
             href="mailto:hallo@bookadj.nl"
-            className="font-semibold text-bookadj-soft underline"
+            className="font-semibold text-green-400 underline"
           >
             hallo@bookadj.nl
           </a>{" "}
@@ -103,7 +103,7 @@ export default function BetalingenTerugbetalingenPage() {
           </Link>
           .
         </p>
-        <ol className="mt-4 list-decimal space-y-3 pl-5 text-ink-secondary">
+        <ol className="mt-4 list-decimal space-y-3 pl-5 text-gray-400">
           <li>
             Log in en open je boeking in het dashboard waar mogelijk, of mail
             direct met je referentie.
@@ -117,9 +117,9 @@ export default function BetalingenTerugbetalingenPage() {
             laat weten of terugbetaling mogelijk is volgens het beleid.
           </li>
         </ol>
-        <p className="mt-6 text-sm text-ink-muted">
+        <p className="mt-6 text-sm text-gray-500">
           Voor geschillen tussen klant en DJ: zie{" "}
-          <Link href="/geschillen" className="font-semibold text-ink-secondary underline">
+          <Link href="/geschillen" className="font-semibold text-gray-400 underline">
             Hulp bij problemen
           </Link>
           .
