@@ -95,7 +95,7 @@ export function BookingPanel({
 
   return (
     <div className="space-y-5">
-      <div className="card-interactive p-6">
+      <div className="card-interactive p-5 sm:p-6">
         <div className="mt-0">
           <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
             Aantal uren
@@ -229,14 +229,14 @@ export function BookingPanel({
             if (!eventDate.trim()) return base;
             return `${base}?${new URLSearchParams({ date: eventDate.trim() }).toString()}`;
           })()}
-          className="mt-5 flex w-full items-center justify-center rounded-xl bg-black py-3.5 text-sm font-bold text-white transition-colors hover:bg-bookadj"
+          className="mt-5 flex min-h-[44px] w-full items-center justify-center rounded-xl bg-black py-3.5 text-sm font-bold text-white transition-all duration-200 hover:bg-bookadj"
         >
           Boeking aanvragen
         </Link>
         <StelVraagButton
           djUserId={djUserId ?? undefined}
           djProfileId={djId}
-          className="mt-3 w-full rounded-xl border-2 border-neutral-900 bg-white py-3 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-50"
+          className="mt-3 min-h-[44px] w-full rounded-xl border-2 border-neutral-900 bg-white py-3 text-sm font-semibold text-neutral-900 transition-all duration-200 hover:bg-neutral-50"
         >
           {contactButtonLabel}
         </StelVraagButton>

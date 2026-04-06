@@ -170,37 +170,38 @@ export function Navbar() {
         />
       ) : null}
 
-      <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
-        <Link
-          href="/"
-          className="shrink-0 text-xl font-semibold tracking-tight text-neutral-900"
-        >
-          bookadj
-        </Link>
+      <div className="relative mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
+        <div className="flex min-w-0 items-center gap-8">
+          <Link
+            href="/"
+            className="shrink-0 text-xl font-semibold tracking-tight text-neutral-900"
+          >
+            bookadj
+          </Link>
 
-        <nav
-          className="absolute left-1/2 hidden -translate-x-1/2 gap-8 text-sm font-medium text-neutral-700 md:flex"
-          aria-label="Hoofdnavigatie"
-        >
-          <Link href="/zoeken" className={navLinkClass}>
-            DJ&apos;s vinden
-          </Link>
-          <Link href="/hoe-het-werkt" className={navLinkClass}>
-            Hoe het werkt
-          </Link>
-          <Link href="/voor-djs" className={navLinkClass}>
-            Voor DJ&apos;s
-          </Link>
-          <Link href="/over-ons" className={navLinkClass}>
-            Over ons
-          </Link>
-          <Link href="/support" className={navLinkClass}>
-            Support
-          </Link>
-          <Link href="/contact" className={navLinkClass}>
-            Contact
-          </Link>
-        </nav>
+          <nav
+            className="hidden min-w-0 items-center gap-6 text-sm font-medium text-neutral-700 md:flex"
+            aria-label="Hoofdnavigatie"
+          >
+            <Link href="/zoeken" className={navLinkClass}>
+              DJ&apos;s vinden
+            </Link>
+            <Link href="/hoe-het-werkt" className={navLinkClass}>
+              Hoe het werkt
+            </Link>
+            <Link href="/voor-djs" className={navLinkClass}>
+              Voor DJ&apos;s
+            </Link>
+            <Link href="/contact" className={navLinkClass}>
+              Contact
+            </Link>
+            <Link href="/over-ons" className={navLinkClass}>
+              Over ons
+            </Link>
+          </nav>
+        </div>
+
+        <div className="flex-1" />
 
         <div
           className={`fixed inset-y-0 right-0 z-[48] w-[min(20rem,88vw)] max-w-full transform border-l border-neutral-200 bg-white shadow-xl transition-transform duration-200 ease-out md:hidden ${

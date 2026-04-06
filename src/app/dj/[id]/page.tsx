@@ -378,6 +378,23 @@ export default async function DjProfilePage({ params }: PageProps) {
           </div>
         </div>
 
+        {/* Booking panel — mobile placement (below DJ header) */}
+        <div className="mt-6 lg:hidden">
+          <BookingPanel
+            djId={id}
+            djUserId={djUserId || null}
+            hourlyRate={hourly}
+            homeLat={typeof profile.home_lat === "number" ? profile.home_lat : null}
+            homeLng={typeof profile.home_lng === "number" ? profile.home_lng : null}
+            ratePerKm={
+              typeof profile.rate_per_km === "number" ? profile.rate_per_km : null
+            }
+            contactButtonLabel={`Stel ${fn} een vraag`}
+            responseTimeLabel={metaResponse(profile)}
+            memberSinceLabel={formatSidebarMemberSince(profile)}
+          />
+        </div>
+
         <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_minmax(280px,360px)] lg:gap-12 lg:items-start">
           <div className="min-w-0 space-y-14">
             <MediaTabs
@@ -560,7 +577,7 @@ export default async function DjProfilePage({ params }: PageProps) {
             <DjProfileFaq />
           </div>
 
-          <aside className="lg:sticky lg:top-24 lg:max-h-[calc(100vh-6.5rem)] lg:overflow-y-auto lg:overscroll-contain lg:self-start">
+          <aside className="hidden lg:block lg:sticky lg:top-24 lg:max-h-[calc(100vh-6.5rem)] lg:overflow-y-auto lg:overscroll-contain lg:self-start">
             <BookingPanel
               djId={id}
               djUserId={djUserId || null}
