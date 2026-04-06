@@ -1,9 +1,19 @@
 import Link from "next/link";
-import { HomeGenreGrid } from "@/components/home-genre-grid";
 import { HomeSearchForm } from "@/components/home-search-form";
 import { Navbar } from "@/components/Navbar";
 import { EmptyState } from "@/components/skeleton";
 import { PaymentMethodBadges } from "@/components/payment-method-badges";
+import {
+  Briefcase,
+  Gift,
+  GraduationCap,
+  Heart,
+  Home as HomeIcon,
+  MoreHorizontal,
+  Music,
+  Zap,
+  Lock,
+} from "lucide-react";
 import {
   getCity,
   getGenres,
@@ -15,15 +25,6 @@ import {
 import { supabase } from "@/lib/supabase";
 
 export const revalidate = 60;
-
-const genres = [
-  "House",
-  "Techno",
-  "Afro House",
-  "Hip-hop",
-  "Top 40",
-  "Latin",
-] as const;
 
 const reviews = [
   {
@@ -76,6 +77,17 @@ const TRUST_SECTION_IMAGE =
 /** Bottom “voor DJ’s” CTA strip */
 const VOOR_DJS_SECTION_BG =
   "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200&q=80&auto=format&fit=crop";
+
+const occasionCards = [
+  { id: "bruiloft", label: "Bruiloft", Icon: Heart },
+  { id: "verjaardag", label: "Verjaardag", Icon: Gift },
+  { id: "bedrijfsfeest", label: "Bedrijfsfeest", Icon: Briefcase },
+  { id: "club_bar", label: "Club & Bar", Icon: Music },
+  { id: "festival", label: "Festival", Icon: Zap },
+  { id: "huisfeest", label: "Huisfeest", Icon: HomeIcon },
+  { id: "afstuderen", label: "Afstuderen", Icon: GraduationCap },
+  { id: "anders", label: "Anders", Icon: MoreHorizontal },
+] as const;
 
 function initialsFromName(name: string) {
   const parts = name
@@ -148,6 +160,47 @@ export default async function Home() {
           </p>
 
           <HomeSearchForm />
+        </div>
+      </section>
+
+      <section
+        className="border-b border-neutral-200 bg-[#faf8f4] px-4 py-14 sm:px-6 lg:px-8 lg:py-16"
+        aria-labelledby="occasion-heading"
+      >
+        <div className="mx-auto max-w-7xl">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2
+              id="occasion-heading"
+              className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl"
+            >
+              Wat wil je boeken?
+            </h2>
+            <p className="mt-3 text-neutral-600">
+              Kies je gelegenheid en zie meteen de beste DJ&apos;s voor jouw
+              type event.
+            </p>
+          </div>
+
+          <div className="mt-10">
+            <div className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-2 snap-x snap-mandatory sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4">
+              {occasionCards.map(({ id, label, Icon }) => (
+                <Link
+                  key={id}
+                  href={`/zoeken?${new URLSearchParams({ occasion: id }).toString()}`}
+                  className="group card-interactive flex min-w-[min(100%,220px)] shrink-0 snap-start flex-col items-center justify-center gap-3 p-6 text-center transition-all duration-200 hover:border-bookadj/40 hover:shadow-md sm:min-w-0"
+                >
+                  <Icon
+                    className="h-8 w-8 text-emerald-600"
+                    strokeWidth={1.75}
+                    aria-hidden
+                  />
+                  <span className="text-sm font-semibold text-neutral-900">
+                    {label}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -279,25 +332,24 @@ export default async function Home() {
       </section>
 
       <section
-        id="genres"
-        className="border-b-2 border-black px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
-        aria-labelledby="genres-heading"
+        className="border-b border-neutral-200 bg-white px-4 py-12 sm:px-6 lg:px-8"
+        aria-label="Veilig betalen"
       >
-        <div className="mx-auto max-w-7xl">
-          <h2
-            id="genres-heading"
-            className="text-center text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl"
-          >
-            Zoek op genre
-          </h2>
-          <div
-            className="mx-auto mt-4 h-1 w-16 rounded-full bg-bookadj"
-            aria-hidden
-          />
-          <p className="mx-auto mt-4 max-w-xl text-center text-neutral-600">
-            Ontdek DJ&apos;s die passen bij jouw sound — van club tot bruiloft.
-          </p>
-          <HomeGenreGrid genres={genres} />
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 rounded-2xl border border-neutral-200 bg-neutral-50 px-6 py-6 text-center sm:flex-row sm:text-left">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-black text-white">
+              <Lock className="h-5 w-5" strokeWidth={2} aria-hidden />
+            </span>
+            <div>
+              <p className="text-sm font-semibold text-neutral-900">
+                Veilig betalen
+              </p>
+              <p className="text-xs text-neutral-600">
+                256-bit SSL beveiliging · 500+ tevreden klanten
+              </p>
+            </div>
+          </div>
+          <PaymentMethodBadges className="justify-center sm:justify-end" />
         </div>
       </section>
 

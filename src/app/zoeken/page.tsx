@@ -518,8 +518,16 @@ export default function ZoekenPage() {
                   <path d="M20 20l-3.5-3.5" strokeLinecap="round" />
                 </svg>
               }
-              title="Geen DJ’s voor deze filters"
-              description="Pas je stad, datum, gelegenheid, genres of prijs aan — of wis een filter om meer profielen te zien."
+              title="Geen DJ&apos;s gevonden voor deze zoekopdracht"
+              description="Tip: verwijder één of meer filters (gelegenheid, genres of prijs) of probeer een andere stad/datum."
+              action={
+                <Link
+                  href="/zoeken"
+                  className="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-bookadj px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-bookadj-hover"
+                >
+                  Bekijk alle DJ&apos;s
+                </Link>
+              }
             />
           ) : (
             <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">

@@ -354,6 +354,23 @@ export default function BevestigingPage() {
             <h2 className="text-lg font-bold text-neutral-900">
               Wat gebeurt er nu?
             </h2>
+            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              {[
+                "De DJ heeft 24 uur om te reageren",
+                "Je ontvangt een e-mail zodra de DJ reageert",
+                "Na acceptatie wordt je betaling verwerkt",
+              ].map((t, i) => (
+                <div
+                  key={t}
+                  className="rounded-xl border border-neutral-200 bg-white px-4 py-3 text-sm text-neutral-800 shadow-sm"
+                >
+                  <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                    Stap {i + 1}
+                  </p>
+                  <p className="mt-1 font-semibold text-neutral-900">{t}</p>
+                </div>
+              ))}
+            </div>
             <ul className="relative mt-6 space-y-0">
               {timelineSteps.map((step, index) => (
                 <li key={step.when} className="relative flex gap-4 pb-8 last:pb-0">

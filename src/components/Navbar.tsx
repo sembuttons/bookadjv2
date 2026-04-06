@@ -171,35 +171,33 @@ export function Navbar() {
       ) : null}
 
       <div className="relative mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
-        <div className="flex min-w-0 items-center gap-8">
-          <Link
-            href="/"
-            className="shrink-0 text-xl font-semibold tracking-tight text-neutral-900"
-          >
-            bookadj
-          </Link>
+        <Link
+          href="/"
+          className="shrink-0 text-xl font-semibold tracking-tight text-neutral-900"
+        >
+          bookadj
+        </Link>
 
-          <nav
-            className="hidden min-w-0 items-center gap-6 text-sm font-medium text-neutral-700 md:flex"
-            aria-label="Hoofdnavigatie"
-          >
-            <Link href="/zoeken" className={navLinkClass}>
-              DJ&apos;s vinden
-            </Link>
-            <Link href="/hoe-het-werkt" className={navLinkClass}>
-              Hoe het werkt
-            </Link>
-            <Link href="/voor-djs" className={navLinkClass}>
-              Voor DJ&apos;s
-            </Link>
-            <Link href="/contact" className={navLinkClass}>
-              Contact
-            </Link>
-            <Link href="/over-ons" className={navLinkClass}>
-              Over ons
-            </Link>
-          </nav>
-        </div>
+        <nav
+          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 text-sm font-medium text-neutral-700 md:flex"
+          aria-label="Hoofdnavigatie"
+        >
+          <Link href="/zoeken" className={navLinkClass}>
+            DJ&apos;s vinden
+          </Link>
+          <Link href="/hoe-het-werkt" className={navLinkClass}>
+            Hoe het werkt
+          </Link>
+          <Link href="/voor-djs" className={navLinkClass}>
+            Voor DJ&apos;s
+          </Link>
+          <Link href="/contact" className={navLinkClass}>
+            Contact
+          </Link>
+          <Link href="/over-ons" className={navLinkClass}>
+            Over ons
+          </Link>
+        </nav>
 
         <div className="flex-1" />
 

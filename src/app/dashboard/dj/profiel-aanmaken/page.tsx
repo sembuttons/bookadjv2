@@ -313,13 +313,47 @@ export default function DjProfielAanmakenPage() {
 
   if (success) {
     return (
-      <div className="mx-auto max-w-lg rounded-2xl border border-emerald-200 bg-emerald-50 px-6 py-10 text-center shadow-sm">
-        <p className="text-lg font-semibold text-emerald-950">
-          Profiel aangemaakt! Ons team beoordeelt je aanvraag binnen 48 uur.
-        </p>
-        <p className="mt-3 text-sm text-emerald-900/80">
-          Je wordt doorgestuurd naar je dashboard…
-        </p>
+      <div className="mx-auto max-w-2xl overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-sm">
+        <div className="bg-emerald-50 px-6 py-10 text-center sm:px-10">
+          <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">
+            Ingediend
+          </p>
+          <p className="mt-3 text-2xl font-bold tracking-tight text-emerald-950">
+            Je profiel is ingediend ter verificatie
+          </p>
+          <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-emerald-900/80">
+            Dit duurt meestal <strong>1–2 werkdagen</strong>. Je ontvangt een
+            e-mail zodra je geverifieerd bent.
+          </p>
+        </div>
+        <div className="px-6 py-8 sm:px-10">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-500">
+            Wat kun je nu doen?
+          </h2>
+          <ol className="mt-4 space-y-3 text-sm text-neutral-700">
+            <li className="flex gap-3">
+              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                1
+              </span>
+              Wacht op verificatie (we houden je op de hoogte per e-mail).
+            </li>
+            <li className="flex gap-3">
+              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                2
+              </span>
+              Houd je inbox in de gaten voor vragen van ons team.
+            </li>
+            <li className="flex gap-3">
+              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                3
+              </span>
+              Na goedkeuring word je zichtbaar in de zoekresultaten.
+            </li>
+          </ol>
+          <p className="mt-6 text-xs text-neutral-500">
+            Je wordt zo doorgestuurd naar je dashboard…
+          </p>
+        </div>
       </div>
     );
   }

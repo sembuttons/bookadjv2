@@ -1,5 +1,13 @@
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
+import {
+  BadgeCheck,
+  BriefcaseBusiness,
+  Camera,
+  Crown,
+  Handshake,
+  ShieldCheck,
+} from "lucide-react";
 
 const signupHref = "/auth?tab=aanmelden&role=dj";
 
@@ -215,6 +223,75 @@ export default function VoorDjsPage() {
             </li>
           ))}
         </ul>
+      </section>
+
+      {/* How bookadj helps the artist */}
+      <section
+        className="bg-[#0a0a0a] px-4 py-20 text-white sm:px-6 lg:px-8 lg:py-24"
+        aria-labelledby="helps-heading"
+      >
+        <div className="mx-auto max-w-7xl">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2
+              id="helps-heading"
+              className="text-3xl font-bold tracking-tight sm:text-4xl"
+            >
+              Hoe bookadj jou helpt als artiest
+            </h2>
+            <p className="mt-4 text-lg text-white/70">
+              Meer vrijheid, meer vertrouwen en een workflow die klopt.
+            </p>
+          </div>
+
+          <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                Icon: Crown,
+                title: "Eigen baas",
+                body: "Jij bepaalt je tarief, beschikbaarheid en welke boekingen je accepteert. Geen tussenpersoon die dicteert.",
+              },
+              {
+                Icon: BriefcaseBusiness,
+                title: "Meer zichtbaarheid",
+                body: "Je profiel is zichtbaar voor duizenden potentiële boekers in heel Nederland.",
+              },
+              {
+                Icon: ShieldCheck,
+                title: "Veilig betaald",
+                body: "Betaling wordt vastgehouden tot na het event. Nooit meer achter je geld aan.",
+              },
+              {
+                Icon: Camera,
+                title: "Professioneel profiel",
+                body: "Laat zien wie je bent met video, foto's en je beste mixen.",
+              },
+              {
+                Icon: Handshake,
+                title: "Direct contact",
+                body: "Communiceer rechtstreeks met boekers via ons platform. Geen e-mailchaos.",
+              },
+              {
+                Icon: BadgeCheck,
+                title: "Groeien samen",
+                body: "Hoe meer boekingen je doet, hoe hoger je in de zoekresultaten komt.",
+              },
+            ].map(({ Icon, title, body }) => (
+              <li key={title}>
+                <article className="h-full rounded-2xl border border-white/10 bg-white/5 p-7 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-emerald-400/30 hover:bg-white/10">
+                  <Icon
+                    className="h-7 w-7 text-emerald-400"
+                    strokeWidth={1.75}
+                    aria-hidden
+                  />
+                  <h3 className="mt-5 text-lg font-bold text-white">{title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-white/75">
+                    {body}
+                  </p>
+                </article>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
       {/* How it works */}

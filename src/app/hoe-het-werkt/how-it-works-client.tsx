@@ -1,22 +1,26 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
+  ArrowRight,
   BadgeCheck,
   CalendarDays,
   CreditCard,
+  Mail,
   MessageSquare,
   Search,
+  ShieldCheck,
+  ThumbsUp,
   UserPlus,
   Wallet,
 } from "lucide-react";
 
-type TabKey = "klant" | "dj";
-
 const HERO_BG =
-  "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1920&q=80&auto=format&fit=crop";
-const SECTION_BG =
-  "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1920&q=80&auto=format&fit=crop";
+  "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=1200&q=80&auto=format&fit=crop";
+
+type FlowKey = "klant" | "dj";
 
 type Step = {
   n: string;
@@ -25,234 +29,383 @@ type Step = {
   Icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
 };
 
-const klantSteps: Step[] = [
+const customerSteps: Step[] = [
   {
     n: "01",
-    title: "Zoek op datum en gelegenheid",
-    desc: "Kies je datum en type feest. Je ziet geverifieerde DJ’s met transparante prijzen.",
+    title: "Zoek een DJ",
+    desc: "Filter op gelegenheid, stad en budget. Bekijk profielen, video's en reviews van echte klanten.",
     Icon: Search,
   },
   {
     n: "02",
-    title: "Vergelijk profielen en stel een vraag",
-    desc: "Bekijk stijl, reviews en tarieven. Twijfel je? Stuur veilig een bericht via bookadj.",
+    title: "Stuur een boekingsverzoek",
+    desc: "Kies datum, tijd en locatie. Stuur je verzoek — de DJ heeft 24 uur om te reageren.",
     Icon: MessageSquare,
   },
   {
     n: "03",
-    title: "Boek met betalingsbescherming",
-    desc: "Je betaalt veilig via het platform. In de regel wordt je kaart pas belast na acceptatie.",
+    title: "Betaal veilig via bookadj",
+    desc: "Je betaling wordt veilig vastgehouden. Pas na het event wordt de DJ uitbetaald.",
     Icon: CreditCard,
+  },
+  {
+    n: "04",
+    title: "Geniet van je feest",
+    desc: "De DJ speelt, jij geniet. Na afloop kun je een review achterlaten.",
+    Icon: ThumbsUp,
   },
 ];
 
 const djSteps: Step[] = [
   {
     n: "01",
-    title: "Maak gratis een profiel",
-    desc: "Vul je bio, tarieven, genres en gelegenheden in. Geen abonnementskosten.",
+    title: "Maak een gratis profiel",
+    desc: "Vul je bio, tarief, gelegenheden en media in. Laat zien wie je bent.",
     Icon: UserPlus,
   },
   {
     n: "02",
-    title: "Verificatie en livegang",
-    desc: "Na controle (ID/KVK/KYC) ga je live als geverifieerde DJ. Dat verhoogt vertrouwen en conversie.",
+    title: "Verificatie",
+    desc: "bookadj verifieert je identiteit en gegevens. Daarna ben je zichtbaar voor boekers.",
     Icon: BadgeCheck,
   },
   {
     n: "03",
-    title: "Ontvang aanvragen en plan je agenda",
-    desc: "Alles op één plek: berichten, boekingen en beschikbaarheid. Jij focust op je set.",
+    title: "Ontvang boekingsverzoeken",
+    desc: "Accepteer of weiger binnen 24 uur. Communiceer via het platform.",
     Icon: CalendarDays,
   },
   {
     n: "04",
-    title: "Uitbetaling na afloop",
-    desc: "Na afronding van het event wordt de betaling volgens afspraken verwerkt en uitbetaald.",
+    title: "Speel en word betaald",
+    desc: "Na het event wordt je uitbetaald. Veilig, snel en betrouwbaar.",
     Icon: Wallet,
   },
 ];
 
-function TabButton({
-  active,
-  children,
-  onClick,
+function FlowToggle({
+  value,
+  onChange,
 }: {
-  active: boolean;
-  children: React.ReactNode;
-  onClick: () => void;
+  value: FlowKey;
+  onChange: (v: FlowKey) => void;
 }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`inline-flex min-h-[44px] flex-1 items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-200 sm:flex-initial sm:px-6 ${
-        active
-          ? "bg-black text-white shadow-sm"
-          : "bg-white/70 text-neutral-900 ring-1 ring-neutral-200 hover:bg-white"
-      }`}
-      aria-pressed={active}
-    >
-      {children}
-    </button>
+    <div className="mt-8 inline-flex w-full max-w-md rounded-2xl bg-white/10 p-1.5 ring-1 ring-white/15 backdrop-blur-sm sm:w-auto">
+      {(
+        [
+          { key: "klant" as const, label: "Voor klanten" },
+          { key: "dj" as const, label: "Voor DJ's" },
+        ] as const
+      ).map((t) => {
+        const active = value === t.key;
+        return (
+          <button
+            key={t.key}
+            type="button"
+            onClick={() => onChange(t.key)}
+            className={`min-h-[44px] flex-1 rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-200 sm:flex-initial sm:px-6 ${
+              active ? "bg-white text-neutral-900" : "text-white/80 hover:text-white"
+            }`}
+            aria-pressed={active}
+          >
+            {t.label}
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
+function StepTimeline({ steps }: { steps: Step[] }) {
+  return (
+    <>
+      {/* Desktop: horizontal connector */}
+      <div className="relative mt-12 hidden lg:block">
+        <div
+          className="pointer-events-none absolute left-6 right-6 top-10 h-px bg-emerald-200"
+          aria-hidden
+        />
+        <div className="grid gap-6 lg:grid-cols-4">
+          {steps.map((s) => (
+            <article
+              key={s.n}
+              className="card-interactive relative z-10 flex h-full flex-col p-7"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <span className="text-2xl font-extrabold tracking-tight text-emerald-600">
+                  {s.n}
+                </span>
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100">
+                  <s.Icon className="h-6 w-6" strokeWidth={1.75} aria-hidden />
+                </span>
+              </div>
+              <h3 className="mt-5 text-lg font-bold text-neutral-900">
+                {s.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+                {s.desc}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      {/* Mobile/tablet: vertical connector */}
+      <ol className="mt-10 space-y-4 lg:hidden">
+        {steps.map((s, idx) => (
+          <li key={s.n} className="relative">
+            {idx < steps.length - 1 ? (
+              <div
+                className="pointer-events-none absolute left-7 top-14 h-[calc(100%-1rem)] w-px bg-emerald-200"
+                aria-hidden
+              />
+            ) : null}
+            <article className="card-interactive flex gap-4 p-5">
+              <div className="flex shrink-0 flex-col items-center">
+                <span className="text-xl font-extrabold text-emerald-600">
+                  {s.n}
+                </span>
+                <span className="mt-3 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100">
+                  <s.Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden />
+                </span>
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-base font-bold text-neutral-900">
+                  {s.title}
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-neutral-600">
+                  {s.desc}
+                </p>
+              </div>
+            </article>
+          </li>
+        ))}
+      </ol>
+    </>
+  );
+}
+
+const faq = [
+  {
+    q: "Wat gebeurt er als een DJ annuleert?",
+    a: "We proberen een passende vervanger te regelen. Lukt dat niet op tijd, dan streven we naar een volledige terugbetaling volgens het beleid.",
+  },
+  {
+    q: "Hoe lang duurt verificatie?",
+    a: "Meestal 1–2 werkdagen (indicatie). Je ontvangt een e-mail zodra je profiel geverifieerd is.",
+  },
+  {
+    q: "Kan ik een boeking wijzigen?",
+    a: "Ja, vaak wel. Stuur via het platform een bericht met je wijziging; we kijken samen wat mogelijk is.",
+  },
+  {
+    q: "Wat als ik niet tevreden ben?",
+    a: "Neem direct contact op. We hanteren een proces voor support en geschillen om tot een eerlijke oplossing te komen.",
+  },
+  {
+    q: "Hoe worden DJs gescreend?",
+    a: "DJ’s doorlopen controles (o.a. identiteit/bedrijf) voordat ze als geverifieerd zichtbaar worden.",
+  },
+  {
+    q: "Zijn er extra kosten bovenop het uurtarief?",
+    a: "Soms reiskosten of extra apparatuur. Je ziet dit transparant (indicatie) voordat je een aanvraag verstuurt.",
+  },
+  {
+    q: "Hoe snel reageert een DJ gemiddeld?",
+    a: "Veel DJ’s reageren binnen enkele uren. Een verzoek heeft maximaal 24 uur om geaccepteerd te worden.",
+  },
+  {
+    q: "Kan ik meerdere DJs tegelijk aanvragen?",
+    a: "Ja. Je kunt meerdere aanvragen versturen om snel opties te vergelijken.",
+  },
+] as const;
+
 export function HowItWorksClient() {
-  const [tab, setTab] = useState<TabKey>("klant");
-  const steps = useMemo(() => (tab === "klant" ? klantSteps : djSteps), [tab]);
+  const [flow, setFlow] = useState<FlowKey>("klant");
+  const steps = useMemo(
+    () => (flow === "klant" ? customerSteps : djSteps),
+    [flow],
+  );
 
   return (
-    <div className="min-h-screen bg-white font-sans text-neutral-900">
+    <div className="bg-white">
+      {/* Hero */}
       <section className="relative isolate overflow-hidden border-b border-neutral-200 px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-24">
+        <div className="absolute inset-0 -z-20">
+          <Image
+            src={HERO_BG}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        </div>
         <div
-          className="absolute inset-0 -z-20 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${HERO_BG})` }}
+          className="absolute inset-0 -z-10 bg-gradient-to-b from-black/85 via-black/75 to-black/90"
           aria-hidden
         />
-        <div
-          className="absolute inset-0 -z-10 bg-gradient-to-b from-black/80 via-black/70 to-black/90"
-          aria-hidden
-        />
+
         <div className="relative mx-auto max-w-4xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-300">
-            Hoe het werkt
-          </p>
-          <h1 className="mt-4 text-balance text-3xl font-bold tracking-tight sm:text-5xl">
-            Boek een DJ zonder gedoe —{" "}
-            <span className="text-emerald-200">veilig en transparant</span>
+          <h1 className="text-balance text-3xl font-bold tracking-tight sm:text-5xl">
+            Hoe werkt bookadj?
           </h1>
-          <p className="mt-5 max-w-2xl text-base text-neutral-200 sm:text-lg">
-            Kies jouw flow: klant of DJ. In een paar duidelijke stappen weet je
-            precies wat er gebeurt.
+          <p className="mt-4 max-w-2xl text-base text-white/85 sm:text-lg">
+            Alles wat je moet weten — van zoeken tot feestje.
           </p>
 
-          <div className="mt-8 flex w-full flex-col gap-3 sm:flex-row">
-            <TabButton active={tab === "klant"} onClick={() => setTab("klant")}>
-              Voor klanten
-            </TabButton>
-            <TabButton active={tab === "dj"} onClick={() => setTab("dj")}>
-              Voor DJ&apos;s
-            </TabButton>
-          </div>
+          <FlowToggle value={flow} onChange={setFlow} />
         </div>
       </section>
 
+      {/* Section 1/2 steps */}
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
-            Stappenplan
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-700">
+            {flow === "klant" ? "Voor klanten" : "Voor DJ's"}
+          </p>
+          <h2 className="mt-3 text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
+            Stap voor stap
           </h2>
           <p className="mt-3 text-neutral-600">
-            Duidelijk, snel, en ontworpen voor vertrouwen.
+            Duidelijk proces, premium ervaring — zonder verrassingen.
           </p>
           <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-bookadj" aria-hidden />
         </div>
 
-        {/* Desktop timeline */}
-        <div className="relative mt-12 hidden md:block">
-          <div
-            className="pointer-events-none absolute left-0 right-0 top-8 h-px bg-emerald-200"
-            aria-hidden
-          />
-          <div
-            className={`grid gap-6 ${
-              steps.length === 3 ? "md:grid-cols-3" : "md:grid-cols-4"
-            }`}
-          >
-            {steps.map((s) => (
-              <article
-                key={s.n}
-                className="card-interactive relative z-10 flex h-full flex-col p-7"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <span className="text-2xl font-extrabold tracking-tight text-emerald-600">
-                    {s.n}
-                  </span>
-                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100">
-                    <s.Icon className="h-6 w-6" strokeWidth={1.75} aria-hidden />
-                  </span>
+        <StepTimeline steps={steps} />
+      </section>
+
+      {/* Section 3 — betaalflow */}
+      <section className="border-y border-neutral-200 bg-neutral-50 px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+        <div className="mx-auto max-w-7xl">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
+              Betaalflow (in het kort)
+            </h2>
+            <p className="mt-3 text-neutral-600">
+              Transparant en veilig: je weet precies waar je geld is.
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-4 lg:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] lg:items-center">
+            {(
+              [
+                { t: "Klant betaalt", d: "Betaal veilig via het platform.", Icon: CreditCard },
+                { t: "bookadj houdt vast", d: "Bescherming tot na het event.", Icon: ShieldCheck },
+                { t: "Event vindt plaats", d: "DJ draait, jij geniet.", Icon: ThumbsUp },
+                { t: "DJ ontvangt uitbetaling", d: "Uitbetaling na afloop.", Icon: Wallet },
+              ] as const
+            ).map((b, i) => (
+              <div key={b.t} className="contents">
+                <div className="card-interactive flex h-full flex-col gap-2 p-6">
+                  <b.Icon className="h-6 w-6 text-emerald-700" strokeWidth={1.75} aria-hidden />
+                  <p className="font-bold text-neutral-900">{b.t}</p>
+                  <p className="text-sm text-neutral-600">{b.d}</p>
                 </div>
-                <h3 className="mt-5 text-lg font-bold text-neutral-900">
-                  {s.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-                  {s.desc}
-                </p>
-              </article>
+                {i < 3 ? (
+                  <div className="hidden justify-center lg:flex" aria-hidden>
+                    <ArrowRight className="h-6 w-6 text-emerald-500" strokeWidth={2} />
+                  </div>
+                ) : null}
+              </div>
             ))}
           </div>
         </div>
-
-        {/* Mobile vertical timeline */}
-        <ol className="mt-12 space-y-4 md:hidden">
-          {steps.map((s, idx) => (
-            <li key={s.n} className="relative">
-              {idx < steps.length - 1 ? (
-                <div
-                  className="pointer-events-none absolute left-7 top-14 h-[calc(100%-1rem)] w-px bg-emerald-200"
-                  aria-hidden
-                />
-              ) : null}
-              <article className="card-interactive flex gap-4 p-5">
-                <div className="flex shrink-0 flex-col items-center">
-                  <span className="text-xl font-extrabold text-emerald-600">
-                    {s.n}
-                  </span>
-                  <span className="mt-3 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100">
-                    <s.Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden />
-                  </span>
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-base font-bold text-neutral-900">
-                    {s.title}
-                  </h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-neutral-600">
-                    {s.desc}
-                  </p>
-                </div>
-              </article>
-            </li>
-          ))}
-        </ol>
       </section>
 
-      <section className="relative isolate overflow-hidden border-t border-neutral-200 bg-neutral-950 px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-20">
-        <div
-          className="absolute inset-0 -z-20 bg-cover bg-center bg-no-repeat opacity-60"
-          style={{ backgroundImage: `url(${SECTION_BG})` }}
-          aria-hidden
-        />
-        <div
-          className="absolute inset-0 -z-10 bg-gradient-to-b from-black/85 via-black/80 to-black/90"
-          aria-hidden
-        />
-        <div className="relative mx-auto max-w-5xl">
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              {
-                t: "Geverifieerde profielen",
-                d: "DJ’s doorlopen checks voordat ze live gaan. Zo boek je met vertrouwen.",
-              },
-              {
-                t: "Transparante prijzen",
-                d: "Uurtarieven en indicaties zijn duidelijk. Geen verrassingen achteraf.",
-              },
-              {
-                t: "Support binnen 24 uur",
-                d: "Loop je vast? Mail ons of gebruik het supportformulier — we reageren snel op werkdagen.",
-              },
-            ].map((x) => (
-              <div
-                key={x.t}
-                className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all duration-200 hover:bg-white/10"
-              >
-                <p className="text-sm font-semibold text-emerald-200">{x.t}</p>
-                <p className="mt-2 text-sm leading-relaxed text-white/80">
-                  {x.d}
+      {/* Section 4 — annuleringsbeleid */}
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+        <div className="mx-auto max-w-3xl text-center">
+          <h2 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
+            Annuleringsbeleid (indicatie)
+          </h2>
+          <p className="mt-3 text-neutral-600">
+            Richtlijnen ten opzichte van de datum van je evenement.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
+          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6">
+            <p className="font-bold text-emerald-950">30+ dagen voor event</p>
+            <p className="mt-2 text-sm text-emerald-900/80">
+              Volledige terugbetaling
+            </p>
+          </div>
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6">
+            <p className="font-bold text-amber-950">14–30 dagen</p>
+            <p className="mt-2 text-sm text-amber-900/80">
+              Gedeeltelijke terugbetaling
+            </p>
+          </div>
+          <div className="rounded-2xl border border-red-200 bg-red-50 p-6">
+            <p className="font-bold text-red-950">Minder dan 14 dagen</p>
+            <p className="mt-2 text-sm text-red-900/80">
+              Geen terugbetaling
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 5 — FAQ */}
+      <section className="border-t border-neutral-200 bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="text-center text-2xl font-bold sm:text-3xl">
+            Veelgestelde vragen
+          </h2>
+          <div className="mt-10 divide-y divide-neutral-200 rounded-2xl border border-neutral-200 bg-white">
+            {faq.map((item) => (
+              <details key={item.q} className="group px-5 py-4">
+                <summary className="cursor-pointer list-none text-left font-semibold text-neutral-900 outline-none marker:content-none [&::-webkit-details-marker]:hidden">
+                  <span className="flex items-center justify-between gap-2">
+                    {item.q}
+                    <svg
+                      className="h-5 w-5 shrink-0 text-neutral-500 transition-transform group-open:rotate-180"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      aria-hidden
+                    >
+                      <path
+                        d="M5 7.5l5 5 5-5"
+                        stroke="currentColor"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                </summary>
+                <p className="mt-3 text-sm leading-relaxed text-neutral-600">
+                  {item.a}
                 </p>
-              </div>
+              </details>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section 6 — Contact CTA */}
+      <section className="bg-neutral-950 px-4 py-14 text-center text-white sm:px-6 lg:px-8 lg:py-20">
+        <div className="mx-auto max-w-2xl">
+          <h2 className="text-2xl font-bold sm:text-3xl">Nog vragen?</h2>
+          <p className="mt-3 text-white/75">
+            Ons team staat voor je klaar. We reageren binnen 24 uur op werkdagen.
+          </p>
+          <a
+            href="mailto:hallo@bookadj.nl"
+            className="mt-8 inline-flex min-h-[44px] items-center justify-center rounded-xl bg-white px-7 text-sm font-semibold text-neutral-900 transition-all duration-200 hover:bg-neutral-100"
+          >
+            <Mail className="mr-2 h-5 w-5" strokeWidth={1.75} aria-hidden />
+            hallo@bookadj.nl
+          </a>
+          <div className="mt-8">
+            <Link
+              href="/zoeken"
+              className="text-sm font-semibold text-emerald-200 underline underline-offset-4"
+            >
+              Of: bekijk DJ’s
+            </Link>
           </div>
         </div>
       </section>

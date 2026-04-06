@@ -34,6 +34,7 @@ import { DjProfileFaq } from "./dj-profile-faq";
 import { DjUspGrid, type UspItem } from "./dj-usp-grid";
 import { MediaTabs } from "./media-tabs";
 import { RelatedDjsCarousel } from "./related-djs-carousel";
+import { MobileStickyBookingBar } from "./mobile-sticky-booking-bar";
 
 export const dynamic = "force-dynamic";
 
@@ -320,6 +321,15 @@ export default async function DjProfilePage({ params }: PageProps) {
               ) : null}
             </div>
 
+            <div className="flex flex-wrap items-center gap-2 text-sm font-semibold text-neutral-900">
+              <StarRow value={displayRating} size="sm" />
+              <span>{displayRating.toFixed(1)}</span>
+              <span className="text-neutral-500">·</span>
+              <span className="text-neutral-600">
+                {totalReviews} {totalReviews === 1 ? "review" : "reviews"}
+              </span>
+            </div>
+
             {/* Location — forced dark */}
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm font-medium text-neutral-900">
               <span className="inline-flex items-center gap-1.5">
@@ -378,23 +388,6 @@ export default async function DjProfilePage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Booking panel — mobile placement (below DJ header) */}
-        <div className="mt-6 lg:hidden">
-          <BookingPanel
-            djId={id}
-            djUserId={djUserId || null}
-            hourlyRate={hourly}
-            homeLat={typeof profile.home_lat === "number" ? profile.home_lat : null}
-            homeLng={typeof profile.home_lng === "number" ? profile.home_lng : null}
-            ratePerKm={
-              typeof profile.rate_per_km === "number" ? profile.rate_per_km : null
-            }
-            contactButtonLabel={`Stel ${fn} een vraag`}
-            responseTimeLabel={metaResponse(profile)}
-            memberSinceLabel={formatSidebarMemberSince(profile)}
-          />
-        </div>
-
         <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_minmax(280px,360px)] lg:gap-12 lg:items-start">
           <div className="min-w-0 space-y-14">
             <MediaTabs
@@ -444,6 +437,29 @@ export default async function DjProfilePage({ params }: PageProps) {
                 ))}
               </ul>
             </section>
+
+            {/* Booking panel — mobile placement (after bio) */}
+            <div id="booking-panel-anchor" className="lg:hidden">
+              <BookingPanel
+                djId={id}
+                djUserId={djUserId || null}
+                hourlyRate={hourly}
+                homeLat={
+                  typeof profile.home_lat === "number" ? profile.home_lat : null
+                }
+                homeLng={
+                  typeof profile.home_lng === "number" ? profile.home_lng : null
+                }
+                ratePerKm={
+                  typeof profile.rate_per_km === "number"
+                    ? profile.rate_per_km
+                    : null
+                }
+                contactButtonLabel={`Stel ${fn} een vraag`}
+                responseTimeLabel={metaResponse(profile)}
+                memberSinceLabel={formatSidebarMemberSince(profile)}
+              />
+            </div>
 
             <DjUspGrid stageName={displayForBio} items={customUsps} />
 
@@ -593,6 +609,8 @@ export default async function DjProfilePage({ params }: PageProps) {
             />
           </aside>
         </div>
+
+        <MobileStickyBookingBar djId={id} hourlyRate={hourly} />
 
         <RelatedDjsCarousel djs={relatedDjs} />
 
