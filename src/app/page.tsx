@@ -12,7 +12,6 @@ import {
   MoreHorizontal,
   Music,
   Zap,
-  Lock,
 } from "lucide-react";
 import {
   getCity,
@@ -332,28 +331,6 @@ export default async function Home() {
       </section>
 
       <section
-        className="border-b border-neutral-200 bg-white px-4 py-12 sm:px-6 lg:px-8"
-        aria-label="Veilig betalen"
-      >
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 rounded-2xl border border-neutral-200 bg-neutral-50 px-6 py-6 text-center sm:flex-row sm:text-left">
-          <div className="flex items-center gap-3">
-            <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-black text-white">
-              <Lock className="h-5 w-5" strokeWidth={2} aria-hidden />
-            </span>
-            <div>
-              <p className="text-sm font-semibold text-neutral-900">
-                Veilig betalen
-              </p>
-              <p className="text-xs text-neutral-600">
-                256-bit SSL beveiliging · 500+ tevreden klanten
-              </p>
-            </div>
-          </div>
-          <PaymentMethodBadges className="justify-center sm:justify-end" />
-        </div>
-      </section>
-
-      <section
         className="border-b border-neutral-200 bg-neutral-50 px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
         aria-labelledby="new-heading"
       >
@@ -595,6 +572,9 @@ export default async function Home() {
           </h2>
           <p className="mt-2 text-sm text-neutral-600 sm:text-base">
             Betalingen verlopen via Stripe. Kies de methode die bij jou past.
+          </p>
+          <p className="mt-3 text-xs font-medium text-neutral-500">
+            256-bit SSL beveiliging · 500+ tevreden klanten
           </p>
           <PaymentMethodBadges
             className="mt-8 justify-center"
