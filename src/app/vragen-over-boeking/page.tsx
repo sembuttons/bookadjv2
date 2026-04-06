@@ -11,16 +11,19 @@ export const metadata = {
 export default function VragenOverBoekingPage() {
   return (
     <MarketingPageShell maxWidth="wide">
-      <p className="text-sm font-semibold uppercase tracking-wide text-green-400">
+      <p className="text-sm font-semibold uppercase tracking-wide text-green-600">
         Help
       </p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+      <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
         Vragen over je boeking
       </h1>
-      <p className="mt-4 max-w-2xl text-gray-400">
+      <p className="mt-4 max-w-2xl text-slate-600">
         Alles over aanvragen, betaling, annulering en wat er gebeurt als er iets
         misgaat. Staat je vraag er niet tussen?{" "}
-        <Link href="/contact" className="font-semibold text-white underline">
+        <Link
+          href="/contact"
+          className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700"
+        >
           Neem contact op
         </Link>
         .
@@ -76,7 +79,7 @@ export default function VragenOverBoekingPage() {
                   ons beleid. Lees meer op{" "}
                   <Link
                     href="/als-dj-annuleert"
-                    className="font-semibold text-white underline"
+                    className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700"
                   >
                     Als een DJ annuleert
                   </Link>
@@ -93,7 +96,7 @@ export default function VragenOverBoekingPage() {
                   meldt, hoe meer opties er meestal zijn. Bekijk{" "}
                   <Link
                     href="/betalingen-en-terugbetalingen"
-                    className="font-semibold text-white underline"
+                    className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700"
                   >
                     Betalingen en terugbetalingen
                   </Link>{" "}
@@ -122,7 +125,7 @@ export default function VragenOverBoekingPage() {
                   mee en bemiddelen waar nodig. Zie{" "}
                   <Link
                     href="/geschillen"
-                    className="font-semibold text-white underline"
+                    className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700"
                   >
                     Hulp bij problemen
                   </Link>

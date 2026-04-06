@@ -202,7 +202,7 @@ export default function DjBeschikbaarheidPage() {
           Niet beschikbaar
         </span>
         <span className="inline-flex items-center gap-2">
-          <span className="h-4 w-4 rounded bg-[#0f172a]/80 ring-1 ring-gray-800" />
+          <span className="h-4 w-4 rounded bg-gray-200 ring-1 ring-gray-300" />
           Verleden
         </span>
       </div>
@@ -213,10 +213,10 @@ export default function DjBeschikbaarheidPage() {
   if (loading) {
     return (
       <>
-        <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
           Beschikbaarheid
         </h1>
-        <p className="mt-2 text-sm text-gray-400">Kalender laden…</p>
+        <p className="mt-2 text-sm text-slate-600">Kalender laden…</p>
       </>
     );
   }
@@ -224,10 +224,10 @@ export default function DjBeschikbaarheidPage() {
   if (!djProfileId) {
     return (
       <>
-        <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
           Beschikbaarheid
         </h1>
-        <p className="mt-2 text-sm text-gray-400">
+        <p className="mt-2 text-sm text-slate-600">
           Je hebt nog geen DJ-profiel. Maak eerst een profiel aan om data te blokkeren.
         </p>
       </>
@@ -236,10 +236,10 @@ export default function DjBeschikbaarheidPage() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+      <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
         Beschikbaarheid
       </h1>
-      <p className="mt-1 text-sm text-gray-400">
+      <p className="mt-1 text-sm text-slate-600">
         Tik op een dag om deze als niet beschikbaar te markeren. Boekers kunnen die datum niet meer
         kiezen. Tik opnieuw om de blokkering op te heffen.
       </p>
@@ -250,22 +250,22 @@ export default function DjBeschikbaarheidPage() {
         </p>
       ) : null}
 
-      <div className="mt-8 max-w-lg rounded-2xl border border-gray-800 bg-[#111827] p-4 shadow-sm sm:p-6">
+      <div className="mt-8 max-w-lg rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-6">
         <div className="mb-4 flex items-center justify-between gap-2">
           <button
             type="button"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-[#0f172a]/80"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-gray-100"
             aria-label="Vorige maand"
             onClick={() => setCursor(new Date(year, month - 1, 1))}
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
-          <p className="min-w-0 flex-1 text-center text-sm font-semibold capitalize text-white">
+          <p className="min-w-0 flex-1 text-center text-sm font-semibold capitalize text-slate-900">
             {MONTHS_NL[month]} {year}
           </p>
           <button
             type="button"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-[#0f172a]/80"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-gray-100"
             aria-label="Volgende maand"
             onClick={() => setCursor(new Date(year, month + 1, 1))}
           >
@@ -298,10 +298,10 @@ export default function DjBeschikbaarheidPage() {
                 className={[
                   "flex aspect-square items-center justify-center rounded-lg text-sm font-medium transition-colors",
                   isPast
-                    ? "cursor-not-allowed bg-[#0f172a] text-gray-400"
+                    ? "cursor-not-allowed bg-gray-100 text-gray-400"
                     : isBlocked
                       ? "bg-red-100 font-semibold text-red-900 ring-1 ring-red-200 hover:bg-red-200/80"
-                      : "bg-[#052e16] text-green-400 ring-1 ring-green-800/35 hover:bg-[#052e16]/70",
+                      : "bg-green-50 font-medium text-green-800 ring-1 ring-green-200 hover:bg-green-100",
                 ].join(" ")}
               >
                 {isWorking ? "…" : day}

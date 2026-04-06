@@ -48,11 +48,11 @@ export function SupportFaqAccordion() {
         return (
           <div
             key={item.q}
-            className="overflow-hidden rounded-xl border border-gray-800 bg-[#111827] shadow-sm transition-all duration-200"
+            className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200"
           >
             <button
               type="button"
-              className="flex w-full min-h-[44px] items-center justify-between gap-3 px-4 py-3 text-left text-sm font-semibold text-white md:px-5 md:py-4 md:text-base"
+              className="flex w-full min-h-[44px] items-center justify-between gap-3 px-4 py-3 text-left text-sm font-semibold text-slate-900 md:px-5 md:py-4 md:text-base"
               aria-expanded={isOpen}
               onClick={() => setOpen(isOpen ? null : i)}
             >
@@ -65,7 +65,7 @@ export function SupportFaqAccordion() {
               />
             </button>
             {isOpen ? (
-              <div className="border-t border-gray-800/60 px-4 py-3 text-sm leading-relaxed text-gray-400 md:px-5 md:py-4">
+              <div className="border-t border-gray-200 px-4 py-3 text-sm leading-relaxed text-slate-600 md:px-5 md:py-4">
                 {item.a}
               </div>
             ) : null}
@@ -118,17 +118,17 @@ export function SupportContactForm() {
   return (
     <form
       onSubmit={(e) => void onSubmit(e)}
-      className="space-y-4 rounded-2xl border border-gray-800 bg-[#111827] p-5 shadow-sm md:p-8"
+      className="space-y-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm md:p-8"
     >
-      <h2 className="text-lg font-bold text-white md:text-xl">
+      <h2 className="text-lg font-bold text-slate-900 md:text-xl">
         Contact opnemen
       </h2>
-      <p className="text-sm text-gray-400">
+      <p className="text-sm text-slate-600">
         Vul het formulier in. We beantwoorden je bericht zo snel mogelijk.
       </p>
 
       <label className="flex flex-col gap-2">
-        <span className="text-sm font-semibold text-white">Naam</span>
+        <span className="text-sm font-semibold text-gray-700">Naam</span>
         <input
           name="name"
           value={name}
@@ -139,7 +139,7 @@ export function SupportContactForm() {
         />
       </label>
       <label className="flex flex-col gap-2">
-        <span className="text-sm font-semibold text-white">E-mail</span>
+        <span className="text-sm font-semibold text-gray-700">E-mail</span>
         <input
           name="email"
           type="email"
@@ -151,7 +151,7 @@ export function SupportContactForm() {
         />
       </label>
       <label className="flex flex-col gap-2">
-        <span className="text-sm font-semibold text-white">Bericht</span>
+        <span className="text-sm font-semibold text-gray-700">Bericht</span>
         <textarea
           name="message"
           value={message}
@@ -179,7 +179,7 @@ export function SupportContactForm() {
         </p>
       ) : null}
       {status === "ok" ? (
-        <p className="text-sm font-medium text-green-400" role="status">
+        <p className="text-sm font-medium text-green-700" role="status">
           Bedankt! Je bericht is verstuurd.
         </p>
       ) : null}
@@ -187,7 +187,7 @@ export function SupportContactForm() {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="inline-flex min-h-[44px] w-full items-center justify-center rounded-lg bg-gray-800 px-6 text-sm font-semibold text-white transition-all duration-200 hover:bg-gray-700 disabled:opacity-60 sm:w-auto"
+        className="inline-flex min-h-[44px] w-full items-center justify-center rounded-lg bg-green-500 px-6 text-sm font-bold text-black transition-all duration-200 hover:bg-green-400 disabled:opacity-60 sm:w-auto"
       >
         {status === "sending" ? "Versturen…" : "Verstuur bericht"}
       </button>

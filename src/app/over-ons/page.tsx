@@ -8,22 +8,22 @@ export const metadata = {
 export default function OverOnsPage() {
   return (
     <MarketingPageShell maxWidth="medium">
-      <p className="text-sm font-semibold uppercase tracking-wide text-green-400">
+      <p className="text-sm font-semibold uppercase tracking-wide text-green-600">
         Team bookadj
       </p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+      <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
         Over ons
       </h1>
 
-      <p className="mt-6 text-lg font-medium leading-relaxed text-white">
+      <p className="mt-6 text-lg font-medium leading-relaxed text-gray-700">
         bookadj is gebouwd voor DJ&apos;s die serieus zijn en klanten die
         zekerheid willen. Geen gedoe, geen onzekerheid — gewoon een betrouwbaar
         platform waar talent en gelegenheid elkaar vinden.
       </p>
 
       <section className="mt-12">
-        <h2 className="text-xl font-bold text-white">Onze missie</h2>
-        <p className="mt-4 text-gray-400">
+        <h2 className="text-xl font-bold text-gray-900">Onze missie</h2>
+        <p className="mt-4 text-gray-700">
           Wij willen boeken van een DJ net zo eenvoudig en veilig maken als online
           shoppen: duidelijke profielen, transparante prijzen, betaling via het
           platform en support als er iets misgaat. Tegelijk geven wij DJ&apos;s
@@ -33,8 +33,8 @@ export default function OverOnsPage() {
       </section>
 
       <section className="mt-12">
-        <h2 className="text-xl font-bold text-white">Het bookadj-verhaal</h2>
-        <div className="mt-4 space-y-4 text-gray-400">
+        <h2 className="text-xl font-bold text-gray-900">Het bookadj-verhaal</h2>
+        <div className="mt-4 space-y-4 text-gray-700">
           <p>
             Ik ben ooit begonnen omdat ik zag hoe vaak het misging: afspraken via
             Instagram, geen contract, geen duidelijkheid over betaling — en aan
@@ -53,7 +53,17 @@ export default function OverOnsPage() {
         </div>
       </section>
 
-      <figure className="mt-12 overflow-hidden rounded-2xl border border-gray-800 bg-[#111827] shadow-sm">
+      <blockquote className="mt-12 rounded-2xl border border-gray-200 border-l-4 border-l-green-500 bg-white py-5 pl-6 pr-5 shadow-sm">
+        <p className="text-base leading-relaxed text-gray-700">
+          &ldquo;We bouwen bookadj voor iedereen die van live muziek houdt — en
+          voor DJ&apos;s die hun vak serieus nemen.&rdquo;
+        </p>
+        <footer className="mt-3 text-sm font-semibold text-gray-900">
+          — Founder, bookadj
+        </footer>
+      </blockquote>
+
+      <figure className="mt-12 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
         <img
           src="https://images.unsplash.com/photo-1571266028243-e631f2e28e4b?w=1200&q=80&auto=format&fit=crop"
           alt="Publiek bij een donker verlicht live-evenement"
@@ -62,28 +72,28 @@ export default function OverOnsPage() {
           height={675}
           loading="lazy"
         />
-        <figcaption className="border-t border-gray-800 bg-[#111827] px-4 py-3 text-center text-sm text-gray-400">
+        <figcaption className="border-t border-gray-200 bg-white px-4 py-3 text-center text-sm text-slate-600">
           Sfeerbeeld: waar bookadj voor staat — live muziek, energie en
           professionele uitvoering.{" "}
           <a
             href="https://unsplash.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-green-400 underline"
+            className="font-medium text-green-600 underline decoration-green-500/40 hover:text-green-700"
           >
             Unsplash
           </a>
         </figcaption>
       </figure>
 
-      <section className="mt-12 rounded-2xl border border-dashed border-gray-800 bg-[#0f172a] p-8 text-center">
-        <h2 className="text-xl font-bold text-white">Het team</h2>
-        <p className="mt-3 text-sm text-gray-400">
+      <section className="mt-12 rounded-2xl border border-dashed border-gray-200 bg-white p-8 text-center shadow-sm">
+        <h2 className="text-xl font-bold text-gray-900">Het team</h2>
+        <p className="mt-3 text-sm text-gray-700">
           Hier komen binnenkort namen en rollen. Heb je zin om mee te bouwen?
           Mail{" "}
           <a
             href="mailto:hallo@bookadj.nl"
-            className="font-semibold text-green-400 underline"
+            className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700"
           >
             hallo@bookadj.nl
           </a>

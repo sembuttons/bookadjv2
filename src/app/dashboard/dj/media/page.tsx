@@ -161,7 +161,7 @@ export default function DjMediaPage() {
   if (loading) {
     return (
       <>
-        <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
           Media &amp; links
         </h1>
         <p className="mt-2 text-sm text-gray-400">Laden…</p>
@@ -172,7 +172,7 @@ export default function DjMediaPage() {
   if (!djProfileId) {
     return (
       <>
-        <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
           Media &amp; links
         </h1>
         <p className="mt-2 text-sm text-gray-400">
@@ -185,7 +185,7 @@ export default function DjMediaPage() {
   return (
     <div className="space-y-10">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
           Media &amp; links
         </h1>
         <p className="mt-1 text-sm text-gray-400">
@@ -205,8 +205,8 @@ export default function DjMediaPage() {
         </p>
       ) : null}
 
-      <section className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm">
-        <h2 className="text-lg font-bold text-white">Foto&apos;s</h2>
+      <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 className="text-lg font-bold text-slate-900">Foto&apos;s</h2>
         <p className="mt-1 text-sm text-gray-400">
           Plak URL&apos;s van Unsplash of je eigen hosting (max. 6).
         </p>
@@ -235,7 +235,7 @@ export default function DjMediaPage() {
             {photos.map((url, i) => (
               <li
                 key={`${url}-${i}`}
-                className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-gray-800 bg-[#0f172a]/80"
+                className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-gray-200 bg-gray-50"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={url} alt="" className="absolute inset-0 h-full w-full object-cover" />
@@ -243,7 +243,7 @@ export default function DjMediaPage() {
                   type="button"
                   disabled={saving}
                   onClick={() => void removePhoto(i)}
-                  className="absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded-lg bg-[#0a0a0a]/80 text-white opacity-0 ring-1 ring-gray-800 transition-opacity hover:bg-gray-700 group-hover:opacity-100 disabled:opacity-40"
+                  className="absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white/95 text-slate-700 opacity-0 shadow-sm transition-opacity hover:bg-gray-50 group-hover:opacity-100 disabled:opacity-40"
                   aria-label="Foto verwijderen"
                 >
                   <Trash2 className="h-4 w-4" aria-hidden />
@@ -256,8 +256,8 @@ export default function DjMediaPage() {
         )}
       </section>
 
-      <section className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm">
-        <h2 className="text-lg font-bold text-white">Video</h2>
+      <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 className="text-lg font-bold text-slate-900">Video</h2>
         <p className="mt-1 text-sm text-gray-400">YouTube- of Vimeo-link naar je showcase-set.</p>
         <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
           <input
@@ -280,7 +280,7 @@ export default function DjMediaPage() {
           </button>
         </div>
         {embedSrc ? (
-          <div className="mt-6 aspect-video w-full max-w-2xl overflow-hidden rounded-xl border border-gray-800 bg-black">
+          <div className="mt-6 aspect-video w-full max-w-2xl overflow-hidden rounded-xl border border-gray-200 bg-black">
             <iframe
               title="Video preview"
               src={embedSrc}
@@ -292,8 +292,8 @@ export default function DjMediaPage() {
         ) : null}
       </section>
 
-      <section className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm">
-        <h2 className="text-lg font-bold text-white">Instagram &amp; SoundCloud</h2>
+      <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 className="text-lg font-bold text-slate-900">Instagram &amp; SoundCloud</h2>
         <p className="mt-1 text-sm text-gray-400">
           Wordt op je profiel getoond zodra beide kloppen (optioneel per link).
         </p>

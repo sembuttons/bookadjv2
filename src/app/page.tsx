@@ -237,23 +237,23 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Trust — Fiverr-style: dark left, photo right */}
+      {/* Trust — white content, photo right */}
       <section
-        className="bg-white px-0 py-16 sm:py-20 lg:py-24"
+        className="bg-white px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24"
         aria-labelledby="trust-pro-heading"
       >
-        <div className="mx-auto grid max-w-7xl lg:grid-cols-2 lg:gap-0">
-          <div className="bg-[#0a0a0a] px-4 py-14 text-white sm:px-8 lg:rounded-l-3xl lg:px-12 lg:py-16">
-            <p className="text-sm font-semibold uppercase tracking-widest text-green-400">
+        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-widest text-green-600">
               Kwaliteit &amp; veiligheid
             </p>
             <h2
               id="trust-pro-heading"
-              className="mt-3 text-3xl font-black tracking-tight sm:text-4xl"
+              className="mt-3 text-3xl font-black tracking-tight text-slate-900 sm:text-4xl"
             >
               Boek met vertrouwen
             </h2>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-gray-400">
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-slate-600">
               Eerlijke informatie, duidelijke afspraken en een platform dat met
               je meedenkt — van eerste klik tot na het feest.
             </p>
@@ -285,13 +285,13 @@ export default async function Home() {
               ).map(({ Icon, title, text }) => (
                 <li
                   key={title}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-5 transition-shadow duration-200 hover:shadow-md"
+                  className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-shadow duration-200 hover:shadow-md"
                 >
-                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-green-500/20 to-green-600/30 text-green-400">
+                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 text-green-600 ring-1 ring-green-100">
                     <Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden />
                   </span>
-                  <h3 className="mt-4 font-bold text-white">{title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-gray-400">
+                  <h3 className="mt-4 font-bold text-slate-900">{title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">
                     {text}
                   </p>
                 </li>
@@ -300,13 +300,13 @@ export default async function Home() {
 
             <Link
               href="/zoeken"
-              className="mt-10 inline-flex rounded-xl bg-gradient-to-r from-green-500 to-green-400 px-8 py-3 text-sm font-bold text-black transition-all duration-150 hover:from-green-400 hover:to-green-300 active:scale-[0.98]"
+              className="mt-10 inline-flex rounded-xl bg-green-500 px-8 py-3 text-sm font-bold text-black transition-all duration-150 hover:bg-green-400 active:scale-[0.98]"
             >
               Ontdek DJ&apos;s
             </Link>
           </div>
 
-          <div className="relative min-h-[320px] bg-gray-100 px-4 py-10 sm:px-8 lg:rounded-r-3xl lg:py-0">
+          <div className="relative min-h-[280px] bg-gray-50 px-4 py-8 sm:px-6 lg:rounded-3xl lg:py-10">
             <div className="relative mx-auto flex h-full min-h-[280px] w-full max-w-lg items-center justify-center lg:absolute lg:inset-0 lg:mx-0 lg:max-w-none">
               <div
                 className="aspect-[4/3] w-full max-w-md overflow-hidden rounded-3xl bg-gray-200 bg-cover bg-center shadow-xl lg:max-w-lg lg:self-center"
@@ -395,7 +395,7 @@ export default async function Home() {
                 return (
                   <li key={dj.id}>
                     <Link href={`/dj/${dj.id}`}>
-                      <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gray-200/80">
+                      <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gray-200/80">
                         <div className="relative flex aspect-[5/3] items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
                           <span className="absolute left-3 top-3 z-[1] rounded-full bg-gradient-to-r from-green-500 to-green-400 px-2 py-0.5 text-xs font-bold text-black shadow-sm">
                             Geverifieerd
@@ -467,7 +467,7 @@ export default async function Home() {
       {/* How it works */}
       <section
         id="hoe-het-werkt"
-        className="bg-gradient-to-b from-white to-[#f0fdf4] px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
+        className="bg-white px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
         aria-labelledby="how-heading"
       >
         <div className="mx-auto max-w-7xl">
@@ -525,7 +525,7 @@ export default async function Home() {
               ] as const
             ).map((step) => (
               <li key={step.n} className="relative">
-                <article className="h-full rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                <article className="h-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
                   <span className="relative z-[1] flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-green-600 text-lg font-black text-black shadow-sm">
                     {step.n}
                   </span>
@@ -545,26 +545,12 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Stats band */}
+      {/* Trust bar — light, payment-friendly */}
       <section
-        className="relative overflow-hidden px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
-        style={{
-          background: "linear-gradient(135deg, #0a0a0a 0%, #052e16 100%)",
-        }}
+        className="border-y border-gray-200 bg-gray-50 px-4 py-12 sm:px-6 lg:px-8 lg:py-14"
         aria-label="Waarom bookadj"
       >
-        <div
-          className="pointer-events-none absolute inset-0 opacity-100"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(34,197,94,0.03) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(34,197,94,0.03) 1px, transparent 1px)
-            `,
-            backgroundSize: "32px 32px",
-          }}
-          aria-hidden
-        />
-        <div className="relative mx-auto grid max-w-7xl gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
           {(
             [
               {
@@ -586,13 +572,26 @@ export default async function Home() {
             ] as const
           ).map(({ head, text }) => (
             <div key={head} className="text-center sm:text-left">
-              <p className="text-4xl font-black tracking-tight text-transparent sm:text-5xl bg-gradient-to-r from-green-400 to-green-300 bg-clip-text">
+              <p className="text-2xl font-black tracking-tight text-green-600 sm:text-3xl">
                 {head}
               </p>
-              <p className="mt-2 text-sm leading-relaxed text-gray-400">
+              <p className="mt-2 text-sm leading-relaxed text-gray-600">
                 {text}
               </p>
             </div>
+          ))}
+        </div>
+        <div
+          className="mx-auto mt-8 flex max-w-7xl flex-wrap items-center justify-center gap-2 border-t border-gray-200 pt-8"
+          aria-label="Betaalmethoden"
+        >
+          {["iDEAL", "Visa", "Mastercard", "Apple Pay"].map((m) => (
+            <span
+              key={m}
+              className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600"
+            >
+              {m}
+            </span>
           ))}
         </div>
       </section>
@@ -620,7 +619,7 @@ export default async function Home() {
             {reviews.map((r) => (
               <blockquote
                 key={r.name}
-                className="min-w-[min(100%,280px)] max-w-sm shrink-0 snap-start rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-200 hover:border-green-200 hover:shadow-md sm:min-w-[300px]"
+                className="min-w-[min(100%,280px)] max-w-sm shrink-0 snap-start rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-200 hover:border-green-200 hover:shadow-md sm:min-w-[300px]"
               >
                 <StarRow value={r.rating} />
                 <p className="mt-4 text-sm leading-relaxed text-slate-600">

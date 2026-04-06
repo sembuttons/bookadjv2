@@ -91,7 +91,7 @@ export function TimePickerPopover({
         onClick={() => setOpen((v) => !v)}
         className={
           triggerClassName ??
-          "flex h-[42px] w-full items-center rounded-lg border border-gray-800 bg-[#111827] px-3 py-2.5 text-left text-sm text-white outline-none ring-black transition-[box-shadow] focus:border-green-800 focus:ring-2"
+          "flex h-[42px] w-full items-center rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-left text-sm text-slate-900 outline-none transition-[box-shadow] focus:border-green-400 focus:ring-2 focus:ring-green-400/20"
         }
       >
         <span className={display ? "" : "text-gray-500"}>
@@ -104,7 +104,7 @@ export function TimePickerPopover({
           ref={popoverRef}
           role="dialog"
           aria-label="Tijd kiezen"
-          className={`absolute top-full z-[60] mt-2 max-h-64 w-[min(100vw-2rem,200px)] overflow-y-auto rounded-2xl border border-gray-800 bg-[#111827] p-2 shadow-2xl ring-1 ring-gray-800/30 ${popAlign}`}
+          className={`absolute top-full z-[60] mt-2 max-h-64 w-[min(100vw-2rem,200px)] overflow-y-auto rounded-2xl border border-gray-200 bg-white p-2 shadow-xl ring-1 ring-gray-100 ${popAlign}`}
         >
           <div className="grid grid-cols-1 gap-0.5">
             {SLOTS.map((slot) => (
@@ -119,7 +119,7 @@ export function TimePickerPopover({
                   "rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors",
                   value === slot
                     ? "bg-green-500 text-black font-bold"
-                    : "text-white hover:bg-[#0f172a]",
+                    : "text-slate-700 hover:bg-gray-50",
                 ].join(" ")}
               >
                 {slot}

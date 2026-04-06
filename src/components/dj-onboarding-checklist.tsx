@@ -67,25 +67,25 @@ export function DjOnboardingChecklist({
 
   return (
     <section
-      className="rounded-2xl border border-green-800/40 bg-gradient-to-br from-[#052e16] to-[#0a0a0a] p-6 shadow-sm ring-1 ring-green-800/35"
+      className="rounded-2xl border border-green-200 bg-[#f0fdf4] p-6 shadow-sm"
       aria-labelledby="onboarding-heading"
     >
-      <h2 id="onboarding-heading" className="text-lg font-bold text-white">
+      <h2 id="onboarding-heading" className="text-lg font-bold text-slate-900">
         Maak je profiel compleet
       </h2>
-      <p className="mt-1 text-sm text-gray-400">
+      <p className="mt-1 text-sm text-slate-600">
         Een volledig profiel trekt meer serieuze boekingen. Je staat op{" "}
-        <span className="font-semibold text-white">{steps.doneCount}/4</span>.
+        <span className="font-semibold text-slate-900">{steps.doneCount}/4</span>.
       </p>
-      <div className="mt-4 h-2 overflow-hidden rounded-full bg-[#052e16]/70">
+      <div className="mt-4 h-2 overflow-hidden rounded-full bg-green-100">
         <div
           className="h-full rounded-full bg-green-500 transition-all duration-500"
           style={{ width: `${pct}%` }}
         />
       </div>
-      <ul className="mt-5 space-y-2 text-sm text-white">
+      <ul className="mt-5 space-y-2 text-sm text-slate-700">
         <li className="flex items-start gap-2">
-          <span className="mt-0.5 text-green-400" aria-hidden>
+          <span className="mt-0.5 text-green-600" aria-hidden>
             ✓
           </span>
           <span>
@@ -98,7 +98,7 @@ export function DjOnboardingChecklist({
           </span>
           <span>
             Foto&apos;s toegevoegd —{" "}
-            <Link href="/dashboard/dj/media" className="font-semibold text-green-500 underline">
+            <Link href="/dashboard/dj/media" className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700">
               Media &amp; links
             </Link>
           </span>
@@ -109,7 +109,7 @@ export function DjOnboardingChecklist({
           </span>
           <span>
             Video gelinkt —{" "}
-            <Link href="/dashboard/dj/media" className="font-semibold text-green-500 underline">
+            <Link href="/dashboard/dj/media" className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700">
               Media &amp; links
             </Link>
           </span>
@@ -120,7 +120,7 @@ export function DjOnboardingChecklist({
           </span>
           <span>
             Instagram &amp; Soundcloud gekoppeld —{" "}
-            <Link href="/dashboard/dj/media" className="font-semibold text-green-500 underline">
+            <Link href="/dashboard/dj/media" className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700">
               Media &amp; links
             </Link>
           </span>

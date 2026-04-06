@@ -10,7 +10,7 @@ const ONDERWERPEN = [
 ] as const;
 
 const inputCls = "input-field mt-2";
-const labelCls = "text-sm font-semibold text-white";
+const labelCls = "text-sm font-semibold text-gray-700";
 
 export function ContactForm() {
   const [name, setName] = useState("");
@@ -60,11 +60,11 @@ export function ContactForm() {
   if (status === "ok") {
     return (
       <div
-        className="rounded-xl border border-green-500/25 bg-green-500/10 px-5 py-6 text-white"
+        className="rounded-xl border border-green-200 bg-green-50 px-5 py-6 text-slate-900"
         role="status"
       >
-        <p className="font-semibold">Bedankt! Je bericht is verstuurd.</p>
-        <p className="mt-2 text-sm text-gray-400">
+        <p className="font-semibold text-slate-900">Bedankt! Je bericht is verstuurd.</p>
+        <p className="mt-2 text-sm text-slate-600">
           We reageren zo snel mogelijk op{" "}
           <span className="font-medium">hallo@bookadj.nl</span>.
         </p>
@@ -83,7 +83,7 @@ export function ContactForm() {
     <form
       noValidate
       onSubmit={(e) => void onSubmit(e)}
-      className="space-y-5 rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm sm:p-8"
+      className="space-y-5 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8"
     >
       <input
         type="text"

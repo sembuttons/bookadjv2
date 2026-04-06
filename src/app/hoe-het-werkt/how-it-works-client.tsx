@@ -123,7 +123,7 @@ function StepTimeline({ steps }: { steps: Step[] }) {
       {/* Desktop: horizontal connector */}
       <div className="relative mt-12 hidden lg:block">
         <div
-          className="pointer-events-none absolute left-6 right-6 top-10 h-px bg-green-800/50"
+          className="pointer-events-none absolute left-6 right-6 top-10 h-px bg-green-200"
           aria-hidden
         />
         <div className="grid gap-6 lg:grid-cols-4">
@@ -133,17 +133,17 @@ function StepTimeline({ steps }: { steps: Step[] }) {
               className="card-interactive relative z-10 flex h-full flex-col p-7"
             >
               <div className="flex items-start justify-between gap-4">
-                <span className="text-2xl font-extrabold tracking-tight text-green-400">
+                <span className="text-2xl font-extrabold tracking-tight text-green-600">
                   {s.n}
                 </span>
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#052e16] text-green-400 ring-1 ring-green-800/35">
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-600 ring-1 ring-green-100">
                   <s.Icon className="h-6 w-6" strokeWidth={1.75} aria-hidden />
                 </span>
               </div>
-              <h3 className="mt-5 text-lg font-bold text-white">
+              <h3 className="mt-5 text-lg font-bold text-slate-900">
                 {s.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-gray-500">
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
                 {s.desc}
               </p>
             </article>
@@ -157,24 +157,24 @@ function StepTimeline({ steps }: { steps: Step[] }) {
           <li key={s.n} className="relative">
             {idx < steps.length - 1 ? (
               <div
-                className="pointer-events-none absolute left-7 top-14 h-[calc(100%-1rem)] w-px bg-green-800/50"
+                className="pointer-events-none absolute left-7 top-14 h-[calc(100%-1rem)] w-px bg-green-200"
                 aria-hidden
               />
             ) : null}
             <article className="card-interactive flex gap-4 p-5">
               <div className="flex shrink-0 flex-col items-center">
-                <span className="text-xl font-extrabold text-green-400">
+                <span className="text-xl font-extrabold text-green-600">
                   {s.n}
                 </span>
-                <span className="mt-3 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-[#052e16] text-green-400 ring-1 ring-green-800/35">
+                <span className="mt-3 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-green-50 text-green-600 ring-1 ring-green-100">
                   <s.Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden />
                 </span>
               </div>
               <div className="min-w-0">
-                <h3 className="text-base font-bold text-white">
+                <h3 className="text-base font-bold text-slate-900">
                   {s.title}
                 </h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-gray-500">
+                <p className="mt-1.5 text-sm leading-relaxed text-slate-600">
                   {s.desc}
                 </p>
               </div>
@@ -261,21 +261,6 @@ export function HowItWorksClient() {
             Van zoeken naar de perfecte DJ tot een onvergetelijk feest — wij regelen het.
           </p>
 
-          <div className="mt-10 flex w-full max-w-md flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center sm:gap-4">
-            <Link
-              href="/zoeken"
-              className="inline-flex min-h-[48px] items-center justify-center rounded-xl bg-green-500 px-8 py-3 text-sm font-bold text-black shadow-lg shadow-green-500/25 transition-all duration-200 hover:bg-green-400"
-            >
-              Ik zoek een DJ
-            </Link>
-            <Link
-              href="/voor-djs"
-              className="inline-flex min-h-[48px] items-center justify-center rounded-xl border border-green-800/40 bg-[#0f172a]/50 px-8 py-3 text-sm font-bold text-white backdrop-blur-sm transition-all duration-200 hover:border-green-800 hover:bg-[#0f172a]"
-            >
-              Ik ben een DJ
-            </Link>
-          </div>
-
           <div className="mt-12 w-full max-w-md sm:max-w-lg">
             <FlowToggle value={flow} onChange={setFlow} />
           </div>
@@ -306,16 +291,16 @@ export function HowItWorksClient() {
       {/* Section 1/2 steps */}
       <section
         id="stap-voor-stap"
-        className="mx-auto max-w-7xl scroll-mt-24 bg-gradient-to-b from-[#0a0a0a] via-[#0b100e] to-[#0a0a0a] px-4 py-14 sm:px-6 lg:px-8 lg:py-20"
+        className="mx-auto max-w-7xl scroll-mt-24 bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20"
       >
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-green-400">
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-green-600">
             {flow === "klant" ? "Voor klanten" : "Voor DJ's"}
           </p>
-          <h2 className="mt-3 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+          <h2 className="mt-3 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
             Stap voor stap
           </h2>
-          <p className="mt-3 text-gray-400">
+          <p className="mt-3 text-slate-600">
             Duidelijk proces, premium ervaring — zonder verrassingen.
           </p>
           <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-green-500" aria-hidden />
@@ -325,13 +310,13 @@ export function HowItWorksClient() {
       </section>
 
       {/* Section 3 — betaalflow */}
-      <section className="bg-gradient-to-b from-[#0a0a0a] via-[#0c1411] to-[#0a0a0a] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+      <section className="bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+            <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
               Betaalflow (in het kort)
             </h2>
-            <p className="mt-3 text-gray-400">
+            <p className="mt-3 text-slate-600">
               Transparant en veilig: je weet precies waar je geld is.
             </p>
           </div>
@@ -347,13 +332,13 @@ export function HowItWorksClient() {
             ).map((b, i) => (
               <div key={b.t} className="contents">
                 <div className="card-interactive flex h-full flex-col gap-2 p-6">
-                  <b.Icon className="h-6 w-6 text-green-400" strokeWidth={1.75} aria-hidden />
-                  <p className="font-bold text-white">{b.t}</p>
-                  <p className="text-sm text-gray-400">{b.d}</p>
+                  <b.Icon className="h-6 w-6 text-green-600" strokeWidth={1.75} aria-hidden />
+                  <p className="font-bold text-slate-900">{b.t}</p>
+                  <p className="text-sm text-slate-600">{b.d}</p>
                 </div>
                 {i < 3 ? (
                   <div className="hidden justify-center lg:flex" aria-hidden>
-                    <ArrowRight className="h-6 w-6 text-green-500" strokeWidth={2} />
+                    <ArrowRight className="h-6 w-6 text-green-600" strokeWidth={2} />
                   </div>
                 ) : null}
               </div>
@@ -363,20 +348,20 @@ export function HowItWorksClient() {
       </section>
 
       {/* Section 4 — annuleringsbeleid */}
-      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+      <section className="mx-auto max-w-7xl bg-gray-50 px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
             Annuleringsbeleid (indicatie)
           </h2>
-          <p className="mt-3 text-gray-400">
+          <p className="mt-3 text-slate-600">
             Richtlijnen ten opzichte van de datum van je evenement.
           </p>
         </div>
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
-          <div className="rounded-2xl border border-green-800/40 bg-[#052e16] p-6">
-            <p className="font-bold text-green-400">30+ dagen voor event</p>
-            <p className="mt-2 text-sm text-green-400/80">
+          <div className="rounded-2xl border border-green-200 bg-green-50 p-6">
+            <p className="font-bold text-green-800">30+ dagen voor event</p>
+            <p className="mt-2 text-sm text-green-700">
               Volledige terugbetaling
             </p>
           </div>
@@ -396,19 +381,19 @@ export function HowItWorksClient() {
       </section>
 
       {/* Section 5 — FAQ */}
-      <section className="bg-gradient-to-b from-[#0a0a0a] via-[#0b100e] to-[#0a0a0a] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+      <section className="bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-3xl">
-          <h2 className="text-center text-2xl font-bold sm:text-3xl">
+          <h2 className="text-center text-2xl font-bold text-slate-900 sm:text-3xl">
             Veelgestelde vragen
           </h2>
-          <div className="mt-10 divide-y divide-gray-800 rounded-2xl border border-gray-800 bg-[#111827]">
+          <div className="mt-10 divide-y divide-gray-200 rounded-2xl border border-gray-200 bg-white shadow-sm">
             {faq.map((item) => (
               <details key={item.q} className="group px-5 py-4">
-                <summary className="cursor-pointer list-none text-left font-semibold text-white outline-none marker:content-none [&::-webkit-details-marker]:hidden">
+                <summary className="cursor-pointer list-none text-left font-semibold text-slate-900 outline-none marker:content-none [&::-webkit-details-marker]:hidden">
                   <span className="flex items-center justify-between gap-2">
                     {item.q}
                     <svg
-                      className="h-5 w-5 shrink-0 text-gray-500 transition-transform group-open:rotate-180"
+                      className="h-5 w-5 shrink-0 text-slate-400 transition-transform group-open:rotate-180"
                       viewBox="0 0 20 20"
                       fill="none"
                       aria-hidden
@@ -423,7 +408,7 @@ export function HowItWorksClient() {
                     </svg>
                   </span>
                 </summary>
-                <p className="mt-3 text-sm leading-relaxed text-gray-400">
+                <p className="mt-3 text-sm leading-relaxed text-slate-600">
                   {item.a}
                 </p>
               </details>
@@ -433,23 +418,23 @@ export function HowItWorksClient() {
       </section>
 
       {/* Section 6 — Contact CTA */}
-      <section className="bg-[#0a0a0a] px-4 py-14 text-center text-white sm:px-6 lg:px-8 lg:py-20">
+      <section className="bg-[#f0fdf4] px-4 py-14 text-center sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-2xl">
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">Nog vragen?</h2>
-          <p className="mt-3 text-gray-400">
+          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Nog vragen?</h2>
+          <p className="mt-3 text-slate-600">
             Ons team staat voor je klaar. We reageren binnen 24 uur op werkdagen.
           </p>
           <a
             href="mailto:hallo@bookadj.nl"
-            className="mt-8 inline-flex min-h-[44px] items-center justify-center rounded-xl bg-[#111827] px-7 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#0f172a]/80"
+            className="mt-8 inline-flex min-h-[44px] items-center justify-center rounded-xl border border-gray-200 bg-white px-7 text-sm font-semibold text-slate-900 shadow-sm transition-all duration-200 hover:bg-gray-50"
           >
-            <Mail className="mr-2 h-5 w-5" strokeWidth={1.75} aria-hidden />
+            <Mail className="mr-2 h-5 w-5 text-green-600" strokeWidth={1.75} aria-hidden />
             hallo@bookadj.nl
           </a>
           <div className="mt-8">
             <Link
               href="/zoeken"
-              className="text-sm font-semibold text-green-400 underline underline-offset-4"
+              className="text-sm font-semibold text-green-600 underline underline-offset-4 hover:text-green-700"
             >
               Of: bekijk DJ’s
             </Link>

@@ -37,10 +37,10 @@ const VAT_PATTERN = /^NL\d{9}B\d{2}$/i;
 const KVK_PATTERN = /^\d{8}$/;
 
 /** Consistent label → control spacing across the form */
-const labelCls = "text-sm font-semibold text-white";
+const labelCls = "text-sm font-semibold text-gray-700";
 const fieldStack = "flex flex-col gap-2";
 const inputCls =
-  "w-full rounded-lg border border-gray-800 px-3 py-2.5 text-sm text-white outline-none focus:border-green-800 focus:ring-2 focus:ring-green-500/25";
+  "w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none placeholder:text-gray-400 focus:border-green-400 focus:ring-2 focus:ring-green-400/20";
 const hintCls = "text-xs text-gray-500";
 const errCls = "text-sm text-red-400";
 
@@ -313,8 +313,8 @@ export default function DjProfielAanmakenPage() {
 
   if (success) {
     return (
-      <div className="mx-auto max-w-2xl overflow-hidden rounded-2xl border border-green-800/40 bg-[#111827] shadow-sm">
-        <div className="bg-[#052e16] px-6 py-10 text-center sm:px-10">
+      <div className="mx-auto max-w-2xl overflow-hidden rounded-2xl border border-green-200 bg-white shadow-sm">
+        <div className="border-b border-green-100 bg-[#f0fdf4] px-6 py-10 text-center sm:px-10">
           <p className="text-sm font-semibold uppercase tracking-wide text-green-400">
             Ingediend
           </p>
@@ -332,19 +332,19 @@ export default function DjProfielAanmakenPage() {
           </h2>
           <ol className="mt-4 space-y-3 text-sm text-gray-400">
             <li className="flex gap-3">
-              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#052e16]/70 text-green-400">
+              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-600">
                 1
               </span>
               Wacht op verificatie (we houden je op de hoogte per e-mail).
             </li>
             <li className="flex gap-3">
-              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#052e16]/70 text-green-400">
+              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-600">
                 2
               </span>
               Houd je inbox in de gaten voor vragen van ons team.
             </li>
             <li className="flex gap-3">
-              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#052e16]/70 text-green-400">
+              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-600">
                 3
               </span>
               Na goedkeuring word je zichtbaar in de zoekresultaten.
@@ -359,11 +359,11 @@ export default function DjProfielAanmakenPage() {
   }
 
   return (
-    <div className="bg-[#111827] pb-16">
-      <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+    <div className="pb-16">
+      <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
         DJ-profiel aanmaken
       </h1>
-      <p className="mt-2 max-w-2xl text-sm text-gray-400">
+      <p className="mt-2 max-w-2xl text-sm text-slate-600">
         Vul je gegevens in. Je profiel wordt pas zichtbaar na goedkeuring door
         ons team.
       </p>
@@ -382,8 +382,8 @@ export default function DjProfielAanmakenPage() {
           </p>
         ) : null}
 
-        <section className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm sm:p-8">
-          <h2 className="text-lg font-bold text-white">Basisinformatie</h2>
+        <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
+          <h2 className="text-lg font-bold text-slate-900">Basisinformatie</h2>
           <div className="mt-6 flex flex-col gap-6">
             <div className={fieldStack}>
               <span className={labelCls}>
@@ -487,13 +487,13 @@ export default function DjProfielAanmakenPage() {
                 {LANGUAGE_OPTIONS.map((lang) => (
                   <label
                     key={lang}
-                    className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-800 bg-[#0f172a] px-3 py-2 text-sm has-[:checked]:border-green-800 has-[:checked]:bg-[#0f172a]/80"
+                    className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm has-[:checked]:border-green-500 has-[:checked]:bg-green-50"
                   >
                     <input
                       type="checkbox"
                       checked={languages[lang] ?? false}
                       onChange={() => toggleLanguage(lang)}
-                      className="rounded border-gray-800 text-white focus:ring-green-500/30"
+                      className="rounded border-gray-300 text-slate-900 focus:ring-green-400/30"
                     />
                     {lang}
                   </label>
@@ -517,10 +517,10 @@ export default function DjProfielAanmakenPage() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm sm:p-8">
+        <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
           <div className="flex flex-col gap-2">
-            <h2 className="text-lg font-bold text-white">Genres</h2>
-            <p className="text-sm text-gray-400">
+            <h2 className="text-lg font-bold text-slate-900">Genres</h2>
+            <p className="text-sm text-slate-600">
               Kies minimaal één genre <span className="text-red-400">*</span>
             </p>
           </div>
@@ -528,13 +528,13 @@ export default function DjProfielAanmakenPage() {
             {GENRE_OPTIONS.map((g) => (
               <label
                 key={g}
-                className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-800 bg-[#0f172a] px-3 py-2.5 text-sm has-[:checked]:border-green-800 has-[:checked]:bg-[#0f172a]/80"
+                className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm has-[:checked]:border-green-500 has-[:checked]:bg-green-50"
               >
                 <input
                   type="checkbox"
                   checked={genres[g] ?? false}
                   onChange={() => toggleGenre(g)}
-                  className="rounded border-gray-800 text-white focus:ring-green-500/30"
+                  className="rounded border-gray-300 text-slate-900 focus:ring-green-400/30"
                 />
                 {g}
               </label>
@@ -547,10 +547,10 @@ export default function DjProfielAanmakenPage() {
           ) : null}
         </section>
 
-        <section className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm sm:p-8">
+        <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
           <div className="flex flex-col gap-2">
-            <h2 className="text-lg font-bold text-white">Gelegenheden</h2>
-            <p className="text-sm text-gray-400">
+            <h2 className="text-lg font-bold text-slate-900">Gelegenheden</h2>
+            <p className="text-sm text-slate-600">
               Waarvoor wil je geboekt worden?{" "}
               <span className="text-red-400">*</span>
             </p>
@@ -559,13 +559,13 @@ export default function DjProfielAanmakenPage() {
             {OCCASION_OPTIONS.map((o) => (
               <label
                 key={o.id}
-                className="flex min-h-[44px] cursor-pointer items-center gap-2 rounded-lg border border-gray-800 bg-[#0f172a] px-3 py-2.5 text-sm has-[:checked]:border-green-800 has-[:checked]:bg-[#0f172a]/80"
+                className="flex min-h-[44px] cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm has-[:checked]:border-green-500 has-[:checked]:bg-green-50"
               >
                 <input
                   type="checkbox"
                   checked={occasions[o.id] ?? false}
                   onChange={() => toggleOccasion(o.id)}
-                  className="rounded border-gray-800 text-white focus:ring-green-500/30"
+                  className="rounded border-gray-300 text-slate-900 focus:ring-green-400/30"
                 />
                 {o.label}
               </label>
@@ -578,8 +578,8 @@ export default function DjProfielAanmakenPage() {
           ) : null}
         </section>
 
-        <section className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm sm:p-8">
-          <h2 className="text-lg font-bold text-white">Tarieven</h2>
+        <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
+          <h2 className="text-lg font-bold text-slate-900">Tarieven</h2>
           <div className="mt-6 flex flex-col gap-6">
             <div className={fieldStack}>
               <span className={labelCls}>
@@ -633,7 +633,7 @@ export default function DjProfielAanmakenPage() {
               ) : null}
             </div>
 
-            <div className="rounded-xl border border-green-800/40 bg-[#052e16] px-4 py-3 text-sm text-green-400">
+            <div className="rounded-xl border border-green-200 bg-[#f0fdf4] px-4 py-3 text-sm text-green-800">
               {previewHourly != null ? (
                 <p>
                   Je ontvangt <strong>85%</strong> van elke boeking. Bij een
@@ -651,7 +651,7 @@ export default function DjProfielAanmakenPage() {
                   uur na platformkosten.
                 </p>
               ) : (
-                <p className="text-green-400/90">
+                <p className="text-green-700">
                   Vul hierboven je uurtarief in om te zien wat je per uur netto
                   ontvangt na platformkosten (85%).
                 </p>
@@ -660,12 +660,12 @@ export default function DjProfielAanmakenPage() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-gray-800 bg-[#111827] p-6 shadow-sm sm:p-8">
+        <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
           <div className="flex flex-col gap-2">
-            <h2 className="text-lg font-bold text-white">
+            <h2 className="text-lg font-bold text-slate-900">
               Zakelijke gegevens
             </h2>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-slate-600">
               Vereist voor uitbetalingen en facturatie.
             </p>
           </div>

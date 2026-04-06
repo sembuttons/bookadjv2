@@ -10,17 +10,17 @@ export const metadata = {
 export default function VeelgesteldeVragenPage() {
   return (
     <MarketingPageShell maxWidth="wide">
-      <p className="text-sm font-semibold uppercase tracking-wide text-green-400">
+      <p className="text-sm font-semibold uppercase tracking-wide text-green-600">
         FAQ
       </p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+      <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
         Veelgestelde vragen
       </h1>
-      <p className="mt-4 text-gray-400">
+      <p className="mt-4 text-slate-600">
         Voor specifieke vragen over boeken, zie ook{" "}
         <Link
           href="/vragen-over-boeking"
-          className="font-semibold text-white underline"
+          className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700"
         >
           Vragen over boeking
         </Link>

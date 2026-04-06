@@ -138,29 +138,29 @@ function statusBadge(statusNorm: string) {
     case "pending":
       return {
         className:
-          "bg-amber-500/15 text-amber-400 ring-amber-500/35",
+          "border border-amber-200 bg-amber-50 text-amber-700",
         label: "Wacht op reactie",
       };
     case "confirmed":
       return {
         className:
-          "bg-green-500/10 text-green-500-hover ring-green-500/25",
+          "border border-green-200 bg-green-50 text-green-700",
         label: "Bevestigd",
       };
     case "completed":
       return {
         className:
-          "bg-gray-800/50 text-gray-400 ring-gray-800/40",
+          "border border-gray-200 bg-gray-100 text-gray-700",
         label: "Afgerond",
       };
     case "cancelled":
       return {
-        className: "bg-red-100 text-red-400 ring-red-600/20",
+        className: "border border-red-200 bg-red-50 text-red-700",
         label: "Geannuleerd",
       };
     default:
       return {
-        className: "bg-[#0f172a]/80 text-gray-400 ring-gray-800/50",
+        className: "border border-gray-200 bg-gray-100 text-gray-600",
         label: statusNorm || "Onbekend",
       };
   }
@@ -292,9 +292,9 @@ export default function KlantDashboardPage() {
 
   if (loading) {
     return (
-      <div className="bg-[#111827]">
-        <div className="h-8 w-48 animate-pulse rounded-lg bg-gray-800/50" />
-        <div className="mt-2 h-4 w-72 max-w-full animate-pulse rounded bg-gray-800/50" />
+      <div>
+        <div className="h-8 w-48 animate-pulse rounded-lg bg-gray-200" />
+        <div className="mt-2 h-4 w-72 max-w-full animate-pulse rounded bg-gray-200" />
         <div className="mt-10">
           <DashboardBookingsSkeleton rows={4} />
         </div>
@@ -303,11 +303,11 @@ export default function KlantDashboardPage() {
   }
 
   return (
-    <div className="bg-[#111827]">
-      <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+    <div>
+      <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
         Mijn boekingen
       </h1>
-      <p className="mt-1 text-sm text-gray-400">
+      <p className="mt-1 text-sm text-slate-600">
         Overzicht van je aanvragen en bevestigde optredens.
       </p>
 
@@ -322,17 +322,17 @@ export default function KlantDashboardPage() {
 
       {upcomingBannerBooking ? (
         <section
-          className="mt-8 overflow-hidden rounded-2xl bg-[#0a0a0a] text-white ring-1 ring-green-500/40"
+          className="mt-8 overflow-hidden rounded-2xl border border-gray-200 bg-white text-slate-900 shadow-sm"
           aria-label="Aankomend evenement"
         >
-          <div className="border-b border-green-500/30 bg-green-500/15 px-5 py-3">
-            <p className="text-xs font-semibold uppercase tracking-wider text-green-400">
+          <div className="border-b border-green-200 bg-green-50 px-5 py-3">
+            <p className="text-xs font-semibold uppercase tracking-wider text-green-700">
               Aankomend evenement
             </p>
           </div>
           <div className="flex flex-col gap-6 px-5 py-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="space-y-3">
-              <p className="text-xl font-bold text-white sm:text-2xl">
+              <p className="text-xl font-bold text-gray-900 sm:text-2xl">
                 {getStageName(
                   getDjProfile(upcomingBannerBooking) ?? {
                     id: "",
@@ -340,16 +340,16 @@ export default function KlantDashboardPage() {
                   },
                 )}
               </p>
-              <ul className="grid gap-2 text-sm text-gray-400 sm:grid-cols-2">
+              <ul className="grid gap-2 text-sm text-slate-600 sm:grid-cols-2">
                 <li>
-                  <span className="text-gray-500">Datum</span>{" "}
-                  <span className="font-medium text-white">
+                  <span className="text-slate-500">Datum</span>{" "}
+                  <span className="font-medium text-slate-900">
                     {formatEventDate(upcomingBannerBooking.event_date)}
                   </span>
                 </li>
                 <li>
-                  <span className="text-gray-500">Tijd</span>{" "}
-                  <span className="font-medium text-white">
+                  <span className="text-slate-500">Tijd</span>{" "}
+                  <span className="font-medium text-slate-900">
                     {typeof upcomingBannerBooking.start_time === "string" &&
                     upcomingBannerBooking.start_time.trim()
                       ? upcomingBannerBooking.start_time.trim()
@@ -357,15 +357,15 @@ export default function KlantDashboardPage() {
                   </span>
                 </li>
                 <li className="sm:col-span-2">
-                  <span className="text-gray-500">Locatie</span>{" "}
-                  <span className="font-medium text-white">
+                  <span className="text-slate-500">Locatie</span>{" "}
+                  <span className="font-medium text-slate-900">
                     {venueLine(upcomingBannerBooking)}
                   </span>
                 </li>
               </ul>
               {typeof upcomingBannerBooking.event_date === "string" &&
               upcomingBannerBooking.event_date ? (
-                <p className="inline-flex items-center rounded-full bg-green-500/20 px-3 py-1 text-sm font-semibold text-green-400 ring-1 ring-green-500/40">
+                <p className="inline-flex items-center rounded-full border border-green-200 bg-green-50 px-3 py-1 text-sm font-semibold text-green-700">
                   {(() => {
                     const days = calendarDaysUntilEvent(
                       upcomingBannerBooking.event_date,
@@ -387,7 +387,7 @@ export default function KlantDashboardPage() {
               </Link>
               <Link
                 href={`/bevestiging/${encodeURIComponent(upcomingBannerBooking.id)}`}
-                className="rounded-lg border border-white/20 bg-[#111827]/5 px-5 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-[#111827]/10"
+                className="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-center text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-gray-50"
               >
                 Details
               </Link>
@@ -410,8 +410,8 @@ export default function KlantDashboardPage() {
             onClick={() => setFilter(tab.id)}
             className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
               filter === tab.id
-                ? "bg-green-500 text-black font-bold shadow-sm"
-                : "bg-[#0f172a]/80 text-gray-400 hover:bg-gray-700"
+                ? "border-2 border-green-500 bg-green-50 font-bold text-green-700 shadow-sm"
+                : "border border-gray-200 bg-white text-slate-600 hover:bg-gray-50"
             }`}
           >
             {tab.label}
@@ -461,18 +461,18 @@ export default function KlantDashboardPage() {
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex gap-4">
                       <div
-                        className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#111827] text-sm font-bold text-white"
+                        className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-gray-100 text-sm font-bold text-slate-700"
                         aria-hidden
                       >
                         {initialsFromStage(stageName)}
                       </div>
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <h2 className="text-lg font-semibold text-white">
+                          <h2 className="text-lg font-semibold text-slate-900">
                             {stageName}
                           </h2>
                           <span
-                            className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ring-inset ${badge.className}`}
+                            className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${badge.className}`}
                           >
                             {badge.label}
                           </span>
@@ -480,19 +480,19 @@ export default function KlantDashboardPage() {
                         <dl className="mt-3 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
                           <div>
                             <dt className="text-gray-500">Datum & tijd</dt>
-                            <dd className="font-medium text-white">
+                            <dd className="font-medium text-slate-900">
                               {formatEventDate(booking.event_date)} · {start}
                             </dd>
                           </div>
                           <div>
                             <dt className="text-gray-500">Locatie</dt>
-                            <dd className="font-medium text-white">
+                            <dd className="font-medium text-slate-900">
                               {venueLine(booking)}
                             </dd>
                           </div>
                           <div>
                             <dt className="text-gray-500">Soort evenement</dt>
-                            <dd className="font-medium text-white">
+                            <dd className="font-medium text-slate-900">
                               {typeof booking.event_type === "string" &&
                               booking.event_type.trim()
                                 ? booking.event_type.trim()
@@ -501,22 +501,22 @@ export default function KlantDashboardPage() {
                           </div>
                           <div>
                             <dt className="text-gray-500">Duur</dt>
-                            <dd className="font-medium text-white">
+                            <dd className="font-medium text-slate-900">
                               {hoursValue(booking)} uur
                             </dd>
                           </div>
                         </dl>
                       </div>
                     </div>
-                    <div className="flex flex-col items-stretch gap-3 border-t border-gray-800/60 pt-4 sm:w-52 sm:shrink-0 sm:border-l sm:border-t-0 sm:pl-6 sm:pt-0">
+                    <div className="flex flex-col items-stretch gap-3 border-t border-gray-200 pt-4 sm:w-52 sm:shrink-0 sm:border-l sm:border-t-0 sm:pl-6 sm:pt-0">
                       <p className="text-sm text-gray-500">Totaal</p>
-                      <p className="text-xl font-bold text-white">
+                      <p className="text-xl font-bold text-slate-900">
                         {formatEuroFromCents(booking.total_amount)}
                       </p>
                       <div className="flex flex-wrap gap-2">
                         <Link
                           href={`/bevestiging/${encodeURIComponent(booking.id)}`}
-                          className="rounded-lg border border-gray-800 bg-[#111827] px-3 py-2 text-center text-sm font-medium text-white hover:bg-[#0f172a]"
+                          className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-center text-sm font-medium text-slate-700 shadow-sm hover:bg-gray-50"
                         >
                           Details
                         </Link>
@@ -533,7 +533,7 @@ export default function KlantDashboardPage() {
                         {st === "completed" ? (
                           <Link
                             href={`/dashboard/klant/reviews?booking=${encodeURIComponent(booking.id)}`}
-                            className="rounded-lg bg-gray-800 px-3 py-2 text-center text-sm font-medium text-white hover:bg-gray-700"
+                            className="rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-center text-sm font-medium text-slate-700 hover:bg-gray-200"
                           >
                             Review schrijven
                           </Link>

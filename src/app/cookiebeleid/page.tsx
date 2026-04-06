@@ -9,13 +9,13 @@ export const metadata = {
 export default function CookiebeleidPage() {
   return (
     <MarketingPageShell maxWidth="prose">
-      <p className="text-sm font-semibold uppercase tracking-wide text-green-400">
+      <p className="text-sm font-semibold uppercase tracking-wide text-green-600">
         Juridisch
       </p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+      <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
         Cookiebeleid
       </h1>
-      <p className="mt-4 text-sm text-gray-500">
+      <p className="mt-4 text-sm text-slate-500">
         Laatst bijgewerkt: april 2026
       </p>
 

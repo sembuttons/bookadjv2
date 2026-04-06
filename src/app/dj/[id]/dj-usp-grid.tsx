@@ -46,7 +46,7 @@ function normalizeIconKey(raw: string): string {
 function UspIcon({ name }: { name: string }) {
   const key = normalizeIconKey(name);
   const Icon = ICON_MAP[key] ?? Sparkles;
-  return <Icon className="h-6 w-6 text-white" strokeWidth={1.75} />;
+  return <Icon className="h-6 w-6 text-green-600" strokeWidth={1.75} />;
 }
 
 type Props = {
@@ -61,7 +61,7 @@ export function DjUspGrid({ stageName, items }: Props) {
     <section aria-labelledby="usp-heading">
       <h2
         id="usp-heading"
-        className="text-xl font-bold text-white sm:text-2xl"
+        className="text-xl font-bold text-slate-900 sm:text-2xl"
       >
         Wat maakt {stageName} uniek
       </h2>
@@ -69,11 +69,11 @@ export function DjUspGrid({ stageName, items }: Props) {
         {items.map((u) => (
           <li
             key={u.title}
-            className="rounded-2xl border border-gray-800 bg-[#0f172a]/80 p-5"
+            className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
           >
             <UspIcon name={u.icon_name} />
-            <p className="mt-4 font-semibold text-white">{u.title}</p>
-            <p className="mt-2 text-sm leading-relaxed text-gray-400">
+            <p className="mt-4 font-semibold text-slate-900">{u.title}</p>
+            <p className="mt-2 text-sm leading-relaxed text-slate-600">
               {u.description}
             </p>
           </li>

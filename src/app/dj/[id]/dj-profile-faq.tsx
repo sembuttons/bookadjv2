@@ -81,7 +81,7 @@ export function DjProfileFaq() {
     <section aria-labelledby="faq-heading">
       <h2
         id="faq-heading"
-        className="text-xl font-bold text-white sm:text-2xl"
+        className="text-xl font-bold text-slate-900 sm:text-2xl"
       >
         Veelgestelde vragen
       </h2>
@@ -91,14 +91,14 @@ export function DjProfileFaq() {
             <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500">
               {section.title}
             </h3>
-            <div className="mt-3 divide-y divide-gray-800 rounded-2xl border border-gray-800 bg-[#111827] px-1">
+            <div className="mt-3 divide-y divide-gray-200 rounded-2xl border border-gray-200 bg-white px-1 shadow-sm">
               {section.items.map((item) => (
                 <details key={item.q} className="group px-3">
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 py-4 text-left font-semibold text-white [&::-webkit-details-marker]:hidden">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 py-4 text-left font-semibold text-slate-900 [&::-webkit-details-marker]:hidden">
                     <span>{item.q}</span>
-                    <Chevron className="shrink-0 text-gray-500 transition-transform group-open:rotate-180" />
+                    <Chevron className="shrink-0 text-slate-500 transition-transform group-open:rotate-180" />
                   </summary>
-                  <div className="pb-4 pt-0 text-sm leading-relaxed text-gray-400">
+                  <div className="pb-4 pt-0 text-sm leading-relaxed text-slate-600">
                     {item.a}
                   </div>
                 </details>

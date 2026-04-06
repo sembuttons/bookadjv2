@@ -253,7 +253,7 @@ export function DashboardAppShell({
 
       <div className="mx-auto flex max-w-[1600px] flex-col md:flex-row">
         <aside
-          className="hidden w-56 shrink-0 border-b-0 border-r border-gray-100 bg-white md:block lg:w-60"
+          className="hidden w-56 shrink-0 border-b-0 border-r border-gray-200 bg-white md:block lg:w-60"
           aria-label={
             sidebarRole === "dj" ? "DJ-dashboard navigatie" : "Dashboard navigatie"
           }
@@ -271,7 +271,7 @@ export function DashboardAppShell({
           </nav>
         </aside>
 
-        <main className="min-w-0 flex-1">
+        <main className="min-w-0 flex-1 bg-gray-50">
           {defaultContentPadding ? (
             <div className="px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
               {children}

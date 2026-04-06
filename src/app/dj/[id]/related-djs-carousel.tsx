@@ -91,7 +91,7 @@ export function RelatedDjsCarousel({ djs }: { djs: DjProfileRow[] }) {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                 <span className="absolute bottom-3 left-3 right-3 flex items-center gap-2">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#111827]/95 text-sm font-bold text-white shadow">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-gray-100 text-sm font-bold text-slate-700 shadow-sm">
                     {initials(name)}
                   </span>
                   <span className="min-w-0 truncate text-sm font-bold text-white drop-shadow">

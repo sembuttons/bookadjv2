@@ -176,19 +176,19 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#111827]">
+    <div className="min-h-screen bg-white">
       <Navbar />
 
       <main className="mx-auto max-w-md px-4 py-12 sm:px-6 lg:px-8">
-        <h1 className="text-center text-2xl font-bold tracking-tight text-white">
+        <h1 className="text-center text-2xl font-bold tracking-tight text-slate-900">
           Welkom bij bookadj
         </h1>
-        <p className="mt-2 text-center text-sm text-gray-400">
+        <p className="mt-2 text-center text-sm text-slate-600">
           Log in of maak een account aan.
         </p>
 
         <div
-          className="mt-8 flex rounded-lg border border-gray-800 bg-[#0f172a] p-1"
+          className="mt-8 flex rounded-lg border border-gray-200 bg-gray-100 p-1"
           role="tablist"
           aria-label="Inloggen of aanmelden"
         >
@@ -205,8 +205,8 @@ export default function AuthPage() {
             }}
             className={`flex-1 rounded-md py-2.5 text-sm font-semibold transition-colors ${
               tab === "login"
-                ? "bg-[#111827] text-white shadow-sm"
-                : "text-gray-400 hover:text-white"
+                ? "bg-white text-slate-900 shadow-sm"
+                : "text-slate-500 hover:text-slate-800"
             }`}
           >
             Inloggen
@@ -223,8 +223,8 @@ export default function AuthPage() {
             }}
             className={`flex-1 rounded-md py-2.5 text-sm font-semibold transition-colors ${
               tab === "signup"
-                ? "bg-[#111827] text-white shadow-sm"
-                : "text-gray-400 hover:text-white"
+                ? "bg-white text-slate-900 shadow-sm"
+                : "text-slate-500 hover:text-slate-800"
             }`}
           >
             Aanmelden
@@ -241,7 +241,7 @@ export default function AuthPage() {
         ) : null}
         {resetMessage ? (
           <p
-            className="mt-6 rounded-lg border border-green-500/25 bg-green-500/10 px-3 py-2 text-sm text-white"
+            className="mt-6 rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-sm text-slate-800"
             role="status"
           >
             {resetMessage}
@@ -257,7 +257,7 @@ export default function AuthPage() {
             <div>
               <label
                 htmlFor="login-email"
-                className="block text-sm font-medium text-gray-400"
+                className="block text-sm font-medium text-gray-700"
               >
                 E-mailadres
               </label>
@@ -287,7 +287,7 @@ export default function AuthPage() {
             <div>
               <label
                 htmlFor="login-password"
-                className="block text-sm font-medium text-gray-400"
+                className="block text-sm font-medium text-gray-700"
               >
                 Wachtwoord
               </label>
@@ -326,7 +326,7 @@ export default function AuthPage() {
                 type="button"
                 onClick={handleForgotPassword}
                 disabled={loading}
-                className="text-sm font-medium text-gray-400 underline-offset-2 hover:text-white hover:underline disabled:opacity-60"
+                className="text-sm font-medium text-slate-600 underline-offset-2 hover:text-slate-900 hover:underline disabled:opacity-60"
               >
                 Wachtwoord vergeten?
               </button>
@@ -334,13 +334,13 @@ export default function AuthPage() {
           </form>
         ) : signupDone ? (
           <div
-            className="mt-8 rounded-2xl border border-green-500/25 bg-green-500/10 px-6 py-8 text-center"
+            className="mt-8 rounded-2xl border border-green-200 bg-green-50 px-6 py-8 text-center"
             role="status"
           >
-            <p className="text-lg font-semibold text-white">
+            <p className="text-lg font-semibold text-slate-900">
               Check je e-mail
             </p>
-            <p className="mt-2 text-sm text-gray-400">
+            <p className="mt-2 text-sm text-slate-600">
               We hebben je een bevestigingslink gestuurd. Open je inbox om je
               account te activeren.
             </p>
@@ -353,7 +353,7 @@ export default function AuthPage() {
                 setSignupPassword("");
                 setTab("login");
               }}
-              className="mt-6 text-sm font-medium text-green-500 underline-offset-2 hover:underline"
+              className="mt-6 text-sm font-medium text-green-700 underline-offset-2 hover:underline"
             >
               Terug naar inloggen
             </button>
@@ -367,7 +367,7 @@ export default function AuthPage() {
             <div>
               <label
                 htmlFor="full-name"
-                className="block text-sm font-medium text-gray-400"
+                className="block text-sm font-medium text-gray-700"
               >
                 Volledige naam
               </label>
@@ -397,7 +397,7 @@ export default function AuthPage() {
             <div>
               <label
                 htmlFor="signup-email"
-                className="block text-sm font-medium text-gray-400"
+                className="block text-sm font-medium text-gray-700"
               >
                 E-mailadres
               </label>
@@ -427,7 +427,7 @@ export default function AuthPage() {
             <div>
               <label
                 htmlFor="signup-password"
-                className="block text-sm font-medium text-gray-400"
+                className="block text-sm font-medium text-gray-700"
               >
                 Wachtwoord
               </label>
@@ -457,7 +457,7 @@ export default function AuthPage() {
             <div>
               <span
                 id="role-label"
-                className="block text-sm font-medium text-gray-400"
+                className="block text-sm font-medium text-gray-700"
               >
                 Ik ben een
               </span>
@@ -466,7 +466,7 @@ export default function AuthPage() {
                 role="group"
                 aria-labelledby="role-label"
               >
-                <label className="flex cursor-pointer items-center justify-center rounded-lg border border-gray-800 bg-[#111827] px-3 py-2.5 text-sm font-medium has-[:checked]:border-green-500 has-[:checked]:bg-green-500/5">
+                <label className="flex cursor-pointer items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 has-[:checked]:border-green-500 has-[:checked]:bg-green-50">
                   <input
                     type="radio"
                     name="role"
@@ -477,7 +477,7 @@ export default function AuthPage() {
                   />
                   Klant
                 </label>
-                <label className="flex cursor-pointer items-center justify-center rounded-lg border border-gray-800 bg-[#111827] px-3 py-2.5 text-sm font-medium has-[:checked]:border-green-500 has-[:checked]:bg-green-500/5">
+                <label className="flex cursor-pointer items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 has-[:checked]:border-green-500 has-[:checked]:bg-green-50">
                   <input
                     type="radio"
                     name="role"

@@ -61,7 +61,7 @@
   }
 
   .card-interactive {
-    @apply rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-200 ease-out;
+    @apply rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-200 ease-out;
     @apply hover:-translate-y-0.5 hover:border-green-200 hover:shadow-lg hover:shadow-gray-200/80;
   }
 
@@ -96,6 +96,7 @@
 html {
   scroll-behavior: smooth;
   background-color: #ffffff;
+  color: #0f172a;
 }
 
 body {

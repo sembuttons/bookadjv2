@@ -19,7 +19,7 @@ export function HomeGenreGrid({ genres }: { genres: readonly string[] }) {
                 "flex h-28 items-center justify-center rounded-xl border-2 text-lg font-semibold shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md",
                 isActive
                   ? "border-green-500 bg-green-500 text-black font-bold ring-2 ring-green-500/35"
-                  : "border-green-500/25 bg-[#111827] text-white hover:border-green-500/60 active:border-green-500 active:bg-green-500 active:text-black",
+                  : "border-gray-200 bg-white text-slate-900 hover:border-green-300 hover:shadow-md active:border-green-500 active:bg-green-500 active:text-black",
               ].join(" ")}
             >
               {g}

@@ -9,17 +9,17 @@ export const metadata = {
 export default function ContactPage() {
   return (
     <MarketingPageShell maxWidth="medium">
-      <p className="text-sm font-semibold uppercase tracking-wide text-green-400">
+      <p className="text-sm font-semibold uppercase tracking-wide text-green-600">
         Support
       </p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+      <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
         Contact
       </h1>
-      <p className="mt-4 text-gray-400">
+      <p className="mt-4 text-slate-700">
         Vul het formulier in. Je bericht komt bij{" "}
         <a
           href="mailto:hallo@bookadj.nl"
-          className="font-semibold text-white underline"
+          className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700"
         >
           hallo@bookadj.nl
         </a>
