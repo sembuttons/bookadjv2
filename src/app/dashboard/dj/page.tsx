@@ -221,6 +221,96 @@ export default function DjDashboardPage() {
         setLoadError(error.message);
         return;
       }
+
+      // Auto-create a message thread after acceptance (DJ -> klant)
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        const djAuthId = session?.user?.id ?? null;
+        if (djAuthId) {
+          const { data: booking } = await supabase
+            .from("bookings")
+            .select("id, reference, event_date, customer_id, dj_id, dj_profiles(stage_name, user_id)")
+            .eq("id", bookingId)
+            .single();
+
+          const b = booking as {
+            id: string;
+            reference?: string | null;
+            event_date?: string | null;
+            customer_id: string;
+            dj_profiles?: { stage_name?: string | null; user_id?: string | null } | null;
+          } | null;
+
+          const customerId = b?.customer_id ?? "";
+          const djUserId =
+            (typeof b?.dj_profiles?.user_id === "string" && b.dj_profiles.user_id.trim()) ||
+            djAuthId;
+
+          if (customerId && djUserId) {
+            const iso = typeof b?.event_date === "string" ? b.event_date : "";
+            const dt = iso ? new Date(`${iso}T12:00:00`) : null;
+            const niceDate = dt
+              ? dt.toLocaleDateString("nl-NL", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })
+              : "je datum";
+            const niceDayMonth = dt
+              ? dt.toLocaleDateString("nl-NL", { day: "numeric", month: "long" })
+              : "je datum";
+            const ref =
+              typeof b?.reference === "string" && b.reference.trim()
+                ? b.reference.trim()
+                : bookingId.slice(0, 8).toUpperCase();
+
+            // best-effort duplicate guard
+            const { data: existing } = await supabase
+              .from("messages")
+              .select("id, content")
+              .eq("booking_id", bookingId)
+              .eq("sender_id", djUserId)
+              .eq("recipient_id", customerId)
+              .limit(10);
+
+            const exists = (existing as { content?: string }[] | null)?.some((r) =>
+              (r.content ?? "").startsWith("Hoi! Ik heb je boekingsaanvraag geaccepteerd"),
+            );
+
+            if (!exists) {
+              await supabase.from("messages").insert([
+                {
+                  sender_id: djUserId,
+                  recipient_id: customerId,
+                  content: `Hoi! Ik heb je boekingsaanvraag geaccepteerd voor ${niceDate}. Ik kijk er naar uit! Heb je nog vragen of wensen voor het event? Laat het me weten.`,
+                  booking_id: bookingId,
+                  inbox_type: "book_me",
+                  created_at: new Date().toISOString(),
+                  is_read: false,
+                  is_flagged: false,
+                  flag_reason: null,
+                },
+                {
+                  sender_id: djUserId,
+                  recipient_id: customerId,
+                  content: `Boeking bevestigd — referentie ${ref}. Je betaling wordt vastgehouden tot na het event op ${niceDayMonth}.`,
+                  booking_id: bookingId,
+                  inbox_type: "book_me",
+                  created_at: new Date().toISOString(),
+                  is_read: false,
+                  is_flagged: false,
+                  flag_reason: null,
+                },
+              ]);
+            }
+          }
+        }
+      } catch {
+        /* messages are best-effort; don't block acceptance */
+      }
+
       const {
         data: { session },
       } = await supabase.auth.getSession();

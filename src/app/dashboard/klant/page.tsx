@@ -16,6 +16,7 @@ type DjEmbed = {
   city?: string | null;
   genres?: unknown;
   hourly_rate?: number | null;
+  user_id?: string | null;
 } | null;
 
 type BookingRow = {
@@ -224,7 +225,7 @@ export default function KlantDashboardPage() {
     const { data, error } = await supabase
       .from("bookings")
       .select(
-        "*, dj_profiles(stage_name, city, genres, hourly_rate)",
+        "*, dj_profiles(stage_name, city, genres, hourly_rate, user_id)",
       )
       .eq("customer_id", session.user.id)
       .order("event_date", { ascending: true });
@@ -266,6 +267,12 @@ export default function KlantDashboardPage() {
     });
     return candidates[0] ?? null;
   }, [bookings]);
+
+  const upcomingDjUserId = useMemo(() => {
+    const dj = upcomingBannerBooking ? getDjProfile(upcomingBannerBooking) : null;
+    const uid = (dj as any)?.user_id;
+    return typeof uid === "string" && uid.trim() ? uid.trim() : null;
+  }, [upcomingBannerBooking]);
 
   const handleCancel = useCallback(
     async (bookingId: string) => {
@@ -324,11 +331,25 @@ export default function KlantDashboardPage() {
           className="mt-8 overflow-hidden rounded-2xl border border-gray-200 bg-white text-slate-900 shadow-sm"
           aria-label="Aankomend evenement"
         >
+          {upcomingDjUserId ? (
+            <div className="bg-green-50 px-5 py-3">
+              <p className="text-sm font-semibold text-green-800">
+                Je boeking is bevestigd!{" "}
+                <Link
+                  href={`/berichten/${encodeURIComponent(upcomingDjUserId)}`}
+                  className="font-bold text-green-700 underline underline-offset-4 hover:text-green-800"
+                >
+                  Start het gesprek met je DJ →
+                </Link>
+              </p>
+            </div>
+          ) : (
           <div className="bg-green-50 px-5 py-3">
             <p className="text-xs font-semibold uppercase tracking-wider text-green-700">
               Aankomend evenement
             </p>
           </div>
+          )}
           <div className="flex flex-col gap-6 px-5 py-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="space-y-3">
               <p className="text-xl font-bold text-gray-900 sm:text-2xl">
