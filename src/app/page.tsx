@@ -2,7 +2,6 @@ import Link from "next/link";
 import { HomeSearchForm } from "@/components/home-search-form";
 import { Navbar } from "@/components/Navbar";
 import { EmptyState } from "@/components/skeleton";
-import { PaymentLogosRow } from "@/components/PaymentLogos";
 import {
   Briefcase,
   CreditCard,
@@ -546,50 +545,6 @@ export default async function Home() {
               </li>
             ))}
           </ol>
-        </div>
-      </section>
-
-      {/* Trust bar — light, payment-friendly */}
-      <section
-        className="bg-gray-50 px-4 py-12 sm:px-6 lg:px-8 lg:py-14"
-        aria-label="Waarom bookadj"
-      >
-        <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
-          {(
-            [
-              {
-                head: "Verify",
-                text: "We controleren DJ’s voordat ze zichtbaar worden.",
-              },
-              {
-                head: "Pay",
-                text: "Je betaalt via het platform volgens duidelijke afspraken.",
-              },
-              {
-                head: "1 plek",
-                text: "Zoeken, berichten en boeking — overzichtelijk.",
-              },
-              {
-                head: "Support",
-                text: "Vragen? We helpen je met heldere communicatie.",
-              },
-            ] as const
-          ).map(({ head, text }) => (
-            <div key={head} className="text-center sm:text-left">
-              <p className="text-2xl font-black tracking-tight text-green-600 sm:text-3xl">
-                {head}
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-gray-600">
-                {text}
-              </p>
-            </div>
-          ))}
-        </div>
-        <div
-          className="mx-auto mt-8 flex max-w-7xl flex-wrap items-center justify-center gap-2 pt-8"
-          aria-label="Betaalmethoden"
-        >
-          <PaymentLogosRow className="flex-wrap justify-center" />
         </div>
       </section>
 

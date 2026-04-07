@@ -13,6 +13,7 @@ export function PaymentMethodBadges({
   showStripe = false,
   className = "",
 }: Props) {
+  void variant;
   void showStripe;
-  return <PaymentLogosRow variant={variant} className={className} />;
+  return <PaymentLogosRow className={className} />;
 }
