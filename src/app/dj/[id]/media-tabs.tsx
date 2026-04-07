@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 
 function IconExternalLink({ className }: { className?: string }) {
   return (
@@ -23,8 +23,6 @@ function IconExternalLink({ className }: { className?: string }) {
   );
 }
 
-type TabKey = "instagram" | "soundcloud";
-
 type Props = {
   djFirstName: string;
   instagramUrl?: string | null;
@@ -39,93 +37,140 @@ export function MediaTabs({
   const ig = typeof instagramUrl === "string" ? instagramUrl.trim() : "";
   const sc = typeof soundcloudUrl === "string" ? soundcloudUrl.trim() : "";
 
-  const tabs = useMemo(() => {
-    const t: { key: TabKey; label: string; url: string }[] = [];
-    if (ig) t.push({ key: "instagram", label: "Instagram", url: ig });
-    if (sc) t.push({ key: "soundcloud", label: "SoundCloud", url: sc });
-    return t;
-  }, [ig, sc]);
+  const instagramHandle = useMemo(() => {
+    if (!ig) return "";
+    try {
+      const u = new URL(ig);
+      const parts = u.pathname.split("/").filter(Boolean);
+      const first = parts[0] ?? "";
+      return first ? `@${first}` : "";
+    } catch {
+      return "";
+    }
+  }, [ig]);
 
-  const [active, setActive] = useState<TabKey | null>(
-    () => tabs[0]?.key ?? null,
-  );
+  const instagramPermalink = useMemo(() => {
+    if (!ig) return "";
+    // Instagram embed works for post/reel permalinks, not just profile pages.
+    if (/(\/p\/|\/reel\/|\/tv\/)/.test(ig)) return ig;
+    return "";
+  }, [ig]);
 
-  if (tabs.length === 0) {
+  useEffect(() => {
+    if (!instagramPermalink) return;
+    const w = window as any;
+    const process = () => {
+      try {
+        w.instgrm?.Embeds?.process?.();
+      } catch {
+        /* ignore */
+      }
+    };
+    if (w.instgrm?.Embeds) {
+      process();
+      return;
+    }
+    const existing = document.querySelector(
+      'script[src="//www.instagram.com/embed.js"]',
+    );
+    if (existing) {
+      existing.addEventListener("load", process, { once: true });
+      return;
+    }
+    const s = document.createElement("script");
+    s.async = true;
+    s.src = "//www.instagram.com/embed.js";
+    s.onload = process;
+    document.body.appendChild(s);
+  }, [instagramPermalink]);
+
+  if (!ig && !sc) {
     return null;
   }
 
-  const current = tabs.find((t) => t.key === active) ?? tabs[0];
-  const scEmbed =
-    current.key === "soundcloud"
-      ? `https://w.soundcloud.com/player/?url=${encodeURIComponent(current.url)}&color=%23000000&inverse=false&auto_play=false&show_user=true`
-      : null;
+  const scEmbed = sc
+    ? `https://w.soundcloud.com/player/?url=${encodeURIComponent(
+        sc,
+      )}&color=%2322c55e&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false`
+    : null;
 
   return (
-    <section aria-labelledby="media-heading">
-      <h2
-        id="media-heading"
-        className="text-xl font-bold text-slate-900 sm:text-2xl"
-      >
+    <section aria-labelledby="media-heading" className="space-y-10">
+      <h2 id="media-heading" className="text-xl font-bold text-slate-900 sm:text-2xl">
         {djFirstName} in actie
       </h2>
-      {tabs.length > 1 ? (
-        <div
-          className="mt-4 flex gap-2"
-          role="tablist"
-          aria-label="Social media"
-        >
-          {tabs.map((t) => (
-            <button
-              key={t.key}
-              type="button"
-              role="tab"
-              aria-selected={current.key === t.key}
-              onClick={() => setActive(t.key)}
-              className={`rounded-full px-3 py-2 text-sm font-semibold transition-colors ${
-                current.key === t.key
-                  ? "bg-green-50 text-green-700"
-                  : "text-slate-500 hover:bg-gray-50 hover:text-slate-800"
-              }`}
+
+      {ig ? (
+        <section aria-label="Instagram">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-lg font-bold text-slate-900">
+                Volg {djFirstName} op Instagram
+              </p>
+              <p className="mt-1 text-sm text-gray-500">
+                {instagramHandle || "Instagram"} · updates, clips en sfeer
+              </p>
+            </div>
+            <a
+              href={ig}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-fit items-center gap-2 rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-gray-50"
             >
-              {t.label}
-            </button>
-          ))}
-        </div>
+              <span
+                aria-hidden
+                className="inline-flex h-5 w-5 items-center justify-center rounded-md"
+                style={{
+                  background:
+                    "linear-gradient(135deg,#f58529,#dd2a7b,#8134af,#515bd4)",
+                }}
+              />
+              Volgen
+              <IconExternalLink className="h-4 w-4 shrink-0 text-slate-400" />
+            </a>
+          </div>
+
+          <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-6">
+            {Array.from({ length: 6 }, (_, i) => (
+              <div
+                key={i}
+                className="aspect-square rounded-xl bg-gradient-to-b from-gray-100 to-gray-200 ring-1 ring-gray-200"
+                aria-hidden
+              />
+            ))}
+          </div>
+
+          {instagramPermalink ? (
+            <div className="mt-6 overflow-hidden rounded-2xl border border-gray-200 bg-white">
+              <blockquote
+                className="instagram-media"
+                data-instgrm-permalink={instagramPermalink}
+                data-instgrm-version="14"
+                style={{ margin: 0, minWidth: "100%" }}
+              />
+            </div>
+          ) : (
+            <p className="mt-4 text-sm text-gray-500">
+              Tip: voeg een link toe naar een specifieke post (bijv. /p/ of /reel/) om een embed te tonen.
+            </p>
+          )}
+        </section>
       ) : null}
 
-      <div className="mt-4">
-        <a
-          href={current.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-green-600 underline-offset-4 hover:underline"
-        >
-          {current.label} openen
-          <IconExternalLink className="h-4 w-4 shrink-0" />
-        </a>
-      </div>
-
-      {current.key === "instagram" ? (
-        <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {Array.from({ length: 4 }, (_, i) => (
-            <li
-              key={i}
-              className="aspect-[9/16] rounded-xl bg-gradient-to-b from-gray-100 to-gray-200 ring-1 ring-gray-200"
+      {sc && scEmbed ? (
+        <section aria-label="SoundCloud">
+          <p className="text-lg font-bold text-slate-900">Luister op SoundCloud</p>
+          <div className="mt-3 rounded-2xl overflow-hidden border border-gray-200 bg-white">
+            <iframe
+              title="SoundCloud"
+              width="100%"
+              height="166"
+              scrolling="no"
+              frameBorder={0}
+              src={scEmbed}
             />
-          ))}
-        </ul>
-      ) : null}
-
-      {current.key === "soundcloud" && scEmbed ? (
-        <div className="mt-4 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-          <iframe
-            title="SoundCloud"
-            width="100%"
-            height="320"
-            className="border-0"
-            src={scEmbed}
-          />
-        </div>
+          </div>
+        </section>
       ) : null}
     </section>
   );
