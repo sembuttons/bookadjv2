@@ -698,7 +698,7 @@ export default function BoekenPage() {
                 )}
               </button>
               <p className="mt-3 text-gray-400 text-xs text-center">
-                Veilig betalen via bookadj - je wordt pas in rekening gebracht na acceptatie
+                Veilig betalen via bookadj. Je wordt pas in rekening gebracht na acceptatie
               </p>
             </div>
           </form>
@@ -809,7 +809,7 @@ export default function BoekenPage() {
             </button>
 
             <p className="mt-3 text-gray-400 text-xs text-center">
-              Veilig betalen via bookadj - je wordt pas in rekening gebracht na acceptatie
+              Veilig betalen via bookadj. Je wordt pas in rekening gebracht na acceptatie
             </p>
           </div>
         </aside>

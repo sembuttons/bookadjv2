@@ -282,7 +282,7 @@ export function newMessageEmail(params: {
         ${button(threadUrl, "Beantwoord bericht")}
       </div>
       <p style="margin:0;color:${BRAND.muted};font-size:13px;line-height:1.6;">
-        Communiceer altijd via bookadj - deel geen persoonlijke contactgegevens.
+        Communiceer altijd via bookadj. Deel geen persoonlijke contactgegevens.
       </p>
     `,
   });
