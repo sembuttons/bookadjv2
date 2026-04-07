@@ -307,19 +307,25 @@ export function BerichtenClient({
     return groupLatestByPartner(filteredForTab, userId);
   }, [filteredForTab, userId]);
 
+  const partnerName = useCallback(
+    (id: string) =>
+      displayNameMap[id] ||
+      userMap[id]?.full_name?.trim() ||
+      userMap[id]?.email?.split("@")[0] ||
+      "Gebruiker",
+    [displayNameMap, userMap],
+  );
+
   const conversations = useMemo(() => {
     const q = search.trim().toLowerCase();
     const list = [...latestByPartner.entries()].map(([partnerId, last]) => ({
       partnerId,
       last,
-      name:
-        userMap[partnerId]?.full_name?.trim() ||
-        userMap[partnerId]?.email ||
-        "Gebruiker",
+      name: partnerName(partnerId),
     }));
     if (!q) return list;
     return list.filter((c) => c.name.toLowerCase().includes(q));
-  }, [latestByPartner, search, userMap]);
+  }, [latestByPartner, partnerName, search]);
 
   const unreadByTab = useMemo(() => {
     if (!userId) return { booking: 0, ask: 0 };
@@ -434,12 +440,6 @@ export function BerichtenClient({
         m.is_read === false,
     );
   };
-
-  const partnerName = (id: string) =>
-    displayNameMap[id] ||
-    userMap[id]?.full_name?.trim() ||
-    userMap[id]?.email?.split("@")[0] ||
-    "Gebruiker";
 
   if (loading || !userId) {
     return (

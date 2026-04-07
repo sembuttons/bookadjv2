@@ -35,6 +35,7 @@ export default function AuthPage() {
   const ensurePublicUserRow = async (args: {
     id: string;
     email: string | null | undefined;
+    fullName?: string | null | undefined;
     selectedRole: Role;
   }) => {
     if (!args.id) return;
@@ -44,6 +45,7 @@ export default function AuthPage() {
       {
         id: args.id,
         email: args.email ?? null,
+        full_name: args.fullName?.trim() || null,
         role: args.selectedRole, // 'klant' or 'dj'
         created_at: new Date().toISOString(),
       },
@@ -76,6 +78,7 @@ export default function AuthPage() {
         await ensurePublicUserRow({
           id: session.user.id,
           email: session.user.email,
+          fullName: (session.user.user_metadata?.full_name as string | undefined) ?? null,
           selectedRole,
         });
       } catch {
