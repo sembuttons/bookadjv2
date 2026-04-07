@@ -187,29 +187,13 @@ export function Navbar() {
         />
       ) : null}
 
-      <div className="relative mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
+      <div className="relative mx-auto flex h-14 max-w-7xl items-center gap-3 px-4 sm:h-16 sm:px-6 lg:px-8">
         <Link
           href="/"
           className="shrink-0 text-xl font-bold tracking-tight text-white"
         >
           book<span className="text-green-400">adj</span>
         </Link>
-
-        {/* Mobile quick links */}
-        <div className="ml-4 hidden items-center gap-3 md:hidden min-[360px]:flex">
-          <Link
-            href="/zoeken"
-            className="text-xs font-medium text-gray-300 transition-colors hover:text-white"
-          >
-            DJ&apos;s vinden
-          </Link>
-          <Link
-            href="/hoe-het-werkt"
-            className="text-xs font-medium text-gray-300 transition-colors hover:text-white"
-          >
-            Boeken
-          </Link>
-        </div>
 
         <nav
           className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 text-sm font-medium text-gray-400 md:flex"
@@ -245,14 +229,14 @@ export function Navbar() {
             <nav className="flex flex-col p-2" aria-label="Mobiel menu">
               <Link
                 href="/zoeken"
-                className="rounded-lg px-3 py-2 text-sm font-medium text-green-600"
+                className="min-h-[48px] rounded-lg px-3 py-3 text-sm font-medium text-green-600 flex items-center"
                 onClick={() => setMobileNavOpen(false)}
               >
                 DJ&apos;s vinden
               </Link>
               <Link
                 href="/hoe-het-werkt"
-                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900"
+                className="min-h-[48px] rounded-lg px-3 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900 flex items-center"
                 onClick={() => setMobileNavOpen(false)}
               >
                 Boeken

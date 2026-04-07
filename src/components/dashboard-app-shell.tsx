@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { DashboardShellSkeleton } from "@/components/skeleton";
+import { BottomNav } from "@/components/BottomNav";
 import { supabase } from "@/lib/supabase-browser";
 
 export type DashboardExpectedRole = "klant" | "dj" | "auto";
@@ -300,45 +301,7 @@ export function DashboardAppShell({
         </main>
       </div>
 
-      <nav
-        className="fixed bottom-0 left-0 right-0 z-[60] flex items-stretch justify-around bg-white px-1 pt-1 shadow-[0_-4px_24px_rgba(15,23,42,0.08)] md:hidden"
-        style={{
-          paddingBottom: "max(0.35rem, env(safe-area-inset-bottom, 0px))",
-        }}
-        aria-label={
-          sidebarRole === "dj"
-            ? "DJ-dashboard, snelle navigatie"
-            : "Dashboard, snelle navigatie"
-        }
-      >
-        {navItems.map((item) => {
-          const active = item.isActive(pathname);
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.key}
-              href={item.href}
-              className={`relative flex min-h-[48px] min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-lg px-1 py-1 text-[10px] font-medium transition-all duration-200 ${
-                active ? "text-green-600" : "text-slate-500"
-              }`}
-            >
-              <span className="relative">
-                <Icon
-                  className={`h-6 w-6 ${active ? "text-green-600" : "text-slate-400"}`}
-                  strokeWidth={1.75}
-                  aria-hidden
-                />
-                {item.unreadBadge && unreadMessages > 0 ? (
-                  <span className="absolute -right-1.5 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-500 px-0.5 text-[9px] font-bold text-white">
-                    {unreadMessages > 9 ? "9+" : unreadMessages}
-                  </span>
-                ) : null}
-              </span>
-              <span className="sr-only">{item.label}</span>
-            </Link>
-          );
-        })}
-      </nav>
+      <BottomNav variant={sidebarRole} />
     </div>
   );
 }
