@@ -102,12 +102,16 @@ export function BerichtenClient({
   const [loading, setLoading] = useState(true);
   const [allMessages, setAllMessages] = useState<MessageRow[]>([]);
   const [userMap, setUserMap] = useState<Record<string, UserPreview>>({});
+  const [displayNameMap, setDisplayNameMap] = useState<Record<string, string>>(
+    {},
+  );
   const [tab, setTab] = useState<TabKey>("ask");
   const [search, setSearch] = useState("");
   const [activePartner, setActivePartner] = useState<string | null>(null);
   const [mobileThread, setMobileThread] = useState(false);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
   const threadEndRef = useRef<HTMLDivElement>(null);
   const channelRef = useRef<RealtimeChannel | null>(null);
 
@@ -115,15 +119,37 @@ export function BerichtenClient({
 
   const loadUsers = useCallback(async (ids: string[]) => {
     if (!ids.length) return;
+    const uniq = [...new Set(ids)];
     const { data } = await supabase
       .from("users")
       .select("id, full_name, email")
-      .in("id", [...new Set(ids)]);
+      .in("id", uniq);
     const rows = (data ?? []) as UserPreview[];
     setUserMap((prev) => ({
       ...prev,
       ...Object.fromEntries(rows.map((u) => [u.id, u])),
     }));
+
+    // Prefer DJ stage_name when available.
+    const { data: djRows } = await supabase
+      .from("dj_profiles")
+      .select("user_id, stage_name")
+      .in("user_id", uniq);
+    const list = (djRows ?? []) as { user_id?: string; stage_name?: string }[];
+
+    setDisplayNameMap((prev) => {
+      const next = { ...prev };
+      for (const id of uniq) {
+        const stage =
+          list.find((r) => r.user_id === id)?.stage_name?.trim() || "";
+        const u = rows.find((r) => r.id === id);
+        const full = u?.full_name?.trim() || "";
+        const emailPrefix = u?.email?.split("@")[0]?.trim() || "";
+        const name = stage || full || emailPrefix || "Gebruiker";
+        next[id] = name;
+      }
+      return next;
+    });
   }, []);
 
   const refreshMessages = useCallback(async () => {
@@ -331,30 +357,35 @@ export function BerichtenClient({
     const self = normalizeUserUuid(userId);
     if (!text || !self || !partner || sending) return;
     setSending(true);
+    setSendError(null);
     const {
       data: { session },
     } = await supabase.auth.getSession();
-    if (!session?.access_token) {
+    if (!session?.user) {
       setSending(false);
       return;
     }
-    const res = await fetch("/api/messages/send", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.access_token}`,
-      },
-      body: JSON.stringify({
-        content: text,
-        recipient_id: partner,
-      }),
+
+    console.log("Sending message:", {
+      sender_id: session.user.id,
+      recipient_id: partner,
+      content: text,
     });
-    const json = (await res.json()) as {
-      error?: string;
-      success?: boolean;
-    };
+
+    const { data, error } = await supabase.from("messages").insert({
+      sender_id: session.user.id,
+      recipient_id: partner,
+      content: text,
+      is_read: false,
+      created_at: new Date().toISOString(),
+    });
+
+    console.log("Insert result:", { data, error });
+
     setSending(false);
-    if (!res.ok) {
+    if (error) {
+      console.error("Send error:", error);
+      setSendError(error.message);
       return;
     }
     setInput("");
@@ -372,7 +403,10 @@ export function BerichtenClient({
   };
 
   const partnerName = (id: string) =>
-    userMap[id]?.full_name?.trim() || userMap[id]?.email || "Gebruiker";
+    displayNameMap[id] ||
+    userMap[id]?.full_name?.trim() ||
+    userMap[id]?.email?.split("@")[0] ||
+    "Gebruiker";
 
   if (loading || !userId) {
     return (
@@ -617,6 +651,9 @@ export function BerichtenClient({
               </div>
 
               <div className="bg-white border-t border-gray-200 px-3 py-3">
+                {sendError ? (
+                  <p className="mb-2 text-sm text-red-600">{sendError}</p>
+                ) : null}
                 <div
                   className="mb-2 flex gap-1 px-1"
                   aria-hidden
