@@ -3,6 +3,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { PhotoLightbox } from "@/components/PhotoLightbox";
 
+function initialsFromName(name: string) {
+  const parts = name
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase() ?? "");
+  return parts.join("") || "?";
+}
+
 export function DjPhotoGrid({
   urls,
   name,
@@ -25,8 +35,6 @@ export function DjPhotoGrid({
 
   const prev = () => setIndex((i) => (i - 1 + list.length) % list.length);
   const next = () => setIndex((i) => (i + 1) % list.length);
-
-  if (list.length === 0) return null;
 
   const Card = ({
     i,
@@ -80,6 +88,7 @@ export function DjPhotoGrid({
   }, [list.length]);
 
   const showAllButton = list.length >= 4;
+  const initials = useMemo(() => initialsFromName(name), [name]);
 
   return (
     <>
@@ -87,20 +96,31 @@ export function DjPhotoGrid({
       <div className="md:hidden">
         <div
           ref={scrollerRef}
-          className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="flex gap-3 overflow-x-auto snap-x snap-mandatory -mx-4 px-4 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
-          {list.map((_, i) => (
-            <div key={list[i]} className="min-w-[240px] snap-start">
-              <Card i={i} className="aspect-video w-full" alt={`${name} — foto ${i + 1}`} />
+          {list.length > 0 ? (
+            list.map((_, i) => (
+              <div
+                key={list[i]}
+                className="flex-none w-[85vw] aspect-[4/3] rounded-2xl overflow-hidden snap-center"
+              >
+                <Card i={i} className="h-full w-full" alt={`${name} — foto ${i + 1}`} />
+              </div>
+            ))
+          ) : (
+            <div className="flex-none w-[85vw] aspect-[4/3] rounded-2xl overflow-hidden snap-center bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+              <span className="text-6xl font-black text-white/20">{initials}</span>
             </div>
-          ))}
+          )}
         </div>
         <div className="mt-2 flex items-center justify-center gap-1.5" aria-hidden>
-          {list.map((_, i) => (
+          {(list.length > 0 ? list : ["_"]).map((_, i) => (
             <span
               key={i}
-              className={`h-1.5 w-1.5 rounded-full ${
-                i === mobileActive ? "bg-green-500" : "bg-gray-300"
+              className={`h-1.5 rounded-full transition-all ${
+                i === mobileActive
+                  ? "bg-green-500 w-4"
+                  : "bg-gray-300 w-2"
               }`}
             />
           ))}
@@ -109,7 +129,7 @@ export function DjPhotoGrid({
 
       {/* Desktop/tablet: Airbnb-style grid */}
       <div className="hidden md:block">
-        {list.length === 1 ? (
+        {list.length === 0 ? null : list.length === 1 ? (
           <div className="relative">
             <Card i={0} className="aspect-video w-full" alt={`${name} — foto`} />
           </div>

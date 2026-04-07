@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
+import { Menu, X } from "lucide-react";
 import { supabase } from "@/lib/supabase-browser";
 
 function initialsFromUser(fullName: string | null, email: string | null) {
@@ -43,6 +44,8 @@ export function Navbar() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const mobileButtonRef = useRef<HTMLButtonElement>(null);
 
   const refreshUserRow = useCallback(async (userId: string, s: Session) => {
     const { data: row } = await supabase
@@ -115,7 +118,7 @@ export function Navbar() {
 
   useEffect(() => {
     if (!menuOpen) return;
-    const onDoc = (e: MouseEvent) => {
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
       const t = e.target as Node;
       if (menuRef.current?.contains(t) || buttonRef.current?.contains(t))
         return;
@@ -124,21 +127,35 @@ export function Navbar() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setMenuOpen(false);
     };
-    document.addEventListener("mousedown", onDoc);
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
     document.addEventListener("keydown", onKey);
     return () => {
-      document.removeEventListener("mousedown", onDoc);
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
       document.removeEventListener("keydown", onKey);
     };
   }, [menuOpen]);
 
   useEffect(() => {
     if (!mobileNavOpen) return;
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      const t = e.target as Node;
+      if (mobileMenuRef.current?.contains(t) || mobileButtonRef.current?.contains(t))
+        return;
+      setMobileNavOpen(false);
+    };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setMobileNavOpen(false);
     };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+      document.removeEventListener("keydown", onKey);
+    };
   }, [mobileNavOpen]);
 
   useEffect(() => {
@@ -179,24 +196,40 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 bg-[#0a0a0a] shadow-sm shadow-black/10 backdrop-blur-md supports-[backdrop-filter]:bg-[#0a0a0a]/95">
       {mobileNavOpen ? (
-        <button
-          type="button"
-          className="fixed inset-0 z-[45] bg-[#0a0a0a]/80 backdrop-blur-sm md:hidden"
-          aria-label="Menu sluiten"
+        <div
+          className="fixed inset-0 bg-black/20 z-40 lg:hidden"
           onClick={() => setMobileNavOpen(false)}
+          onTouchStart={() => setMobileNavOpen(false)}
+          aria-hidden
         />
       ) : null}
 
-      <div className="relative mx-auto flex h-14 max-w-7xl items-center gap-3 px-4 sm:h-16 sm:px-6 lg:px-8">
-        <Link
-          href="/"
-          className="shrink-0 text-xl font-bold tracking-tight text-white"
-        >
-          book<span className="text-green-400">adj</span>
-        </Link>
+      <div className="relative mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4 sm:h-16 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-3">
+          <button
+            ref={mobileButtonRef}
+            type="button"
+            className="lg:hidden p-2 -ml-2 rounded-xl text-white transition-colors hover:bg-white/10 active:bg-white/15"
+            aria-expanded={mobileNavOpen}
+            aria-controls="site-mobile-nav"
+            aria-label={mobileNavOpen ? "Menu sluiten" : "Menu openen"}
+            onClick={() => setMobileNavOpen((o) => !o)}
+          >
+            {mobileNavOpen ? (
+              <X className="w-5 h-5" aria-hidden />
+            ) : (
+              <Menu className="w-5 h-5" aria-hidden />
+            )}
+          </button>
+
+          <Link href="/" className="font-bold tracking-tight text-white">
+            <span className="text-base lg:text-xl">book</span>
+            <span className="text-base lg:text-xl text-green-400">adj</span>
+          </Link>
+        </div>
 
         <nav
-          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 text-sm font-medium text-gray-400 md:flex"
+          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 text-sm font-medium text-gray-400 lg:flex"
           aria-label="Hoofdnavigatie"
         >
           <Link href="/zoeken" className={navLinkClass}>
@@ -216,13 +249,12 @@ export function Navbar() {
           </Link>
         </nav>
 
-        <div className="flex-1" />
-
         {/* Mobile dropdown menu */}
         {mobileNavOpen ? (
           <div
             id="site-mobile-nav"
-            className="absolute left-4 right-4 top-full z-[48] mt-2 rounded-xl border border-gray-200 bg-white shadow-lg md:hidden"
+            ref={mobileMenuRef}
+            className="absolute left-4 right-4 top-full z-50 mt-2 rounded-xl border border-gray-200 bg-white shadow-lg lg:hidden"
             role="dialog"
             aria-label="Mobiel menu"
           >
@@ -244,28 +276,28 @@ export function Navbar() {
               <div className="my-2 border-t border-gray-100" />
               <Link
                 href="/voor-djs"
-                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900"
+                className="min-h-[48px] rounded-lg px-3 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900 flex items-center"
                 onClick={() => setMobileNavOpen(false)}
               >
                 Voor DJ&apos;s
               </Link>
               <Link
                 href="/over-ons"
-                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900"
+                className="min-h-[48px] rounded-lg px-3 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900 flex items-center"
                 onClick={() => setMobileNavOpen(false)}
               >
                 Over ons
               </Link>
               <Link
                 href="/support"
-                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900"
+                className="min-h-[48px] rounded-lg px-3 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900 flex items-center"
                 onClick={() => setMobileNavOpen(false)}
               >
                 Support
               </Link>
               <Link
                 href="/contact"
-                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900"
+                className="min-h-[48px] rounded-lg px-3 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900 flex items-center"
                 onClick={() => setMobileNavOpen(false)}
               >
                 Contact
@@ -275,7 +307,7 @@ export function Navbar() {
                 <div className="space-y-2 p-2">
                   <Link
                     href="/auth"
-                    className="block rounded-lg px-3 py-2 text-sm font-medium text-gray-700"
+                    className="block min-h-[48px] rounded-lg px-3 py-3 text-sm font-medium text-gray-700"
                     onClick={() => setMobileNavOpen(false)}
                   >
                     Inloggen
@@ -294,23 +326,6 @@ export function Navbar() {
         ) : null}
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-          <button
-            type="button"
-            className="flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 text-white shadow-sm transition-all duration-200 hover:bg-white/10 md:hidden"
-            aria-expanded={mobileNavOpen}
-            aria-controls="site-mobile-nav"
-            aria-label="Menu openen"
-            onClick={() => setMobileNavOpen((o) => !o)}
-          >
-            <svg className="h-5 w-5" viewBox="0 0 20 20" fill="none" aria-hidden>
-              <path
-                d="M3 5h14M3 10h14M3 15h14"
-                stroke="currentColor"
-                strokeWidth="1.75"
-                strokeLinecap="round"
-              />
-            </svg>
-          </button>
           {!session ? (
             <>
               <Link
