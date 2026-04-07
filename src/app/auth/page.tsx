@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { supabase } from "@/lib/supabase-browser";
 
@@ -11,6 +11,7 @@ type Role = "klant" | "dj";
 export default function AuthPage() {
   const router = useRouter();
   const [tab, setTab] = useState<Tab>("login");
+  const ensuredUserRowForIdRef = useRef<string | null>(null);
 
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -28,6 +29,28 @@ export default function AuthPage() {
 
   const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 
+  const ensurePublicUserRow = async (args: {
+    id: string;
+    email: string | null | undefined;
+    selectedRole: Role;
+  }) => {
+    if (!args.id) return;
+    if (ensuredUserRowForIdRef.current === args.id) return;
+
+    const { error: upsertError } = await supabase.from("users").upsert(
+      {
+        id: args.id,
+        email: args.email ?? null,
+        role: args.selectedRole, // 'klant' or 'dj'
+        created_at: new Date().toISOString(),
+      },
+      { onConflict: "id" },
+    );
+
+    if (upsertError) throw upsertError;
+    ensuredUserRowForIdRef.current = args.id;
+  };
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get("tab") === "aanmelden") {
@@ -36,6 +59,27 @@ export default function AuthPage() {
     const r = params.get("role")?.toLowerCase();
     if (r === "dj") setRole("dj");
     if (r === "klant" || r === "customer") setRole("klant");
+  }, []);
+
+  // Ensure a public.users row exists after any successful sign-in (incl. social/OAuth redirects).
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (!session?.user) return;
+      const metaRole = (session.user.user_metadata?.role as string | undefined)?.toLowerCase();
+      const selectedRole: Role = metaRole === "dj" ? "dj" : "klant";
+      try {
+        await ensurePublicUserRow({
+          id: session.user.id,
+          email: session.user.email,
+          selectedRole,
+        });
+      } catch {
+        // Don't block navigation; signup/login still succeeded.
+      }
+    });
+    return () => subscription.unsubscribe();
   }, []);
 
   async function handleLogin(e: React.FormEvent) {
@@ -131,6 +175,23 @@ export default function AuthPage() {
     if (signError) {
       setError(signError.message);
       return;
+    }
+
+    if (signData.user) {
+      try {
+        await ensurePublicUserRow({
+          id: signData.user.id,
+          email: signData.user.email,
+          selectedRole: role,
+        });
+      } catch (e) {
+        setError(
+          e instanceof Error
+            ? e.message
+            : "Account aangemaakt, maar opslaan van gebruikersprofiel mislukte.",
+        );
+        return;
+      }
     }
 
     if (signData.session) {

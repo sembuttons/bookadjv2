@@ -168,6 +168,22 @@ export function DashboardAppShell({
         return;
       }
 
+      // Ensure a public.users row exists before any other dashboard queries.
+      const metaRole = session.user.user_metadata?.role;
+      const roleForDb =
+        typeof metaRole === "string" && metaRole.toLowerCase() === "dj"
+          ? "dj"
+          : "klant";
+      await supabase.from("users").upsert(
+        {
+          id: session.user.id,
+          email: session.user.email ?? null,
+          role: roleForDb,
+          created_at: new Date().toISOString(),
+        },
+        { onConflict: "id" },
+      );
+
       const roleForNav: "klant" | "dj" =
         expectedRole === "auto" ? (isDj ? "dj" : "klant") : expectedRole;
 

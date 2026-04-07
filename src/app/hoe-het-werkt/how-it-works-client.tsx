@@ -92,7 +92,7 @@ function FlowToggle({
   onChange: (v: FlowKey) => void;
 }) {
   return (
-    <div className="mt-8 inline-flex w-full max-w-md rounded-2xl bg-[#111827]/10 p-1.5 ring-1 ring-white/15 backdrop-blur-sm sm:w-auto">
+    <div className="inline-flex w-full max-w-md rounded-2xl bg-gray-50 p-1.5 ring-1 ring-gray-200 sm:w-auto">
       {(
         [
           { key: "klant" as const, label: "Voor klanten" },
@@ -106,7 +106,9 @@ function FlowToggle({
             type="button"
             onClick={() => onChange(t.key)}
             className={`min-h-[44px] flex-1 rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-200 sm:flex-initial sm:px-6 ${
-              active ? "bg-[#111827] text-white" : "text-white/80 hover:text-white"
+              active
+                ? "bg-green-500 text-white shadow-sm"
+                : "text-gray-700 hover:bg-white hover:text-gray-900"
             }`}
             aria-pressed={active}
           >

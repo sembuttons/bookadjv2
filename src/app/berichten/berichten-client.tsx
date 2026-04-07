@@ -148,11 +148,33 @@ export function BerichtenClient({
     }));
   }, []);
 
+  const ensurePublicUserRow = useCallback(async (sessionUser: {
+    id: string;
+    email?: string | null;
+    user_metadata?: Record<string, unknown>;
+  }) => {
+    const metaRole = sessionUser.user_metadata?.role;
+    const role =
+      typeof metaRole === "string" && metaRole.toLowerCase() === "dj"
+        ? "dj"
+        : "klant";
+    await supabase.from("users").upsert(
+      {
+        id: sessionUser.id,
+        email: sessionUser.email ?? null,
+        role,
+        created_at: new Date().toISOString(),
+      },
+      { onConflict: "id" },
+    );
+  }, []);
+
   const refreshMessages = useCallback(async () => {
     const {
       data: { session },
     } = await supabase.auth.getSession();
     if (!session?.user) return;
+    await ensurePublicUserRow(session.user);
     const uid = session.user.id;
     const { data, error } = await supabase
       .from("messages")
@@ -169,7 +191,7 @@ export function BerichtenClient({
       ids.add(m.recipient_id);
     }
     await loadUsers([...ids]);
-  }, [loadUsers]);
+  }, [ensurePublicUserRow, loadUsers]);
 
   useEffect(() => {
     let cancelled = false;
@@ -188,6 +210,7 @@ export function BerichtenClient({
         );
         return;
       }
+      await ensurePublicUserRow(session.user);
       setUserId(session.user.id);
       setLoading(false);
       await refreshMessages();
@@ -195,7 +218,7 @@ export function BerichtenClient({
     return () => {
       cancelled = true;
     };
-  }, [initialPartnerId, refreshMessages, router, threadOnly]);
+  }, [initialPartnerId, ensurePublicUserRow, refreshMessages, router, threadOnly]);
 
   useEffect(() => {
     if (!userId) return;
