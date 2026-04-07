@@ -242,10 +242,11 @@ export default async function Home() {
 
       {/* Trust — white content, photo right */}
       <section
-        className="bg-white py-16 sm:py-20 lg:py-24"
+        className="w-full px-4 py-20"
         aria-labelledby="trust-pro-heading"
       >
-        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-4 lg:grid-cols-2 lg:items-center">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
             <p className="text-sm font-semibold uppercase tracking-widest text-green-600">
               Kwaliteit &amp; veiligheid
@@ -261,7 +262,7 @@ export default async function Home() {
               je meedenkt — van eerste klik tot na het feest.
             </p>
 
-            <ul className="mt-10 grid max-w-lg gap-4 sm:grid-cols-2">
+            <ul className="mt-10 grid grid-cols-2 gap-4">
               {(
                 [
                   {
@@ -309,39 +310,42 @@ export default async function Home() {
             </Link>
           </div>
 
-          <div className="relative min-h-[280px] bg-gray-50 px-4 py-8 sm:px-6 lg:rounded-3xl lg:py-10">
-            <div className="relative mx-auto flex h-full min-h-[280px] w-full max-w-lg items-center justify-center lg:absolute lg:inset-0 lg:mx-0 lg:max-w-none">
-              <div
-                className="aspect-[4/3] w-full max-w-md overflow-hidden rounded-3xl bg-gray-200 bg-cover bg-center shadow-xl lg:max-w-lg lg:self-center"
-                style={{ backgroundImage: `url(${TRUST_SECTION_IMAGE})` }}
-                aria-hidden
-              />
-              <div className="absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-auto sm:right-8 sm:w-[min(100%,300px)]">
-                <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-xl sm:p-5">
-                  <div className="flex items-center gap-3">
-                    <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-green-500 to-green-400 text-sm font-bold text-black">
-                      NV
-                      <span
-                        className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-white bg-green-500"
-                        aria-hidden
-                      />
+          <div className="flex items-center justify-center">
+            <div className="relative min-h-[280px] bg-gray-50 px-4 py-8 sm:px-6 lg:rounded-3xl lg:py-10">
+              <div className="relative mx-auto flex h-full min-h-[280px] w-full max-w-lg items-center justify-center lg:absolute lg:inset-0 lg:mx-0 lg:max-w-none">
+                <div
+                  className="aspect-[4/3] w-full max-w-md overflow-hidden rounded-3xl bg-gray-200 bg-cover bg-center shadow-xl lg:max-w-lg lg:self-center"
+                  style={{ backgroundImage: `url(${TRUST_SECTION_IMAGE})` }}
+                  aria-hidden
+                />
+                <div className="absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-auto sm:right-8 sm:w-[min(100%,300px)]">
+                  <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-xl sm:p-5">
+                    <div className="flex items-center gap-3">
+                      <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-green-500 to-green-400 text-sm font-bold text-black">
+                        NV
+                        <span
+                          className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-white bg-green-500"
+                          aria-hidden
+                        />
+                      </div>
+                      <div className="min-w-0 text-left">
+                        <p className="truncate font-semibold text-slate-900">
+                          DJ Nova
+                        </p>
+                        <span className="mt-1 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-green-600">
+                          Geverifieerde DJ
+                        </span>
+                      </div>
                     </div>
-                    <div className="min-w-0 text-left">
-                      <p className="truncate font-semibold text-slate-900">
-                        DJ Nova
-                      </p>
-                      <span className="mt-1 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-green-600">
-                        Geverifieerde DJ
-                      </span>
-                    </div>
+                    <p className="mt-3 text-xs text-slate-500">
+                      Zo zie je op het platform dat een DJ gecontroleerd is —
+                      met echte reviews en duidelijke afspraken.
+                    </p>
                   </div>
-                  <p className="mt-3 text-xs text-slate-500">
-                    Zo zie je op het platform dat een DJ gecontroleerd is —
-                    met echte reviews en duidelijke afspraken.
-                  </p>
                 </div>
               </div>
             </div>
+          </div>
           </div>
         </div>
       </section>
