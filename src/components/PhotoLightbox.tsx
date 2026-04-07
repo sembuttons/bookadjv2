@@ -31,6 +31,8 @@ export function PhotoLightbox({
 
   if (!open) return null;
   const src = urls[index] ?? "";
+  const total = urls.length;
+  const counter = total > 0 ? `${index + 1} / ${total}` : "";
 
   return (
     <div
@@ -51,6 +53,10 @@ export function PhotoLightbox({
         >
           <X className="h-5 w-5" aria-hidden />
         </button>
+
+        <div className="absolute -top-10 left-0 text-sm font-semibold text-white/80">
+          {counter}
+        </div>
 
         <div className="relative overflow-hidden rounded-2xl bg-black">
           {/* eslint-disable-next-line @next/next/no-img-element */}

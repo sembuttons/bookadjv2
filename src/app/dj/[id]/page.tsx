@@ -13,6 +13,7 @@ import {
   SlidersHorizontal,
   Speech,
   Star as StarIcon,
+  Play,
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { notFound } from "next/navigation";
@@ -265,9 +266,30 @@ export default async function DjProfilePage({ params }: PageProps) {
   const hasPhotos = photoUrls.length > 0;
   const videoRaw =
     typeof profile.video_url === "string" ? profile.video_url.trim() : "";
-  const videoIframeSrc = videoRaw ? videoEmbedSrc(videoRaw) : null;
+  const youtubeId = (() => {
+    if (!videoRaw) return "";
+    try {
+      const u = new URL(videoRaw);
+      const host = u.hostname.replace(/^www\./, "");
+      if (host === "youtu.be") {
+        const id = u.pathname.split("/").filter(Boolean)[0] ?? "";
+        return id;
+      }
+      if (host === "youtube.com" || host === "m.youtube.com") {
+        const v = u.searchParams.get("v");
+        if (v) return v;
+        const parts = u.pathname.split("/").filter(Boolean);
+        const embedIdx = parts.indexOf("embed");
+        if (embedIdx >= 0) return parts[embedIdx + 1] ?? "";
+      }
+      return "";
+    } catch {
+      return "";
+    }
+  })();
+  const hasYouTubeVideo = Boolean(youtubeId);
   const hasAnyMedia =
-    hasPhotos || Boolean(instagramUrl) || Boolean(soundcloudUrl) || Boolean(videoIframeSrc);
+    hasPhotos || Boolean(instagramUrl) || Boolean(soundcloudUrl) || hasYouTubeVideo;
 
   return (
     <div className="min-h-screen bg-[#f8fafc] font-sans text-slate-900">
@@ -276,7 +298,11 @@ export default async function DjProfilePage({ params }: PageProps) {
       <div className="mx-auto max-w-[1400px] px-4 pb-16 pt-6 sm:px-6 lg:px-8">
         {/* Photo grid / media empty state */}
         {hasPhotos ? (
-          <DjPhotoGrid urls={photoUrls} name={name} videoAnchorHref={videoIframeSrc ? "#dj-video" : null} />
+          <DjPhotoGrid
+            urls={photoUrls}
+            name={name}
+            videoAnchorHref={hasYouTubeVideo ? "#dj-video" : null}
+          />
         ) : !hasAnyMedia ? (
           <div className="rounded-2xl bg-gray-50 border border-gray-200 p-8 text-center">
             <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -300,21 +326,6 @@ export default async function DjProfilePage({ params }: PageProps) {
             </span>
           </div>
         )}
-
-        {videoIframeSrc ? (
-          <div id="dj-video" className="mt-6 scroll-mt-24">
-            <h2 className="text-lg font-bold text-slate-900">Video</h2>
-            <div className="mt-3 aspect-video w-full max-w-4xl overflow-hidden rounded-2xl border border-gray-200 bg-black shadow-sm">
-              <iframe
-                title={`Video van ${name}`}
-                src={videoIframeSrc}
-                className="h-full w-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          </div>
-        ) : null}
 
         {/* Name + badge + location + genres — all in one block */}
         <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -408,7 +419,7 @@ export default async function DjProfilePage({ params }: PageProps) {
             <MediaTabs
               djFirstName={fn}
               instagramUrl={instagramUrl}
-              soundcloudUrl={soundcloudUrl}
+              soundcloudUrl={null}
             />
 
             <section aria-labelledby="over-heading">
@@ -466,6 +477,46 @@ export default async function DjProfilePage({ params }: PageProps) {
                 ))}
               </ul>
             </section>
+
+            {hasYouTubeVideo || soundcloudUrl ? (
+              <section id="dj-video" className="scroll-mt-24" aria-label="DJ in actie">
+                <div className="flex items-center gap-2">
+                  <Play className="h-5 w-5 text-green-600" aria-hidden />
+                  <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">
+                    DJ in actie
+                  </h2>
+                </div>
+
+                {hasYouTubeVideo ? (
+                  <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-black shadow-sm">
+                    <iframe
+                      title={`Video van ${name}`}
+                      src={`https://www.youtube.com/embed/${encodeURIComponent(
+                        youtubeId,
+                      )}`}
+                      className="w-full aspect-video rounded-2xl"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                ) : null}
+
+                {soundcloudUrl ? (
+                  <div className="mt-4 rounded-2xl overflow-hidden border border-gray-200 bg-white">
+                    <iframe
+                      title="SoundCloud"
+                      width="100%"
+                      height="166"
+                      scrolling="no"
+                      frameBorder={0}
+                      src={`https://w.soundcloud.com/player/?url=${encodeURIComponent(
+                        soundcloudUrl,
+                      )}&color=%2322c55e&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false`}
+                    />
+                  </div>
+                ) : null}
+              </section>
+            ) : null}
 
             {/* Booking panel — mobile placement (after bio) */}
             <div id="booking-panel-anchor" className="lg:hidden">
