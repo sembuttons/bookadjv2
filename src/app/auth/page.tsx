@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { supabase } from "@/lib/supabase-browser";
 
@@ -15,10 +16,12 @@ export default function AuthPage() {
 
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
 
   const [fullName, setFullName] = useState("");
   const [signupEmail, setSignupEmail] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
+  const [showSignupPassword, setShowSignupPassword] = useState(false);
   const [role, setRole] = useState<Role>("klant");
 
   const [loading, setLoading] = useState(false);
@@ -358,23 +361,39 @@ export default function AuthPage() {
               >
                 Wachtwoord
               </label>
-              <input
-                id="login-password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                value={loginPassword}
-                onChange={(e) => {
-                  setLoginPassword(e.target.value);
-                  setFieldErrors((p) => {
-                    const n = { ...p };
-                    delete n.loginPassword;
-                    return n;
-                  });
-                }}
-                className="input-field mt-1.5"
-                placeholder="••••••••"
-              />
+              <div className="relative mt-1.5">
+                <input
+                  id="login-password"
+                  name="password"
+                  type={showLoginPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  value={loginPassword}
+                  onChange={(e) => {
+                    setLoginPassword(e.target.value);
+                    setFieldErrors((p) => {
+                      const n = { ...p };
+                      delete n.loginPassword;
+                      return n;
+                    });
+                  }}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 pr-12 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+                  placeholder="Wachtwoord"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowLoginPassword(!showLoginPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label={
+                    showLoginPassword ? "Verberg wachtwoord" : "Toon wachtwoord"
+                  }
+                >
+                  {showLoginPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
               {fieldErrors.loginPassword ? (
                 <p className="mt-1.5 text-sm text-red-400" role="alert">
                   {fieldErrors.loginPassword}
@@ -498,23 +517,39 @@ export default function AuthPage() {
               >
                 Wachtwoord
               </label>
-              <input
-                id="signup-password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                value={signupPassword}
-                onChange={(e) => {
-                  setSignupPassword(e.target.value);
-                  setFieldErrors((p) => {
-                    const n = { ...p };
-                    delete n.signupPassword;
-                    return n;
-                  });
-                }}
-                className="input-field mt-1.5"
-                placeholder="Minimaal 6 tekens"
-              />
+              <div className="relative mt-1.5">
+                <input
+                  id="signup-password"
+                  name="password"
+                  type={showSignupPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  value={signupPassword}
+                  onChange={(e) => {
+                    setSignupPassword(e.target.value);
+                    setFieldErrors((p) => {
+                      const n = { ...p };
+                      delete n.signupPassword;
+                      return n;
+                    });
+                  }}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 pr-12 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+                  placeholder="Wachtwoord"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowSignupPassword(!showSignupPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label={
+                    showSignupPassword ? "Verberg wachtwoord" : "Toon wachtwoord"
+                  }
+                >
+                  {showSignupPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
               {fieldErrors.signupPassword ? (
                 <p className="mt-1.5 text-sm text-red-400" role="alert">
                   {fieldErrors.signupPassword}
