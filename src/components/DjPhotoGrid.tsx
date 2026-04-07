@@ -48,7 +48,7 @@ export function DjPhotoGrid({
     <button
       type="button"
       onClick={() => openAt(i)}
-      className={`relative overflow-hidden rounded-2xl bg-gray-100 cursor-pointer transition duration-200 hover:brightness-90 ${className}`}
+      className={`relative bg-gray-100 cursor-pointer transition duration-200 hover:brightness-90 ${className}`}
       aria-label="Open foto"
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -102,14 +102,20 @@ export function DjPhotoGrid({
             list.map((_, i) => (
               <div
                 key={list[i]}
-                className="flex-none w-[85vw] aspect-[4/3] rounded-2xl overflow-hidden snap-center"
+                className="flex-none w-[80vw] h-[240px] rounded-2xl overflow-hidden snap-center"
               >
-                <Card i={i} className="h-full w-full" alt={`${name} — foto ${i + 1}`} />
+                <Card
+                  i={i}
+                  className="h-full w-full rounded-2xl overflow-hidden"
+                  alt={`${name} — foto ${i + 1}`}
+                />
               </div>
             ))
           ) : (
-            <div className="flex-none w-[85vw] aspect-[4/3] rounded-2xl overflow-hidden snap-center bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-              <span className="text-6xl font-black text-white/20">{initials}</span>
+            <div className="flex-none w-[80vw] h-[240px] rounded-2xl overflow-hidden snap-center bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+              <span className="text-6xl font-black text-white/20">
+                {initials}
+              </span>
             </div>
           )}
         </div>
@@ -130,49 +136,39 @@ export function DjPhotoGrid({
       {/* Desktop/tablet: Airbnb-style grid */}
       <div className="hidden md:block">
         {list.length === 0 ? null : list.length === 1 ? (
-          <div className="relative">
-            <Card i={0} className="aspect-video w-full" alt={`${name} — foto`} />
+          <div className="w-full h-[480px] rounded-2xl overflow-hidden">
+            <Card i={0} className="h-full w-full" alt={`${name} — foto`} />
           </div>
         ) : list.length === 2 ? (
-          <div className="grid grid-cols-2 gap-2">
-            <Card i={0} className="aspect-video w-full" alt={`${name} — foto 1`} />
-            <Card i={1} className="aspect-video w-full" alt={`${name} — foto 2`} />
+          <div className="grid grid-cols-2 gap-2 h-[480px] rounded-2xl overflow-hidden">
+            <Card i={0} className="h-full w-full" alt={`${name} — foto 1`} />
+            <Card i={1} className="h-full w-full" alt={`${name} — foto 2`} />
           </div>
         ) : (
-          <div className="relative grid grid-cols-5 gap-2">
-            {/* Left large (60%) */}
-            <div className="col-span-3">
-              <Card
-                i={0}
-                className="h-full min-h-[320px] lg:min-h-[380px] xl:min-h-[420px]"
-                alt={`${name} — foto 1`}
-              />
+          <div className="grid grid-cols-2 gap-2 h-[480px]">
+            {/* Left: 1 large photo */}
+            <div className="rounded-l-2xl overflow-hidden">
+              <Card i={0} className="h-full w-full" alt={`${name} — foto 1`} />
             </div>
 
-            {/* Right stacked (40%) */}
-            <div className="col-span-2 grid grid-rows-2 gap-2">
-              <Card i={1} className="h-full" alt={`${name} — foto 2`} />
-              <Card i={2} className="h-full" alt={`${name} — foto 3`} />
+            {/* Right: 2 stacked photos */}
+            <div className="grid grid-rows-2 gap-2">
+              <div className="rounded-tr-2xl overflow-hidden">
+                <Card i={1} className="h-full w-full" alt={`${name} — foto 2`} />
+              </div>
+              <div className="rounded-br-2xl overflow-hidden relative">
+                <Card i={2} className="h-full w-full" alt={`${name} — foto 3`} />
+                {list.length > 3 ? (
+                  <button
+                    type="button"
+                    onClick={() => openAt(0)}
+                    className="absolute bottom-3 right-3 bg-white text-gray-900 text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50"
+                  >
+                    +{list.length - 3} foto&apos;s
+                  </button>
+                ) : null}
+              </div>
             </div>
-
-            {videoAnchorHref ? (
-              <a
-                href={videoAnchorHref}
-                className="absolute right-3 top-3 inline-flex items-center justify-center rounded-xl bg-black/45 px-3 py-2 text-xs font-semibold text-white ring-1 ring-white/25 backdrop-blur-sm hover:bg-black/55"
-              >
-                Video
-              </a>
-            ) : null}
-
-            {showAllButton ? (
-              <button
-                type="button"
-                onClick={() => openAt(0)}
-                className="absolute bottom-3 right-3 inline-flex items-center justify-center rounded-xl bg-white/95 px-4 py-2 text-sm font-semibold text-slate-900 ring-1 ring-gray-200 shadow-sm hover:bg-white"
-              >
-                Alle foto&apos;s bekijken
-              </button>
-            ) : null}
           </div>
         )}
       </div>

@@ -317,12 +317,17 @@ export default async function DjProfilePage({ params }: PageProps) {
           </div>
         ) : (
           <div
-            className="relative flex min-h-[220px] items-center justify-center overflow-hidden rounded-2xl bg-[#111827] bg-cover bg-center lg:min-h-[420px]"
+            className="w-full h-[360px] rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center"
             style={{ backgroundImage: `url(${DJ_GALLERY_MAIN})` }}
           >
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/20" aria-hidden />
-            <span className="relative z-10 text-sm font-semibold text-white/85">
-              Nog geen foto&apos;s toegevoegd
+            <span className="text-8xl font-black text-white/10">
+              {name
+                .trim()
+                .split(/\s+/)
+                .filter(Boolean)
+                .slice(0, 2)
+                .map((p) => p[0]?.toUpperCase() ?? "")
+                .join("") || "?"}
             </span>
           </div>
         )}
