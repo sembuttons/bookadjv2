@@ -90,7 +90,7 @@ export function DjPhotoGrid({
           className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {list.map((_, i) => (
-            <div key={list[i]} className="min-w-[280px] snap-start">
+            <div key={list[i]} className="min-w-[240px] snap-start">
               <Card i={i} className="aspect-video w-full" alt={`${name} — foto ${i + 1}`} />
             </div>
           ))}
@@ -122,7 +122,11 @@ export function DjPhotoGrid({
           <div className="relative grid grid-cols-5 gap-2">
             {/* Left large (60%) */}
             <div className="col-span-3">
-              <Card i={0} className="h-full min-h-[420px]" alt={`${name} — foto 1`} />
+              <Card
+                i={0}
+                className="h-full min-h-[320px] lg:min-h-[380px] xl:min-h-[420px]"
+                alt={`${name} — foto 1`}
+              />
             </div>
 
             {/* Right stacked (40%) */}
