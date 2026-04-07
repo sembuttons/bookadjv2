@@ -6,6 +6,7 @@ import {
   ArrowRight,
   BadgeCheck,
   CalendarDays,
+  ChevronDown,
   CreditCard,
   Mail,
   MessageSquare,
@@ -240,7 +241,9 @@ export function HowItWorksClient() {
           className="absolute inset-0 -z-20"
           style={{
             backgroundImage:
-              "linear-gradient(135deg, #0a0a0a 0%, #0f2818 100%)",
+              "linear-gradient(135deg, rgba(10,10,10,0.92) 0%, rgba(15,40,24,0.95) 100%), url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1600&q=80')",
+            backgroundSize: "cover",
+            backgroundPosition: "center top",
           }}
           aria-hidden
         />
@@ -256,21 +259,50 @@ export function HowItWorksClient() {
           aria-hidden
         />
 
-        <div className="relative mx-auto max-w-5xl py-28 text-center md:py-36">
-          <p className="text-green-400 text-xs font-semibold tracking-widest uppercase">
+        <div className="relative mx-auto max-w-5xl py-36 text-center md:py-48">
+          <p className="mx-auto text-center text-green-400 text-xs font-semibold tracking-widest uppercase">
             HOE HET WERKT
           </p>
-          <h1 className="mt-6 font-black tracking-tight leading-none text-5xl md:text-7xl">
-            <span className="text-white">Zo werkt</span>
-            <br />
-            <span className="text-green-400">bookadj.</span>
-          </h1>
+
+          <div className="relative mt-6">
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(ellipse 60% 40% at 50% 40%, rgba(34,197,94,0.08), transparent)",
+              }}
+              aria-hidden
+            />
+            <h1 className="relative mx-auto font-black tracking-tight leading-none text-6xl md:text-8xl text-center">
+              <span className="text-white">Zo werkt</span>
+              <br />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-green-300 to-emerald-400 font-black">
+                bookadj.
+              </span>
+            </h1>
+            <div
+              className="w-24 h-1 bg-gradient-to-r from-green-500 to-emerald-400 rounded-full mx-auto mt-4"
+              aria-hidden
+            />
+          </div>
+
           <p className="mx-auto mt-6 max-w-2xl text-center text-gray-400 text-lg md:text-xl">
             Van zoeken naar de perfecte DJ — tot een onvergetelijk feest.
           </p>
-          <p className="mt-8 text-gray-500 text-sm text-center">
-            Veilig betalen · Geverifieerde DJ&apos;s · Direct contact
-          </p>
+
+          <div className="flex items-center justify-center gap-3 flex-wrap mt-8">
+            {["Veilig betalen", "Geverifieerde DJ's", "Direct contact"].map((item) => (
+              <span key={item} className="flex items-center gap-1.5 text-gray-400 text-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500" aria-hidden />
+                {item}
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-12 flex flex-col items-center gap-2 animate-bounce">
+            <div className="w-px h-8 bg-gradient-to-b from-green-500/0 to-green-500/60" />
+            <ChevronDown className="w-5 h-5 text-green-500/60" aria-hidden />
+          </div>
         </div>
       </section>
 
