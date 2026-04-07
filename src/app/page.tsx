@@ -4,6 +4,7 @@ import { Navbar } from "@/components/Navbar";
 import { EmptyState } from "@/components/skeleton";
 import {
   Briefcase,
+  CheckCircle,
   CreditCard,
   Gift,
   GraduationCap,
@@ -242,7 +243,7 @@ export default async function Home() {
 
       {/* Trust — white content, photo right */}
       <section
-        className="w-full px-4 py-20"
+        className="w-full py-20 px-4"
         aria-labelledby="trust-pro-heading"
       >
         <div className="max-w-6xl mx-auto">
@@ -262,7 +263,7 @@ export default async function Home() {
               je meedenkt — van eerste klik tot na het feest.
             </p>
 
-            <ul className="mt-10 grid grid-cols-2 gap-4">
+            <ul className="grid grid-cols-2 gap-4 mt-8">
               {(
                 [
                   {
@@ -310,38 +311,33 @@ export default async function Home() {
             </Link>
           </div>
 
-          <div className="flex items-center justify-center">
-            <div className="relative min-h-[280px] bg-gray-50 px-4 py-8 sm:px-6 lg:rounded-3xl lg:py-10">
-              <div className="relative mx-auto flex h-full min-h-[280px] w-full max-w-lg items-center justify-center lg:absolute lg:inset-0 lg:mx-0 lg:max-w-none">
-                <div
-                  className="aspect-[4/3] w-full max-w-md overflow-hidden rounded-3xl bg-gray-200 bg-cover bg-center shadow-xl lg:max-w-lg lg:self-center"
-                  style={{ backgroundImage: `url(${TRUST_SECTION_IMAGE})` }}
-                  aria-hidden
-                />
-                <div className="absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-auto sm:right-8 sm:w-[min(100%,300px)]">
-                  <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-xl sm:p-5">
-                    <div className="flex items-center gap-3">
-                      <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-green-500 to-green-400 text-sm font-bold text-black">
-                        NV
-                        <span
-                          className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-white bg-green-500"
-                          aria-hidden
-                        />
-                      </div>
-                      <div className="min-w-0 text-left">
-                        <p className="truncate font-semibold text-slate-900">
-                          DJ Nova
-                        </p>
-                        <span className="mt-1 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-green-600">
-                          Geverifieerde DJ
-                        </span>
-                      </div>
-                    </div>
-                    <p className="mt-3 text-xs text-slate-500">
-                      Zo zie je op het platform dat een DJ gecontroleerd is —
-                      met echte reviews en duidelijke afspraken.
+          <div className="relative flex items-center justify-center">
+            <div className="bg-gray-50 rounded-3xl w-full aspect-square max-w-sm flex items-center justify-center">
+              <div className="bg-white rounded-2xl shadow-xl p-6 w-72">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-lg">
+                    NV
+                  </div>
+                  <div>
+                    <p className="font-bold text-gray-900">DJ Nova</p>
+                    <p className="text-green-600 text-xs font-semibold uppercase tracking-wide flex items-center gap-1">
+                      <CheckCircle className="w-3 h-3" /> Geverifieerde DJ
                     </p>
                   </div>
+                </div>
+                <p className="text-gray-500 text-sm leading-relaxed">
+                  Zo zie je op het platform dat een DJ gecontroleerd is — met echte reviews en duidelijke afspraken.
+                </p>
+                <div className="mt-4 flex gap-1">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <Star
+                      key={i}
+                      className="w-4 h-4 fill-amber-400 text-amber-400"
+                    />
+                  ))}
+                  <span className="text-gray-500 text-xs ml-1">
+                    5.0 · 12 reviews
+                  </span>
                 </div>
               </div>
             </div>
