@@ -178,19 +178,20 @@ export default function AuthPage() {
     }
 
     if (signData.user) {
+      // Best-effort: don't block signup if this fails (dashboard upsert will catch it).
       try {
-        await ensurePublicUserRow({
-          id: signData.user.id,
-          email: signData.user.email,
-          selectedRole: role,
-        });
-      } catch (e) {
-        setError(
-          e instanceof Error
-            ? e.message
-            : "Account aangemaakt, maar opslaan van gebruikersprofiel mislukte.",
+        await supabase.from("users").upsert(
+          {
+            id: signData.user.id,
+            email: signData.user.email,
+            role,
+            full_name: fullName.trim(),
+            created_at: new Date().toISOString(),
+          },
+          { onConflict: "id" },
         );
-        return;
+      } catch {
+        /* non-blocking */
       }
     }
 
@@ -208,6 +209,11 @@ export default function AuthPage() {
         router.refresh();
         return;
       }
+
+      // Default post-signup destination
+      router.push(role === "dj" ? "/dashboard/dj" : "/dashboard/klant");
+      router.refresh();
+      return;
     }
 
     setSignupDone(true);

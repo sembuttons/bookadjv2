@@ -209,17 +209,16 @@ export default function KlantDashboardPage() {
       {
         id: session.user.id,
         email: userEmail,
-        full_name: session.user.user_metadata?.full_name || "",
-        role: session.user.user_metadata?.role || "customer",
+        role: (session.user.user_metadata?.role as string | undefined) ?? "klant",
+        full_name:
+          (session.user.user_metadata?.full_name as string | undefined) ?? null,
+        created_at: new Date().toISOString(),
       },
       { onConflict: "id" },
     );
 
     if (upsertUserError) {
-      setLoadError(upsertUserError.message);
-      setBookings([]);
-      setLoading(false);
-      return;
+      // If this fails (RLS/network), don't block the dashboard.
     }
 
     const { data, error } = await supabase

@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import {
+  bookingConfirmedEmail,
+  bookingReceivedEmail,
+  bookingRejectedEmail,
+} from "@/lib/email-templates";
 
 const resendApiKey = process.env.RESEND_API_KEY;
 const defaultFrom =
@@ -153,7 +158,7 @@ export async function POST(req: Request) {
   const { data: booking, error: bookingError } = await supabaseAdmin
     .from("bookings")
     .select(
-      "*, users!bookings_customer_id_fkey(email, full_name), dj_profiles(stage_name, city)",
+      "id, customer_id, dj_id, reference, event_date, hours, venue_address, total_amount, users!bookings_customer_id_fkey(email, full_name), dj_profiles(stage_name, city, user_id)",
     )
     .eq("id", bookingId)
     .single();
@@ -171,9 +176,15 @@ export async function POST(req: Request) {
     dj_id?: string | null;
     reference?: string | null;
     event_date?: string | null;
+    hours?: number | null;
+    venue_address?: string | null;
     total_amount?: number | null;
     users?: { email?: string | null; full_name?: string | null } | unknown;
-    dj_profiles?: { stage_name?: string | null; city?: string | null } | unknown;
+    dj_profiles?: {
+      stage_name?: string | null;
+      city?: string | null;
+      user_id?: string | null;
+    } | unknown;
   };
 
   if (type === "booking_requested") {
@@ -201,58 +212,81 @@ export async function POST(req: Request) {
   const customer = embedOne(
     row.users as { email?: string | null; full_name?: string | null } | null,
   );
-  const toEmail =
-    typeof customer?.email === "string" ? customer.email.trim() : "";
-  if (!toEmail) {
-    return NextResponse.json(
-      { error: "Geen e-mailadres voor klant." },
-      { status: 400 },
-    );
-  }
 
   const dj = embedOne(
     row.dj_profiles as {
       stage_name?: string | null;
       city?: string | null;
+      user_id?: string | null;
     } | null,
   );
   const stageName =
     typeof dj?.stage_name === "string" && dj.stage_name.trim()
       ? dj.stage_name.trim()
       : "DJ";
-  const stageSafe = escapeHtml(stageName);
-  const ref =
-    typeof row.reference === "string" && row.reference.trim()
-      ? escapeHtml(row.reference.trim())
-      : escapeHtml(bookingId.slice(0, 8).toUpperCase());
-  const eventDateRaw =
-    typeof row.event_date === "string" ? row.event_date : "—";
-  const eventDateSafe = escapeHtml(eventDateRaw);
+  const eventDateRaw = typeof row.event_date === "string" ? row.event_date : "—";
   const totalEuro = formatEuroFromCents(row.total_amount ?? null);
+  const venue = typeof row.venue_address === "string" && row.venue_address.trim()
+    ? row.venue_address.trim()
+    : "—";
+  const hours = typeof row.hours === "number" ? row.hours : "—";
 
   const resend = new Resend(resendApiKey);
 
   try {
     if (type === "booking_requested") {
+      const djAuthId = typeof dj?.user_id === "string" ? dj.user_id.trim() : "";
+      if (!djAuthId) {
+        return NextResponse.json({ error: "DJ-account ontbreekt." }, { status: 400 });
+      }
+      const { data: djUser } = await supabaseAdmin
+        .from("users")
+        .select("email")
+        .eq("id", djAuthId)
+        .maybeSingle();
+      const djEmail = (djUser as { email?: string | null } | null)?.email?.trim() || "";
+      if (!djEmail) {
+        return NextResponse.json({ error: "Geen e-mailadres voor DJ." }, { status: 400 });
+      }
       await resend.emails.send({
         from: defaultFrom,
-        to: toEmail,
-        subject: `Aanvraag verstuurd naar ${stageName}`,
-        html: `<h1>Aanvraag verstuurd!</h1><p>Je aanvraag bij ${stageSafe} is ontvangen. De DJ heeft 24 uur om te reageren. Referentie: ${ref}</p>`,
+        to: djEmail,
+        subject: `Nieuwe boekingsaanvraag — ${eventDateRaw}`,
+        html: bookingReceivedEmail({
+          date: eventDateRaw,
+          location: venue,
+          hours,
+          totalAmountEuro: totalEuro,
+        }),
       });
     } else if (type === "booking_confirmed") {
+      const toEmail =
+        typeof customer?.email === "string" ? customer.email.trim() : "";
+      if (!toEmail) {
+        return NextResponse.json({ error: "Geen e-mailadres voor klant." }, { status: 400 });
+      }
       await resend.emails.send({
         from: defaultFrom,
         to: toEmail,
-        subject: `Boeking bevestigd — ${stageName}`,
-        html: `<h1>Boeking bevestigd!</h1><p>${stageSafe} heeft je aanvraag geaccepteerd. Datum: ${eventDateSafe}. Totaal: €${totalEuro}</p>`,
+        subject: `Je boeking is bevestigd! — ${stageName}`,
+        html: bookingConfirmedEmail({
+          djName: stageName,
+          date: eventDateRaw,
+          location: venue,
+          totalAmountEuro: totalEuro,
+        }),
       });
     } else if (type === "booking_declined") {
+      const toEmail =
+        typeof customer?.email === "string" ? customer.email.trim() : "";
+      if (!toEmail) {
+        return NextResponse.json({ error: "Geen e-mailadres voor klant." }, { status: 400 });
+      }
       await resend.emails.send({
         from: defaultFrom,
         to: toEmail,
-        subject: `Aanvraag afgewezen`,
-        html: `<h1>Aanvraag afgewezen</h1><p>${stageSafe} kan helaas niet op jouw datum. Zoek een andere DJ via bookadj.</p>`,
+        subject: "Update over je boekingsaanvraag",
+        html: bookingRejectedEmail({ djName: stageName }),
       });
     }
 

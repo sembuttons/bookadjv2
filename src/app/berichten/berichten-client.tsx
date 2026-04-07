@@ -163,6 +163,8 @@ export function BerichtenClient({
         id: sessionUser.id,
         email: sessionUser.email ?? null,
         role,
+        full_name:
+          (sessionUser.user_metadata?.full_name as string | undefined) ?? null,
         created_at: new Date().toISOString(),
       },
       { onConflict: "id" },

@@ -11,6 +11,7 @@ import {
   warningForPriorOffenses,
 } from "@/lib/messages-safety";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { newMessageEmail } from "@/lib/email-templates";
 
 const resendApiKey = process.env.RESEND_API_KEY;
 const defaultFrom =
@@ -216,13 +217,16 @@ export async function POST(req: Request) {
 
       if (rec?.email) {
         const resend = new Resend(resendApiKey);
-        const base = appBaseUrl();
         try {
           await resend.emails.send({
             from: defaultFrom,
             to: rec.email,
-            subject: "Nieuw bericht op bookadj",
-            html: `<h2>Je hebt een nieuw bericht</h2><p>${escapeHtml(senderRow?.full_name ?? "Iemand")} heeft je een bericht gestuurd op bookadj.</p><p><a href="${base}/berichten">Bekijk berichten</a></p>`,
+            subject: `Nieuw bericht van ${senderRow?.full_name ?? "iemand"}`,
+            html: newMessageEmail({
+              name: senderRow?.full_name ?? "Iemand",
+              preview: displayContent.slice(0, 100),
+              userId: sender_id,
+            }),
           });
         } catch {
           /* negeren */

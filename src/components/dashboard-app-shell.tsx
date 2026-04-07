@@ -179,6 +179,8 @@ export function DashboardAppShell({
           id: session.user.id,
           email: session.user.email ?? null,
           role: roleForDb,
+          full_name:
+            (session.user.user_metadata?.full_name as string | undefined) ?? null,
           created_at: new Date().toISOString(),
         },
         { onConflict: "id" },

@@ -123,6 +123,23 @@ export default function DjDashboardPage() {
       return;
     }
 
+    // Auto-create user row if it doesn't exist (don't block dashboard on failure)
+    try {
+      await supabase.from("users").upsert(
+        {
+          id: session.user.id,
+          email: session.user.email,
+          role: (session.user.user_metadata?.role as string | undefined) ?? "klant",
+          full_name:
+            (session.user.user_metadata?.full_name as string | undefined) ?? null,
+          created_at: new Date().toISOString(),
+        },
+        { onConflict: "id" },
+      );
+    } catch {
+      /* non-blocking */
+    }
+
     const { data: profile, error: profileError } = await supabase
       .from("dj_profiles")
       .select("id, photos, video_url, instagram_url, soundcloud_url")
