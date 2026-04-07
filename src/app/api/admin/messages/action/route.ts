@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { requireAdmin } from "@/lib/api-auth";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { getResendFromEmail } from "@/lib/resend-from";
 
 const resendApiKey = process.env.RESEND_API_KEY;
-const defaultFrom =
-  process.env.RESEND_FROM_EMAIL || "bookadj <onboarding@resend.dev>";
+const defaultFrom = getResendFromEmail();
 
 export async function POST(req: Request) {
   const auth = await requireAdmin(req);

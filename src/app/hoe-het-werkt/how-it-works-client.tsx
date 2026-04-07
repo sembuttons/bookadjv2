@@ -455,11 +455,11 @@ export function HowItWorksClient() {
             Ons team staat voor je klaar. We reageren binnen 24 uur op werkdagen.
           </p>
           <a
-            href="mailto:hallo@bookadj.nl"
+            href="mailto:info@bookadj.nl"
             className="mt-8 inline-flex min-h-[44px] items-center justify-center rounded-xl border border-gray-200 bg-white px-7 text-sm font-semibold text-slate-900 shadow-sm transition-all duration-200 hover:bg-gray-50"
           >
             <Mail className="mr-2 h-5 w-5 text-green-600" strokeWidth={1.75} aria-hidden />
-            hallo@bookadj.nl
+            info@bookadj.nl
           </a>
           <div className="mt-8">
             <Link

@@ -30,7 +30,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Problemen met betaling of uitbetaling?",
-    a: "Neem contact op met support via het formulier hieronder of mail hallo@bookadj.nl met je boekingsreferentie.",
+    a: "Neem contact op met support via het formulier hieronder of mail info@bookadj.nl met je boekingsreferentie.",
   },
   {
     q: "Hoe meld ik een geschil?",
@@ -110,7 +110,7 @@ export function SupportContactForm() {
       setStatus("ok");
       setMessage("");
     } catch {
-      setErrMsg("Netwerkfout. Probeer opnieuw of mail hallo@bookadj.nl.");
+      setErrMsg("Netwerkfout. Probeer opnieuw of mail info@bookadj.nl.");
       setStatus("err");
     }
   }

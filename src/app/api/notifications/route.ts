@@ -6,12 +6,11 @@ import {
   bookingReceivedEmail,
   bookingRejectedEmail,
 } from "@/lib/email-templates";
+import { getContactInboxEmail, getResendFromEmail } from "@/lib/resend-from";
 
 const resendApiKey = process.env.RESEND_API_KEY;
-const defaultFrom =
-  process.env.RESEND_FROM_EMAIL || "bookadj <onboarding@resend.dev>";
-const contactInbox =
-  process.env.CONTACT_INBOX_EMAIL?.trim() || "hallo@bookadj.nl";
+const defaultFrom = getResendFromEmail();
+const contactInbox = getContactInboxEmail();
 
 const CONTACT_SUBJECTS = [
   "Boeking",

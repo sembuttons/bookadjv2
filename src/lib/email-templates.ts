@@ -135,7 +135,7 @@ export function welcomeEmail(name: string): string {
         ${button(absolute("/zoeken"), "Bekijk DJ's")}
       </div>
       <p style="margin:14px 0 0;color:${BRAND.muted};font-size:13px;line-height:1.6;">
-        Vragen? Mail ons op <a href="mailto:hallo@bookadj.nl" style="color:${BRAND.green};text-decoration:underline;">hallo@bookadj.nl</a>
+        Vragen? Mail ons op <a href="mailto:info@bookadj.nl" style="color:${BRAND.green};text-decoration:underline;">info@bookadj.nl</a>
       </p>
     `,
   });

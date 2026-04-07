@@ -25,7 +25,7 @@ export default function PrivacyPage() {
           bookadj (&quot;wij&quot;, &quot;ons&quot;) exploiteert het online
           platform bookadj.nl waar klanten DJ&apos;s kunnen vinden en boeken. Voor
           vragen over dit beleid:{" "}
-          <a href="mailto:hallo@bookadj.nl">hallo@bookadj.nl</a> of via{" "}
+          <a href="mailto:info@bookadj.nl">info@bookadj.nl</a> of via{" "}
           <Link href="/contact">contact</Link>.
         </p>
 
@@ -132,7 +132,7 @@ export default function PrivacyPage() {
         </ul>
         <p>
           Om je rechten uit te oefenen, neem contact op via{" "}
-          <a href="mailto:hallo@bookadj.nl">hallo@bookadj.nl</a>. Wij reageren
+          <a href="mailto:info@bookadj.nl">info@bookadj.nl</a>. Wij reageren
           binnen de wettelijke termijnen.
         </p>
 

@@ -33,10 +33,10 @@ export default function DjUitbetalingenPage() {
               Zodra je eerste boeking is afgerond, zie je hier uitbetalingen en
               status. Vragen over betalingen? Mail{" "}
               <a
-                href="mailto:hallo@bookadj.nl"
+                href="mailto:info@bookadj.nl"
                 className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700"
               >
-                hallo@bookadj.nl
+                info@bookadj.nl
               </a>
               .
             </p>

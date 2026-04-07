@@ -18,10 +18,10 @@ export default function ContactPage() {
       <p className="mt-4 text-slate-700">
         Vul het formulier in. Je bericht komt bij{" "}
         <a
-          href="mailto:hallo@bookadj.nl"
+          href="mailto:info@bookadj.nl"
           className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700"
         >
-          hallo@bookadj.nl
+          info@bookadj.nl
         </a>
         . We streven ernaar binnen enkele werkdagen te reageren.
       </p>

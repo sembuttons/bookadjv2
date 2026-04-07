@@ -26,10 +26,10 @@ export default function SupportPage() {
         <p className="text-sm font-semibold text-slate-700 md:text-base">
           Mail ons op{" "}
           <a
-            href="mailto:hallo@bookadj.nl"
+            href="mailto:info@bookadj.nl"
             className="font-bold underline decoration-green-500 underline-offset-2"
           >
-            hallo@bookadj.nl
+            info@bookadj.nl
           </a>{" "}
           — we reageren binnen 24 uur op werkdagen.
         </p>

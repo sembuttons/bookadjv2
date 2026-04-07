@@ -91,10 +91,10 @@ export default function BetalingenTerugbetalingenPage() {
         <p className="mt-4 text-slate-600">
           Stuur een mail naar{" "}
           <a
-            href="mailto:hallo@bookadj.nl"
+            href="mailto:info@bookadj.nl"
             className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700"
           >
-            hallo@bookadj.nl
+            info@bookadj.nl
           </a>{" "}
           met je boekingsreferentie — of gebruik{" "}
           <Link

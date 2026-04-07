@@ -72,10 +72,10 @@ export function DjHelpSection() {
           We reageren binnen 24 uur op werkdagen.
         </p>
         <a
-          href="mailto:hallo@bookadj.nl"
+          href="mailto:info@bookadj.nl"
           className="mt-6 inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-green-500 px-6 text-sm font-bold text-black transition-all duration-200 hover:bg-green-400 sm:w-auto"
         >
-          hallo@bookadj.nl
+          info@bookadj.nl
         </a>
       </div>
     </section>

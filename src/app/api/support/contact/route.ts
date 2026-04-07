@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { getContactInboxEmail, getResendFromEmail } from "@/lib/resend-from";
 
 const resendApiKey = process.env.RESEND_API_KEY;
-const defaultFrom =
-  process.env.RESEND_FROM_EMAIL || "bookadj <onboarding@resend.dev>";
-const inbox = process.env.CONTACT_INBOX_EMAIL?.trim() || "hallo@bookadj.nl";
+const defaultFrom = getResendFromEmail();
+const inbox = getContactInboxEmail();
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -19,7 +19,7 @@ function escapeHtml(text: string): string {
 export async function POST(req: Request) {
   if (!resendApiKey) {
     return NextResponse.json(
-      { error: "E-mail is tijdelijk niet beschikbaar. Mail direct naar hallo@bookadj.nl." },
+      { error: "E-mail is tijdelijk niet beschikbaar. Mail direct naar info@bookadj.nl." },
       { status: 503 },
     );
   }

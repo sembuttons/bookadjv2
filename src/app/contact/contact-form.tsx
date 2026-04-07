@@ -66,7 +66,7 @@ export function ContactForm() {
         <p className="font-semibold text-slate-900">Bedankt! Je bericht is verstuurd.</p>
         <p className="mt-2 text-sm text-slate-600">
           We reageren zo snel mogelijk op{" "}
-          <span className="font-medium">hallo@bookadj.nl</span>.
+          <span className="font-medium">info@bookadj.nl</span>.
         </p>
         <button
           type="button"

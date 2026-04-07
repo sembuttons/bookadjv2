@@ -33,10 +33,10 @@ export default function KlantProfielPage() {
             <p className="text-sm leading-relaxed text-slate-600">
               Wil je je naam of e-mail wijzigen? Neem contact op via{" "}
               <a
-                href="mailto:hallo@bookadj.nl"
+                href="mailto:info@bookadj.nl"
                 className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700"
               >
-                hallo@bookadj.nl
+                info@bookadj.nl
               </a>{" "}
               — we helpen je verder.
             </p>
