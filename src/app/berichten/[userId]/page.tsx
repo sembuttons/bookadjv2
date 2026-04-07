@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { BerichtenClient } from "../berichten-client";
 import { supabaseAdmin } from "@/lib/supabase-server";
-import { EnsurePublicUserRow } from "@/components/EnsurePublicUserRow";
 
 type PageProps = { params: Promise<{ userId: string }> };
 
@@ -32,9 +31,7 @@ export default async function BerichtenThreadPage({ params }: PageProps) {
         <div className="py-16 text-center text-gray-400">Laden…</div>
       }
     >
-      <EnsurePublicUserRow>
-        <BerichtenClient initialPartnerId={decoded} threadOnly />
-      </EnsurePublicUserRow>
+      <BerichtenClient initialPartnerId={decoded} threadOnly />
     </Suspense>
   );
 }

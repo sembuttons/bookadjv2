@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { BerichtenClient } from "./berichten-client";
-import { EnsurePublicUserRow } from "@/components/EnsurePublicUserRow";
 
 export default function BerichtenPage() {
   return (
@@ -9,9 +8,7 @@ export default function BerichtenPage() {
         <div className="py-16 text-center text-gray-400">Laden…</div>
       }
     >
-      <EnsurePublicUserRow>
-        <BerichtenClient />
-      </EnsurePublicUserRow>
+      <BerichtenClient />
     </Suspense>
   );
 }

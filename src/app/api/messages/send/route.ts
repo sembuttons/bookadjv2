@@ -1,265 +1,58 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
+import { createClient } from "@supabase/supabase-js";
 import { requireUser } from "@/lib/api-auth";
-import {
-  dutchMessageForDbError,
-  ensurePublicUserRow,
-  normalizeMessageUserId,
-} from "@/lib/messages-ensure-user";
-import {
-  analyzeMessageContent,
-  warningForPriorOffenses,
-} from "@/lib/messages-safety";
-import { supabaseAdmin } from "@/lib/supabase-server";
-import { newMessageEmail } from "@/lib/email-templates";
-
-const resendApiKey = process.env.RESEND_API_KEY;
-const defaultFrom =
-  process.env.RESEND_FROM_EMAIL || "bookadj <onboarding@resend.dev>";
-const adminEmail = process.env.ADMIN_ALERT_EMAIL || "admin@bookadj.nl";
-
-function appBaseUrl() {
-  const raw = process.env.NEXT_PUBLIC_BASE_URL?.trim() || "";
-  if (!raw) return "https://bookadj.nl";
-  if (raw.startsWith("http://") || raw.startsWith("https://")) return raw;
-  return `https://${raw}`;
-}
 
 export async function POST(req: Request) {
   const auth = await requireUser(req);
   if (auth.response) return auth.response;
-  const sessionUser = auth.user;
 
-  let body: {
-    content?: string;
-    sender_id?: string;
-    recipient_id?: string;
-    inbox_type?: string;
-    booking_id?: string | null;
-  };
+  let body: { content?: string; recipient_id?: string };
   try {
     body = (await req.json()) as typeof body;
   } catch {
     return NextResponse.json({ error: "Ongeldige body." }, { status: 400 });
   }
 
-  const content = typeof body.content === "string" ? body.content : "";
-  const sender_id = normalizeMessageUserId(sessionUser.id);
-  const recipient_id = normalizeMessageUserId(body.recipient_id);
+  const content = typeof body.content === "string" ? body.content.trim() : "";
+  const recipientId =
+    typeof body.recipient_id === "string" ? body.recipient_id.trim() : "";
 
-  if (!content.trim()) {
-    return NextResponse.json(
-      { error: "Schrijf eerst een bericht." },
-      { status: 400 },
-    );
+  if (!content) {
+    return NextResponse.json({ error: "Schrijf eerst een bericht." }, { status: 400 });
   }
 
-  if (!sender_id || !recipient_id) {
-    return NextResponse.json(
-      { error: "Ontvanger ontbreekt of is ongeldig. Vernieuw de pagina en open het gesprek opnieuw." },
-      { status: 400 },
-    );
+  if (!recipientId) {
+    return NextResponse.json({ error: "Ontvanger ontbreekt." }, { status: 400 });
   }
 
-  if (typeof body.sender_id === "string" && body.sender_id.trim()) {
-    const claimed = normalizeMessageUserId(body.sender_id);
-    if (claimed && claimed !== sender_id) {
-      return NextResponse.json({ error: "Geen toegang." }, { status: 403 });
-    }
+  if (recipientId === auth.user.id) {
+    return NextResponse.json({ error: "Je kunt geen bericht aan jezelf sturen." }, { status: 400 });
   }
 
-  if (sender_id === recipient_id) {
-    return NextResponse.json(
-      { error: "Je kunt geen bericht aan jezelf sturen." },
-      { status: 400 },
-    );
+  const token =
+    req.headers.get("authorization")?.replace(/^Bearer\\s+/i, "").trim() || "";
+  if (!token) {
+    return NextResponse.json({ error: "Niet ingelogd" }, { status: 401 });
   }
 
-  const senderRowEnsure = await ensurePublicUserRow(sender_id);
-  if (!senderRowEnsure.ok) {
-    return NextResponse.json({ error: senderRowEnsure.nl }, { status: 400 });
-  }
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { global: { headers: { Authorization: `Bearer ${token}` } } },
+  );
 
-  const recipientEnsure = await ensurePublicUserRow(recipient_id);
-  if (!recipientEnsure.ok) {
-    return NextResponse.json({ error: recipientEnsure.nl }, { status: 400 });
-  }
-
-  const { data: sender, error: senderErr } = await supabaseAdmin
-    .from("users")
-    .select("is_suspended, offense_count, full_name, email")
-    .eq("id", sender_id)
-    .maybeSingle();
-
-  if (senderErr) {
-    return NextResponse.json(
-      { error: "Kon je account niet laden. Probeer het later opnieuw." },
-      { status: 500 },
-    );
-  }
-
-  const senderRow = sender as {
-    is_suspended?: boolean | null;
-    offense_count?: number | null;
-    full_name?: string | null;
-    email?: string | null;
-  } | null;
-
-  if (senderRow?.is_suspended) {
-    return NextResponse.json({ error: "Account opgeschort" }, { status: 403 });
-  }
-
-  const priorOffenses = senderRow?.offense_count ?? 0;
-  const { isFlagged, flagReason, displayContent } =
-    analyzeMessageContent(content);
-
-  const insertPayload: Record<string, unknown> = {
-    content: displayContent,
-    sender_id,
-    recipient_id,
-    inbox_type: body.inbox_type?.trim() || "ask_me",
-    booking_id: body.booking_id ?? null,
-    is_flagged: isFlagged,
-    flag_reason: flagReason,
+  const { error } = await supabase.from("messages").insert({
+    sender_id: auth.user.id,
+    recipient_id: recipientId,
+    content,
+    created_at: new Date().toISOString(),
     is_read: false,
-  };
-
-  const { data: message, error: insertErr } = await supabaseAdmin
-    .from("messages")
-    .insert(insertPayload)
-    .select()
-    .single();
-
-  if (insertErr) {
-    return NextResponse.json(
-      { error: dutchMessageForDbError(insertErr.message) },
-      { status: 500 },
-    );
-  }
-
-  let newOffenseCount = priorOffenses;
-
-  if (isFlagged) {
-    newOffenseCount = priorOffenses + 1;
-    await supabaseAdmin
-      .from("users")
-      .update({ offense_count: newOffenseCount })
-      .eq("id", sender_id);
-
-    try {
-      await supabaseAdmin.from("audit_log").insert({
-        admin_id: null,
-        action: "message_flagged",
-        target_type: "message",
-        target_id: (message as { id: string }).id,
-        reason: flagReason ?? "automatisch gedetecteerd",
-        metadata: { sender_id, automated: true },
-      });
-    } catch {
-      /* audit_log optioneel */
-    }
-
-    if (newOffenseCount >= 3 && resendApiKey) {
-      await supabaseAdmin
-        .from("users")
-        .update({ is_suspended: true })
-        .eq("id", sender_id);
-      const resend = new Resend(resendApiKey);
-      try {
-        await resend.emails.send({
-          from: defaultFrom,
-          to: adminEmail,
-          subject: "Account automatisch opgeschort",
-          html: `<p>Gebruiker ${senderRow?.full_name ?? ""} (${senderRow?.email ?? ""}) is automatisch opgeschort na ${newOffenseCount} overtredingen. Laatste overtreding: ${flagReason ?? ""}</p>`,
-        });
-      } catch {
-        /* e-mailfout negeren */
-      }
-    } else if (newOffenseCount >= 2 && resendApiKey) {
-      const resend = new Resend(resendApiKey);
-      try {
-        await resend.emails.send({
-          from: defaultFrom,
-          to: adminEmail,
-          subject: "Tweede bericht-melding",
-          html: `<p>Gebruiker ${senderRow?.full_name ?? ""} (${senderRow?.email ?? ""}) heeft ${newOffenseCount} meldingen. Reden: ${flagReason ?? ""}</p><p>Voorbeeld: ${escapeHtml(content.slice(0, 200))}</p>`,
-        });
-      } catch {
-        /* negeren */
-      }
-    }
-  }
-
-  if (!isFlagged && resendApiKey) {
-    const fifteenMinutesAgo = new Date(
-      Date.now() - 15 * 60 * 1000,
-    ).toISOString();
-    const { data: recentRows } = await supabaseAdmin
-      .from("notifications")
-      .select("id")
-      .eq("type", "new_message")
-      .eq("user_id", recipient_id)
-      .gte("sent_at", fifteenMinutesAgo)
-      .limit(1);
-
-    const recentList = recentRows as { id: string }[] | null;
-    if (!recentList?.length) {
-      const { data: recipient } = await supabaseAdmin
-        .from("users")
-        .select("email, full_name")
-        .eq("id", recipient_id)
-        .maybeSingle();
-
-      const rec = recipient as {
-        email?: string | null;
-        full_name?: string | null;
-      } | null;
-
-      if (rec?.email) {
-        const resend = new Resend(resendApiKey);
-        try {
-          await resend.emails.send({
-            from: defaultFrom,
-            to: rec.email,
-            subject: `Nieuw bericht van ${senderRow?.full_name ?? "iemand"}`,
-            html: newMessageEmail({
-              name: senderRow?.full_name ?? "Iemand",
-              preview: displayContent.slice(0, 100),
-              userId: sender_id,
-            }),
-          });
-        } catch {
-          /* negeren */
-        }
-
-        try {
-          await supabaseAdmin.from("notifications").insert({
-            user_id: recipient_id,
-            type: "new_message",
-            channel: "email",
-            payload: { senderId: sender_id, messageId: (message as { id: string }).id },
-            sent_at: new Date().toISOString(),
-          });
-        } catch {
-          /* notifications optioneel */
-        }
-      }
-    }
-  }
-
-  return NextResponse.json({
-    message,
-    isFlagged,
-    flagReason,
-    offenseCount: isFlagged ? newOffenseCount : 0,
-    warning: isFlagged ? warningForPriorOffenses(priorOffenses) : null,
   });
-}
 
-function escapeHtml(text: string): string {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+  if (error) {
+    console.error("Message insert error:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ success: true });
 }

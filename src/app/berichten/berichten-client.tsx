@@ -60,27 +60,6 @@ function IconSend({ className }: { className?: string }) {
   );
 }
 
-function IconWarning({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      width="20"
-      height="20"
-      viewBox="0 0 20 20"
-      fill="none"
-      aria-hidden
-    >
-      <path
-        d="M10 3L2 17h16L10 3z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-      <path d="M10 8v4M10 14h.01" stroke="currentColor" strokeWidth="1.5" />
-    </svg>
-  );
-}
-
 function IconBack({ className }: { className?: string }) {
   return (
     <svg
@@ -129,7 +108,6 @@ export function BerichtenClient({
   const [mobileThread, setMobileThread] = useState(false);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
-  const [banner, setBanner] = useState<string | null>(null);
   const threadEndRef = useRef<HTMLDivElement>(null);
   const channelRef = useRef<RealtimeChannel | null>(null);
 
@@ -148,35 +126,11 @@ export function BerichtenClient({
     }));
   }, []);
 
-  const ensurePublicUserRow = useCallback(async (sessionUser: {
-    id: string;
-    email?: string | null;
-    user_metadata?: Record<string, unknown>;
-  }) => {
-    const metaRole = sessionUser.user_metadata?.role;
-    const role =
-      typeof metaRole === "string" && metaRole.toLowerCase() === "dj"
-        ? "dj"
-        : "klant";
-    await supabase.from("users").upsert(
-      {
-        id: sessionUser.id,
-        email: sessionUser.email ?? null,
-        role,
-        full_name:
-          (sessionUser.user_metadata?.full_name as string | undefined) ?? null,
-        created_at: new Date().toISOString(),
-      },
-      { onConflict: "id" },
-    );
-  }, []);
-
   const refreshMessages = useCallback(async () => {
     const {
       data: { session },
     } = await supabase.auth.getSession();
     if (!session?.user) return;
-    await ensurePublicUserRow(session.user);
     const uid = session.user.id;
     const { data, error } = await supabase
       .from("messages")
@@ -193,7 +147,7 @@ export function BerichtenClient({
       ids.add(m.recipient_id);
     }
     await loadUsers([...ids]);
-  }, [ensurePublicUserRow, loadUsers]);
+  }, [loadUsers]);
 
   useEffect(() => {
     let cancelled = false;
@@ -212,7 +166,6 @@ export function BerichtenClient({
         );
         return;
       }
-      await ensurePublicUserRow(session.user);
       setUserId(session.user.id);
       setLoading(false);
       await refreshMessages();
@@ -220,7 +173,7 @@ export function BerichtenClient({
     return () => {
       cancelled = true;
     };
-  }, [initialPartnerId, ensurePublicUserRow, refreshMessages, router, threadOnly]);
+  }, [initialPartnerId, refreshMessages, router, threadOnly]);
 
   useEffect(() => {
     if (!userId) return;
@@ -270,22 +223,14 @@ export function BerichtenClient({
   useEffect(() => {
     if (!userId) return;
     const rawPid = threadOnly ? initialPartnerId : partnerFromUrl;
-    if (threadOnly && rawPid && !normalizeUserUuid(rawPid)) {
-      setBanner("Deze gesprekslink is ongeldig.");
-      setActivePartner(null);
-      setMobileThread(true);
-      return;
-    }
     const pid = normalizeUserUuid(rawPid);
     const self = normalizeUserUuid(userId);
     if (!pid) return;
     if (self && pid === self) {
-      setBanner("Je kunt geen bericht aan jezelf sturen.");
       setActivePartner(null);
       setMobileThread(threadOnly);
       return;
     }
-    setBanner(null);
     setActivePartner(pid);
     setMobileThread(true);
     void loadUsers([pid]);
@@ -373,12 +318,10 @@ export function BerichtenClient({
     const self = normalizeUserUuid(userId);
     if (!nid) return;
     if (self && nid === self) {
-      setBanner("Je kunt geen bericht aan jezelf sturen.");
       return;
     }
     setActivePartner(nid);
     setMobileThread(true);
-    setBanner(null);
     void loadUsers([nid]);
   };
 
@@ -387,12 +330,7 @@ export function BerichtenClient({
     const partner = normalizeUserUuid(activePartner);
     const self = normalizeUserUuid(userId);
     if (!text || !self || !partner || sending) return;
-    if (partner === self) {
-      setBanner("Je kunt geen bericht aan jezelf sturen.");
-      return;
-    }
     setSending(true);
-    setBanner(null);
     const {
       data: { session },
     } = await supabase.auth.getSession();
@@ -408,31 +346,19 @@ export function BerichtenClient({
       },
       body: JSON.stringify({
         content: text,
-        sender_id: self,
         recipient_id: partner,
-        inbox_type: tabInboxType,
-        booking_id: null,
       }),
     });
     const json = (await res.json()) as {
       error?: string;
-      message?: MessageRow;
-      warning?: string | null;
-      isFlagged?: boolean;
+      success?: boolean;
     };
     setSending(false);
     if (!res.ok) {
-      setBanner(json.error ?? "Versturen mislukt.");
       return;
     }
-    if (json.message) {
-      setAllMessages((prev) => {
-        if (prev.some((m) => m.id === json.message!.id)) return prev;
-        return [json.message!, ...prev];
-      });
-    }
     setInput("");
-    if (json.warning) setBanner(json.warning);
+    await refreshMessages();
   };
 
   const partnerHasUnread = (partnerId: string) => {
@@ -595,11 +521,7 @@ export function BerichtenClient({
           <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 py-16 text-center">
             <IconChatEmpty className="text-gray-400" />
             <p className="text-sm font-medium text-gray-400">
-              {threadOnly && banner
-                ? banner
-                : threadOnly
-                  ? "Gesprek laden…"
-                  : "Selecteer een gesprek"}
+              {threadOnly ? "Gesprek laden…" : "Selecteer een gesprek"}
             </p>
             {threadOnly ? (
               <Link
@@ -644,13 +566,6 @@ export function BerichtenClient({
                 <p className="text-sm text-gray-500">Online</p>
               </div>
             </div>
-
-            {banner ? (
-              <div className="mx-3 mt-3 flex gap-2 rounded-xl border border-amber-800 bg-amber-500/10 px-3 py-2 text-sm text-amber-400">
-                <IconWarning className="mt-0.5 shrink-0 text-amber-400" />
-                <span>{banner}</span>
-              </div>
-            ) : null}
 
             <div className="flex flex-1 flex-col overflow-hidden">
               <div className="flex-1 space-y-3 overflow-y-auto px-3 py-4">
@@ -715,7 +630,6 @@ export function BerichtenClient({
                     value={input}
                     onChange={(e) => {
                       setInput(e.target.value);
-                      setBanner(null);
                     }}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" && !e.shiftKey) {
