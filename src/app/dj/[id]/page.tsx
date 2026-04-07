@@ -3,10 +3,15 @@ import {
   BadgeCheck,
   CheckCircle2,
   CircleDollarSign,
+  Clock,
+  Headset,
   Headphones,
   LayoutDashboard,
   MapPin,
   Music,
+  NotebookPen,
+  SlidersHorizontal,
+  Speech,
   Star as StarIcon,
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
@@ -419,7 +424,7 @@ export default async function DjProfilePage({ params }: PageProps) {
               <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {[
                   {
-                    i: "⏱",
+                    Icon: Clock,
                     t: "Jaren ervaring",
                     d:
                       years != null
@@ -427,27 +432,33 @@ export default async function DjProfilePage({ params }: PageProps) {
                         : "Ruime podiumervaring",
                   },
                   {
-                    i: "🎛",
+                    Icon: SlidersHorizontal,
                     t: "Apparatuur",
                     d: "Controller, speakers en licht op aanvraag",
                   },
-                  { i: "🎤", t: "MC & aankondigingen", d: "Optioneel in overleg" },
                   {
-                    i: "📝",
+                    Icon: Headset,
+                    t: "MC & aankondigingen",
+                    d: "Optioneel in overleg",
+                  },
+                  {
+                    Icon: NotebookPen,
                     t: "Voorbereiding",
                     d: "Playlist en briefing vooraf met jou afgestemd",
                   },
-                  { i: "🚗", t: "Reizen", d: "Door heel Nederland inzetbaar" },
-                  { i: "🗣", t: "Talen", d: "Nederlands & Engels" },
+                  {
+                    Icon: MapPin,
+                    t: "Reizen",
+                    d: "Door heel Nederland inzetbaar",
+                  },
+                  { Icon: Speech, t: "Talen", d: "Nederlands & Engels" },
                 ].map((card) => (
                   <li
                     key={card.t}
                     className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-200 hover:border-green-200 hover:shadow-sm"
                   >
                     <p className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                      <span className="text-gray-400" aria-hidden>
-                        {card.i}
-                      </span>
+                      <card.Icon className="h-4 w-4 text-gray-400" aria-hidden />
                       {card.t}
                     </p>
                     <p className="mt-1 text-sm text-gray-400">{card.d}</p>

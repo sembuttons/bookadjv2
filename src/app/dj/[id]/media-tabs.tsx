@@ -102,58 +102,70 @@ export function MediaTabs({
 
       {ig ? (
         <section aria-label="Instagram">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-lg font-bold text-slate-900">
-                Volg {djFirstName} op Instagram
-              </p>
-              <p className="mt-1 text-sm text-gray-500">
-                {instagramHandle || "Instagram"} · updates, clips en sfeer
-              </p>
-            </div>
-            <a
-              href={ig}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex w-fit items-center gap-2 rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-gray-50"
-            >
-              <span
-                aria-hidden
-                className="inline-flex h-5 w-5 items-center justify-center rounded-md"
-                style={{
-                  background:
-                    "linear-gradient(135deg,#f58529,#dd2a7b,#8134af,#515bd4)",
-                }}
-              />
-              Volgen
-              <IconExternalLink className="h-4 w-4 shrink-0 text-slate-400" />
-            </a>
-          </div>
+          <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <span
+                    aria-hidden
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-xl"
+                    style={{
+                      background:
+                        "linear-gradient(135deg,#f58529,#dd2a7b,#8134af,#515bd4)",
+                    }}
+                  />
+                  <div className="min-w-0">
+                    <p className="truncate text-lg font-bold text-slate-900">
+                      Volg {djFirstName} op Instagram
+                    </p>
+                    <p className="mt-0.5 text-sm text-gray-500">
+                      {instagramHandle || "@instagram"}
+                    </p>
+                  </div>
+                </div>
+              </div>
 
-          <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-6">
-            {Array.from({ length: 6 }, (_, i) => (
-              <div
-                key={i}
-                className="aspect-square rounded-xl bg-gradient-to-b from-gray-100 to-gray-200 ring-1 ring-gray-200"
-                aria-hidden
-              />
-            ))}
-          </div>
-
-          {instagramPermalink ? (
-            <div className="mt-6 overflow-hidden rounded-2xl border border-gray-200 bg-white">
-              <blockquote
-                className="instagram-media"
-                data-instgrm-permalink={instagramPermalink}
-                data-instgrm-version="14"
-                style={{ margin: 0, minWidth: "100%" }}
-              />
+              <a
+                href={ig}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-fit items-center gap-2 rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-gray-50"
+              >
+                Volg op Instagram
+                <IconExternalLink className="h-4 w-4 shrink-0 text-slate-400" />
+              </a>
             </div>
-          ) : (
-            <p className="mt-4 text-sm text-gray-500">
-              Tip: voeg een link toe naar een specifieke post (bijv. /p/ of /reel/) om een embed te tonen.
-            </p>
-          )}
+
+            <div className="mt-5 grid grid-cols-3 gap-2 sm:grid-cols-6">
+              {Array.from({ length: 6 }, (_, i) => (
+                <div
+                  key={i}
+                  className="aspect-square rounded-xl bg-gradient-to-b from-gray-100 to-gray-200 ring-1 ring-gray-200"
+                  aria-hidden
+                />
+              ))}
+            </div>
+
+            {instagramPermalink ? (
+              <div className="mt-6 overflow-hidden rounded-2xl border border-gray-200 bg-white">
+                <blockquote
+                  className="instagram-media"
+                  data-instgrm-permalink={instagramPermalink}
+                  data-instgrm-version="14"
+                  style={{ margin: 0, width: "100%" }}
+                />
+              </div>
+            ) : (
+              <div className="mt-6 rounded-2xl border border-gray-200 bg-gray-50 p-5">
+                <p className="text-sm font-semibold text-gray-900">
+                  Posts laden binnenkort
+                </p>
+                <p className="mt-1 text-sm text-gray-500">
+                  We tonen hier automatisch posts zodra er een post-link is toegevoegd.
+                </p>
+              </div>
+            )}
+          </div>
         </section>
       ) : null}
 
