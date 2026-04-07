@@ -131,24 +131,29 @@ function StepTimeline({ steps }: { steps: Step[] }) {
           className="pointer-events-none absolute left-6 right-6 top-10 h-px bg-green-200"
           aria-hidden
         />
-        <div className="grid gap-6 lg:grid-cols-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
           {steps.map((s) => (
             <article
               key={s.n}
-              className="card-interactive relative z-10 flex h-full flex-col p-7"
+              className="flex flex-col border border-gray-200 rounded-2xl p-6 h-full bg-white shadow-sm"
             >
-              <div className="flex items-start justify-between gap-4">
-                <span className="text-2xl font-extrabold tracking-tight text-green-600">
+              {/* Top row - number + icon */}
+              <div className="flex items-start justify-between mb-6">
+                <span className="text-2xl font-black text-green-500">
                   {s.n}
                 </span>
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-600 ring-1 ring-green-100">
-                  <s.Icon className="h-6 w-6" strokeWidth={1.75} aria-hidden />
-                </span>
+                <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center">
+                  <s.Icon className="h-5 w-5 text-green-600" strokeWidth={1.75} aria-hidden />
+                </div>
               </div>
-              <h3 className="mt-5 text-lg font-bold text-slate-900">
+
+              {/* Title - always at same height */}
+              <p className="font-bold text-gray-900 text-base mb-2">
                 {s.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+              </p>
+
+              {/* Description - fills remaining space */}
+              <p className="text-gray-500 text-sm leading-relaxed flex-1">
                 {s.desc}
               </p>
             </article>
