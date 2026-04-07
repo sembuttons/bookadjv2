@@ -22,7 +22,7 @@ function startOfCurrentMonthIso(): string {
 
 function ageLabel(iso: string): string {
   const t = new Date(iso).getTime();
-  if (Number.isNaN(t)) return "—";
+  if (Number.isNaN(t)) return "-";
   const ms = Date.now() - t;
   const h = Math.floor(ms / (1000 * 60 * 60));
   if (h < 1) return "Zojuist";

@@ -10,7 +10,7 @@ export default function KlantProfielPage() {
         Profiel
       </h1>
       <p className="mt-1 text-sm text-slate-600">
-        Beheer je gegevens en voorkeuren — deze pagina wordt binnenkort
+        Beheer je gegevens en voorkeuren. Deze pagina wordt binnenkort
         uitgebreid.
       </p>
       <div className="mt-8 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
@@ -37,8 +37,8 @@ export default function KlantProfielPage() {
                 className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700"
               >
                 info@bookadj.nl
-              </a>{" "}
-              — we helpen je verder.
+              </a>
+              . We helpen je verder.
             </p>
           </div>
         </div>

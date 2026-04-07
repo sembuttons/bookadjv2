@@ -14,7 +14,7 @@ export function Footer() {
               book<span className="text-green-400">adj</span>
             </Link>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-gray-400">
-              De DJ-boekingsmarktplaats van Nederland — geverifieerd, transparant,
+              De DJ-boekingsmarktplaats van Nederland, geverifieerd, transparant,
               veilig betalen.
             </p>
             <div className="mt-8">

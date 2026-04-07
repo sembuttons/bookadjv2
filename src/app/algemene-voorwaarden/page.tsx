@@ -2,7 +2,7 @@ import Link from "next/link";
 import { MarketingPageShell } from "@/components/marketing-page-shell";
 
 export const metadata = {
-  title: "Algemene voorwaarden — bookadj",
+  title: "Algemene voorwaarden - bookadj",
   description: "Gebruiksvoorwaarden van het bookadj-platform.",
 };
 

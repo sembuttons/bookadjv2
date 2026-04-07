@@ -5,7 +5,7 @@ import {
 } from "./support-page-client";
 
 export const metadata = {
-  title: "Support — bookadj",
+  title: "Support - bookadj",
   description: "Veelgestelde vragen en contact met het bookadj-team.",
 };
 
@@ -30,8 +30,8 @@ export default function SupportPage() {
             className="font-bold underline decoration-green-500 underline-offset-2"
           >
             info@bookadj.nl
-          </a>{" "}
-          — we reageren binnen 24 uur op werkdagen.
+          </a>
+          . We reageren binnen 24 uur op werkdagen.
         </p>
       </div>
 

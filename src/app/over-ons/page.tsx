@@ -1,7 +1,7 @@
 import { MarketingPageShell } from "@/components/marketing-page-shell";
 
 export const metadata = {
-  title: "Over ons — bookadj",
+  title: "Over ons - bookadj",
   description: "Missie en verhaal van bookadj.",
 };
 
@@ -17,7 +17,7 @@ export default function OverOnsPage() {
 
       <p className="mt-6 text-lg font-medium leading-relaxed text-gray-700">
         bookadj is gebouwd voor DJ&apos;s die serieus zijn en klanten die
-        zekerheid willen. Geen gedoe, geen onzekerheid — gewoon een betrouwbaar
+        zekerheid willen. Geen gedoe, geen onzekerheid, gewoon een betrouwbaar
         platform waar talent en gelegenheid elkaar vinden.
       </p>
 
@@ -27,7 +27,7 @@ export default function OverOnsPage() {
           Wij willen boeken van een DJ net zo eenvoudig en veilig maken als online
           shoppen: duidelijke profielen, transparante prijzen, betaling via het
           platform en support als er iets misgaat. Tegelijk geven wij DJ&apos;s
-          een plek waar ze professioneel gezien worden — niet alleen als
+          een plek waar ze professioneel gezien worden, niet alleen als
           &quot;iemand met speakers&quot;, maar als ondernemers met een merk.
         </p>
       </section>
@@ -37,7 +37,7 @@ export default function OverOnsPage() {
         <div className="mt-4 space-y-4 text-gray-700">
           <p>
             Ik ben ooit begonnen omdat ik zag hoe vaak het misging: afspraken via
-            Instagram, geen contract, geen duidelijkheid over betaling — en aan
+            Instagram, geen contract, geen duidelijkheid over betaling, en aan
             beide kanten stress vlak voor het feest. Dat wilde ik anders.
           </p>
           <p>
@@ -48,18 +48,18 @@ export default function OverOnsPage() {
           </p>
           <p>
             Of je nu een bruiloft plant of een clubnacht runt: wij geloven dat
-            het kan zonder gedoe — als het platform de zware lifting doet.
+            het kan zonder gedoe als het platform de zware lifting doet.
           </p>
         </div>
       </section>
 
       <blockquote className="mt-12 rounded-2xl border border-gray-200 border-l-4 border-l-green-500 bg-white py-5 pl-6 pr-5 shadow-sm">
         <p className="text-base leading-relaxed text-gray-700">
-          &ldquo;We bouwen bookadj voor iedereen die van live muziek houdt — en
+          &ldquo;We bouwen bookadj voor iedereen die van live muziek houdt en
           voor DJ&apos;s die hun vak serieus nemen.&rdquo;
         </p>
         <footer className="mt-3 text-sm font-semibold text-gray-900">
-          — Founder, bookadj
+          Founder, bookadj
         </footer>
       </blockquote>
 
@@ -73,8 +73,8 @@ export default function OverOnsPage() {
           loading="lazy"
         />
         <figcaption className="bg-white px-4 py-3 text-center text-sm text-slate-600">
-          Sfeerbeeld: waar bookadj voor staat — live muziek, energie en
-          professionele uitvoering.{" "}
+          Sfeerbeeld: waar bookadj voor staat (live muziek, energie en
+          professionele uitvoering).{" "}
           <a
             href="https://unsplash.com"
             target="_blank"

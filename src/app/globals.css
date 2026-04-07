@@ -45,7 +45,7 @@
     @apply font-semibold text-slate-900;
   }
 
-  /* Form inputs — global spec */
+  /* Form inputs - global spec */
   .input-field {
     @apply h-11 min-h-[44px] w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-150;
     @apply placeholder:text-gray-400;

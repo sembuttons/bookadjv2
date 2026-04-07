@@ -625,7 +625,7 @@ export default function DjProfielAanmakenPage() {
                 }}
                 className={`${inputCls} max-w-xs`}
               />
-              <p className={hintCls}>Standaard 0,42 — pas aan indien nodig.</p>
+              <p className={hintCls}>Standaard 0,42; pas aan indien nodig.</p>
               {fieldErrors.ratePerKm ? (
                 <p className={errCls} role="alert">
                   {fieldErrors.ratePerKm}

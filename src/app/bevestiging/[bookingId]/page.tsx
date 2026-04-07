@@ -13,7 +13,7 @@ import { supabase } from "@/lib/supabase-browser";
 type BookingRow = Record<string, unknown> & { id: string };
 
 function formatEventDate(iso: string | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   const d = new Date(iso.includes("T") ? iso : `${iso}T12:00:00`);
   if (Number.isNaN(d.getTime())) return iso;
   return d.toLocaleDateString("nl-NL", {
@@ -55,7 +55,7 @@ function totalAsEuro(booking: BookingRow): number {
 
 function venueLine(booking: BookingRow): string {
   const v = booking.venue_address ?? booking.location;
-  return typeof v === "string" && v.trim() ? v.trim() : "—";
+  return typeof v === "string" && v.trim() ? v.trim() : "-";
 }
 
 const timelineSteps = [
@@ -201,7 +201,7 @@ export default function BevestigingPage() {
     typeof booking?.event_date === "string" ? booking.event_date : "";
   const startTime =
     typeof booking?.start_time === "string" ? booking.start_time : "";
-  const location = booking ? venueLine(booking) : "—";
+  const location = booking ? venueLine(booking) : "-";
   const totalEuro = booking ? totalAsEuro(booking) : 0;
 
   const reference = formatReference(booking, bookingId);
@@ -302,7 +302,7 @@ export default function BevestigingPage() {
             </h1>
             <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-gray-400">
               De DJ heeft maximaal 24 uur om te reageren. Je ontvangt een
-              e-mail zodra er nieuws is — houd je inbox in de gaten.
+              e-mail zodra er nieuws is. Houd je inbox in de gaten.
             </p>
           </div>
 
@@ -332,7 +332,7 @@ export default function BevestigingPage() {
               <div>
                 <dt className="text-xs text-gray-500">Tijd</dt>
                 <dd className="mt-0.5 font-medium text-white">
-                  {startTime || "—"}
+                  {startTime || "-"}
                 </dd>
               </div>
               <div className="sm:col-span-2">

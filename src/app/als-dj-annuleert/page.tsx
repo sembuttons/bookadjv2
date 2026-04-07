@@ -2,7 +2,7 @@ import Link from "next/link";
 import { MarketingPageShell } from "@/components/marketing-page-shell";
 
 export const metadata = {
-  title: "Als een DJ annuleert — bookadj",
+  title: "Als een DJ annuleert - bookadj",
   description:
     "Wat bookadj doet als je DJ niet kan komen: vervanger of terugbetaling.",
 };
@@ -18,7 +18,7 @@ export default function AlsDjAnnuleertPage() {
       </h1>
       <p className="mt-4 text-lg text-slate-600">
         Geen zorgen: jouw feest hoeft niet in het water te vallen. bookadj
-        staat tussen jou en de DJ — als er iets misgaat aan hun kant, pakken
+        staat tussen jou en de DJ. Als er iets misgaat aan hun kant, pakken
         wij het met je op.
       </p>
 
@@ -39,8 +39,8 @@ export default function AlsDjAnnuleertPage() {
         <p>
           Zodra een DJ een bevestigde boeking annuleert of niet kan nakomen,
           krijg je daar bericht van via het platform (en waar van toepassing
-          per e-mail). Je hoeft niet zelf te gokken wat de volgende stap is —
-          volg de instructies in je account of neem direct{" "}
+          per e-mail). Je hoeft niet zelf te gokken wat de volgende stap is.
+          Volg de instructies in je account of neem direct{" "}
           <Link
             href="/contact"
             className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700"
@@ -57,19 +57,19 @@ export default function AlsDjAnnuleertPage() {
         </h2>
         <ol className="list-decimal space-y-4 pl-5">
           <li>
-            <strong className="text-slate-900">Melding en check</strong> — we
+            <strong className="text-slate-900">Melding en check</strong>: we
             bevestigen dat de annulering bij de DJ vandaan komt en welke datum
             en locatie van je evenement gelden.
           </li>
           <li>
-            <strong className="text-slate-900">Vervanger zoeken</strong> — we
+            <strong className="text-slate-900">Vervanger zoeken</strong>: we
             kijken binnen ons netwerk of er een andere geverifieerde DJ
             beschikbaar is met vergelijkbaar profiel en budget, in overleg met
             jou.
           </li>
           <li>
-            <strong className="text-slate-900">Terugbetaling als er geen match is</strong>{" "}
-            — als er geen geschikte vervanger is binnen de afgesproken termijn,
+            <strong className="text-slate-900">Terugbetaling als er geen match is</strong>
+            : als er geen geschikte vervanger is binnen de afgesproken termijn,
             starten we het traject voor terugbetaling volgens het beleid.
           </li>
         </ol>

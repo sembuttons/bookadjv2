@@ -43,7 +43,7 @@ function embedOne<T extends Record<string, unknown>>(
 }
 
 function formatEuroFromCents(cents: number | null | undefined): string {
-  if (typeof cents !== "number" || Number.isNaN(cents)) return "—";
+  if (typeof cents !== "number" || Number.isNaN(cents)) return "-";
   const euros = cents / 100;
   return euros.toLocaleString("nl-NL", {
     minimumFractionDigits: Number.isInteger(euros) ? 0 : 2,
@@ -98,7 +98,7 @@ async function handleContactForm(
       from: defaultFrom,
       to: contactInbox,
       replyTo: email,
-      subject: `[bookadj contact] ${onderwerp} — ${name}`,
+      subject: `[bookadj contact] ${onderwerp} | ${name}`,
       html: `<p><strong>Naam:</strong> ${nameSafe}</p><p><strong>E-mail:</strong> ${emailSafe}</p><p><strong>Onderwerp:</strong> ${subjSafe}</p><p>${bodySafe}</p>`,
     });
     return NextResponse.json({ success: true });
@@ -223,12 +223,12 @@ export async function POST(req: Request) {
     typeof dj?.stage_name === "string" && dj.stage_name.trim()
       ? dj.stage_name.trim()
       : "DJ";
-  const eventDateRaw = typeof row.event_date === "string" ? row.event_date : "—";
+  const eventDateRaw = typeof row.event_date === "string" ? row.event_date : "-";
   const totalEuro = formatEuroFromCents(row.total_amount ?? null);
   const venue = typeof row.venue_address === "string" && row.venue_address.trim()
     ? row.venue_address.trim()
-    : "—";
-  const hours = typeof row.hours === "number" ? row.hours : "—";
+    : "-";
+  const hours = typeof row.hours === "number" ? row.hours : "-";
 
   const resend = new Resend(resendApiKey);
 
@@ -250,7 +250,7 @@ export async function POST(req: Request) {
       await resend.emails.send({
         from: defaultFrom,
         to: djEmail,
-        subject: `Nieuwe boekingsaanvraag — ${eventDateRaw}`,
+        subject: `Nieuwe boekingsaanvraag | ${eventDateRaw}`,
         html: bookingReceivedEmail({
           date: eventDateRaw,
           location: venue,
@@ -267,7 +267,7 @@ export async function POST(req: Request) {
       await resend.emails.send({
         from: defaultFrom,
         to: toEmail,
-        subject: `Je boeking is bevestigd! — ${stageName}`,
+        subject: `Je boeking is bevestigd! | ${stageName}`,
         html: bookingConfirmedEmail({
           djName: stageName,
           date: eventDateRaw,

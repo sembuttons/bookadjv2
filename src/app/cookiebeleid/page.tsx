@@ -2,7 +2,7 @@ import Link from "next/link";
 import { MarketingPageShell } from "@/components/marketing-page-shell";
 
 export const metadata = {
-  title: "Cookiebeleid — bookadj",
+  title: "Cookiebeleid - bookadj",
   description: "Welke cookies bookadj gebruikt en waarom.",
 };
 
@@ -24,7 +24,7 @@ export default function CookiebeleidPage() {
         <p>
           Cookies zijn kleine tekstbestanden die op je apparaat worden geplaatst
           wanneer je een website bezoekt. Ze helpen de site te laten werken of
-          geven ons inzicht in gebruik — afhankelijk van het type cookie.
+          geven ons inzicht in gebruik, afhankelijk van het type cookie.
         </p>
 
         <h2>Functionele cookies</h2>

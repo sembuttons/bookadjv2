@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "bookadj — Vind de perfecte DJ voor jouw evenement",
+  title: "bookadj - Vind de perfecte DJ voor jouw evenement",
   description:
     "De DJ-boekingsmarktplaats van Nederland. Geverifieerde DJ's, transparante prijzen en volledige betalingsbescherming.",
 };

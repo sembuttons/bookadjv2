@@ -20,7 +20,7 @@ export function getStageName(row: DjProfileRow): string {
 
 export function getCity(row: DjProfileRow): string {
   const c = row.city;
-  return typeof c === "string" ? c : "—";
+  return typeof c === "string" ? c : "-";
 }
 
 export function getHourlyRate(row: DjProfileRow): number | null {

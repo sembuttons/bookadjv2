@@ -2,7 +2,7 @@ import Link from "next/link";
 import { MarketingPageShell } from "@/components/marketing-page-shell";
 
 export const metadata = {
-  title: "Privacybeleid — bookadj",
+  title: "Privacybeleid - bookadj",
   description: "Hoe bookadj persoonsgegevens verwerkt (AVG/GDPR).",
 };
 
@@ -58,20 +58,20 @@ export default function PrivacyPage() {
         <p>Wij verwerken persoonsgegevens op basis van:</p>
         <ul>
           <li>
-            <strong>Uitvoering van de overeenkomst</strong> — account aanmaken,
+            <strong>Uitvoering van de overeenkomst</strong>: account aanmaken,
             boekingen, berichten, betalingen en uitbetalingen.
           </li>
           <li>
-            <strong>Gerechtvaardigd belang</strong> — fraudepreventie,
+            <strong>Gerechtvaardigd belang</strong>: fraudepreventie,
             beveiliging, verbetering van het platform, support en (beperkte)
             analyse van gebruik.
           </li>
           <li>
-            <strong>Wettelijke verplichting</strong> — bijvoorbeeld fiscale of
+            <strong>Wettelijke verplichting</strong>: bijvoorbeeld fiscale of
             administratieve bewaarplicht.
           </li>
           <li>
-            <strong>Toestemming</strong> — waar wij die expliciet vragen (bijv.
+            <strong>Toestemming</strong>: waar wij die expliciet vragen (bijv.
             marketingcookies of nieuwsbrief); je kunt toestemming intrekken.
           </li>
         </ul>
@@ -105,13 +105,13 @@ export default function PrivacyPage() {
         <p>Je hebt onder meer recht op:</p>
         <ul>
           <li>
-            <strong>Inzage</strong> — welke gegevens wij van jou verwerken.
+            <strong>Inzage</strong>: welke gegevens wij van jou verwerken.
           </li>
           <li>
-            <strong>Rectificatie</strong> — correctie van onjuiste gegevens.
+            <strong>Rectificatie</strong>: correctie van onjuiste gegevens.
           </li>
           <li>
-            <strong>Verwijdering</strong> — in bepaalde gevallen (&quot;recht om
+            <strong>Verwijdering</strong>: in bepaalde gevallen (&quot;recht om
             vergeten te worden&quot;).
           </li>
           <li>
@@ -122,7 +122,7 @@ export default function PrivacyPage() {
             belang.
           </li>
           <li>
-            <strong>Dataportabiliteit</strong> — waar van toepassing, in een
+            <strong>Dataportabiliteit</strong>: waar van toepassing, in een
             gangbaar formaat.
           </li>
           <li>

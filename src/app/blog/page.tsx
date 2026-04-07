@@ -2,7 +2,7 @@ import Link from "next/link";
 import { MarketingPageShell } from "@/components/marketing-page-shell";
 
 export const metadata = {
-  title: "Blog — bookadj",
+  title: "Blog - bookadj",
   description: "Tips en nieuws over het boeken van DJ’s en evenementen.",
 };
 
@@ -18,7 +18,7 @@ export default function BlogPage() {
       </p>
       <div className="mt-10 rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-8 text-center">
         <p className="text-sm text-slate-600">
-          Nog geen artikelen — kom later terug of{" "}
+          Nog geen artikelen. Kom later terug of{" "}
           <Link
             href="/zoeken"
             className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700"

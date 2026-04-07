@@ -41,7 +41,7 @@ const customerSteps: Step[] = [
   {
     n: "02",
     title: "Stuur een boekingsverzoek",
-    desc: "Kies datum, tijd en locatie. Stuur je verzoek — de DJ heeft 24 uur om te reageren.",
+    desc: "Kies datum, tijd en locatie. Stuur je verzoek. De DJ heeft 24 uur om te reageren.",
     Icon: MessageSquare,
   },
   {
@@ -240,7 +240,7 @@ export function HowItWorksClient() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero — match /voor-djs style */}
+      {/* Hero - match /voor-djs style */}
       <section className="relative isolate overflow-hidden bg-[#0a0a0a] px-4 text-white sm:px-6 lg:px-8">
         <div
           className="absolute inset-0 -z-20"
@@ -292,7 +292,7 @@ export function HowItWorksClient() {
           </div>
 
           <p className="mx-auto mt-6 max-w-2xl text-center text-gray-400 text-lg md:text-xl">
-            Van zoeken naar de perfecte DJ — tot een onvergetelijk feest.
+            Van zoeken naar de perfecte DJ tot een onvergetelijk feest.
           </p>
 
           <div className="flex items-center justify-center gap-3 flex-wrap mt-8">
@@ -324,7 +324,7 @@ export function HowItWorksClient() {
             Stap voor stap
           </h2>
           <p className="mt-3 text-slate-600">
-            Duidelijk proces, premium ervaring — zonder verrassingen.
+            Duidelijk proces, premium ervaring, zonder verrassingen.
           </p>
           <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-green-500" aria-hidden />
 
@@ -336,7 +336,7 @@ export function HowItWorksClient() {
         <StepTimeline steps={steps} />
       </section>
 
-      {/* Section 3 — betaalflow */}
+      {/* Section 3 - betaalflow */}
       <section className="bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
@@ -374,7 +374,7 @@ export function HowItWorksClient() {
         </div>
       </section>
 
-      {/* Section 4 — annuleringsbeleid */}
+      {/* Section 4 - annuleringsbeleid */}
       <section className="mx-auto max-w-7xl bg-gray-50 px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
@@ -407,7 +407,7 @@ export function HowItWorksClient() {
         </div>
       </section>
 
-      {/* Section 5 — FAQ */}
+      {/* Section 5 - FAQ */}
       <section className="bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-3xl">
           <h2 className="text-center text-2xl font-bold text-slate-900 sm:text-3xl">
@@ -447,7 +447,7 @@ export function HowItWorksClient() {
         </div>
       </section>
 
-      {/* Section 6 — Contact CTA */}
+      {/* Section 6 - Contact CTA */}
       <section className="bg-[#f0fdf4] px-4 py-14 text-center sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-2xl">
           <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">Nog vragen?</h2>

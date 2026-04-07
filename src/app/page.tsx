@@ -166,7 +166,7 @@ export default async function Home() {
             De DJ-boekingsmarktplaats van Nederland
           </p>
           <h1 className="text-balance text-4xl font-black leading-tight tracking-tight text-white sm:text-5xl md:text-6xl">
-            De beste DJ voor jouw feest —{" "}
+            De beste DJ voor jouw feest,{" "}
             <span className="bg-gradient-to-r from-green-400 to-green-300 bg-clip-text text-transparent">
               geverifieerd
             </span>{" "}
@@ -195,7 +195,7 @@ export default async function Home() {
               <span className="text-green-400" aria-hidden>
                 ★★★★★
               </span>
-              <span>Meer dan 50 DJ&apos;s beschikbaar — vandaag nog boeken</span>
+              <span>Meer dan 50 DJ&apos;s beschikbaar. Vandaag nog boeken</span>
             </div>
           </div>
         </div>
@@ -241,7 +241,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Trust — white content, photo right */}
+      {/* Trust - white content, photo right */}
       <section
         className="w-full py-20 px-4"
         aria-labelledby="trust-pro-heading"
@@ -260,7 +260,7 @@ export default async function Home() {
             </h2>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-slate-600">
               Eerlijke informatie, duidelijke afspraken en een platform dat met
-              je meedenkt — van eerste klik tot na het feest.
+              je meedenkt. Van eerste klik tot na het feest.
             </p>
 
             <ul className="grid grid-cols-2 gap-4 mt-8">
@@ -326,7 +326,7 @@ export default async function Home() {
                   </div>
                 </div>
                 <p className="text-gray-500 text-sm leading-relaxed">
-                  Zo zie je op het platform dat een DJ gecontroleerd is — met echte reviews en duidelijke afspraken.
+                  Zo zie je op het platform dat een DJ gecontroleerd is, met echte reviews en duidelijke afspraken.
                 </p>
                 <div className="mt-4 flex gap-1">
                   {[1, 2, 3, 4, 5].map((i) => (
@@ -436,7 +436,7 @@ export default async function Home() {
                               <p className="text-lg font-black text-gray-900">
                                 {rate != null
                                   ? `€${Math.round(rate)}`
-                                  : "—"}
+                                  : "-"}
                                 {rate != null ? (
                                   <span className="text-sm font-semibold text-gray-500">
                                     /uur
@@ -481,7 +481,7 @@ export default async function Home() {
             Hoe het werkt
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-center text-slate-600">
-            In drie stappen van idee naar geboekte DJ — zonder gedoe.
+            In drie stappen van idee naar geboekte DJ, zonder gedoe.
           </p>
           <div
             className="mx-auto mt-4 h-1 w-16 rounded-full bg-gradient-to-r from-green-500 to-green-400"
@@ -640,7 +640,7 @@ export default async function Home() {
             <span className="text-green-400">avond</span>?
           </h2>
           <p className="mt-4 text-gray-400">
-            Maak een account en ontdek DJ&apos;s in jouw regio — of meld je aan
+            Maak een account en ontdek DJ&apos;s in jouw regio, of meld je aan
             als DJ en ontvang serieuze aanvragen.
           </p>
           <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:justify-center">

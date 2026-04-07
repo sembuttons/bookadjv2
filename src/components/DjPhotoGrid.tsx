@@ -107,7 +107,7 @@ export function DjPhotoGrid({
                 <Card
                   i={i}
                   className="h-full w-full rounded-2xl overflow-hidden"
-                  alt={`${name} — foto ${i + 1}`}
+                  alt={`${name}, foto ${i + 1}`}
                 />
               </div>
             ))
@@ -137,27 +137,27 @@ export function DjPhotoGrid({
       <div className="hidden md:block">
         {list.length === 0 ? null : list.length === 1 ? (
           <div className="w-full h-[480px] rounded-2xl overflow-hidden">
-            <Card i={0} className="h-full w-full" alt={`${name} — foto`} />
+            <Card i={0} className="h-full w-full" alt={`${name}, foto`} />
           </div>
         ) : list.length === 2 ? (
           <div className="grid grid-cols-2 gap-2 h-[480px] rounded-2xl overflow-hidden">
-            <Card i={0} className="h-full w-full" alt={`${name} — foto 1`} />
-            <Card i={1} className="h-full w-full" alt={`${name} — foto 2`} />
+            <Card i={0} className="h-full w-full" alt={`${name}, foto 1`} />
+            <Card i={1} className="h-full w-full" alt={`${name}, foto 2`} />
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-2 h-[480px]">
             {/* Left: 1 large photo */}
             <div className="rounded-l-2xl overflow-hidden">
-              <Card i={0} className="h-full w-full" alt={`${name} — foto 1`} />
+              <Card i={0} className="h-full w-full" alt={`${name}, foto 1`} />
             </div>
 
             {/* Right: 2 stacked photos */}
             <div className="grid grid-rows-2 gap-2">
               <div className="rounded-tr-2xl overflow-hidden">
-                <Card i={1} className="h-full w-full" alt={`${name} — foto 2`} />
+                <Card i={1} className="h-full w-full" alt={`${name}, foto 2`} />
               </div>
               <div className="rounded-br-2xl overflow-hidden relative">
-                <Card i={2} className="h-full w-full" alt={`${name} — foto 3`} />
+                <Card i={2} className="h-full w-full" alt={`${name}, foto 3`} />
                 {list.length > 3 ? (
                   <button
                     type="button"

@@ -9,7 +9,7 @@ export default function DjBevestigdPage() {
         hoofddashboard zie je alvast een voorbeeld.
       </p>
       <div className="mt-8 rounded-2xl border border-dashed border-gray-200 bg-white px-6 py-12 text-center text-sm text-slate-600 shadow-sm">
-        Placeholder — koppel later je echte data.
+        Placeholder: koppel later je echte data.
       </div>
     </>
   );

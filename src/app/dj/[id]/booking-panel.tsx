@@ -44,7 +44,7 @@ export function BookingPanel({
   ratePerKm,
   contactButtonLabel = "Stel een vraag",
   responseTimeLabel = "Binnen 2 uur",
-  memberSinceLabel = "—",
+  memberSinceLabel = "-",
   blockedIsoDates,
 }: Props) {
   const { isLoaded } = useJsApiLoader({
@@ -105,7 +105,7 @@ export function BookingPanel({
           <span className="text-lg font-semibold text-gray-400">/uur</span>
         </p>
         <p className="mt-1 text-xs text-gray-400">
-          Indicatie — totaal hangt af van duur en locatie.
+          Indicatie: totaal hangt af van duur en locatie.
         </p>
 
         <div className="mt-6">
@@ -227,7 +227,7 @@ export function BookingPanel({
           <div className="flex justify-between text-slate-500">
             <span>Reiskosten</span>
             <span className="font-medium text-slate-600">
-              {travelCost > 0 ? `€${travelCost.toLocaleString("nl-NL")}` : "—"}
+              {travelCost > 0 ? `€${travelCost.toLocaleString("nl-NL")}` : "-"}
             </span>
           </div>
           <div className="flex justify-between pt-2 text-base font-bold text-slate-900">

@@ -58,7 +58,7 @@ function initialsFromStage(name: string) {
 }
 
 function formatEventDate(isoDate: string | null | undefined): string {
-  if (!isoDate || typeof isoDate !== "string") return "—";
+  if (!isoDate || typeof isoDate !== "string") return "-";
   const d = new Date(`${isoDate}T12:00:00`);
   if (Number.isNaN(d.getTime())) return isoDate;
   return d.toLocaleDateString("nl-NL", {
@@ -80,7 +80,7 @@ function formatEuroFromCents(cents: number | null | undefined): string {
 
 function venueLine(b: BookingRow): string {
   const v = b.venue_address ?? b.location;
-  return typeof v === "string" && v.trim() ? v.trim() : "—";
+  return typeof v === "string" && v.trim() ? v.trim() : "-";
 }
 
 function hoursValue(b: BookingRow): number {
@@ -373,7 +373,7 @@ export default function KlantDashboardPage() {
                     {typeof upcomingBannerBooking.start_time === "string" &&
                     upcomingBannerBooking.start_time.trim()
                       ? upcomingBannerBooking.start_time.trim()
-                      : "—"}
+                      : "-"}
                   </span>
                 </li>
                 <li className="sm:col-span-2">
@@ -390,7 +390,7 @@ export default function KlantDashboardPage() {
                     const days = calendarDaysUntilEvent(
                       upcomingBannerBooking.event_date,
                     );
-                    if (days < 0) return "—";
+                    if (days < 0) return "-";
                     if (days === 0) return "Vandaag";
                     if (days === 1) return "Nog 1 dag";
                     return `Nog ${days} dagen`;
@@ -473,7 +473,7 @@ export default function KlantDashboardPage() {
               typeof booking.start_time === "string" &&
               booking.start_time.trim()
                 ? booking.start_time.trim()
-                : "—";
+                : "-";
 
             return (
               <li key={booking.id}>
@@ -516,7 +516,7 @@ export default function KlantDashboardPage() {
                               {typeof booking.event_type === "string" &&
                               booking.event_type.trim()
                                 ? booking.event_type.trim()
-                                : "—"}
+                                : "-"}
                             </dd>
                           </div>
                           <div>

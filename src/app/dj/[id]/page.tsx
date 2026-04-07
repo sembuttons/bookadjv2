@@ -76,9 +76,9 @@ function firstName(full: string) {
 
 function formatSidebarMemberSince(row: DjProfileRow): string {
   const c = row.created_at ?? row.member_since;
-  if (typeof c !== "string") return "—";
+  if (typeof c !== "string") return "-";
   const d = new Date(c);
-  if (Number.isNaN(d.getTime())) return "—";
+  if (Number.isNaN(d.getTime())) return "-";
   const monthRaw = d.toLocaleDateString("nl-NL", { month: "long" });
   const month =
     monthRaw.charAt(0).toLocaleUpperCase("nl-NL") +
@@ -298,7 +298,7 @@ export default async function DjProfilePage({ params }: PageProps) {
       <div className="mx-auto max-w-[1400px] px-4 pb-16 pt-6 sm:px-6 lg:px-8">
         <DjPhotoSection photos={photoUrls} name={name} />
 
-        {/* Name + badge + location + genres — all in one block */}
+        {/* Name + badge + location + genres - all in one block */}
         <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0 space-y-3">
 
@@ -489,7 +489,7 @@ export default async function DjProfilePage({ params }: PageProps) {
               </section>
             ) : null}
 
-            {/* Booking panel — mobile placement (after bio) */}
+            {/* Booking panel - mobile placement (after bio) */}
             <div id="booking-panel-anchor" className="lg:hidden">
               <BookingPanel
                 djId={id}
@@ -584,7 +584,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                           </p>
                         ) : null}
                         <p className="mt-3 text-sm leading-relaxed text-gray-400">
-                          {getReviewBody(r) || "—"}
+                          {getReviewBody(r) || "-"}
                         </p>
                       </article>
                     );

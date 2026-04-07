@@ -9,7 +9,7 @@ export default function KlantReviewsPage() {
         voor nu.
       </p>
       <div className="mt-8 rounded-2xl border border-dashed border-gray-200 bg-white px-6 py-12 text-center text-sm text-slate-600 shadow-sm">
-        Nog geen reviews — dit vullen we aan zodra boekingen live zijn.
+        Nog geen reviews. Dit vullen we aan zodra boekingen live zijn.
       </div>
     </>
   );

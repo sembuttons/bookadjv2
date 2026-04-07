@@ -15,7 +15,7 @@ export function BerichtenLayoutClient({
             Berichten
           </h1>
           <p className="mt-1 text-sm text-slate-600">
-            Veilige berichten binnen bookadj — deel geen telefoonnummers of
+            Veilige berichten binnen bookadj. Deel geen telefoonnummers of
             betaalverzoeken.
           </p>
         </div>

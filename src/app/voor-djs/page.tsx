@@ -17,7 +17,7 @@ const VOOR_DJS_HERO_BG =
 const usps = [
   {
     title: "Meer boekingen, minder moeite",
-    body: "Klanten vinden jou, niet andersom. Jouw profiel werkt voor je — 24/7 zichtbaar voor serieuze boekers.",
+    body: "Klanten vinden jou, niet andersom. Jouw profiel werkt voor je: 24/7 zichtbaar voor serieuze boekers.",
     icon: (
       <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" aria-hidden>
         <path
@@ -32,7 +32,7 @@ const usps = [
   },
   {
     title: "Direct contact met boekers",
-    body: "Via ons veilige berichtenplatform. Alles op één plek — geen ruis op privékanalen, wel snelle antwoorden.",
+    body: "Via ons veilige berichtenplatform. Alles op één plek: geen ruis op privékanalen, wel snelle antwoorden.",
     icon: (
       <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" aria-hidden>
         <path
@@ -52,7 +52,7 @@ const usps = [
   },
   {
     title: "Professioneel portfolio",
-    body: "Laat zien wie je bent met video, mix en foto's. Een volledig profiel vertrouwen wekt — en boekingen oplevert.",
+    body: "Laat zien wie je bent met video, mix en foto's. Een volledig profiel wekt vertrouwen en levert boekingen op.",
     icon: (
       <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" aria-hidden>
         <rect
@@ -202,7 +202,7 @@ export default function VoorDjsPage() {
             Alles wat je nodig hebt om te groeien
           </h2>
           <p className="mt-4 text-lg text-slate-600">
-            Eén platform voor zichtbaarheid, communicatie en betaling — zodat jij
+            Eén platform voor zichtbaarheid, communicatie en betaling, zodat jij
             je kunt focussen op je set.
           </p>
         </div>
@@ -404,8 +404,8 @@ export default function VoorDjsPage() {
                   Platformcommission
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                  bookadj houdt per bevestigde boeking een platformcommission in
-                  — gangbaar <strong className="font-semibold text-slate-900">10–15%</strong> van het
+                  bookadj houdt per bevestigde boeking een platformcommission in,
+                  gangbaar <strong className="font-semibold text-slate-900">10–15%</strong> van het
                   boekingsbedrag, afhankelijk van het type opdracht en je
                   overeenkomst. Het exacte percentage zie je transparant in je
                   dashboard vóór je een aanvraag accepteert.
@@ -455,7 +455,7 @@ export default function VoorDjsPage() {
                 </span>
                 Sinds ik op bookadj sta, krijg ik serieuze aanvragen zonder
                 eindeloos te onderhandelen op Instagram. Alles loopt via één
-                plek — en ik weet dat ik betaald word. Dat geeft rust voor een
+                plek, en ik weet dat ik betaald word. Dat geeft rust voor een
                 drukke weekendagenda.
                 <span className="text-4xl leading-none text-green-500/40">
                   &rdquo;
@@ -464,7 +464,7 @@ export default function VoorDjsPage() {
             </blockquote>
           </figure>
           <p className="mt-4 text-center text-xs text-gray-500">
-            Fictief voorbeeld — placeholder tot we echte DJ-verhalen publiceren.
+            Fictief voorbeeld; placeholder tot we echte DJ-verhalen publiceren.
           </p>
         </div>
       </section>

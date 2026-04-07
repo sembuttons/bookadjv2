@@ -122,7 +122,7 @@ export function welcomeEmail(name: string): string {
   const safeName = escapeHtml(name || "");
   return wrapEmailHtml({
     title: "Welkom bij bookadj",
-    preheader: "Je account is aangemaakt — je kunt direct DJ’s zoeken.",
+    preheader: "Je account is aangemaakt. Je kunt direct DJ’s zoeken.",
     bodyHtml: `
       <h1 style="margin:0 0 10px;color:${BRAND.dark};font-size:24px;line-height:1.25;font-weight:800;">
         Welkom bij bookadj
@@ -149,7 +149,7 @@ export function bookingReceivedEmail(params: {
 }): string {
   return wrapEmailHtml({
     title: "Nieuwe boekingsaanvraag",
-    preheader: "Nieuwe aanvraag — je hebt 24 uur om te reageren.",
+    preheader: "Nieuwe aanvraag: je hebt 24 uur om te reageren.",
     bodyHtml: `
       <h1 style="margin:0 0 10px;color:${BRAND.dark};font-size:22px;line-height:1.25;font-weight:800;">
         Je hebt een nieuwe boekingsaanvraag
@@ -180,10 +180,10 @@ export function bookingConfirmedEmail(params: {
 }): string {
   return wrapEmailHtml({
     title: "Boeking bevestigd",
-    preheader: "Goed nieuws — je boeking is bevestigd.",
+    preheader: "Goed nieuws: je boeking is bevestigd.",
     bodyHtml: `
       <h1 style="margin:0 0 10px;color:${BRAND.dark};font-size:22px;line-height:1.25;font-weight:800;">
-        Goed nieuws — je boeking is bevestigd
+        Goed nieuws: je boeking is bevestigd
       </h1>
       <div style="margin:12px 0 14px;">
         <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:999px;background:${BRAND.green};color:#0a0a0a;font-weight:900;font-size:16px;">
@@ -247,7 +247,7 @@ export function reviewRequestEmail(params: {
         Deel je ervaring
       </h1>
       <p style="margin:0 0 14px;color:${BRAND.text};font-size:14px;line-height:1.7;">
-        Je event is voorbij — we hopen dat het geweldig was! Laat een review achter en help andere boekers.
+        Je event is voorbij. We hopen dat het geweldig was! Laat een review achter en help andere boekers.
       </p>
       <div style="margin:12px 0 16px;">
         ${stars}
@@ -282,7 +282,7 @@ export function newMessageEmail(params: {
         ${button(threadUrl, "Beantwoord bericht")}
       </div>
       <p style="margin:0;color:${BRAND.muted};font-size:13px;line-height:1.6;">
-        Communiceer altijd via bookadj — deel geen persoonlijke contactgegevens.
+        Communiceer altijd via bookadj - deel geen persoonlijke contactgegevens.
       </p>
     `,
   });

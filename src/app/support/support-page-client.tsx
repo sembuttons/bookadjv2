@@ -14,7 +14,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Kan ik annuleren als klant?",
-    a: "Ja, volgens ons terugbetalingsbeleid — afhankelijk van hoe ver je evenement nog weg is. Zie de pagina Betalingen en terugbetalingen voor de richtlijnen.",
+    a: "Ja, volgens ons terugbetalingsbeleid, afhankelijk van hoe ver je evenement nog weg is. Zie de pagina Betalingen en terugbetalingen voor de richtlijnen.",
   },
   {
     q: "Wat als mijn DJ annuleert?",

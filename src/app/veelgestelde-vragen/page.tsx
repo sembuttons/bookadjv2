@@ -3,7 +3,7 @@ import { FaqAccordion } from "@/components/faq-accordion";
 import { MarketingPageShell } from "@/components/marketing-page-shell";
 
 export const metadata = {
-  title: "Veelgestelde vragen — bookadj",
+  title: "Veelgestelde vragen - bookadj",
   description: "FAQ voor klanten en DJ's over bookadj.",
 };
 
@@ -35,7 +35,7 @@ export default function VeelgesteldeVragenPage() {
               answer: (
                 <p>
                   bookadj is een platform waar je geverifieerde DJ&apos;s kunt
-                  vinden, vergelijken en boeken — met duidelijke prijzen en
+                  vinden, vergelijken en boeken, met duidelijke prijzen en
                   betaling via het platform.
                 </p>
               ),
@@ -103,7 +103,7 @@ export default function VeelgesteldeVragenPage() {
               question: "Mag ik met klanten bellen of Whatsappen?",
               answer: (
                 <p>
-                  Nee — houd contact binnen bookadj. Zo blijf je beschermd en
+                  Nee. Houd contact binnen bookadj. Zo blijf je beschermd en
                   voorkom je dat boekingen of geschillen buiten het platform
                   vallen.
                 </p>

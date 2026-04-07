@@ -97,7 +97,7 @@ export function DjOnboardingChecklist({
             {steps.s2 ? "✓" : "☐"}
           </span>
           <span>
-            Foto&apos;s toegevoegd —{" "}
+            Foto&apos;s toegevoegd:{" "}
             <Link href="/dashboard/dj/media" className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700">
               Media &amp; links
             </Link>
@@ -108,7 +108,7 @@ export function DjOnboardingChecklist({
             {steps.s3 ? "✓" : "☐"}
           </span>
           <span>
-            Video gelinkt —{" "}
+            Video gelinkt:{" "}
             <Link href="/dashboard/dj/media" className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700">
               Media &amp; links
             </Link>
@@ -119,7 +119,7 @@ export function DjOnboardingChecklist({
             {steps.s4 ? "✓" : "☐"}
           </span>
           <span>
-            Instagram &amp; Soundcloud gekoppeld —{" "}
+            Instagram &amp; Soundcloud gekoppeld:{" "}
             <Link href="/dashboard/dj/media" className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700">
               Media &amp; links
             </Link>

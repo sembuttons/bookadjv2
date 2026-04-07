@@ -16,11 +16,11 @@ export default function StedenPage() {
       <header className="bg-white px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="text-balance text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
-            Beschikbaar door heel Nederland — en daarbuiten
+            Beschikbaar door heel Nederland en daarbuiten
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-pretty text-base leading-relaxed text-slate-600 sm:text-lg">
             bookadj DJ&apos;s komen uit alle uithoeken van Nederland en reizen naar jouw locatie.
-            Groot of klein, stad of dorp — wij vinden de perfecte DJ.
+            Groot of klein, stad of dorp: wij vinden de perfecte DJ.
           </p>
         </div>
       </header>
@@ -49,7 +49,7 @@ export default function StedenPage() {
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-center text-slate-600">
             Sommige bookadj DJ&apos;s zijn beschikbaar in België, Duitsland en Luxemburg.
-            Beschikbaarheid verschilt per DJ — check het profiel of neem contact op.
+            Beschikbaarheid verschilt per DJ. Check het profiel of neem contact op.
           </p>
           <ul className="mt-12 grid gap-4 sm:grid-cols-3">
             {CROSS_BORDER.map((c) => (

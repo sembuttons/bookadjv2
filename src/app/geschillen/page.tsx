@@ -2,7 +2,7 @@ import Link from "next/link";
 import { MarketingPageShell } from "@/components/marketing-page-shell";
 
 export const metadata = {
-  title: "Hulp bij problemen — bookadj",
+  title: "Hulp bij problemen - bookadj",
   description:
     "Hoe bookadj helpt bij conflicten tussen klanten en DJ's.",
 };
@@ -17,7 +17,7 @@ export default function GeschillenPage() {
         Hulp bij problemen
       </h1>
       <p className="mt-4 text-lg text-slate-600">
-        Soms lopen afspraken scheef — tussen klant en DJ of door
+        Soms lopen afspraken scheef, tussen klant en DJ of door
         miscommunicatie. bookadj is er om eerlijk mee te kijken en tot een
         oplossing te komen binnen het platform.
       </p>

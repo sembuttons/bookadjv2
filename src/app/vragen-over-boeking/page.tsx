@@ -3,7 +3,7 @@ import { FaqAccordion } from "@/components/faq-accordion";
 import { MarketingPageShell } from "@/components/marketing-page-shell";
 
 export const metadata = {
-  title: "Vragen over boeken — bookadj",
+  title: "Vragen over boeken - bookadj",
   description:
     "Antwoorden op veelgestelde vragen over het boeken van een DJ via bookadj.",
 };
@@ -52,7 +52,7 @@ export default function VragenOverBoekingPage() {
                 <p>
                   Bij bookadj betaal je veilig via Stripe. In de regel wordt je
                   kaart of betaalmethode pas belast wanneer de DJ je aanvraag
-                  heeft geaccepteerd — zo weet je zeker dat je niet voor niets
+                  heeft geaccepteerd, zo weet je zeker dat je niet voor niets
                   betaalt. De exacte timing kan per situatie verschillen; je ziet
                   het altijd in je bevestiging en op de betalingspagina.
                 </p>
@@ -64,7 +64,7 @@ export default function VragenOverBoekingPage() {
                 <p>
                   Ja. Betalingen lopen via Stripe (o.a. iDEAL, creditcard).
                   Wij slaan geen volledige kaartgegevens op. Communicatie en
-                  betalingsbescherming horen bij het platform — betaal niet
+                  betalingsbescherming horen bij het platform. Betaal niet
                   buiten bookadj om, zodat je beschermd blijft.
                 </p>
               ),
@@ -73,7 +73,7 @@ export default function VragenOverBoekingPage() {
               question: "Wat als de DJ mijn evenement annuleert?",
               answer: (
                 <p>
-                  Dat is vervelend — en precies waarom bookadj tussenbeide staat.
+                  Dat is vervelend, en precies waarom bookadj tussenbeide staat.
                   We streven ernaar een vervangende DJ voor te stellen of, als
                   dat niet lukt, een volledige terugbetaling te regelen volgens
                   ons beleid. Lees meer op{" "}

@@ -2,7 +2,7 @@ import { ContactForm } from "./contact-form";
 import { MarketingPageShell } from "@/components/marketing-page-shell";
 
 export const metadata = {
-  title: "Contact — bookadj",
+  title: "Contact - bookadj",
   description: "Neem contact op met bookadj.",
 };
 

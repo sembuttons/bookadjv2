@@ -9,7 +9,7 @@ import {
 import { supabase } from "@/lib/supabase-browser";
 
 function formatCreatedAt(iso: string | null | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
   return d.toLocaleString("nl-NL", {
@@ -158,25 +158,25 @@ export default function AdminVerificatiesPage() {
             const stage =
               typeof row.stage_name === "string" && row.stage_name.trim()
                 ? row.stage_name.trim()
-                : "—";
+                : "-";
             const city =
               typeof row.city === "string" && row.city.trim()
                 ? row.city.trim()
-                : "—";
+                : "-";
             const genres = getGenres(row);
             const rate = getHourlyRate(row);
             const bio =
               typeof row.bio === "string" && row.bio.trim()
                 ? row.bio.trim()
-                : "—";
+                : "-";
             const vat =
               typeof row.vat_number === "string" && row.vat_number.trim()
                 ? row.vat_number.trim()
-                : "—";
+                : "-";
             const kvk =
               typeof row.kvk_number === "string" && row.kvk_number.trim()
                 ? row.kvk_number.trim()
-                : "—";
+                : "-";
             const created =
               typeof row.created_at === "string" ? row.created_at : null;
             const busy = actionId === id;
@@ -225,13 +225,13 @@ export default function AdminVerificatiesPage() {
                       <dd className="mt-0.5 font-medium text-white">
                         {rate != null
                           ? `€${rate.toLocaleString("nl-NL")}/uur`
-                          : "—"}
+                          : "-"}
                       </dd>
                     </div>
                     <div className="sm:col-span-2">
                       <dt className="text-gray-500">Genres</dt>
                       <dd className="mt-0.5 font-medium text-white">
-                        {genres.length ? genres.join(", ") : "—"}
+                        {genres.length ? genres.join(", ") : "-"}
                       </dd>
                     </div>
                     <div className="sm:col-span-2">

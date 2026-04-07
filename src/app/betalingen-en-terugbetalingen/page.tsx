@@ -2,7 +2,7 @@ import Link from "next/link";
 import { MarketingPageShell } from "@/components/marketing-page-shell";
 
 export const metadata = {
-  title: "Betalingen en terugbetalingen — bookadj",
+  title: "Betalingen en terugbetalingen - bookadj",
   description:
     "Hoe betalen werkt op bookadj en wanneer je recht hebt op (deel)terugbetaling.",
 };
@@ -72,7 +72,7 @@ export default function BetalingenTerugbetalingenPage() {
           <li>
             <strong className="text-slate-900">Tussen 14 en 30 dagen</strong>{" "}
             voor de evenementdatum: <strong>gedeeltelijke terugbetaling</strong>
-            — een deel van het bedrag kan ingehouden worden voor
+            . Een deel van het bedrag kan ingehouden worden voor
             gemaakte kosten en de gereserveerde tijd van de DJ.
           </li>
           <li>
@@ -96,7 +96,7 @@ export default function BetalingenTerugbetalingenPage() {
           >
             info@bookadj.nl
           </a>{" "}
-          met je boekingsreferentie — of gebruik{" "}
+          met je boekingsreferentie, of gebruik{" "}
           <Link
             href="/contact"
             className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700"

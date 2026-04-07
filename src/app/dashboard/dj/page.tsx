@@ -18,7 +18,7 @@ function formatEuroFromCents(cents: number | null | undefined): string {
 }
 
 function formatEventDate(isoDate: string | null | undefined): string {
-  if (!isoDate || typeof isoDate !== "string") return "—";
+  if (!isoDate || typeof isoDate !== "string") return "-";
   const d = new Date(`${isoDate}T12:00:00`);
   if (Number.isNaN(d.getTime())) return isoDate;
   return d.toLocaleDateString("nl-NL", {
@@ -30,9 +30,9 @@ function formatEventDate(isoDate: string | null | undefined): string {
 }
 
 function payoutExpectedLabel(eventDateStr: string | null | undefined): string {
-  if (!eventDateStr || typeof eventDateStr !== "string") return "—";
+  if (!eventDateStr || typeof eventDateStr !== "string") return "-";
   const d = new Date(`${eventDateStr}T12:00:00`);
-  if (Number.isNaN(d.getTime())) return "—";
+  if (Number.isNaN(d.getTime())) return "-";
   d.setDate(d.getDate() + 2);
   return d.toLocaleDateString("nl-NL", {
     weekday: "long",
@@ -83,7 +83,7 @@ function getCustomerName(booking: BookingRow): string {
 
 function venueLine(b: BookingRow): string {
   const v = b.venue_address ?? b.location;
-  return typeof v === "string" && v.trim() ? v.trim() : "—";
+  return typeof v === "string" && v.trim() ? v.trim() : "-";
 }
 
 function hoursValue(b: BookingRow): number {
@@ -295,7 +295,7 @@ export default function DjDashboardPage() {
                 {
                   sender_id: djUserId,
                   recipient_id: customerId,
-                  content: `Boeking bevestigd — referentie ${ref}. Je betaling wordt vastgehouden tot na het event op ${niceDayMonth}.`,
+                  content: `Boeking bevestigd. Referentie ${ref}. Je betaling wordt vastgehouden tot na het event op ${niceDayMonth}.`,
                   booking_id: bookingId,
                   inbox_type: "book_me",
                   created_at: new Date().toISOString(),
@@ -446,7 +446,7 @@ export default function DjDashboardPage() {
           Nieuwe aanvragen
         </h1>
         <p className="mt-1 text-sm text-slate-600">
-          Inbox — klanten die je willen boeken. Reageer voordat de aanvraag
+          Inbox: klanten die je willen boeken. Reageer voordat de aanvraag
           verloopt.
         </p>
 
@@ -478,7 +478,7 @@ export default function DjDashboardPage() {
               const start =
                 typeof req.start_time === "string" && req.start_time.trim()
                   ? req.start_time.trim()
-                  : "—";
+                  : "-";
               const msg =
                 typeof req.customer_message === "string" &&
                 req.customer_message.trim()
@@ -542,7 +542,7 @@ export default function DjDashboardPage() {
                               {typeof req.event_type === "string" &&
                               req.event_type.trim()
                                 ? req.event_type.trim()
-                                : "—"}
+                                : "-"}
                             </dd>
                           </div>
                         </dl>
@@ -640,7 +640,7 @@ export default function DjDashboardPage() {
               const start =
                 typeof b.start_time === "string" && b.start_time.trim()
                   ? b.start_time.trim()
-                  : "—";
+                  : "-";
               return (
                 <li key={b.id}>
                   <article className="card-interactive p-5 sm:p-6">

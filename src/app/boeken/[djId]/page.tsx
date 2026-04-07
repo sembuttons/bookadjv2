@@ -176,7 +176,7 @@ export default function BoekenPage() {
 
   const hourlyRate = profile ? getHourlyRate(profile) ?? 125 : 125;
   const djName = profile ? getDisplayName(profile) : "…";
-  const city = profile ? getCity(profile) : "—";
+  const city = profile ? getCity(profile) : "-";
   const genres = profile ? getGenres(profile) : [];
 
   const djCostEuro = useMemo(
@@ -698,7 +698,7 @@ export default function BoekenPage() {
                 )}
               </button>
               <p className="mt-3 text-gray-400 text-xs text-center">
-                Veilig betalen via bookadj — je wordt pas in rekening gebracht na acceptatie
+                Veilig betalen via bookadj - je wordt pas in rekening gebracht na acceptatie
               </p>
             </div>
           </form>
@@ -729,13 +729,13 @@ export default function BoekenPage() {
                             year: "numeric",
                           },
                         )
-                      : "—"}
+                      : "-"}
                   </span>
                 </li>
                 <li>
                   Start:{" "}
                   <span className="font-semibold text-gray-900">
-                    {startTime || "—"}
+                    {startTime || "-"}
                   </span>
                 </li>
                 <li>
@@ -747,7 +747,7 @@ export default function BoekenPage() {
                 <li>
                   Locatie:{" "}
                   <span className="font-semibold text-gray-900">
-                    {venueAddress.trim() || "—"}
+                    {venueAddress.trim() || "-"}
                   </span>
                 </li>
                 <li>
@@ -809,7 +809,7 @@ export default function BoekenPage() {
             </button>
 
             <p className="mt-3 text-gray-400 text-xs text-center">
-              Veilig betalen via bookadj — je wordt pas in rekening gebracht na acceptatie
+              Veilig betalen via bookadj - je wordt pas in rekening gebracht na acceptatie
             </p>
           </div>
         </aside>

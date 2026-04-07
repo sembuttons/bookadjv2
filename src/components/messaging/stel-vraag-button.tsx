@@ -7,7 +7,7 @@ import { supabase } from "@/lib/supabase-browser";
 type Props = {
   /** Auth user id of the DJ when already known (server-resolved). */
   djUserId?: string | null;
-  /** DJ profile row id — used to resolve auth user id when djUserId is empty. */
+  /** DJ profile row id; used to resolve auth user id when djUserId is empty. */
   djProfileId?: string;
   className?: string;
   children?: React.ReactNode;

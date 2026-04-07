@@ -182,7 +182,7 @@ export function AdminBerichtenClient() {
                 {m.is_flagged ? (
                   <p className="mb-3 inline-block rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-bold uppercase text-white">
                     Gemarkeerd
-                    {m.flag_reason ? ` — ${m.flag_reason}` : ""}
+                    {m.flag_reason ? ` (${m.flag_reason})` : ""}
                   </p>
                 ) : null}
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -199,7 +199,7 @@ export function AdminBerichtenClient() {
                       </span>
                       <div>
                         <p className="text-sm font-semibold text-white">
-                          {m.sender?.full_name ?? "—"}
+                          {m.sender?.full_name ?? "-"}
                         </p>
                         <p className="text-xs text-gray-500">
                           {m.sender?.email}
@@ -226,7 +226,7 @@ export function AdminBerichtenClient() {
                       </span>
                       <div>
                         <p className="text-sm font-semibold text-white">
-                          {m.recipient?.full_name ?? "—"}
+                          {m.recipient?.full_name ?? "-"}
                         </p>
                         <p className="text-xs text-gray-500">
                           {m.recipient?.email}
@@ -236,7 +236,7 @@ export function AdminBerichtenClient() {
                   </div>
                 </div>
                 <p className="mt-4 whitespace-pre-wrap rounded-lg bg-[#111827]/80 p-3 text-sm text-white ring-1 ring-gray-800/60">
-                  {m.content ?? "—"}
+                  {m.content ?? "-"}
                 </p>
                 <p className="mt-2 text-xs text-gray-500">
                   {new Date(m.created_at).toLocaleString("nl-NL")}
