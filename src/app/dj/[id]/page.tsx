@@ -47,7 +47,7 @@ import { DjUspGrid, type UspItem } from "./dj-usp-grid";
 import { MediaTabs } from "./media-tabs";
 import { RelatedDjsCarousel } from "./related-djs-carousel";
 import { MobileStickyBookingBar } from "./mobile-sticky-booking-bar";
-import { DjPhotoGrid } from "@/components/DjPhotoGrid";
+// Photo grid is implemented inline for strict sizing.
 
 export const dynamic = "force-dynamic";
 
@@ -296,41 +296,113 @@ export default async function DjProfilePage({ params }: PageProps) {
       <Navbar />
 
       <div className="mx-auto max-w-[1400px] px-4 pb-16 pt-6 sm:px-6 lg:px-8">
-        {/* Photo grid / media empty state */}
-        {hasPhotos ? (
-          <DjPhotoGrid
-            urls={photoUrls}
-            name={name}
-            videoAnchorHref={hasYouTubeVideo ? "#dj-video" : null}
-          />
-        ) : !hasAnyMedia ? (
-          <div className="rounded-2xl bg-gray-50 border border-gray-200 p-8 text-center">
-            <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Music className="w-7 h-7 text-green-500" aria-hidden />
+        {/* Photos (strict max height) */}
+        <div className="dj-photo-grid">
+          {photoUrls && photoUrls.length > 0 ? (
+            <div className="w-full mt-6">
+              {/* Desktop grid */}
+              <div
+                className="hidden md:block rounded-2xl overflow-hidden"
+                style={{ height: "480px" }}
+              >
+                {photoUrls.length === 1 ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={photoUrls[0]}
+                    alt="DJ foto"
+                    className="w-full h-full object-cover"
+                  />
+                ) : null}
+
+                {photoUrls.length === 2 ? (
+                  <div className="grid grid-cols-2 gap-2 h-full">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={photoUrls[0]}
+                      alt="DJ foto 1"
+                      className="w-full h-full object-cover rounded-l-2xl"
+                    />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={photoUrls[1]}
+                      alt="DJ foto 2"
+                      className="w-full h-full object-cover rounded-r-2xl"
+                    />
+                  </div>
+                ) : null}
+
+                {photoUrls.length >= 3 ? (
+                  <div className="grid grid-cols-2 gap-2 h-full">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={photoUrls[0]}
+                      alt="DJ foto 1"
+                      className="w-full h-full object-cover rounded-l-2xl"
+                    />
+                    <div className="grid grid-rows-2 gap-2 h-full">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={photoUrls[1]}
+                        alt="DJ foto 2"
+                        className="w-full h-full object-cover rounded-tr-2xl"
+                      />
+                      <div className="relative">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={photoUrls[2]}
+                          alt="DJ foto 3"
+                          className="w-full h-full object-cover rounded-br-2xl"
+                        />
+                        {photoUrls.length > 3 ? (
+                          <button
+                            type="button"
+                            className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm text-gray-900 text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-white"
+                          >
+                            +{photoUrls.length - 3} foto&apos;s
+                          </button>
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+
+              {/* Mobile horizontal scroll */}
+              <div className="flex md:hidden gap-3 overflow-x-auto snap-x snap-mandatory -mx-4 px-4 pb-2">
+                {photoUrls.map((photo: string, i: number) => (
+                  <div
+                    key={i}
+                    className="flex-none w-[80vw] rounded-2xl overflow-hidden snap-center"
+                    style={{ height: "240px" }}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={photo}
+                      alt={`Foto ${i + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-            <p className="font-semibold text-gray-900 mb-2">
-              Meer content komt binnenkort
-            </p>
-            <p className="text-gray-500 text-sm max-w-xs mx-auto">
-              Deze DJ is bezig zijn profiel in te richten. Stuur alvast een vraag via de knop hierboven.
-            </p>
-          </div>
-        ) : (
-          <div
-            className="w-full h-[360px] rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center"
-            style={{ backgroundImage: `url(${DJ_GALLERY_MAIN})` }}
-          >
-            <span className="text-8xl font-black text-white/10">
-              {name
-                .trim()
-                .split(/\s+/)
-                .filter(Boolean)
-                .slice(0, 2)
-                .map((p) => p[0]?.toUpperCase() ?? "")
-                .join("") || "?"}
-            </span>
-          </div>
-        )}
+          ) : (
+            /* No photos placeholder */
+            <div
+              className="w-full mt-6 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center"
+              style={{ height: "360px" }}
+            >
+              <span className="text-9xl font-black text-white/10">
+                {name
+                  .trim()
+                  .split(/\s+/)
+                  .filter(Boolean)
+                  .slice(0, 2)
+                  .map((p) => p[0]?.toUpperCase() ?? "")
+                  .join("") || "?"}
+              </span>
+            </div>
+          )}
+        </div>
 
         {/* Name + badge + location + genres — all in one block */}
         <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -419,7 +491,7 @@ export default async function DjProfilePage({ params }: PageProps) {
           </div>
         </div>
 
-        <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_minmax(280px,360px)] lg:gap-12 lg:items-start">
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 lg:items-start">
           <div className="min-w-0 space-y-14">
             <MediaTabs
               djFirstName={fn}
@@ -698,7 +770,7 @@ export default async function DjProfilePage({ params }: PageProps) {
             <DjProfileFaq />
           </div>
 
-          <aside className="hidden lg:block lg:sticky lg:top-24 lg:max-h-[calc(100vh-6.5rem)] lg:overflow-y-auto lg:overscroll-contain lg:self-start">
+          <aside className="hidden lg:block lg:sticky lg:top-24 lg:self-start">
             <BookingPanel
               djId={id}
               djUserId={djUserId || null}
