@@ -195,6 +195,22 @@ export function Navbar() {
           book<span className="text-green-400">adj</span>
         </Link>
 
+        {/* Mobile quick links */}
+        <div className="ml-4 hidden items-center gap-3 md:hidden min-[360px]:flex">
+          <Link
+            href="/zoeken"
+            className="text-xs font-medium text-gray-300 transition-colors hover:text-white"
+          >
+            DJ&apos;s vinden
+          </Link>
+          <Link
+            href="/hoe-het-werkt"
+            className="text-xs font-medium text-gray-300 transition-colors hover:text-white"
+          >
+            Boeken
+          </Link>
+        </div>
+
         <nav
           className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 text-sm font-medium text-gray-400 md:flex"
           aria-label="Hoofdnavigatie"
@@ -218,76 +234,80 @@ export function Navbar() {
 
         <div className="flex-1" />
 
-        <div
-          className={`fixed inset-y-0 right-0 z-[48] w-[min(20rem,88vw)] max-w-full transform border-l border-gray-200 bg-white shadow-xl shadow-gray-400/20 transition-transform duration-200 ease-out md:hidden ${
-            mobileNavOpen ? "translate-x-0" : "translate-x-full"
-          }`}
-          aria-hidden={!mobileNavOpen}
-          id="site-mobile-nav"
-        >
-          <div className="flex h-14 items-center justify-between px-4">
-            <span className="text-sm font-bold text-slate-900">Menu</span>
-            <button
-              type="button"
-              className="flex h-11 w-11 items-center justify-center rounded-lg text-slate-500 hover:bg-gray-100"
-              aria-label="Menu sluiten"
-              onClick={() => setMobileNavOpen(false)}
-            >
-              <svg className="h-5 w-5" viewBox="0 0 20 20" fill="none" aria-hidden>
-                <path
-                  d="M5 5l10 10M15 5L5 15"
-                  stroke="currentColor"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
+        {/* Mobile dropdown menu */}
+        {mobileNavOpen ? (
+          <div
+            id="site-mobile-nav"
+            className="absolute left-4 right-4 top-full z-[48] mt-2 rounded-xl border border-gray-200 bg-white shadow-lg md:hidden"
+            role="dialog"
+            aria-label="Mobiel menu"
+          >
+            <nav className="flex flex-col p-2" aria-label="Mobiel menu">
+              <Link
+                href="/zoeken"
+                className="rounded-lg px-3 py-2 text-sm font-medium text-green-600"
+                onClick={() => setMobileNavOpen(false)}
+              >
+                DJ&apos;s vinden
+              </Link>
+              <Link
+                href="/hoe-het-werkt"
+                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900"
+                onClick={() => setMobileNavOpen(false)}
+              >
+                Boeken
+              </Link>
+              <div className="my-2 border-t border-gray-100" />
+              <Link
+                href="/voor-djs"
+                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900"
+                onClick={() => setMobileNavOpen(false)}
+              >
+                Voor DJ&apos;s
+              </Link>
+              <Link
+                href="/over-ons"
+                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900"
+                onClick={() => setMobileNavOpen(false)}
+              >
+                Over ons
+              </Link>
+              <Link
+                href="/support"
+                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900"
+                onClick={() => setMobileNavOpen(false)}
+              >
+                Support
+              </Link>
+              <Link
+                href="/contact"
+                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900"
+                onClick={() => setMobileNavOpen(false)}
+              >
+                Contact
+              </Link>
+              <div className="my-2 border-t border-gray-100" />
+              {!session ? (
+                <div className="space-y-2 p-2">
+                  <Link
+                    href="/auth"
+                    className="block rounded-lg px-3 py-2 text-sm font-medium text-gray-700"
+                    onClick={() => setMobileNavOpen(false)}
+                  >
+                    Inloggen
+                  </Link>
+                  <Link
+                    href="/auth?tab=aanmelden"
+                    className="block w-full rounded-xl bg-green-500 px-4 py-3 text-center text-sm font-bold text-black"
+                    onClick={() => setMobileNavOpen(false)}
+                  >
+                    Aanmelden
+                  </Link>
+                </div>
+              ) : null}
+            </nav>
           </div>
-          <nav className="flex flex-col gap-1 p-3" aria-label="Mobiel menu">
-            <Link
-              href="/zoeken"
-              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-gray-50 hover:text-slate-900"
-              onClick={() => setMobileNavOpen(false)}
-            >
-              DJ&apos;s vinden
-            </Link>
-            <Link
-              href="/hoe-het-werkt"
-              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-gray-50 hover:text-slate-900"
-              onClick={() => setMobileNavOpen(false)}
-            >
-              Hoe het werkt
-            </Link>
-            <Link
-              href="/voor-djs"
-              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-gray-50 hover:text-slate-900"
-              onClick={() => setMobileNavOpen(false)}
-            >
-              Voor DJ&apos;s
-            </Link>
-            <Link
-              href="/over-ons"
-              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-gray-50 hover:text-slate-900"
-              onClick={() => setMobileNavOpen(false)}
-            >
-              Over ons
-            </Link>
-            <Link
-              href="/support"
-              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-gray-50 hover:text-slate-900"
-              onClick={() => setMobileNavOpen(false)}
-            >
-              Support
-            </Link>
-            <Link
-              href="/contact"
-              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-gray-50 hover:text-slate-900"
-              onClick={() => setMobileNavOpen(false)}
-            >
-              Contact
-            </Link>
-          </nav>
-        </div>
+        ) : null}
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <button
