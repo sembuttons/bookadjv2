@@ -13,7 +13,7 @@ export default function StedenPage() {
     <div className="min-h-screen bg-white font-sans text-slate-900">
       <Navbar />
 
-      <header className="border-b border-gray-200 bg-white px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+      <header className="bg-white px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="text-balance text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
             Beschikbaar door heel Nederland — en daarbuiten
@@ -42,7 +42,7 @@ export default function StedenPage() {
         </div>
       </section>
 
-      <section className="border-y border-gray-200 bg-white px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+      <section className="bg-white px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-7xl">
           <h2 className="text-center text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
             Ook over de grens

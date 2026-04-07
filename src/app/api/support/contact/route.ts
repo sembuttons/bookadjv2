@@ -68,7 +68,7 @@ export async function POST(req: Request) {
       to: inbox,
       replyTo: email,
       subject: `[bookadj support] ${name}`,
-      html: `<p><strong>Naam:</strong> ${nameSafe}</p><p><strong>E-mail:</strong> ${emailSafe}</p><hr/><p>${msgSafe}</p>`,
+      html: `<p><strong>Naam:</strong> ${nameSafe}</p><p><strong>E-mail:</strong> ${emailSafe}</p><p>${msgSafe}</p>`,
     });
     return NextResponse.json({ success: true });
   } catch (err: unknown) {

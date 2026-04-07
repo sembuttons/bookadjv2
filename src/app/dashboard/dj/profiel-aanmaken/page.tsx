@@ -314,7 +314,7 @@ export default function DjProfielAanmakenPage() {
   if (success) {
     return (
       <div className="mx-auto max-w-2xl overflow-hidden rounded-2xl border border-green-200 bg-white shadow-sm">
-        <div className="border-b border-green-100 bg-[#f0fdf4] px-6 py-10 text-center sm:px-10">
+        <div className="bg-[#f0fdf4] px-6 py-10 text-center sm:px-10">
           <p className="text-sm font-semibold uppercase tracking-wide text-green-400">
             Ingediend
           </p>

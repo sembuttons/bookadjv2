@@ -458,7 +458,7 @@ export function BerichtenClient({
           mobileThread && activePartner ? "hidden md:flex" : "flex"
         }`}
       >
-        <div className="flex gap-1 border-b border-gray-800 p-3">
+        <div className="flex gap-1 p-3">
           <button
             type="button"
             onClick={() => {
@@ -500,7 +500,7 @@ export function BerichtenClient({
             ) : null}
           </button>
         </div>
-        <div className="border-b border-gray-800 p-3">
+        <div className="p-3">
           <input
             type="search"
             value={search}
@@ -520,7 +520,7 @@ export function BerichtenClient({
                 <button
                   type="button"
                   onClick={() => selectConversation(partnerId)}
-                  className={`flex w-full gap-3 border-b border-gray-800/60 px-3 py-3 text-left transition-colors hover:bg-[#0f172a] ${
+                  className={`flex w-full gap-3 px-3 py-3 text-left transition-colors hover:bg-[#0f172a] ${
                     activePartner === partnerId
                       ? "border-l-2 border-l-green-500 bg-green-500/10"
                       : ""
@@ -587,7 +587,7 @@ export function BerichtenClient({
           </div>
         ) : (
           <>
-            <div className="flex items-center gap-3 border-b border-gray-800 bg-[#111827] px-3 py-3">
+            <div className="flex items-center gap-3 bg-[#111827] px-3 py-3">
               {threadOnly ? (
                 <a
                   href="/berichten"
@@ -676,7 +676,7 @@ export function BerichtenClient({
                 <div ref={threadEndRef} />
               </div>
 
-              <div className="border-t border-gray-800 bg-[#111827] px-3 py-3">
+              <div className="bg-[#111827] px-3 py-3">
                 <div
                   className="mb-2 flex gap-1 px-1"
                   aria-hidden

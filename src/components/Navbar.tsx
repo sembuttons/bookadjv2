@@ -177,7 +177,7 @@ export function Navbar() {
     "py-2 text-sm font-medium text-gray-400 transition-colors duration-200 hover:text-white md:py-0";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a] shadow-sm shadow-black/10 backdrop-blur-md supports-[backdrop-filter]:bg-[#0a0a0a]/95">
+    <header className="sticky top-0 z-50 bg-[#0a0a0a] shadow-sm shadow-black/10 backdrop-blur-md supports-[backdrop-filter]:bg-[#0a0a0a]/95">
       {mobileNavOpen ? (
         <button
           type="button"
@@ -225,7 +225,7 @@ export function Navbar() {
           aria-hidden={!mobileNavOpen}
           id="site-mobile-nav"
         >
-          <div className="flex h-14 items-center justify-between border-b border-gray-100 px-4">
+          <div className="flex h-14 items-center justify-between px-4">
             <span className="text-sm font-bold text-slate-900">Menu</span>
             <button
               type="button"
@@ -347,7 +347,7 @@ export function Navbar() {
                     </p>
                     <p className="truncate text-xs text-slate-500">{email}</p>
                   </div>
-                  <div className="my-2 border-t border-gray-100" role="separator" />
+                  <div className="my-2" role="separator" />
                   {isAdmin ? (
                     <>
                       <Link
@@ -419,7 +419,7 @@ export function Navbar() {
                       </Link>
                     </>
                   ) : null}
-                  <div className="my-2 border-t border-gray-800/60" role="separator" />
+                  <div className="my-2" role="separator" />
                   <button
                     type="button"
                     role="menuitem"

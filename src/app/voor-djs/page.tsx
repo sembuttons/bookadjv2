@@ -297,7 +297,7 @@ export default function VoorDjsPage() {
       {/* How it works */}
       <section
         id="hoe-het-werkt"
-        className="border-y border-gray-200 bg-white px-4 py-20 sm:px-6 lg:px-8 lg:py-28"
+        className="bg-white px-4 py-20 sm:px-6 lg:px-8 lg:py-28"
         aria-labelledby="steps-heading"
       >
         <div className="mx-auto max-w-7xl">
@@ -365,7 +365,7 @@ export default function VoorDjsPage() {
 
         <div className="mx-auto mt-14 max-w-xl">
           <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-lg ring-1 ring-gray-100">
-            <div className="border-b border-gray-100 bg-gray-50 px-8 py-10 text-center">
+            <div className="bg-gray-50 px-8 py-10 text-center">
               <p className="text-sm font-semibold uppercase tracking-wider text-green-600">
                 Altijd starten met
               </p>
@@ -424,7 +424,7 @@ export default function VoorDjsPage() {
 
       {/* Testimonial */}
       <section
-        className="border-t border-gray-200 bg-white px-4 py-20 sm:px-6 lg:px-8 lg:py-24"
+        className="bg-white px-4 py-20 sm:px-6 lg:px-8 lg:py-24"
         aria-labelledby="testimonial-heading"
       >
         <div className="mx-auto max-w-4xl">

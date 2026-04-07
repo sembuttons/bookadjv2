@@ -1,9 +1,12 @@
 import Link from "next/link";
 import {
   BadgeCheck,
+  CheckCircle2,
   CircleDollarSign,
   Headphones,
   LayoutDashboard,
+  MapPin,
+  Star as StarIcon,
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { notFound } from "next/navigation";
@@ -369,41 +372,26 @@ export default async function DjProfilePage({ params }: PageProps) {
               ) : null}
             </div>
 
+            {/* Rating directly under name */}
             <div className="flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-900">
-              <StarRow value={displayRating} size="sm" />
+              <span className="flex items-center gap-0.5" aria-hidden>
+                {Array.from({ length: 5 }, (_, i) => (
+                  <StarIcon
+                    key={i}
+                    className={`h-4 w-4 ${i < Math.round(displayRating) ? "text-amber-400 fill-amber-400" : "text-gray-200 fill-gray-200"}`}
+                  />
+                ))}
+              </span>
               <span>{displayRating.toFixed(1)}</span>
-              <span className="text-gray-500">·</span>
-              <span className="text-gray-400">
-                {totalReviews} {totalReviews === 1 ? "review" : "reviews"}
+              <span className="text-gray-500 text-sm">
+                · {totalReviews} beoordelingen
               </span>
             </div>
 
-            {/* Location — forced dark */}
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm font-medium text-slate-800">
-              <span className="inline-flex items-center gap-1.5">
-                <svg
-                  className="h-4 w-4 shrink-0 text-slate-600"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  aria-hidden
-                >
-                  <path
-                    d="M12 21s7-4.35 7-10a7 7 0 10-14 0c0 5.65 7 10 7 10z"
-                    stroke="currentColor"
-                    strokeWidth="1.75"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <circle
-                    cx="12"
-                    cy="11"
-                    r="2.25"
-                    stroke="currentColor"
-                    strokeWidth="1.75"
-                  />
-                </svg>
-                {city}
-              </span>
+            {/* Location */}
+            <div className="flex items-center gap-1 text-sm text-gray-500">
+              <MapPin className="h-4 w-4 text-gray-400" aria-hidden />
+              <span>{city}</span>
             </div>
 
             {/* Genres */}
@@ -412,7 +400,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                 {genres.map((g) => (
                   <span
                     key={g}
-                    className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-slate-700"
+                    className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-medium text-green-700"
                   >
                     {g}
                   </span>
@@ -457,6 +445,7 @@ export default async function DjProfilePage({ params }: PageProps) {
               <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {[
                   {
+                    i: "⏱",
                     t: "Jaren ervaring",
                     d:
                       years != null
@@ -464,22 +453,29 @@ export default async function DjProfilePage({ params }: PageProps) {
                         : "Ruime podiumervaring",
                   },
                   {
+                    i: "🎛",
                     t: "Apparatuur",
                     d: "Controller, speakers en licht op aanvraag",
                   },
-                  { t: "MC & aankondigingen", d: "Optioneel in overleg" },
+                  { i: "🎤", t: "MC & aankondigingen", d: "Optioneel in overleg" },
                   {
+                    i: "📝",
                     t: "Voorbereiding",
                     d: "Playlist en briefing vooraf met jou afgestemd",
                   },
-                  { t: "Reizen", d: "Door heel Nederland inzetbaar" },
-                  { t: "Talen", d: "Nederlands & Engels" },
+                  { i: "🚗", t: "Reizen", d: "Door heel Nederland inzetbaar" },
+                  { i: "🗣", t: "Talen", d: "Nederlands & Engels" },
                 ].map((card) => (
                   <li
                     key={card.t}
-                    className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-shadow duration-300 hover:shadow-md"
+                    className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-200 hover:border-green-200 hover:shadow-sm"
                   >
-                    <p className="text-sm font-semibold text-slate-900">{card.t}</p>
+                    <p className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+                      <span className="text-gray-400" aria-hidden>
+                        {card.i}
+                      </span>
+                      {card.t}
+                    </p>
                     <p className="mt-1 text-sm text-gray-400">{card.d}</p>
                   </li>
                 ))}
@@ -588,7 +584,26 @@ export default async function DjProfilePage({ params }: PageProps) {
                   })}
                 </div>
               </section>
-            ) : null}
+            ) : (
+              <section aria-label="Reviews">
+                <div className="rounded-2xl border border-gray-100 bg-gray-50 p-8 text-center">
+                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-50">
+                    <StarIcon className="h-6 w-6 text-green-600" aria-hidden />
+                  </div>
+                  <p className="mb-2 font-semibold text-gray-900">
+                    Nog geen reviews
+                  </p>
+                  <p className="mx-auto max-w-xs text-sm text-gray-500">
+                    Deze DJ is nieuw op bookadj. Wees de eerste die een boeking
+                    plaatst en een review achterlaat.
+                  </p>
+                  <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-3 py-1.5 text-xs font-medium text-green-700">
+                    <CheckCircle2 className="h-4 w-4" aria-hidden />
+                    Geverifieerde DJ
+                  </div>
+                </div>
+              </section>
+            )}
 
             <section aria-labelledby="trust-heading">
               <h2

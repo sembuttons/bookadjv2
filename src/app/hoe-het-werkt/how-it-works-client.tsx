@@ -386,9 +386,12 @@ export function HowItWorksClient() {
           <h2 className="text-center text-2xl font-bold text-slate-900 sm:text-3xl">
             Veelgestelde vragen
           </h2>
-          <div className="mt-10 divide-y divide-gray-200 rounded-2xl border border-gray-200 bg-white shadow-sm">
+          <div className="mt-10 space-y-3 rounded-2xl border border-gray-200 bg-white p-1 shadow-sm">
             {faq.map((item) => (
-              <details key={item.q} className="group px-5 py-4">
+              <details
+                key={item.q}
+                className="group rounded-xl px-4 py-4 transition-colors hover:bg-gray-50"
+              >
                 <summary className="cursor-pointer list-none text-left font-semibold text-slate-900 outline-none marker:content-none [&::-webkit-details-marker]:hidden">
                   <span className="flex items-center justify-between gap-2">
                     {item.q}

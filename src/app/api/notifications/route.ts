@@ -95,7 +95,7 @@ async function handleContactForm(
       to: contactInbox,
       replyTo: email,
       subject: `[bookadj contact] ${onderwerp} — ${name}`,
-      html: `<p><strong>Naam:</strong> ${nameSafe}</p><p><strong>E-mail:</strong> ${emailSafe}</p><p><strong>Onderwerp:</strong> ${subjSafe}</p><hr/><p>${bodySafe}</p>`,
+      html: `<p><strong>Naam:</strong> ${nameSafe}</p><p><strong>E-mail:</strong> ${emailSafe}</p><p><strong>Onderwerp:</strong> ${subjSafe}</p><p>${bodySafe}</p>`,
     });
     return NextResponse.json({ success: true });
   } catch (err: unknown) {

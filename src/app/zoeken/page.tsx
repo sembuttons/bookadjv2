@@ -329,7 +329,7 @@ export default function ZoekenPage() {
 
   const FilterBlock = (
     <>
-      <div className="space-y-2 border-b border-gray-100 py-6">
+      <div className="space-y-2 py-6">
         <h2 className="text-sm font-semibold text-slate-900">Gelegenheid</h2>
         <p className="text-xs text-gray-500">
           Filter op type feest (secundair naast je zoekbalk).
@@ -349,7 +349,7 @@ export default function ZoekenPage() {
         </select>
       </div>
 
-      <fieldset className="space-y-3 border-b border-gray-100 py-6">
+      <fieldset className="space-y-3 py-6">
         <legend className="text-sm font-semibold text-slate-900">Genre</legend>
         <ul className="space-y-2">
           {FILTER_GENRES.map((g) => (
@@ -370,7 +370,7 @@ export default function ZoekenPage() {
         </ul>
       </fieldset>
 
-      <div className="space-y-2 border-b border-gray-100 py-6">
+      <div className="space-y-2 py-6">
         <h2 className="text-sm font-semibold text-slate-900">
           Uurtarief (€)
         </h2>
@@ -394,7 +394,7 @@ export default function ZoekenPage() {
     <div className="min-h-screen bg-[#f8fafc] font-sans text-slate-900">
       <Navbar />
 
-      <header className="border-b border-gray-100 bg-white text-slate-900 shadow-sm">
+      <header className="bg-white text-slate-900 shadow-sm">
         <div className="mx-auto max-w-[1600px]">
           <form
             onSubmit={handleZoeken}
@@ -591,7 +591,7 @@ export default function ZoekenPage() {
                         <p className="text-xs text-gray-500">
                           Reactietijd: {responseLabel}
                         </p>
-                        <div className="flex items-center justify-between border-t border-gray-100 pt-3">
+                        <div className="flex items-center justify-between pt-3">
                           <span className="text-sm text-slate-500">
                             Profiel bekijken
                           </span>

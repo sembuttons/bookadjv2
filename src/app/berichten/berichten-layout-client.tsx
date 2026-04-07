@@ -10,7 +10,7 @@ export function BerichtenLayoutClient({
   return (
     <DashboardAppShell expectedRole="auto" defaultContentPadding={false}>
       <div className="min-w-0">
-        <div className="border-b border-gray-200 bg-gray-50 px-4 pb-4 pt-6 sm:px-6 lg:px-10 lg:pt-10">
+        <div className="bg-gray-50 px-4 pb-4 pt-6 sm:px-6 lg:px-10 lg:pt-10">
           <h1 className="text-2xl font-bold tracking-tight text-gray-900">
             Berichten
           </h1>

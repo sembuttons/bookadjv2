@@ -2,6 +2,7 @@ import Link from "next/link";
 import { HomeSearchForm } from "@/components/home-search-form";
 import { Navbar } from "@/components/Navbar";
 import { EmptyState } from "@/components/skeleton";
+import { PaymentLogosRow } from "@/components/PaymentLogos";
 import {
   Briefcase,
   CreditCard,
@@ -85,11 +86,7 @@ const occasionCards = [
   { id: "anders", label: "Anders", Icon: MoreHorizontal },
 ] as const;
 
-const heroStats = [
-  { value: "NL", label: "Landelijk zoeken" },
-  { value: "Veilig", label: "Betalen via het platform" },
-  { value: "Support", label: "Hulp wanneer je het nodig hebt" },
-] as const;
+const heroSocialProofAvatars = ["AD", "MK", "SV", "TB", "FA"] as const;
 
 function initialsFromName(name: string) {
   const parts = name
@@ -182,17 +179,24 @@ export default async function Home() {
 
           <HomeSearchForm />
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 sm:mt-10">
-            {heroStats.map(({ value, label }) => (
-              <div key={label} className="text-center">
-                <p className="text-2xl font-black text-green-400 sm:text-3xl">
-                  {value}
-                </p>
-                <p className="mt-0.5 text-xs font-medium text-gray-500 sm:text-sm">
-                  {label}
-                </p>
-              </div>
-            ))}
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:mt-10">
+            <div className="flex items-center justify-center -space-x-2">
+              {heroSocialProofAvatars.map((a) => (
+                <div
+                  key={a}
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-green-600 text-xs font-bold text-white ring-2 ring-[#0a0a0a]"
+                  aria-hidden
+                >
+                  {a}
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center justify-center gap-2 text-sm text-white/80">
+              <span className="text-green-400" aria-hidden>
+                ★★★★★
+              </span>
+              <span>Meer dan 50 DJ&apos;s beschikbaar — vandaag nog boeken</span>
+            </div>
           </div>
         </div>
       </section>
@@ -239,10 +243,10 @@ export default async function Home() {
 
       {/* Trust — white content, photo right */}
       <section
-        className="bg-white px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24"
+        className="bg-white py-16 sm:py-20 lg:py-24"
         aria-labelledby="trust-pro-heading"
       >
-        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-4 lg:grid-cols-2 lg:items-center">
           <div>
             <p className="text-sm font-semibold uppercase tracking-widest text-green-600">
               Kwaliteit &amp; veiligheid
@@ -258,7 +262,7 @@ export default async function Home() {
               je meedenkt — van eerste klik tot na het feest.
             </p>
 
-            <ul className="mt-10 grid max-w-xl gap-4 sm:grid-cols-2">
+            <ul className="mt-10 grid max-w-lg gap-4 sm:grid-cols-2">
               {(
                 [
                   {
@@ -428,7 +432,7 @@ export default async function Home() {
                               </span>
                             )}
                           </div>
-                          <div className="mt-4 flex items-end justify-between border-t border-gray-100 pt-4">
+                          <div className="mt-4 flex items-end justify-between pt-4">
                             <div>
                               <p className="text-lg font-black text-gray-900">
                                 {rate != null
@@ -487,7 +491,7 @@ export default async function Home() {
 
           <ol className="relative mt-12 grid gap-8 lg:grid-cols-3">
             <div
-              className="pointer-events-none absolute left-[18%] right-[18%] top-6 hidden h-0 border-t-2 border-dashed border-green-200 lg:block"
+              className="pointer-events-none absolute left-[18%] right-[18%] top-6 hidden h-0 lg:block"
               aria-hidden
             />
             {(
@@ -547,7 +551,7 @@ export default async function Home() {
 
       {/* Trust bar — light, payment-friendly */}
       <section
-        className="border-y border-gray-200 bg-gray-50 px-4 py-12 sm:px-6 lg:px-8 lg:py-14"
+        className="bg-gray-50 px-4 py-12 sm:px-6 lg:px-8 lg:py-14"
         aria-label="Waarom bookadj"
       >
         <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
@@ -582,17 +586,10 @@ export default async function Home() {
           ))}
         </div>
         <div
-          className="mx-auto mt-8 flex max-w-7xl flex-wrap items-center justify-center gap-2 border-t border-gray-200 pt-8"
+          className="mx-auto mt-8 flex max-w-7xl flex-wrap items-center justify-center gap-2 pt-8"
           aria-label="Betaalmethoden"
         >
-          {["iDEAL", "Visa", "Mastercard", "Apple Pay"].map((m) => (
-            <span
-              key={m}
-              className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600"
-            >
-              {m}
-            </span>
-          ))}
+          <PaymentLogosRow className="flex-wrap justify-center" />
         </div>
       </section>
 
@@ -625,7 +622,7 @@ export default async function Home() {
                 <p className="mt-4 text-sm leading-relaxed text-slate-600">
                   &ldquo;{r.quote}&rdquo;
                 </p>
-                <footer className="mt-4 border-t border-gray-100 pt-4">
+                <footer className="mt-4 pt-4">
                   <p className="font-semibold text-gray-900">{r.name}</p>
                   <p className="text-sm text-slate-500">{r.role}</p>
                 </footer>

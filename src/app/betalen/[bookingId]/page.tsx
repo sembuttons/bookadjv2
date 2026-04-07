@@ -469,7 +469,7 @@ export default function BetalenPage() {
     <div className="min-h-screen bg-[#111827] font-sans text-white">
       <Navbar />
 
-      <div className="border-b border-gray-800 bg-[#0f172a]">
+      <div className="bg-[#0f172a]">
         <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
           <ol className="flex items-center justify-between gap-2 text-xs font-semibold sm:text-sm">
             <li className="flex flex-1 flex-col items-center gap-2 sm:flex-row sm:justify-center">
@@ -480,7 +480,7 @@ export default function BetalenPage() {
                 Evenementdetails
               </span>
             </li>
-            <div className="hidden h-px flex-1 bg-gray-800/70 sm:block" />
+            <div className="hidden h-px flex-1 sm:block" />
             <li className="flex flex-1 flex-col items-center gap-2 sm:flex-row sm:justify-center">
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-green-500 text-black font-bold sm:h-10 sm:w-10">
                 2
@@ -489,7 +489,7 @@ export default function BetalenPage() {
                 Betaling
               </span>
             </li>
-            <div className="hidden h-px flex-1 bg-gray-800/70 sm:block" />
+            <div className="hidden h-px flex-1 sm:block" />
             <li className="flex flex-1 flex-col items-center gap-2 opacity-50 sm:flex-row sm:justify-center">
               <span className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-gray-800 bg-[#111827] text-gray-500 sm:h-10 sm:w-10">
                 3
@@ -531,7 +531,7 @@ export default function BetalenPage() {
                   {venue}
                 </dd>
               </div>
-              <div className="flex justify-between gap-4 border-t border-gray-800/60 pt-3">
+              <div className="flex justify-between gap-4 pt-3">
                 <dt className="font-semibold text-white">Totaal</dt>
                 <dd className="text-lg font-bold text-white">
                   {totalDisplay}
@@ -680,8 +680,8 @@ export default function BetalenPage() {
               </div>
             </div>
 
-            <div className="mt-5 space-y-2 border-t border-gray-800/60 pt-5 text-sm">
-              <div className="flex justify-between border-t border-gray-800 pt-2 text-base font-bold text-white">
+            <div className="mt-5 space-y-2 pt-5 text-sm">
+              <div className="flex justify-between pt-2 text-base font-bold text-white">
                 <span>Totaal</span>
                 <span>{totalDisplay}</span>
               </div>

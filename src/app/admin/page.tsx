@@ -311,7 +311,7 @@ export default function AdminDashboardPage() {
           <>
             <div className="mt-6 hidden overflow-hidden rounded-2xl border border-gray-800 shadow-sm md:block">
               <table className="w-full text-left text-sm">
-                <thead className="border-b border-gray-800 bg-[#0f172a]">
+                <thead className="bg-[#0f172a]">
                   <tr>
                     <th className="px-4 py-3 font-semibold text-gray-400">
                       Omschrijving
@@ -327,7 +327,7 @@ export default function AdminDashboardPage() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-800/60 bg-[#111827]">
+                <tbody className="bg-[#111827]">
                   {queue.map((row) => {
                     const badge = typeBadge(row.type);
                     return (

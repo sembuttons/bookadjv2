@@ -132,7 +132,7 @@ export function AdminBerichtenClient() {
         </span>
       </div>
 
-      <div className="flex gap-2 border-b border-gray-800 pb-2">
+      <div className="flex gap-2 pb-2">
         <button
           type="button"
           onClick={() => setTab("flagged")}

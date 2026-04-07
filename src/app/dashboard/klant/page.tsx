@@ -325,7 +325,7 @@ export default function KlantDashboardPage() {
           className="mt-8 overflow-hidden rounded-2xl border border-gray-200 bg-white text-slate-900 shadow-sm"
           aria-label="Aankomend evenement"
         >
-          <div className="border-b border-green-200 bg-green-50 px-5 py-3">
+          <div className="bg-green-50 px-5 py-3">
             <p className="text-xs font-semibold uppercase tracking-wider text-green-700">
               Aankomend evenement
             </p>
@@ -508,7 +508,7 @@ export default function KlantDashboardPage() {
                         </dl>
                       </div>
                     </div>
-                    <div className="flex flex-col items-stretch gap-3 border-t border-gray-200 pt-4 sm:w-52 sm:shrink-0 sm:border-l sm:border-t-0 sm:pl-6 sm:pt-0">
+                    <div className="flex flex-col items-stretch gap-3 pt-4 sm:w-52 sm:shrink-0 sm:border-l sm:border-t-0 sm:pl-6 sm:pt-0">
                       <p className="text-sm text-gray-500">Totaal</p>
                       <p className="text-xl font-bold text-slate-900">
                         {formatEuroFromCents(booking.total_amount)}

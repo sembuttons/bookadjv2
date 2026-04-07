@@ -264,7 +264,7 @@ export function DashboardAppShell({
               type="button"
               onClick={() => void handleLogout()}
               disabled={loggingOut}
-              className="mt-3 border-t border-gray-100 pt-4 text-left text-sm font-medium text-slate-500 transition-colors hover:bg-gray-50 hover:text-slate-900 disabled:opacity-50"
+              className="mt-3 pt-4 text-left text-sm font-medium text-slate-500 transition-colors hover:bg-gray-50 hover:text-slate-900 disabled:opacity-50"
             >
               Uitloggen
             </button>
@@ -283,7 +283,7 @@ export function DashboardAppShell({
       </div>
 
       <nav
-        className="fixed bottom-0 left-0 right-0 z-[60] flex items-stretch justify-around border-t border-gray-200 bg-white px-1 pt-1 shadow-[0_-4px_24px_rgba(15,23,42,0.08)] md:hidden"
+        className="fixed bottom-0 left-0 right-0 z-[60] flex items-stretch justify-around bg-white px-1 pt-1 shadow-[0_-4px_24px_rgba(15,23,42,0.08)] md:hidden"
         style={{
           paddingBottom: "max(0.35rem, env(safe-area-inset-bottom, 0px))",
         }}

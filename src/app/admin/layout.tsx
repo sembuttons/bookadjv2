@@ -71,7 +71,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="flex min-h-screen bg-[#0a0a0a] font-sans text-white">
       <aside className="flex w-56 shrink-0 flex-col border-r border-gray-900 bg-[#0f0f0f] lg:w-60">
-        <div className="border-b border-gray-900 px-4 py-5">
+        <div className="px-4 py-5">
           <Link
             href="/admin"
             className="text-lg font-bold tracking-tight text-green-400"
@@ -98,7 +98,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             );
           })}
         </nav>
-        <div className="border-t border-gray-900 p-3">
+        <div className="p-3">
           <button
             type="button"
             onClick={() => void handleLogout()}

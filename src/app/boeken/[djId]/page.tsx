@@ -418,7 +418,7 @@ export default function BoekenPage() {
   return (
     <div className="min-h-screen bg-[#111827] font-sans text-white">
       <Navbar />
-      <div className="border-b border-gray-800 bg-[#0f172a]">
+      <div className="bg-[#0f172a]">
         <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6">
           <div className="mb-4 flex justify-end">
             <Link
@@ -687,7 +687,7 @@ export default function BoekenPage() {
                 {submitting ? (
                   <>
                     <span
-                      className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+                      className="h-4 w-4 animate-spin rounded-full border-2 border-white border-r-transparent"
                       aria-hidden
                     />
                     Bezig met verzenden…
@@ -750,7 +750,7 @@ export default function BoekenPage() {
               </ul>
             </div>
 
-            <div className="mt-5 space-y-2 border-t border-gray-800/60 pt-5 text-sm">
+            <div className="mt-5 space-y-2 pt-5 text-sm">
               <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
                 Prijsopbouw (indicatie)
               </p>
@@ -770,7 +770,7 @@ export default function BoekenPage() {
                     : "€0"}
                 </span>
               </div>
-              <div className="flex justify-between border-t border-gray-800 pt-2 text-base font-bold text-white">
+              <div className="flex justify-between pt-2 text-base font-bold text-white">
                 <span>Totaal (indicatie)</span>
                 <span>€{estimatedTotalEuro.toLocaleString("nl-NL")}</span>
               </div>
@@ -789,7 +789,7 @@ export default function BoekenPage() {
               {submitting ? (
                 <>
                   <span
-                    className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+                    className="h-4 w-4 animate-spin rounded-full border-2 border-white border-r-transparent"
                     aria-hidden
                   />
                   Bezig met verzenden…

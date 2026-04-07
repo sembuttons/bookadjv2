@@ -230,7 +230,7 @@ export default function BevestigingPage() {
       <Navbar />
 
       {/* Alle stappen voltooid */}
-      <div className="border-b border-gray-800 bg-[#0f172a]">
+      <div className="bg-[#0f172a]">
         <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6">
           <ol className="flex items-center justify-between gap-2 text-xs font-semibold sm:text-sm">
             {(
@@ -306,7 +306,7 @@ export default function BevestigingPage() {
             </p>
           </div>
 
-          <div className="border-t border-gray-800/60 px-6 py-8 sm:px-10">
+          <div className="px-6 py-8 sm:px-10">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500">
               Boekingsgegevens
             </h2>
@@ -350,7 +350,7 @@ export default function BevestigingPage() {
             </dl>
           </div>
 
-          <div className="border-t border-gray-800/60 px-6 py-8 sm:px-10">
+          <div className="px-6 py-8 sm:px-10">
             <h2 className="text-lg font-bold text-white">
               Wat gebeurt er nu?
             </h2>
@@ -398,7 +398,7 @@ export default function BevestigingPage() {
             </ul>
           </div>
 
-          <div className="flex flex-col gap-3 border-t border-gray-800/60 bg-[#0f172a] px-6 py-8 sm:flex-row sm:px-10">
+          <div className="flex flex-col gap-3 bg-[#0f172a] px-6 py-8 sm:flex-row sm:px-10">
             <Link
               href="/dashboard/klant"
               className="flex flex-1 items-center justify-center rounded-xl bg-gray-800 px-6 py-3.5 text-center text-sm font-bold text-white hover:bg-gray-700"
@@ -413,7 +413,7 @@ export default function BevestigingPage() {
             </Link>
           </div>
 
-          <div className="border-t border-gray-800 bg-[#111827] px-6 py-5 sm:px-10">
+          <div className="bg-[#111827] px-6 py-5 sm:px-10">
             <p className="text-center text-sm text-gray-400">
               We hebben een bevestiging gestuurd naar{" "}
               <span className="font-semibold text-white">

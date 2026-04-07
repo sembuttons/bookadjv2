@@ -65,7 +65,7 @@ export function SupportFaqAccordion() {
               />
             </button>
             {isOpen ? (
-              <div className="border-t border-gray-200 px-4 py-3 text-sm leading-relaxed text-slate-600 md:px-5 md:py-4">
+              <div className="px-4 pb-4 pt-0 text-sm leading-relaxed text-slate-600 md:px-5 md:py-4">
                 {item.a}
               </div>
             ) : null}

@@ -451,7 +451,7 @@ export default function DjDashboardPage() {
                           </div>
                         ) : null}
 
-                        <div className="flex flex-wrap gap-6 border-t border-gray-200 pt-4">
+                        <div className="flex flex-wrap gap-6 pt-4">
                           <div>
                             <p className="text-xs text-gray-500">Bruto</p>
                             <p className="text-lg font-bold text-slate-900">

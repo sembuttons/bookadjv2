@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ShieldCheck } from "lucide-react";
+import { Lock, ShieldCheck } from "lucide-react";
 import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
 import { useCallback, useMemo, useState } from "react";
 import { DatePickerPopover } from "@/components/date-picker-popover";
@@ -97,12 +97,14 @@ export function BookingPanel({
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
-        <p className="text-3xl font-black text-slate-900">
+      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+        <div className="h-1 w-full bg-green-500" aria-hidden />
+        <div className="p-5 sm:p-6">
+        <p className="text-4xl font-black text-gray-900">
           €{Math.round(hourlyRate)}
-          <span className="text-lg font-semibold text-slate-500">/uur</span>
+          <span className="text-lg font-semibold text-gray-400">/uur</span>
         </p>
-        <p className="mt-1 text-xs text-slate-500">
+        <p className="mt-1 text-xs text-gray-400">
           Indicatie — totaal hangt af van duur en locatie.
         </p>
 
@@ -118,7 +120,7 @@ export function BookingPanel({
                 onClick={() => setHours(h)}
                 className={`shrink-0 rounded-full px-3.5 py-2 text-sm font-semibold transition-all duration-150 ${
                   hours === h
-                    ? "bg-gradient-to-r from-green-500 to-green-400 font-bold text-black shadow-sm"
+                    ? "scale-105 bg-green-500 font-bold text-white shadow-sm"
                     : "bg-gray-100 text-slate-700 hover:bg-green-50 hover:text-green-800"
                 }`}
               >
@@ -228,7 +230,7 @@ export function BookingPanel({
               {travelCost > 0 ? `€${travelCost.toLocaleString("nl-NL")}` : "—"}
             </span>
           </div>
-          <div className="flex justify-between border-t border-gray-200 pt-2 text-base font-bold text-slate-900">
+          <div className="flex justify-between pt-2 text-base font-bold text-slate-900">
             <span>Totaal (indicatie)</span>
             <span className="bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">
               €{total.toLocaleString("nl-NL")}
@@ -242,7 +244,7 @@ export function BookingPanel({
             if (!eventDate.trim()) return base;
             return `${base}?${new URLSearchParams({ date: eventDate.trim() }).toString()}`;
           })()}
-          className="mt-5 flex min-h-[44px] w-full items-center justify-center rounded-xl bg-gradient-to-r from-green-500 to-green-400 py-4 text-base font-bold text-black transition-all duration-150 hover:from-green-400 hover:to-green-300 active:scale-[0.98]"
+          className="mt-5 flex w-full items-center justify-center rounded-xl bg-green-500 py-4 text-base font-bold text-black transition-all duration-150 hover:bg-green-400 active:scale-[0.98]"
         >
           Boeking aanvragen
         </Link>
@@ -253,11 +255,15 @@ export function BookingPanel({
         >
           {contactButtonLabel}
         </StelVraagButton>
+        </div>
       </div>
 
       <div className="flex items-center gap-3 rounded-xl border border-green-200 bg-[#f0fdf4] px-4 py-3 text-sm font-medium text-slate-800">
         <ShieldCheck className="h-5 w-5 shrink-0 text-green-600" aria-hidden />
-        Geen betaling tot acceptatie van de boeking.
+        <span className="inline-flex items-center gap-2">
+          <Lock className="h-4 w-4 shrink-0 text-green-700" aria-hidden />
+          Veilig betalen via bookadj
+        </span>
       </div>
 
       <div className="grid gap-3 text-sm">

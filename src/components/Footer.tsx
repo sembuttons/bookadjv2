@@ -3,7 +3,7 @@ import { FooterPaymentLogos } from "@/components/footer-payment-logos";
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-white/5 bg-[#0a0a0a] text-sm">
+    <footer className="mt-auto bg-[#0a0a0a] text-sm">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-16">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-4">
@@ -179,7 +179,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-white/5">
+      <div>
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <p className="text-xs text-gray-600">
             © 2026 bookadj. Alle rechten voorbehouden.

@@ -28,7 +28,7 @@ export function MobileStickyBookingBar({ djId }: { djId: string }) {
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 z-[70] border-t border-gray-200 bg-white/95 shadow-[0_-8px_30px_rgba(15,23,42,0.08)] backdrop-blur-sm transition-transform duration-200 lg:hidden ${
+      className={`fixed bottom-0 left-0 right-0 z-[70] bg-white/95 shadow-[0_-8px_30px_rgba(15,23,42,0.08)] backdrop-blur-sm transition-transform duration-200 lg:hidden ${
         panelInView ? "translate-y-full" : "translate-y-0"
       }`}
       style={{

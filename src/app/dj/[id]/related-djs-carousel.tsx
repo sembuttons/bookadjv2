@@ -37,7 +37,7 @@ export function RelatedDjsCarousel({ djs }: { djs: DjProfileRow[] }) {
 
   return (
     <section
-      className="mt-16 border-t border-gray-100 pt-12"
+      className="mt-16 pt-12"
       aria-labelledby="related-djs-heading"
     >
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">

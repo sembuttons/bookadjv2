@@ -70,7 +70,7 @@ export function MediaTabs({
       </h2>
       {tabs.length > 1 ? (
         <div
-          className="mt-4 flex gap-2 border-b border-gray-200"
+          className="mt-4 flex gap-2"
           role="tablist"
           aria-label="Social media"
         >
@@ -81,10 +81,10 @@ export function MediaTabs({
               role="tab"
               aria-selected={current.key === t.key}
               onClick={() => setActive(t.key)}
-              className={`border-b-2 px-3 py-2 text-sm font-semibold transition-colors ${
+              className={`rounded-full px-3 py-2 text-sm font-semibold transition-colors ${
                 current.key === t.key
-                  ? "border-green-600 text-slate-900"
-                  : "border-transparent text-slate-500 hover:text-slate-800"
+                  ? "bg-green-50 text-green-700"
+                  : "text-slate-500 hover:bg-gray-50 hover:text-slate-800"
               }`}
             >
               {t.label}

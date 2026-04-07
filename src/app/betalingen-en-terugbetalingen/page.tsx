@@ -30,7 +30,7 @@ export default function BetalingenTerugbetalingenPage() {
         .
       </p>
 
-      <section className="mt-12 border-t border-gray-200 pt-10">
+      <section className="mt-12 pt-10">
         <h2 className="text-xl font-bold text-slate-900">
           Hoe betalen werkt
         </h2>
@@ -53,7 +53,7 @@ export default function BetalingenTerugbetalingenPage() {
         </div>
       </section>
 
-      <section className="mt-12 border-t border-gray-200 pt-10">
+      <section className="mt-12 pt-10">
         <h2 className="text-xl font-bold text-slate-900">
           Terugbetalingsbeleid (indicatie annulering klant)
         </h2>
@@ -84,7 +84,7 @@ export default function BetalingenTerugbetalingenPage() {
         </ul>
       </section>
 
-      <section className="mt-12 border-t border-gray-200 pt-10">
+      <section className="mt-12 pt-10">
         <h2 className="text-xl font-bold text-slate-900">
           Hoe vraag je een terugbetaling aan?
         </h2>

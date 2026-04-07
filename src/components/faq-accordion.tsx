@@ -35,7 +35,7 @@ export function FaqAccordion({ items }: { items: FaqItem[] }) {
             <span className="pr-2">{item.question}</span>
             <Chevron className="shrink-0 text-green-600 transition-transform duration-200 group-open:rotate-180" />
           </summary>
-          <div className="border-t border-gray-200 px-5 py-4 text-sm leading-relaxed text-slate-600">
+          <div className="px-5 pb-5 pt-0 text-sm leading-relaxed text-slate-600">
             {item.answer}
           </div>
         </details>

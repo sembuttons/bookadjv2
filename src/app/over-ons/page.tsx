@@ -72,7 +72,7 @@ export default function OverOnsPage() {
           height={675}
           loading="lazy"
         />
-        <figcaption className="border-t border-gray-200 bg-white px-4 py-3 text-center text-sm text-slate-600">
+        <figcaption className="bg-white px-4 py-3 text-center text-sm text-slate-600">
           Sfeerbeeld: waar bookadj voor staat — live muziek, energie en
           professionele uitvoering.{" "}
           <a
