@@ -303,14 +303,14 @@ export default async function DjProfilePage({ params }: PageProps) {
               {/* Desktop grid */}
               <div
                 className="hidden md:block rounded-2xl overflow-hidden"
-                style={{ height: "480px" }}
+                style={{ height: "380px" }}
               >
                 {photoUrls.length === 1 ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={photoUrls[0]}
                     alt="DJ foto"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-top"
                   />
                 ) : null}
 
@@ -320,13 +320,13 @@ export default async function DjProfilePage({ params }: PageProps) {
                     <img
                       src={photoUrls[0]}
                       alt="DJ foto 1"
-                      className="w-full h-full object-cover rounded-l-2xl"
+                      className="w-full h-full object-cover object-top rounded-l-2xl"
                     />
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={photoUrls[1]}
                       alt="DJ foto 2"
-                      className="w-full h-full object-cover rounded-r-2xl"
+                      className="w-full h-full object-cover object-center rounded-r-2xl"
                     />
                   </div>
                 ) : null}
@@ -337,21 +337,21 @@ export default async function DjProfilePage({ params }: PageProps) {
                     <img
                       src={photoUrls[0]}
                       alt="DJ foto 1"
-                      className="w-full h-full object-cover rounded-l-2xl"
+                      className="w-full h-full object-cover object-top rounded-l-2xl"
                     />
                     <div className="grid grid-rows-2 gap-2 h-full">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={photoUrls[1]}
                         alt="DJ foto 2"
-                        className="w-full h-full object-cover rounded-tr-2xl"
+                        className="w-full h-full object-cover object-top rounded-tr-2xl"
                       />
                       <div className="relative">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={photoUrls[2]}
                           alt="DJ foto 3"
-                          className="w-full h-full object-cover rounded-br-2xl"
+                          className="w-full h-full object-cover object-top rounded-br-2xl"
                         />
                         {photoUrls.length > 3 ? (
                           <button
