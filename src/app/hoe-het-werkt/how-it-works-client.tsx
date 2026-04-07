@@ -92,30 +92,31 @@ function FlowToggle({
   onChange: (v: FlowKey) => void;
 }) {
   return (
-    <div className="inline-flex w-full max-w-md rounded-2xl bg-gray-50 p-1.5 ring-1 ring-gray-200 sm:w-auto">
-      {(
-        [
-          { key: "klant" as const, label: "Voor klanten" },
-          { key: "dj" as const, label: "Voor DJ's" },
-        ] as const
-      ).map((t) => {
-        const active = value === t.key;
-        return (
-          <button
-            key={t.key}
-            type="button"
-            onClick={() => onChange(t.key)}
-            className={`min-h-[44px] flex-1 rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-200 sm:flex-initial sm:px-6 ${
-              active
-                ? "bg-green-500 text-white shadow-sm"
-                : "text-gray-700 hover:bg-white hover:text-gray-900"
-            }`}
-            aria-pressed={active}
-          >
-            {t.label}
-          </button>
-        );
-      })}
+    <div className="flex items-center gap-2 bg-gray-100 p-1 rounded-xl w-fit mx-auto mt-8">
+      <button
+        type="button"
+        onClick={() => onChange("klant")}
+        className={`px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
+          value === "klant"
+            ? "bg-green-500 text-black shadow-sm"
+            : "text-gray-500 hover:text-gray-700"
+        }`}
+        aria-pressed={value === "klant"}
+      >
+        Voor klanten
+      </button>
+      <button
+        type="button"
+        onClick={() => onChange("dj")}
+        className={`px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
+          value === "dj"
+            ? "bg-green-500 text-black shadow-sm"
+            : "text-gray-500 hover:text-gray-700"
+        }`}
+        aria-pressed={value === "dj"}
+      >
+        Voor DJ&apos;s
+      </button>
     </div>
   );
 }
@@ -254,7 +255,7 @@ export function HowItWorksClient() {
           aria-hidden
         />
 
-        <div className="relative mx-auto max-w-4xl px-4 py-28 text-center sm:px-6 md:py-36 lg:px-8">
+        <div className="relative mx-auto max-w-4xl px-4 py-24 text-center sm:px-6 md:py-32 lg:px-8">
           <span className="inline-block bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 tracking-widest">
             HOE HET WERKT
           </span>
