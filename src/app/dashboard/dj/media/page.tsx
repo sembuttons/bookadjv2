@@ -1,7 +1,7 @@
 "use client";
 
-import { Check, Trash2 } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { Check, Trash2, UploadCloud } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase-browser";
 import { parseVideoEmbed, videoEmbedSrc } from "@/lib/video-embed";
 
@@ -19,11 +19,14 @@ export default function DjMediaPage() {
   const [success, setSuccess] = useState<string | null>(null);
   const [djProfileId, setDjProfileId] = useState<string | null>(null);
   const [photos, setPhotos] = useState<string[]>([]);
-  const [photoInput, setPhotoInput] = useState("");
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [videoUrl, setVideoUrl] = useState("");
   const [instagramUrl, setInstagramUrl] = useState("");
   const [soundcloudUrl, setSoundcloudUrl] = useState("");
   const [saving, setSaving] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -91,31 +94,120 @@ export default function DjMediaPage() {
     [djProfileId],
   );
 
-  const addPhoto = async () => {
-    const url = photoInput.trim();
-    if (!url) return;
-    if (photos.length >= 6) {
-      setError("Je kunt maximaal 6 foto-URL's opslaan.");
-      return;
-    }
-    try {
-      // eslint-disable-next-line no-new
-      new URL(url);
-    } catch {
-      setError("Voer een geldige URL in (inclusief https://).");
-      return;
-    }
-    const next = [...photos, url];
-    setPhotos(next);
-    setPhotoInput("");
-    await persist({ photos: next });
+  const maxPhotos = 6;
+
+  const extractStoragePathFromPublicUrl = (url: string): string | null => {
+    const marker = "/storage/v1/object/public/dj-photos/";
+    const idx = url.indexOf(marker);
+    if (idx === -1) return null;
+    const path = url.slice(idx + marker.length);
+    return path ? decodeURIComponent(path) : null;
   };
 
-  const removePhoto = async (idx: number) => {
-    const next = photos.filter((_, i) => i !== idx);
-    setPhotos(next);
-    await persist({ photos: next });
+  const uploadPhoto = useCallback(
+    async (file: File) => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      const userId = session?.user?.id;
+      if (!userId) throw new Error("Geen sessie.");
+
+      const fileNameSafe = file.name.replace(/[^\w.\-()]+/g, "-");
+      const fileName = `${userId}/${Date.now()}-${fileNameSafe}`;
+
+      const { error: upErr } = await supabase.storage
+        .from("dj-photos")
+        .upload(fileName, file, { upsert: true, contentType: file.type });
+      if (upErr) throw upErr;
+
+      const { data } = supabase.storage.from("dj-photos").getPublicUrl(fileName);
+      return data.publicUrl;
+    },
+    [],
+  );
+
+  const validateFiles = (files: File[]): string | null => {
+    const allowed = ["image/jpeg", "image/png", "image/webp"];
+    for (const f of files) {
+      if (!allowed.includes(f.type)) {
+        return "Alleen JPG, PNG of WEBP toegestaan.";
+      }
+      if (f.size > 5 * 1024 * 1024) {
+        return "Maximaal 5MB per foto.";
+      }
+    }
+    return null;
   };
+
+  const handleFiles = useCallback(
+    async (files: File[]) => {
+      setError(null);
+      setSuccess(null);
+
+      if (uploading || saving) return;
+      if (photos.length >= maxPhotos) {
+        setError("Je kunt maximaal 6 foto's uploaden.");
+        return;
+      }
+
+      const remaining = Math.max(0, maxPhotos - photos.length);
+      const take = files.slice(0, remaining);
+      if (!take.length) return;
+
+      const validationError = validateFiles(take);
+      if (validationError) {
+        setError(validationError);
+        return;
+      }
+
+      setUploading(true);
+      setUploadProgress(5);
+      const tick = window.setInterval(() => {
+        setUploadProgress((p) => (p < 85 ? p + 5 : p));
+      }, 180);
+
+      try {
+        const uploaded = [];
+        for (const f of take) {
+          // eslint-disable-next-line no-await-in-loop
+          const url = await uploadPhoto(f);
+          uploaded.push(url);
+        }
+        const next = normalizePhotoList([...photos, ...uploaded]);
+        setPhotos(next);
+        await persist({ photos: next });
+        setUploadProgress(100);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Upload mislukt.");
+      } finally {
+        window.clearInterval(tick);
+        window.setTimeout(() => setUploadProgress(0), 400);
+        setUploading(false);
+      }
+    },
+    [photos, persist, saving, uploadPhoto, uploading],
+  );
+
+  const removePhoto = useCallback(
+    async (idx: number) => {
+      if (saving || uploading) return;
+      const url = photos[idx];
+      const next = photos.filter((_, i) => i !== idx);
+      setPhotos(next);
+
+      try {
+        const path = url ? extractStoragePathFromPublicUrl(url) : null;
+        if (path) {
+          await supabase.storage.from("dj-photos").remove([path]);
+        }
+      } catch {
+        /* best effort */
+      }
+
+      await persist({ photos: next });
+    },
+    [persist, photos, saving, uploading],
+  );
 
   const saveVideo = async () => {
     const v = videoUrl.trim();
@@ -157,6 +249,11 @@ export default function DjMediaPage() {
   };
 
   const embedSrc = videoUrl.trim() ? videoEmbedSrc(videoUrl.trim()) : null;
+  const canAddMore = photos.length < maxPhotos;
+  const uploadHint = useMemo(() => {
+    const remaining = maxPhotos - photos.length;
+    return remaining > 0 ? `Je kunt nog ${remaining} foto${remaining === 1 ? "" : "'s"} uploaden.` : "Maximum bereikt.";
+  }, [photos.length]);
 
   if (loading) {
     return (
@@ -208,28 +305,84 @@ export default function DjMediaPage() {
       <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
         <h2 className="text-lg font-bold text-slate-900">Foto&apos;s</h2>
         <p className="mt-1 text-sm text-gray-400">
-          Plak URL&apos;s van Unsplash of je eigen hosting (max. 6).
+          Upload maximaal 6 foto&apos;s (JPG/PNG/WEBP, max. 5MB per foto).
         </p>
-        <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-          <input
-            type="url"
-            value={photoInput}
-            onChange={(e) => {
-              setPhotoInput(e.target.value);
-              setError(null);
-            }}
-            placeholder="https://…"
-            className="input-field flex-1"
-          />
-          <button
-            type="button"
-            disabled={saving || photos.length >= 6}
-            onClick={() => void addPhoto()}
-            className="rounded-xl bg-green-500 px-5 py-2.5 text-sm font-bold text-black transition-colors hover:bg-green-400 disabled:opacity-50"
-          >
-            Toevoegen
-          </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          multiple
+          className="hidden"
+          onChange={(e) => {
+            const list = Array.from(e.target.files ?? []);
+            e.target.value = "";
+            void handleFiles(list);
+          }}
+        />
+
+        <div
+          className={`mt-4 rounded-2xl border-2 border-dashed p-6 transition-colors ${
+            dragActive
+              ? "border-green-300 bg-green-50"
+              : "border-gray-200 bg-gray-50"
+          }`}
+          onDragEnter={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setDragActive(true);
+          }}
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setDragActive(true);
+          }}
+          onDragLeave={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setDragActive(false);
+          }}
+          onDrop={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setDragActive(false);
+            const files = Array.from(e.dataTransfer.files ?? []);
+            void handleFiles(files);
+          }}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              fileInputRef.current?.click();
+            }
+          }}
+          onClick={() => fileInputRef.current?.click()}
+          aria-disabled={!canAddMore || uploading || saving}
+        >
+          <div className="flex flex-col items-center justify-center gap-2 text-center">
+            <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-gray-500 ring-1 ring-gray-200">
+              <UploadCloud className="h-6 w-6" aria-hidden />
+            </span>
+            <p className="text-sm font-semibold text-gray-900">
+              Klik om foto&apos;s te uploaden of sleep ze hierheen
+            </p>
+            <p className="text-xs text-gray-500">{uploadHint}</p>
+          </div>
+
+          {uploading ? (
+            <div className="mt-4">
+              <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                <div
+                  className="h-full rounded-full bg-green-500 transition-[width] duration-200"
+                  style={{ width: `${uploadProgress}%` }}
+                  aria-hidden
+                />
+              </div>
+              <p className="mt-2 text-xs text-gray-500">Uploaden…</p>
+            </div>
+          ) : null}
         </div>
+
         {photos.length > 0 ? (
           <ul className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
             {photos.map((url, i) => (
@@ -241,7 +394,7 @@ export default function DjMediaPage() {
                 <img src={url} alt="" className="absolute inset-0 h-full w-full object-cover" />
                 <button
                   type="button"
-                  disabled={saving}
+                  disabled={saving || uploading}
                   onClick={() => void removePhoto(i)}
                   className="absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white/95 text-slate-700 opacity-0 shadow-sm transition-opacity hover:bg-gray-50 group-hover:opacity-100 disabled:opacity-40"
                   aria-label="Foto verwijderen"
