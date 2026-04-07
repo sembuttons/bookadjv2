@@ -16,9 +16,10 @@ import {
   Wallet,
 } from "lucide-react";
 
-/** Zelfde sfeer als Voor DJ’s: één achtergrond met donkere overlay + groene gloed. */
-const HERO_BG =
-  "https://images.unsplash.com/photo-1540039155733-5bb30b53aa88?w=1920&q=80&auto=format&fit=crop";
+const HERO_BG_IMAGE =
+  "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1600&q=80";
+
+const heroSocialProofAvatars = ["AD", "MK", "SV", "TB", "FA"] as const;
 
 type FlowKey = "klant" | "dj";
 
@@ -230,60 +231,70 @@ export function HowItWorksClient() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero — aansluitend op Voor DJ’s: één kleurvlak met subtiele gradient */}
-      <section className="relative isolate min-h-[min(88vh,720px)] w-full overflow-x-clip text-white">
+      {/* Hero — match homepage style */}
+      <section className="relative isolate w-full overflow-hidden text-white">
         <div
-          className="absolute inset-0 -z-30 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${HERO_BG})` }}
-          aria-hidden
-        />
-        <div
-          className="absolute inset-0 -z-20 bg-gradient-to-b from-[#0a0a0a]/92 via-[#0a0a0a]/88 to-[#0a0a0a]/95"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(34,197,94,0.22),transparent)]"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute inset-0 -z-[5] opacity-[0.35]"
+          className="absolute inset-0 -z-20 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundImage:
+              "linear-gradient(135deg, rgba(10,10,10,0.85) 0%, rgba(15,40,24,0.90) 100%), url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1600&q=80')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 pointer-events-none -z-10"
+          style={{
+            background:
+              "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(34,197,94,0.12), transparent)",
           }}
           aria-hidden
         />
 
-        <div className="relative mx-auto flex min-h-[min(88vh,720px)] max-w-4xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
-          <h1 className="text-balance text-4xl font-bold tracking-tight drop-shadow-sm sm:text-5xl md:text-6xl">
-            Hoe werkt bookadj?
+        <div className="relative mx-auto max-w-4xl px-4 py-28 text-center sm:px-6 md:py-36 lg:px-8">
+          <span className="inline-block bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 tracking-widest">
+            HOE HET WERKT
+          </span>
+          <h1 className="text-white font-black text-4xl md:text-6xl tracking-tight">
+            Zo werkt bookadj
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-white/90 sm:text-lg">
-            Van zoeken naar de perfecte DJ tot een onvergetelijk feest — wij regelen het.
+          <p className="text-gray-400 text-lg md:text-xl mt-4 max-w-2xl mx-auto">
+            Van zoeken naar de perfecte DJ — tot een onvergetelijk feest.
           </p>
 
-          <div className="mt-12 w-full max-w-md sm:max-w-lg">
-            <FlowToggle value={flow} onChange={setFlow} />
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:mt-10">
+            <div className="flex items-center justify-center -space-x-2">
+              {heroSocialProofAvatars.map((a) => (
+                <div
+                  key={a}
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-green-600 text-xs font-bold text-white ring-2 ring-[#0a0a0a]"
+                  aria-hidden
+                >
+                  {a}
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center justify-center gap-2 text-gray-400 text-sm">
+              <span className="text-green-400" aria-hidden>
+                ★★★★★
+              </span>
+              <span>Meer dan 50 DJ&apos;s beschikbaar — vandaag nog boeken</span>
+            </div>
           </div>
 
-          <a
-            href="#stap-voor-stap"
-            className="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-1 text-xs font-medium text-white/80 transition-colors hover:text-white"
-          >
+          <a href="#stap-voor-stap" className="mt-8 inline-flex items-center justify-center">
             <span className="sr-only">Scroll naar uitleg</span>
-            <span
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-[#111827]/10 ring-1 ring-white/20 backdrop-blur-sm"
+            <svg
+              className="animate-bounce text-green-400 mt-8 h-6 w-6"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
               aria-hidden
             >
-              <svg
-                className="h-5 w-5 animate-bounce"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </span>
+              <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </a>
         </div>
       </section>
@@ -304,6 +315,10 @@ export function HowItWorksClient() {
             Duidelijk proces, premium ervaring — zonder verrassingen.
           </p>
           <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-green-500" aria-hidden />
+
+          <div className="mt-8 flex justify-center">
+            <FlowToggle value={flow} onChange={setFlow} />
+          </div>
         </div>
 
         <StepTimeline steps={steps} />
