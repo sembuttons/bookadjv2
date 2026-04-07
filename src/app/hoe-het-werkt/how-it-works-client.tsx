@@ -234,71 +234,43 @@ export function HowItWorksClient() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero — match homepage style */}
-      <section className="relative isolate w-full overflow-hidden text-white">
+      {/* Hero — match /voor-djs style */}
+      <section className="relative isolate overflow-hidden bg-[#0a0a0a] px-4 text-white sm:px-6 lg:px-8">
         <div
-          className="absolute inset-0 -z-20 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 -z-20"
           style={{
             backgroundImage:
-              "linear-gradient(135deg, rgba(10,10,10,0.85) 0%, rgba(15,40,24,0.90) 100%), url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1600&q=80')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+              "linear-gradient(135deg, #0a0a0a 0%, #0f2818 100%)",
           }}
           aria-hidden
         />
         <div
-          className="absolute inset-0 pointer-events-none -z-10"
+          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(34,197,94,0.22),transparent)]"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.35]"
           style={{
-            background:
-              "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(34,197,94,0.12), transparent)",
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
           }}
           aria-hidden
         />
 
-        <div className="relative mx-auto max-w-4xl px-4 py-24 text-center sm:px-6 md:py-32 lg:px-8">
-          <span className="inline-block bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 tracking-widest">
+        <div className="relative mx-auto max-w-5xl py-28 text-center md:py-36">
+          <p className="text-green-400 text-xs font-semibold tracking-widest uppercase">
             HOE HET WERKT
-          </span>
-          <h1 className="text-white font-black text-4xl md:text-6xl tracking-tight">
-            Zo werkt bookadj
+          </p>
+          <h1 className="mt-6 font-black tracking-tight leading-none text-5xl md:text-7xl">
+            <span className="text-white">Zo werkt</span>
+            <br />
+            <span className="text-green-400">bookadj.</span>
           </h1>
-          <p className="text-gray-400 text-lg md:text-xl mt-4 max-w-2xl mx-auto">
+          <p className="mx-auto mt-6 max-w-2xl text-center text-gray-400 text-lg md:text-xl">
             Van zoeken naar de perfecte DJ — tot een onvergetelijk feest.
           </p>
-
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:mt-10">
-            <div className="flex items-center justify-center -space-x-2">
-              {heroSocialProofAvatars.map((a) => (
-                <div
-                  key={a}
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-green-600 text-xs font-bold text-white ring-2 ring-[#0a0a0a]"
-                  aria-hidden
-                >
-                  {a}
-                </div>
-              ))}
-            </div>
-            <div className="flex items-center justify-center gap-2 text-gray-400 text-sm">
-              <span className="text-green-400" aria-hidden>
-                ★★★★★
-              </span>
-              <span>Meer dan 50 DJ&apos;s beschikbaar — vandaag nog boeken</span>
-            </div>
-          </div>
-
-          <a href="#stap-voor-stap" className="mt-8 inline-flex items-center justify-center">
-            <span className="sr-only">Scroll naar uitleg</span>
-            <svg
-              className="animate-bounce text-green-400 mt-8 h-6 w-6"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              aria-hidden
-            >
-              <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </a>
+          <p className="mt-8 text-gray-500 text-sm text-center">
+            Veilig betalen · Geverifieerde DJ&apos;s · Direct contact
+          </p>
         </div>
       </section>
 
