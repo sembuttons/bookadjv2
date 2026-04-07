@@ -1,49 +1,418 @@
-import { UserRound } from "lucide-react";
+"use client";
 
-const SIDE_IMG =
-  "https://images.unsplash.com/photo-1598387993784-808f6ee9fa6f?w=800&q=80&auto=format&fit=crop";
+import Link from "next/link";
+import { Loader2 } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { supabase } from "@/lib/supabase-browser";
+
+const GENRES = [
+  "House",
+  "Techno",
+  "Afro House",
+  "Hip-hop",
+  "Top 40",
+  "Disco",
+  "Latin",
+  "Drum & Bass",
+] as const;
+
+const OCCASIONS = [
+  "Bruiloft",
+  "Verjaardag",
+  "Bedrijfsfeest",
+  "Club & Bar",
+  "Festival",
+  "Huisfeest",
+  "Afstuderen",
+  "Anders",
+] as const;
+
+const LANGUAGES = ["Nederlands", "Engels", "Frans", "Duits"] as const;
+
+function initialsFromName(name: string) {
+  const parts = name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase() ?? "");
+  return parts.join("") || "DJ";
+}
+
+function normalizeStringArray(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.filter((x): x is string => typeof x === "string" && Boolean(x.trim()));
+}
+
+function toggleInList(list: string[], value: string): string[] {
+  return list.includes(value) ? list.filter((x) => x !== value) : [...list, value];
+}
 
 export default function DjProfielPage() {
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
+  const [djProfileId, setDjProfileId] = useState<string | null>(null);
+  const [photos, setPhotos] = useState<string[]>([]);
+
+  const [stageName, setStageName] = useState("");
+  const [bio, setBio] = useState("");
+  const [homeCity, setHomeCity] = useState("");
+  const [hourlyRate, setHourlyRate] = useState<number | "">("");
+  const [yearsExperience, setYearsExperience] = useState<number | "">("");
+  const [genres, setGenres] = useState<string[]>([]);
+  const [occasions, setOccasions] = useState<string[]>([]);
+  const [languages, setLanguages] = useState<string[]>([]);
+  const [extraLanguages, setExtraLanguages] = useState("");
+
+  const firstPhoto = photos[0] ?? null;
+  const displayNameForAvatar = useMemo(() => stageName.trim() || "DJ", [stageName]);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session?.user) {
+      setLoading(false);
+      setError("Geen sessie.");
+      return;
+    }
+
+    const { data: profile, error: pe } = await supabase
+      .from("dj_profiles")
+      .select(
+        "id, stage_name, bio, home_city, hourly_rate, years_experience, genres, occasions, languages, extra_languages, photos",
+      )
+      .eq("user_id", session.user.id)
+      .maybeSingle();
+
+    if (pe) {
+      setError(pe.message);
+      setLoading(false);
+      return;
+    }
+
+    if (!profile?.id) {
+      setDjProfileId(null);
+      setPhotos([]);
+      setLoading(false);
+      return;
+    }
+
+    setDjProfileId(profile.id as string);
+    setStageName(typeof profile.stage_name === "string" ? profile.stage_name : "");
+    setBio(typeof profile.bio === "string" ? profile.bio : "");
+    setHomeCity(typeof profile.home_city === "string" ? profile.home_city : "");
+    setHourlyRate(typeof profile.hourly_rate === "number" ? profile.hourly_rate : "");
+    setYearsExperience(
+      typeof profile.years_experience === "number" ? profile.years_experience : "",
+    );
+    setGenres(normalizeStringArray(profile.genres));
+    setOccasions(normalizeStringArray(profile.occasions));
+    setLanguages(normalizeStringArray(profile.languages));
+    setExtraLanguages(
+      typeof (profile as any).extra_languages === "string"
+        ? (profile as any).extra_languages
+        : "",
+    );
+    setPhotos(Array.isArray(profile.photos) ? (profile.photos as string[]) : []);
+
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  const save = useCallback(async () => {
+    setSaving(true);
+    setError(null);
+    setSuccess(null);
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session?.user) {
+      setSaving(false);
+      setError("Geen sessie.");
+      return;
+    }
+
+    const payload: Record<string, unknown> = {
+      user_id: session.user.id,
+      stage_name: stageName.trim() || null,
+      bio: bio.trim() || null,
+      home_city: homeCity.trim() || null,
+      hourly_rate: hourlyRate === "" ? null : hourlyRate,
+      years_experience: yearsExperience === "" ? null : yearsExperience,
+      genres,
+      occasions,
+      languages,
+      extra_languages: extraLanguages.trim() || null,
+      updated_at: new Date().toISOString(),
+    };
+
+    const { error: up } = await supabase.from("dj_profiles").upsert(payload, {
+      onConflict: "user_id",
+    });
+
+    setSaving(false);
+    if (up) {
+      setError(up.message);
+      return;
+    }
+
+    setSuccess("Profiel opgeslagen");
+    window.setTimeout(() => setSuccess(null), 3000);
+    await load();
+  }, [
+    bio,
+    extraLanguages,
+    genres,
+    homeCity,
+    hourlyRate,
+    languages,
+    load,
+    occasions,
+    stageName,
+    yearsExperience,
+  ]);
+
+  if (loading) {
+    return (
+      <>
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+          Mijn profiel
+        </h1>
+        <p className="mt-2 text-sm text-gray-500">Laden…</p>
+      </>
+    );
+  }
+
   return (
-    <>
-      <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-        Mijn profiel
-      </h1>
-      <p className="mt-1 text-sm text-slate-600">
-        Beheer je DJ-profiel, genres en tarieven zodra dit live is.
-      </p>
-      <div className="mt-8 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-        <div className="grid md:grid-cols-2">
-          <div className="relative min-h-[180px] md:min-h-[240px]">
-            <img
-              src={SIDE_IMG}
-              alt=""
-              className="absolute inset-0 h-full w-full object-cover opacity-90"
-              width={800}
-              height={600}
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-black/10" />
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+          Mijn profiel
+        </h1>
+        <p className="mt-1 text-sm text-gray-500">
+          Werk je profiel bij. Dit wordt gebruikt op je openbare DJ-pagina.
+        </p>
+      </div>
+
+      {error ? (
+        <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-500">
+          {error}
+        </p>
+      ) : null}
+      {success ? (
+        <p className="rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800">
+          {success}
+        </p>
+      ) : null}
+
+      <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+          <p className="text-sm font-semibold text-gray-900">Profielfoto</p>
+          <p className="mt-1 text-sm text-gray-500">
+            Toon je eerste foto op je profiel.
+          </p>
+
+          <div className="mt-5">
+            {firstPhoto ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={firstPhoto}
+                alt=""
+                className="h-32 w-32 rounded-2xl object-cover ring-1 ring-gray-200"
+              />
+            ) : (
+              <div className="flex h-32 w-32 items-center justify-center rounded-2xl bg-green-50 text-2xl font-black text-green-700 ring-1 ring-green-100">
+                {initialsFromName(displayNameForAvatar)}
+              </div>
+            )}
           </div>
-          <div className="flex flex-col justify-center gap-3 p-6 text-slate-900 md:p-10">
-            <div className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-green-200 bg-green-50 text-green-600">
-              <UserRound className="h-6 w-6" strokeWidth={1.5} aria-hidden />
-            </div>
-            <p className="text-lg font-semibold">Profiel bewerken</p>
-            <p className="text-sm leading-relaxed text-slate-600">
-              Binnenkort kun je hier je artiestennaam, bio, genres en
-              gelegenheden aanpassen. Tot die tijd wijzigt bookadj je gegevens op
-              verzoek via{" "}
-              <a
-                href="mailto:hallo@bookadj.nl"
-                className="font-semibold text-green-600 underline decoration-green-500/40 hover:text-green-700"
-              >
-                hallo@bookadj.nl
-              </a>
-              .
-            </p>
+
+          <Link
+            href="/dashboard/dj/media"
+            className="mt-5 inline-flex w-full items-center justify-center rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-50"
+          >
+            Foto&apos;s beheren
+          </Link>
+        </div>
+
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="grid gap-5 md:grid-cols-2">
+            <label className="block">
+              <span className="text-sm font-medium text-gray-700 mb-1 block">
+                Artiestennaam
+              </span>
+              <input
+                value={stageName}
+                onChange={(e) => setStageName(e.target.value)}
+                className="border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full focus:border-green-500 focus:ring-2 focus:ring-green-500/20 focus:outline-none"
+                placeholder="Bijv. DJ Nova"
+              />
+            </label>
+
+            <label className="block">
+              <span className="text-sm font-medium text-gray-700 mb-1 block">
+                Stad
+              </span>
+              <input
+                value={homeCity}
+                onChange={(e) => setHomeCity(e.target.value)}
+                className="border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full focus:border-green-500 focus:ring-2 focus:ring-green-500/20 focus:outline-none"
+                placeholder="Bijv. Amsterdam"
+              />
+            </label>
+
+            <label className="block md:col-span-2">
+              <span className="text-sm font-medium text-gray-700 mb-1 block">
+                Bio
+              </span>
+              <textarea
+                rows={4}
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                className="border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full focus:border-green-500 focus:ring-2 focus:ring-green-500/20 focus:outline-none"
+                placeholder="Vertel iets over je stijl, ervaring en wat klanten kunnen verwachten…"
+              />
+            </label>
+
+            <label className="block">
+              <span className="text-sm font-medium text-gray-700 mb-1 block">
+                Uurtarief
+              </span>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
+                  €
+                </span>
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  value={hourlyRate}
+                  onChange={(e) =>
+                    setHourlyRate(e.target.value === "" ? "" : Number(e.target.value))
+                  }
+                  className="border border-gray-200 rounded-xl px-4 py-3 pl-9 text-gray-900 w-full focus:border-green-500 focus:ring-2 focus:ring-green-500/20 focus:outline-none"
+                  placeholder="125"
+                  min={0}
+                />
+              </div>
+            </label>
+
+            <label className="block">
+              <span className="text-sm font-medium text-gray-700 mb-1 block">
+                Jaren ervaring
+              </span>
+              <input
+                type="number"
+                inputMode="numeric"
+                value={yearsExperience}
+                onChange={(e) =>
+                  setYearsExperience(e.target.value === "" ? "" : Number(e.target.value))
+                }
+                className="border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full focus:border-green-500 focus:ring-2 focus:ring-green-500/20 focus:outline-none"
+                placeholder="5"
+                min={0}
+              />
+            </label>
+          </div>
+
+          <div className="mt-8 grid gap-8 lg:grid-cols-3">
+            <fieldset>
+              <legend className="text-sm font-medium text-gray-700 mb-3">
+                Genres
+              </legend>
+              <div className="space-y-2">
+                {GENRES.map((g) => (
+                  <label key={g} className="flex items-center gap-2 text-sm text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={genres.includes(g)}
+                      onChange={() => setGenres((p) => toggleInList(p, g))}
+                      className="accent-green-500"
+                    />
+                    {g}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend className="text-sm font-medium text-gray-700 mb-3">
+                Gelegenheden
+              </legend>
+              <div className="space-y-2">
+                {OCCASIONS.map((o) => (
+                  <label key={o} className="flex items-center gap-2 text-sm text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={occasions.includes(o)}
+                      onChange={() => setOccasions((p) => toggleInList(p, o))}
+                      className="accent-green-500"
+                    />
+                    {o}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend className="text-sm font-medium text-gray-700 mb-3">
+                Talen
+              </legend>
+              <div className="space-y-2">
+                {LANGUAGES.map((l) => (
+                  <label key={l} className="flex items-center gap-2 text-sm text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={languages.includes(l)}
+                      onChange={() => setLanguages((p) => toggleInList(p, l))}
+                      className="accent-green-500"
+                    />
+                    {l}
+                  </label>
+                ))}
+              </div>
+              <label className="mt-4 block">
+                <span className="text-sm font-medium text-gray-700 mb-1 block">
+                  Extra talen
+                </span>
+                <input
+                  value={extraLanguages}
+                  onChange={(e) => setExtraLanguages(e.target.value)}
+                  className="border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full focus:border-green-500 focus:ring-2 focus:ring-green-500/20 focus:outline-none"
+                  placeholder="Bijv. Spaans, Italiaans…"
+                />
+              </label>
+            </fieldset>
+          </div>
+
+          <div className="mt-8 flex justify-end">
+            <button
+              type="button"
+              onClick={() => void save()}
+              disabled={saving}
+              className="bg-green-500 text-black font-bold px-6 py-3 rounded-xl inline-flex items-center gap-2 disabled:opacity-60"
+            >
+              {saving ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
+                  Opslaan…
+                </>
+              ) : (
+                "Opslaan"
+              )}
+            </button>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

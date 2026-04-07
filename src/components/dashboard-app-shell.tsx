@@ -238,10 +238,10 @@ export function DashboardAppShell({
         <Link
           key={item.key}
           href={item.href}
-          className={`relative flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
+          className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
             active
-              ? "border-r-2 border-green-500 bg-gradient-to-r from-green-50 to-transparent font-medium text-green-700"
-              : "text-slate-600 hover:bg-gray-50 hover:text-slate-900"
+              ? "bg-green-50 text-green-700 font-semibold border-l-4 border-green-500"
+              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
           }`}
         >
           <span className="min-w-0 flex-1">{item.label}</span>
