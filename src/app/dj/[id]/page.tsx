@@ -4,11 +4,14 @@ import {
   CheckCircle2,
   CircleDollarSign,
   Clock,
+  Lock,
   Headset,
   Headphones,
   LayoutDashboard,
+  Languages,
   MapPin,
   Music,
+  Music2,
   NotebookPen,
   SlidersHorizontal,
   Speech,
@@ -44,7 +47,6 @@ import { BookingPanel } from "./booking-panel";
 import { DjHelpSection } from "./dj-help-section";
 import { DjProfileFaq } from "./dj-profile-faq";
 import { DjUspGrid, type UspItem } from "./dj-usp-grid";
-import { MediaTabs } from "./media-tabs";
 import { RelatedDjsCarousel } from "./related-djs-carousel";
 import { MobileStickyBookingBar } from "./mobile-sticky-booking-bar";
 import { DjPhotoSection } from "./dj-photo-section";
@@ -255,6 +257,53 @@ export default async function DjProfilePage({ params }: PageProps) {
     typeof profile.instagram_url === "string" ? profile.instagram_url : null;
   const soundcloudUrl =
     typeof profile.soundcloud_url === "string" ? profile.soundcloud_url : null;
+  const languagesRaw = (profile as any).languages;
+  const languages =
+    Array.isArray(languagesRaw)
+      ? (languagesRaw as unknown[]).filter(
+          (x): x is string => typeof x === "string" && Boolean(x.trim()),
+        )
+      : typeof languagesRaw === "string"
+        ? languagesRaw
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean)
+        : [];
+  const extraLanguagesRaw = (profile as any).extra_languages;
+  const extraLanguages =
+    typeof extraLanguagesRaw === "string"
+      ? extraLanguagesRaw
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : [];
+  const languagesLabel = [...languages, ...extraLanguages].filter(Boolean).join(", ");
+
+  const equipmentRaw = (profile as any).equipment;
+  const equipmentLabel =
+    typeof equipmentRaw === "string" && equipmentRaw.trim()
+      ? equipmentRaw.trim()
+      : customUsps.length > 0
+        ? customUsps
+            .map((u) => u.title)
+            .filter(Boolean)
+            .slice(0, 2)
+            .join(", ")
+        : "";
+
+  const instagramHandle = (() => {
+    if (!instagramUrl) return "";
+    try {
+      const u = new URL(instagramUrl);
+      const parts = u.pathname.split("/").filter(Boolean);
+      const h = parts[0] ?? "";
+      return h ? `@${h.replace(/^@/, "")}` : "";
+    } catch {
+      const m = instagramUrl.match(/instagram\.com\/([^/?#]+)/i);
+      const h = m?.[1] ?? "";
+      return h ? `@${h.replace(/^@/, "")}` : "";
+    }
+  })();
 
   const blockedIsoDates = availRes.error
     ? []
@@ -368,6 +417,11 @@ export default async function DjProfilePage({ params }: PageProps) {
                 ))}
               </div>
             ) : null}
+
+            {/* Bio - directly under genres */}
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-gray-400">
+              {bio}
+            </p>
           </div>
 
           {/* Stel een vraag */}
@@ -387,69 +441,45 @@ export default async function DjProfilePage({ params }: PageProps) {
 
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 lg:items-start">
           <div className="min-w-0 space-y-14">
-            <MediaTabs
-              djFirstName={fn}
-              instagramUrl={instagramUrl}
-              soundcloudUrl={null}
-            />
+            {/* 3 info-pills */}
+            {years != null || equipmentLabel || languagesLabel ? (
+              <section aria-label="DJ details">
+                <div className="grid gap-3 sm:grid-cols-3">
+                  {years != null ? (
+                    <div className="rounded-2xl border border-gray-200 bg-white p-4">
+                      <p className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+                        <Clock className="h-4 w-4 text-green-600" aria-hidden />
+                        Jaren ervaring
+                      </p>
+                      <p className="mt-1 text-sm text-gray-500">
+                        {years} jaar ervaring
+                      </p>
+                    </div>
+                  ) : null}
+                  {equipmentLabel ? (
+                    <div className="rounded-2xl border border-gray-200 bg-white p-4">
+                      <p className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+                        <Music2 className="h-4 w-4 text-green-600" aria-hidden />
+                        Apparatuur
+                      </p>
+                      <p className="mt-1 text-sm text-gray-500">{equipmentLabel}</p>
+                    </div>
+                  ) : null}
+                  {languagesLabel ? (
+                    <div className="rounded-2xl border border-gray-200 bg-white p-4">
+                      <p className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+                        <Languages className="h-4 w-4 text-green-600" aria-hidden />
+                        Taal
+                      </p>
+                      <p className="mt-1 text-sm text-gray-500">{languagesLabel}</p>
+                    </div>
+                  ) : null}
+                </div>
+              </section>
+            ) : null}
 
-            <section aria-labelledby="over-heading">
-              <h2
-                id="over-heading"
-                className="text-xl font-bold text-slate-900 sm:text-2xl"
-              >
-                Over {displayForBio}
-              </h2>
-              <p className="mt-4 max-w-3xl text-base leading-relaxed text-gray-400">
-                {bio}
-              </p>
-              <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {[
-                  {
-                    Icon: Clock,
-                    t: "Jaren ervaring",
-                    d:
-                      years != null
-                        ? `${years}+ jaar in events & clubs`
-                        : "Ruime podiumervaring",
-                  },
-                  {
-                    Icon: SlidersHorizontal,
-                    t: "Apparatuur",
-                    d: "Controller, speakers en licht op aanvraag",
-                  },
-                  {
-                    Icon: Headset,
-                    t: "MC & aankondigingen",
-                    d: "Optioneel in overleg",
-                  },
-                  {
-                    Icon: NotebookPen,
-                    t: "Voorbereiding",
-                    d: "Playlist en briefing vooraf met jou afgestemd",
-                  },
-                  {
-                    Icon: MapPin,
-                    t: "Reizen",
-                    d: "Door heel Nederland inzetbaar",
-                  },
-                  { Icon: Speech, t: "Talen", d: "Nederlands & Engels" },
-                ].map((card) => (
-                  <li
-                    key={card.t}
-                    className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-200 hover:border-green-200 hover:shadow-sm"
-                  >
-                    <p className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                      <card.Icon className="h-4 w-4 text-gray-400" aria-hidden />
-                      {card.t}
-                    </p>
-                    <p className="mt-1 text-sm text-gray-400">{card.d}</p>
-                  </li>
-                ))}
-              </ul>
-            </section>
-
-            {hasYouTubeVideo || soundcloudUrl ? (
+            {/* DJ in actie - only when video exists */}
+            {hasYouTubeVideo ? (
               <section id="dj-video" className="scroll-mt-24" aria-label="DJ in actie">
                 <div className="flex items-center gap-2">
                   <Play className="h-5 w-5 text-green-600" aria-hidden />
@@ -458,36 +488,118 @@ export default async function DjProfilePage({ params }: PageProps) {
                   </h2>
                 </div>
 
-                {hasYouTubeVideo ? (
-                  <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-black shadow-sm">
-                    <iframe
-                      title={`Video van ${name}`}
-                      src={`https://www.youtube.com/embed/${encodeURIComponent(
-                        youtubeId,
-                      )}`}
-                      className="w-full aspect-video rounded-2xl"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  </div>
-                ) : null}
-
-                {soundcloudUrl ? (
-                  <div className="mt-4 rounded-2xl overflow-hidden border border-gray-200 bg-white">
-                    <iframe
-                      title="SoundCloud"
-                      width="100%"
-                      height="166"
-                      scrolling="no"
-                      frameBorder={0}
-                      src={`https://w.soundcloud.com/player/?url=${encodeURIComponent(
-                        soundcloudUrl,
-                      )}&color=%2322c55e&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false`}
-                    />
-                  </div>
-                ) : null}
+                <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-black shadow-sm">
+                  <iframe
+                    title={`Video van ${name}`}
+                    src={`https://www.youtube.com/embed/${encodeURIComponent(
+                      youtubeId,
+                    )}`}
+                    className="w-full aspect-video rounded-2xl"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
               </section>
             ) : null}
+
+            {/* Muziek & Instagram */}
+            {soundcloudUrl || instagramUrl ? (
+              <section aria-label="Muziek en Instagram">
+                <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">
+                  Muziek &amp; Instagram
+                </h2>
+                <div
+                  className={`mt-4 grid gap-6 ${
+                    soundcloudUrl && instagramUrl ? "lg:grid-cols-[3fr_2fr]" : "grid-cols-1"
+                  }`}
+                >
+                  {soundcloudUrl ? (
+                    <div className="w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+                      <iframe
+                        width="100%"
+                        height="166"
+                        scrolling="no"
+                        frameBorder="no"
+                        allow="autoplay"
+                        src={`https://w.soundcloud.com/player/?url=${encodeURIComponent(
+                          soundcloudUrl,
+                        )}&color=%2322c55e&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`}
+                        className="w-full rounded-2xl"
+                        title="SoundCloud"
+                      />
+                    </div>
+                  ) : null}
+
+                  {instagramUrl ? (
+                    <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-pink-50 via-purple-50 to-amber-50 p-5 shadow-sm">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0">
+                          <p className="text-sm font-bold text-slate-900">
+                            Instagram
+                          </p>
+                          <p className="mt-1 truncate text-sm text-slate-600">
+                            {instagramHandle || instagramUrl}
+                          </p>
+                        </div>
+                        <div
+                          className="shrink-0 rounded-xl bg-white/70 px-3 py-1 text-xs font-semibold text-slate-700 ring-1 ring-white/50"
+                          aria-hidden
+                        >
+                          Volg mee
+                        </div>
+                      </div>
+                      <a
+                        href={instagramUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-4 inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-white px-4 py-3 text-sm font-bold text-slate-900 ring-1 ring-gray-200 transition hover:bg-white/90"
+                      >
+                        Volg op Instagram
+                      </a>
+                    </div>
+                  ) : null}
+                </div>
+              </section>
+            ) : null}
+
+            {/* Waarom bookadj */}
+            <section aria-label="Waarom bookadj">
+              <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">
+                Waarom bookadj
+              </h2>
+              <ul className="mt-4 grid gap-4 sm:grid-cols-2">
+                {[
+                  {
+                    Icon: Lock,
+                    title: "Veilige betaling",
+                    text: "Betaal via het platform met betalingsbescherming.",
+                  },
+                  {
+                    Icon: CheckCircle2,
+                    title: "Geverifieerde DJ's",
+                    text: "DJ-profielen worden gecontroleerd voordat ze live gaan.",
+                  },
+                  {
+                    Icon: Headset,
+                    title: "Klantenservice",
+                    text: "Hulp bij vragen, wijzigingen en eventuele problemen.",
+                  },
+                  {
+                    Icon: BadgeCheck,
+                    title: "Alles op één plek",
+                    text: "Berichten en afspraken overzichtelijk in je account.",
+                  },
+                ].map(({ Icon, title, text }) => (
+                  <li key={title} className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+                    <p className="flex items-center gap-2 text-sm font-bold text-slate-900">
+                      <Icon className="h-4 w-4 text-green-600" aria-hidden />
+                      {title}
+                    </p>
+                    <p className="mt-1 text-sm text-slate-600">{text}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
 
             {/* Booking panel - mobile placement (after bio) */}
             <div id="booking-panel-anchor" className="lg:hidden">
