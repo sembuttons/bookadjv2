@@ -100,6 +100,8 @@ export default function DjProfielPage() {
   const [occasions, setOccasions] = useState<string[]>([]);
   const [languages, setLanguages] = useState<string[]>([]);
   const [extraLanguages, setExtraLanguages] = useState("");
+  const [customGenre, setCustomGenre] = useState("");
+  const [customOccasion, setCustomOccasion] = useState("");
 
   const firstPhoto = photos[0] ?? null;
   const displayNameForAvatar = useMemo(() => stageName.trim() || "DJ", [stageName]);
@@ -120,7 +122,7 @@ export default function DjProfielPage() {
     const { data: profile, error: pe } = await supabase
       .from("dj_profiles")
       .select(
-        "id, stage_name, bio, home_city, hourly_rate, years_experience, genres, occasions, languages, extra_languages, photos",
+        "id, stage_name, bio, home_city, hourly_rate, years_experience, genres, custom_genres, occasions, custom_occasions, languages, extra_languages, photos",
       )
       .eq("user_id", session.user.id)
       .maybeSingle();
@@ -147,7 +149,17 @@ export default function DjProfielPage() {
       typeof profile.years_experience === "number" ? profile.years_experience : "",
     );
     setGenres(normalizeStringArray(profile.genres));
+    setCustomGenre(
+      typeof (profile as any).custom_genres === "string"
+        ? (profile as any).custom_genres
+        : "",
+    );
     setOccasions(normalizeStringArray(profile.occasions));
+    setCustomOccasion(
+      typeof (profile as any).custom_occasions === "string"
+        ? (profile as any).custom_occasions
+        : "",
+    );
     setLanguages(normalizeStringArray(profile.languages));
     setExtraLanguages(
       typeof (profile as any).extra_languages === "string"
@@ -185,7 +197,9 @@ export default function DjProfielPage() {
       hourly_rate: hourlyRate === "" ? null : hourlyRate,
       years_experience: yearsExperience === "" ? null : yearsExperience,
       genres,
+      custom_genres: customGenre.trim() || null,
       occasions,
+      custom_occasions: customOccasion.trim() || null,
       languages,
       extra_languages: extraLanguages.trim() || null,
       updated_at: new Date().toISOString(),
@@ -206,6 +220,8 @@ export default function DjProfielPage() {
     await load();
   }, [
     bio,
+    customGenre,
+    customOccasion,
     extraLanguages,
     genres,
     homeCity,
@@ -390,6 +406,21 @@ export default function DjProfielPage() {
                   </label>
                 ))}
               </div>
+              <div className="mt-3">
+                <label className="text-xs font-medium text-gray-500 mb-1 block">
+                  Staat jouw genre er niet bij?
+                </label>
+                <input
+                  type="text"
+                  value={customGenre}
+                  onChange={(e) => setCustomGenre(e.target.value)}
+                  placeholder="Bijv. Moombahton, Afrobeats..."
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  Meerdere genres? Scheid ze met een komma.
+                </p>
+              </div>
             </fieldset>
 
             <fieldset>
@@ -409,6 +440,18 @@ export default function DjProfielPage() {
                     {o}
                   </label>
                 ))}
+              </div>
+              <div className="mt-3">
+                <label className="text-xs font-medium text-gray-500 mb-1 block">
+                  Staat jouw gelegenheid er niet bij?
+                </label>
+                <input
+                  type="text"
+                  value={customOccasion}
+                  onChange={(e) => setCustomOccasion(e.target.value)}
+                  placeholder="Bijv. Straatfeest, Kerstmarkt..."
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+                />
               </div>
             </fieldset>
 
