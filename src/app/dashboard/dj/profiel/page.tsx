@@ -5,15 +5,37 @@ import { Loader2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase-browser";
 
-const GENRES = [
+const GENRE_SUGGESTIONS = [
   "House",
-  "Techno",
+  "Deep House",
+  "Tech House",
   "Afro House",
-  "Hip-hop",
-  "Top 40",
+  "Techno",
+  "Hardstyle",
+  "Drum and Bass",
+  "Dubstep",
+  "Trance",
   "Disco",
+  "Nu Disco",
+  "Funk",
+  "Soul",
+  "R&B",
+  "Hip Hop",
+  "Trap",
+  "Afrobeats",
+  "Dancehall",
+  "Reggaeton",
   "Latin",
-  "Drum & Bass",
+  "Pop",
+  "Dance Pop",
+  "80s",
+  "90s",
+  "00s",
+  "Top 40",
+  "Nederlandstalig",
+  "Lounge",
+  "Commercial",
+  "Oldskool",
 ] as const;
 
 const OCCASIONS = [
@@ -65,6 +87,8 @@ export default function DjProfielPage() {
   const [occasions, setOccasions] = useState<string[]>([]);
   const [languages, setLanguages] = useState<string[]>([]);
   const [extraLanguages, setExtraLanguages] = useState("");
+  const [genreQuery, setGenreQuery] = useState("");
+  const [genreFocus, setGenreFocus] = useState(false);
 
   const firstPhoto = photos[0] ?? null;
   const displayNameForAvatar = useMemo(() => stageName.trim() || "DJ", [stageName]);
@@ -181,6 +205,36 @@ export default function DjProfielPage() {
     stageName,
     yearsExperience,
   ]);
+
+  const addGenre = useCallback((raw: string) => {
+    const q = raw.trim().replace(/\s+/g, " ");
+    if (!q) return;
+    const canonical =
+      (GENRE_SUGGESTIONS as readonly string[]).find(
+        (g) => g.toLowerCase() === q.toLowerCase(),
+      ) ?? q;
+    setGenres((prev) => {
+      const has = prev.some((x) => x.toLowerCase() === canonical.toLowerCase());
+      return has ? prev : [...prev, canonical];
+    });
+    setGenreQuery("");
+  }, []);
+
+  const removeGenre = useCallback((g: string) => {
+    setGenres((prev) => prev.filter((x) => x !== g));
+  }, []);
+
+  const genreSuggestions = useMemo(() => {
+    const q = genreQuery.trim().toLowerCase();
+    const selected = new Set(genres.map((g) => g.toLowerCase()));
+    const list = (GENRE_SUGGESTIONS as readonly string[]).filter(
+      (g) => !selected.has(g.toLowerCase()),
+    );
+    if (!q) return list.slice(0, 10);
+    return list
+      .filter((g) => g.toLowerCase().includes(q))
+      .slice(0, 10);
+  }, [genreQuery, genres]);
 
   if (loading) {
     return (
@@ -329,18 +383,69 @@ export default function DjProfielPage() {
               <legend className="text-sm font-medium text-gray-700 mb-3">
                 Genres
               </legend>
-              <div className="space-y-2">
-                {GENRES.map((g) => (
-                  <label key={g} className="flex items-center gap-2 text-sm text-gray-700">
+              <div className="relative">
+                <div className="rounded-2xl border border-gray-200 bg-white px-3 py-2.5 focus-within:border-green-500 focus-within:ring-2 focus-within:ring-green-500/20">
+                  <div className="flex flex-wrap gap-2">
+                    {genres.map((g) => (
+                      <span
+                        key={g}
+                        className="inline-flex items-center gap-1 rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-700"
+                      >
+                        {g}
+                        <button
+                          type="button"
+                          onClick={() => removeGenre(g)}
+                          className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full text-green-700/70 hover:bg-green-100 hover:text-green-800"
+                          aria-label={`Verwijder ${g}`}
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+
                     <input
-                      type="checkbox"
-                      checked={genres.includes(g)}
-                      onChange={() => setGenres((p) => toggleInList(p, g))}
-                      className="accent-green-500"
+                      value={genreQuery}
+                      onChange={(e) => setGenreQuery(e.target.value)}
+                      onFocus={() => setGenreFocus(true)}
+                      onBlur={() => {
+                        window.setTimeout(() => setGenreFocus(false), 100);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          addGenre(genreQuery);
+                        }
+                        if (e.key === "," || e.key === "Tab") {
+                          if (genreQuery.trim()) {
+                            e.preventDefault();
+                            addGenre(genreQuery);
+                          }
+                        }
+                        if (e.key === "Backspace" && !genreQuery && genres.length > 0) {
+                          removeGenre(genres[genres.length - 1]);
+                        }
+                      }}
+                      className="min-w-[160px] flex-1 bg-transparent px-2 py-1 text-sm text-gray-900 placeholder-gray-400 outline-none"
+                      placeholder={genres.length ? "Voeg genre toe…" : "Typ een genre…"}
                     />
-                    {g}
-                  </label>
-                ))}
+                  </div>
+                </div>
+
+                {genreFocus && genreSuggestions.length > 0 ? (
+                  <div className="absolute z-20 mt-2 w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg">
+                    {genreSuggestions.map((g) => (
+                      <button
+                        key={g}
+                        type="button"
+                        onClick={() => addGenre(g)}
+                        className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm text-gray-900 hover:bg-gray-50"
+                      >
+                        <span>{g}</span>
+                        <span className="text-xs text-gray-400">Voeg toe</span>
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
               </div>
             </fieldset>
 
