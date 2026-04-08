@@ -46,6 +46,20 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
+  if (session && isProtected) {
+    const { data: userRow } = await supabase
+      .from("users")
+      .select("is_suspended")
+      .eq("id", session.user.id)
+      .maybeSingle();
+    if ((userRow as { is_suspended?: boolean } | null)?.is_suspended) {
+      await supabase.auth.signOut();
+      const suspendedUrl = new URL("/auth", req.url);
+      suspendedUrl.searchParams.set("error", "suspended");
+      return NextResponse.redirect(suspendedUrl);
+    }
+  }
+
   return res;
 }
 

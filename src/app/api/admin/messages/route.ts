@@ -17,6 +17,7 @@ type UserRow = {
   id: string;
   full_name?: string | null;
   email?: string | null;
+  role?: string | null;
   offense_count?: number | null;
   is_suspended?: boolean | null;
 };
@@ -26,7 +27,9 @@ export async function GET(req: Request) {
   if (auth.response) return auth.response;
 
   const { searchParams } = new URL(req.url);
-  const tab = searchParams.get("tab") === "flagged" ? "flagged" : "all";
+  const tabRaw = searchParams.get("tab") ?? "all";
+  const tab =
+    tabRaw === "flagged" ? "flagged" : tabRaw === "normal" ? "normal" : "all";
 
   const startOfDay = new Date();
   startOfDay.setHours(0, 0, 0, 0);
@@ -50,10 +53,12 @@ export async function GET(req: Request) {
   let q = supabaseAdmin.from("messages").select("*");
   if (tab === "flagged") {
     q = q.eq("is_flagged", true);
+  } else if (tab === "normal") {
+    q = q.eq("is_flagged", false);
   }
   const { data: rawMessages, error } = await q
     .order("created_at", { ascending: false })
-    .limit(200);
+    .limit(100);
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -70,18 +75,29 @@ export async function GET(req: Request) {
   if (ids.size > 0) {
     const { data: users } = await supabaseAdmin
       .from("users")
-      .select("id, full_name, email, offense_count, is_suspended")
+      .select("id, full_name, email, role, offense_count, is_suspended")
       .in("id", [...ids]);
     userMap = Object.fromEntries(
       ((users ?? []) as UserRow[]).map((u) => [u.id, u]),
     );
   }
 
-  const messages = rows.map((m) => ({
+  let messages = rows.map((m) => ({
     ...m,
     sender: userMap[m.sender_id] ?? null,
     recipient: userMap[m.recipient_id] ?? null,
   }));
+
+  if (tab === "all") {
+    messages = [...messages].sort((a, b) => {
+      const fa = a.is_flagged ? 1 : 0;
+      const fb = b.is_flagged ? 1 : 0;
+      if (fb !== fa) return fb - fa;
+      const ta = new Date(a.created_at ?? 0).getTime();
+      const tb = new Date(b.created_at ?? 0).getTime();
+      return tb - ta;
+    });
+  }
 
   return NextResponse.json({
     messages,

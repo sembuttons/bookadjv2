@@ -29,6 +29,7 @@ export default function AuthPage() {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [signupDone, setSignupDone] = useState(false);
   const [resetMessage, setResetMessage] = useState<string | null>(null);
+  const [suspendedNotice, setSuspendedNotice] = useState(false);
 
   const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 
@@ -64,6 +65,7 @@ export default function AuthPage() {
     const r = params.get("role")?.toLowerCase();
     if (r === "dj") setRole("dj");
     if (r === "klant" || r === "customer") setRole("klant");
+    setSuspendedNotice(params.get("error") === "suspended");
   }, []);
 
   // Ensure a public.users row exists after any successful sign-in (incl. social/OAuth redirects).
@@ -259,6 +261,22 @@ export default function AuthPage() {
         <p className="mt-2 text-center text-sm text-slate-600">
           Log in of maak een account aan.
         </p>
+
+        {suspendedNotice ? (
+          <p
+            className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-center text-sm text-red-800"
+            role="alert"
+          >
+            Je account is geschorst. Neem contact op via{" "}
+            <a
+              href="mailto:info@bookadj.nl"
+              className="font-semibold text-red-900 underline"
+            >
+              info@bookadj.nl
+            </a>
+            .
+          </p>
+        ) : null}
 
         <div
           className="mt-8 flex rounded-lg border border-gray-200 bg-gray-100 p-1"

@@ -5,18 +5,53 @@ import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase-browser";
 
-const nav = [
-  { href: "/admin", label: "Dashboard", match: "exact" as const },
-  { href: "/admin/verificaties", label: "DJ Verificaties", match: "prefix" as const },
-  { href: "/admin/boekingen", label: "Boekingen", match: "prefix" as const },
-  { href: "/admin/berichten", label: "Berichten", match: "prefix" as const },
-  { href: "/admin/gebruikers", label: "Gebruikers", match: "prefix" as const },
-  { href: "/admin/geschillen", label: "Geschillen", match: "prefix" as const },
+type MatchMode = "exact" | "prefix";
+
+type NavDef = {
+  href: string;
+  label: string;
+  match: MatchMode;
+  badge?: "bookings" | "verifications" | "messages";
+};
+
+const NAV: NavDef[] = [
+  { href: "/admin", label: "Dashboard", match: "exact" },
+  { href: "/admin/boekingen", label: "Boekingen", match: "prefix", badge: "bookings" },
+  {
+    href: "/admin/verificaties",
+    label: "Verificaties",
+    match: "prefix",
+    badge: "verifications",
+  },
+  { href: "/admin/berichten", label: "Berichten", match: "prefix", badge: "messages" },
+  { href: "/admin/gebruikers", label: "Gebruikers", match: "prefix" },
+  { href: "/admin/geschillen", label: "Geschillen", match: "prefix" },
 ];
 
-function linkActive(pathname: string, href: string, match: "exact" | "prefix") {
+function linkActive(pathname: string, href: string, match: MatchMode) {
   if (match === "exact") return pathname === href;
   return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+function NavBadge({
+  count,
+  variant,
+}: {
+  count: number;
+  variant: "default" | "danger";
+}) {
+  if (count <= 0) return null;
+  return (
+    <span
+      className={`ml-2 inline-flex min-w-[1.25rem] justify-center rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
+        variant === "danger"
+          ? "bg-red-500 text-white"
+          : "bg-amber-500 text-black"
+      }`}
+    >
+      {count > 99 ? "99+" : count}
+    </span>
+  );
 }
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -24,6 +59,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const [ready, setReady] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
+  const [counts, setCounts] = useState({
+    bookings: 0,
+    verifications: 0,
+    messages: 0,
+  });
 
   useEffect(() => {
     let cancelled = false;
@@ -53,6 +93,34 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     };
   }, [router]);
 
+  useEffect(() => {
+    if (!ready) return;
+    let cancelled = false;
+    void (async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session?.access_token || cancelled) return;
+      const res = await fetch("/api/admin/stats", {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      if (!res.ok || cancelled) return;
+      const j = (await res.json()) as {
+        pendingBookings?: number;
+        pendingVerifications?: number;
+        flaggedMessages?: number;
+      };
+      setCounts({
+        bookings: j.pendingBookings ?? 0,
+        verifications: j.pendingVerifications ?? 0,
+        messages: j.flaggedMessages ?? 0,
+      });
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [ready, pathname]);
+
   const handleLogout = useCallback(async () => {
     setLoggingOut(true);
     await supabase.auth.signOut();
@@ -81,19 +149,32 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <p className="mt-1 text-xs font-medium text-gray-500">Admin</p>
         </div>
         <nav className="flex flex-1 flex-col gap-0.5 p-3" aria-label="Admin navigatie">
-          {nav.map((item) => {
+          {NAV.map((item) => {
             const active = linkActive(pathname, item.href, item.match);
+            const badgeCount =
+              item.badge === "bookings"
+                ? counts.bookings
+                : item.badge === "verifications"
+                  ? counts.verifications
+                  : item.badge === "messages"
+                    ? counts.messages
+                    : 0;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                className={`flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                   active
                     ? "border-r-2 border-green-500 bg-green-500/10 text-green-400"
                     : "text-gray-400 hover:bg-gray-900 hover:text-white"
                 }`}
               >
-                {item.label}
+                <span className="flex-1">{item.label}</span>
+                {item.badge === "messages" ? (
+                  <NavBadge count={badgeCount} variant="danger" />
+                ) : item.badge ? (
+                  <NavBadge count={badgeCount} variant="default" />
+                ) : null}
               </Link>
             );
           })}
