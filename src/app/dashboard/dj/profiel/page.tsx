@@ -1,39 +1,45 @@
 "use client";
 
 import Link from "next/link";
-import { Loader2 } from "lucide-react";
+import {
+  Briefcase,
+  Gift,
+  GraduationCap,
+  Heart,
+  Home,
+  Loader2,
+  MoreHorizontal,
+  Music,
+  Zap,
+} from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase-browser";
 
 const GENRE_SUGGESTIONS = [
   "House",
-  "Deep House",
-  "Tech House",
-  "Afro House",
   "Techno",
-  "Hardstyle",
-  "Drum and Bass",
-  "Dubstep",
-  "Trance",
+  "Afro House",
+  "Hip-hop",
+  "Top 40",
   "Disco",
-  "Nu Disco",
+  "Latin",
+  "Drum & Bass",
+  "R&B",
+  "Hardstyle",
+  "Trance",
+  "Reggaeton",
   "Funk",
   "Soul",
-  "R&B",
-  "Hip Hop",
-  "Trap",
-  "Afrobeats",
-  "Dancehall",
-  "Reggaeton",
-  "Latin",
+  "Jazz",
   "Pop",
-  "Dance Pop",
-  "80s",
-  "90s",
-  "00s",
-  "Top 40",
-  "Nederlandstalig",
-  "Lounge",
+  "Dance",
+  "EDM",
+  "Dubstep",
+  "Garage",
+  "UK Garage",
+  "Amapiano",
+  "Dancehall",
+  "Afrobeats",
   "Commercial",
   "Oldskool",
 ] as const;
@@ -49,7 +55,15 @@ const OCCASIONS = [
   "Anders",
 ] as const;
 
-const LANGUAGES = ["Nederlands", "Engels", "Frans", "Duits"] as const;
+const LANGUAGES = [
+  "Nederlands",
+  "Engels",
+  "Frans",
+  "Duits",
+  "Spaans",
+  "Italiaans",
+  "Arabisch",
+] as const;
 
 function initialsFromName(name: string) {
   const parts = name
@@ -214,6 +228,7 @@ export default function DjProfielPage() {
         (g) => g.toLowerCase() === q.toLowerCase(),
       ) ?? q;
     setGenres((prev) => {
+      if (prev.length >= 8) return prev;
       const has = prev.some((x) => x.toLowerCase() === canonical.toLowerCase());
       return has ? prev : [...prev, canonical];
     });
@@ -235,6 +250,14 @@ export default function DjProfielPage() {
       .filter((g) => g.toLowerCase().includes(q))
       .slice(0, 10);
   }, [genreQuery, genres]);
+
+  const toggleOccasion = useCallback((o: string) => {
+    setOccasions((prev) => toggleInList(prev, o));
+  }, []);
+
+  const toggleLanguage = useCallback((l: string) => {
+    setLanguages((prev) => toggleInList(prev, l));
+  }, []);
 
   if (loading) {
     return (
@@ -378,14 +401,12 @@ export default function DjProfielPage() {
             </label>
           </div>
 
-          <div className="mt-8 grid gap-8 lg:grid-cols-3">
+          <div className="mt-8 grid gap-8 md:grid-cols-3">
             <fieldset>
-              <legend className="text-sm font-medium text-gray-700 mb-3">
+              <legend className="text-sm font-semibold text-gray-900 mb-1">
                 Genres
               </legend>
-              <p className="mb-3 text-xs text-gray-500">
-                Typ een genre en kies uit suggesties, of voeg je eigen genre toe.
-              </p>
+              <p className="text-xs text-gray-500 mb-3">Kies je muziekstijlen (max. 8)</p>
               <div className="relative">
                 <div className="rounded-2xl border border-gray-200 bg-white px-3 py-2.5 focus-within:border-green-500 focus-within:ring-2 focus-within:ring-green-500/20">
                   <div className="flex flex-wrap gap-2">
@@ -429,7 +450,8 @@ export default function DjProfielPage() {
                         }
                       }}
                       className="min-w-[160px] flex-1 bg-transparent px-2 py-1 text-sm text-gray-900 placeholder-gray-400 outline-none"
-                      placeholder={genres.length ? "Voeg genre toe…" : "Typ een genre…"}
+                      placeholder="Voeg genre toe..."
+                      disabled={genres.length >= 8}
                     />
                   </div>
                 </div>
@@ -441,6 +463,7 @@ export default function DjProfielPage() {
                         key={g}
                         type="button"
                         onClick={() => addGenre(g)}
+                        disabled={genres.length >= 8}
                         className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm text-gray-900 hover:bg-gray-50"
                       >
                         <span>{g}</span>
@@ -450,46 +473,75 @@ export default function DjProfielPage() {
                   </div>
                 ) : null}
               </div>
+              <p className="mt-3 text-xs text-gray-500">Max 8 genres</p>
             </fieldset>
 
             <fieldset>
-              <legend className="text-sm font-medium text-gray-700 mb-3">
+              <legend className="text-sm font-semibold text-gray-900 mb-1">
                 Gelegenheden
               </legend>
-              <div className="space-y-2">
-                {OCCASIONS.map((o) => (
-                  <label key={o} className="flex items-center gap-2 text-sm text-gray-700">
-                    <input
-                      type="checkbox"
-                      checked={occasions.includes(o)}
-                      onChange={() => setOccasions((p) => toggleInList(p, o))}
-                      className="accent-green-500"
-                    />
-                    {o}
-                  </label>
-                ))}
+              <p className="text-xs text-gray-500 mb-3">
+                Voor welke gelegenheden ben je beschikbaar?
+              </p>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {(
+                  [
+                    { value: "Bruiloft", label: "Bruiloft", Icon: Heart },
+                    { value: "Verjaardag", label: "Verjaardag", Icon: Gift },
+                    { value: "Bedrijfsfeest", label: "Bedrijfsfeest", Icon: Briefcase },
+                    { value: "Club & Bar", label: "Club & Bar", Icon: Music },
+                    { value: "Festival", label: "Festival", Icon: Zap },
+                    { value: "Huisfeest", label: "Huisfeest", Icon: Home },
+                    { value: "Afstuderen", label: "Afstuderen", Icon: GraduationCap },
+                    { value: "Anders", label: "Anders", Icon: MoreHorizontal },
+                  ] as const
+                ).map(({ value, label, Icon }) => {
+                  const selected = occasions.includes(value);
+                  return (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => toggleOccasion(value)}
+                      className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all ${
+                        selected
+                          ? "border-green-500 bg-green-50 text-green-700"
+                          : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
+                      }`}
+                    >
+                      <Icon className="h-5 w-5" aria-hidden />
+                      <span className="text-sm font-medium">{label}</span>
+                    </button>
+                  );
+                })}
               </div>
             </fieldset>
 
             <fieldset>
-              <legend className="text-sm font-medium text-gray-700 mb-3">
+              <legend className="text-sm font-semibold text-gray-900 mb-1">
                 Talen
               </legend>
-              <div className="space-y-2">
-                {LANGUAGES.map((l) => (
-                  <label key={l} className="flex items-center gap-2 text-sm text-gray-700">
-                    <input
-                      type="checkbox"
-                      checked={languages.includes(l)}
-                      onChange={() => setLanguages((p) => toggleInList(p, l))}
-                      className="accent-green-500"
-                    />
-                    {l}
-                  </label>
-                ))}
+              <p className="text-xs text-gray-500 mb-3">Welke talen spreek je?</p>
+              <div className="flex flex-wrap gap-2">
+                {LANGUAGES.map((l) => {
+                  const selected = languages.includes(l);
+                  return (
+                    <button
+                      key={l}
+                      type="button"
+                      onClick={() => toggleLanguage(l)}
+                      className={`px-4 py-2 rounded-full border text-sm font-medium transition-all ${
+                        selected
+                          ? "bg-green-500 border-green-500 text-black"
+                          : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
+                      }`}
+                    >
+                      {l}
+                    </button>
+                  );
+                })}
               </div>
               <label className="mt-4 block">
-                <span className="text-sm font-medium text-gray-700 mb-1 block">
+                <span className="text-sm font-semibold text-gray-900 mb-1 block">
                   Extra talen
                 </span>
                 <input
