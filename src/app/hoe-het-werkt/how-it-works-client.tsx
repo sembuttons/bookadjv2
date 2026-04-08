@@ -127,10 +127,6 @@ function StepTimeline({ steps }: { steps: Step[] }) {
     <>
       {/* Desktop: horizontal connector */}
       <div className="relative mt-12 hidden lg:block">
-        <div
-          className="pointer-events-none absolute left-6 right-6 top-10 h-px bg-green-200"
-          aria-hidden
-        />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
           {steps.map((s) => (
             <article
@@ -370,39 +366,6 @@ export function HowItWorksClient() {
                 ) : null}
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Section 4 - annuleringsbeleid */}
-      <section className="mx-auto max-w-7xl bg-gray-50 px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-            Annuleringsbeleid (indicatie)
-          </h2>
-          <p className="mt-3 text-slate-600">
-            Richtlijnen ten opzichte van de datum van je evenement.
-          </p>
-        </div>
-
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          <div className="rounded-2xl border border-green-200 bg-green-50 p-6">
-            <p className="font-bold text-green-800">30+ dagen voor event</p>
-            <p className="mt-2 text-sm text-green-700">
-              Volledige terugbetaling
-            </p>
-          </div>
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6">
-            <p className="font-bold text-amber-400">14–30 dagen</p>
-            <p className="mt-2 text-sm text-amber-900/80">
-              Gedeeltelijke terugbetaling
-            </p>
-          </div>
-          <div className="rounded-2xl border border-red-500/35 bg-red-500/10 p-6">
-            <p className="font-bold text-red-950">Minder dan 14 dagen</p>
-            <p className="mt-2 text-sm text-red-900/80">
-              Geen terugbetaling
-            </p>
           </div>
         </div>
       </section>
