@@ -241,8 +241,11 @@ export function BookingPanel({
         <Link
           href={(() => {
             const base = `/boeken/${encodeURIComponent(djId)}`;
-            if (!eventDate.trim()) return base;
-            return `${base}?${new URLSearchParams({ date: eventDate.trim() }).toString()}`;
+            const q = new URLSearchParams();
+            if (eventDate.trim()) q.set("date", eventDate.trim());
+            if (venueAddress.trim()) q.set("locatie", venueAddress.trim());
+            const qs = q.toString();
+            return qs ? `${base}?${qs}` : base;
           })()}
           className="mt-5 flex w-full items-center justify-center rounded-xl bg-green-500 py-4 text-base font-bold text-black transition-all duration-150 hover:bg-green-400 active:scale-[0.98]"
         >

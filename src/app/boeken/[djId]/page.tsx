@@ -84,7 +84,7 @@ export default function BoekenPage() {
   const [eventDate, setEventDate] = useState("");
   const [hours, setHours] = useState(4);
   const [startTime, setStartTime] = useState("");
-  const [venueAddress, setVenueAddress] = useState("");
+  const [venueAddress, setVenueAddress] = useState(() => searchParams.get("locatie") || "");
   const [travelCost, setTravelCost] = useState(0);
   const [travelDistance, setTravelDistance] = useState(0);
   const [autocomplete, setAutocomplete] =
