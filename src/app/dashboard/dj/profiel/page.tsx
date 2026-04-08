@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { CheckCircle, Circle, Loader2 } from "lucide-react";
+import { Tooltip } from "@/components/Tooltip";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase-browser";
 
@@ -373,8 +374,9 @@ export default function DjProfielPage() {
         <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
           <div className="grid gap-5 md:grid-cols-2">
             <label className="block">
-              <span className="text-sm font-medium text-gray-700 mb-1 block">
+              <span className="mb-1 flex items-center text-sm font-medium text-gray-700">
                 Artiestennaam
+                <Tooltip text="Je publieke naam op bookadj. Gebruik je DJ naam zoals je die op flyers en social media gebruikt. Maximaal 50 tekens." />
               </span>
               <input
                 value={stageName}
@@ -385,8 +387,9 @@ export default function DjProfielPage() {
             </label>
 
             <label className="block">
-              <span className="text-sm font-medium text-gray-700 mb-1 block">
+              <span className="mb-1 flex items-center text-sm font-medium text-gray-700">
                 Stad
+                <Tooltip text="Vul de stad in waar je gevestigd bent. Maximaal 1 stad. Klanten in de buurt vinden jou sneller. Reiskosten worden apart berekend op basis van afstand." />
               </span>
               <input
                 value={homeCity}
@@ -397,8 +400,9 @@ export default function DjProfielPage() {
             </label>
 
             <label className="block md:col-span-2">
-              <span className="text-sm font-medium text-gray-700 mb-1 block">
+              <span className="mb-1 flex items-center text-sm font-medium text-gray-700">
                 Bio
+                <Tooltip text="Vertel klanten wie je bent en wat je doet. Beschrijf je stijl, ervaring en wat jou uniek maakt. Minimaal 50 tekens voor een volledig profiel. Geen telefoonnummers of externe links toevoegen." />
               </span>
               <textarea
                 rows={4}
@@ -410,8 +414,9 @@ export default function DjProfielPage() {
             </label>
 
             <label className="block">
-              <span className="text-sm font-medium text-gray-700 mb-1 block">
+              <span className="mb-1 flex items-center text-sm font-medium text-gray-700">
                 Uurtarief
+                <Tooltip text="Dit is het bedrag dat klanten per uur zien. bookadj rekent 15% platformkosten. Jij ontvangt 85% van het overeengekomen bedrag. Minimaal €50/uur, maximaal €500/uur." />
               </span>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
@@ -448,8 +453,9 @@ export default function DjProfielPage() {
             </label>
 
             <label className="block">
-              <span className="text-sm font-medium text-gray-700 mb-1 block">
+              <span className="mb-1 flex items-center text-sm font-medium text-gray-700">
                 Jaren ervaring
+                <Tooltip text="Hoeveel jaar draai je al professioneel? Vul 0 in als je net begint. Dit wordt getoond als 'Opkomend talent' op je profiel." />
               </span>
               <input
                 type="number"
@@ -471,8 +477,11 @@ export default function DjProfielPage() {
           </div>
 
           <div className="mt-8">
-            <p className="mb-1 text-sm font-semibold text-gray-900">Apparatuur</p>
-            <p className="mb-3 text-xs text-gray-500">
+            <div className="flex items-center">
+              <p className="text-sm font-semibold text-gray-900">Apparatuur</p>
+              <Tooltip text="Welke apparatuur breng je zelf mee? Klanten weten zo wat ze wel en niet extra hoeven te regelen. Vul dit zo volledig mogelijk in." />
+            </div>
+            <p className="mb-3 mt-0.5 text-xs text-gray-500">
               Welke apparatuur breng je zelf mee?
             </p>
             <div className="space-y-2">
@@ -492,9 +501,10 @@ export default function DjProfielPage() {
               ))}
             </div>
             <div className="mt-3">
-              <label className="mb-1.5 block text-xs font-medium text-gray-500">
+              <p className="mb-1.5 flex items-center text-xs font-medium text-gray-500">
                 Andere apparatuur?
-              </label>
+                <Tooltip text="Vul hier extra apparatuur in die niet in de lijst staat, bijvoorbeeld LED wall of rookmachine." />
+              </p>
               <input
                 type="text"
                 value={customEquipment}
@@ -509,7 +519,10 @@ export default function DjProfielPage() {
             {/* GENRES */}
             <div className="flex flex-col gap-3">
               <div>
-                <p className="text-sm font-semibold text-gray-900">Genres</p>
+                <div className="flex items-center">
+                  <p className="text-sm font-semibold text-gray-900">Genres</p>
+                  <Tooltip text="Selecteer alle genres die je speelt. Je kunt meerdere genres kiezen. Klanten zoeken op genre, dus hoe completer hoe beter. Voeg eigen genres toe als ze er niet bij staan." />
+                </div>
                 <p className="mt-0.5 text-xs text-gray-500">
                   Selecteer alle genres die op jou van toepassing zijn.
                 </p>
@@ -536,8 +549,9 @@ export default function DjProfielPage() {
                 </div>
               </div>
               <div>
-                <p className="mb-1.5 text-xs font-medium text-gray-500">
+                <p className="mb-1.5 flex items-center text-xs font-medium text-gray-500">
                   Staat jouw genre er niet bij?
+                  <Tooltip text="Typ je eigen genre en druk op Enter. Scheid meerdere genres met een komma. Bijv: Moombahton, Cumbia, Baile Funk" />
                 </p>
                 <input
                   type="text"
@@ -552,7 +566,10 @@ export default function DjProfielPage() {
             {/* GELEGENHEDEN */}
             <div className="flex flex-col gap-3">
               <div>
-                <p className="text-sm font-semibold text-gray-900">Gelegenheden</p>
+                <div className="flex items-center">
+                  <p className="text-sm font-semibold text-gray-900">Gelegenheden</p>
+                  <Tooltip text="Voor welke type events ben je beschikbaar? Klanten filteren op gelegenheid. Selecteer alles wat van toepassing is op jou." />
+                </div>
                 <p className="mt-0.5 text-xs text-gray-500">
                   Voor welke gelegenheden ben je beschikbaar?
                 </p>
@@ -579,8 +596,9 @@ export default function DjProfielPage() {
                 </div>
               </div>
               <div>
-                <p className="mb-1.5 text-xs font-medium text-gray-500">
+                <p className="mb-1.5 flex items-center text-xs font-medium text-gray-500">
                   Staat jouw gelegenheid er niet bij?
+                  <Tooltip text="Typ je eigen gelegenheid. Bijv: Straatfeest, Modeshoot, Sportgala. Scheid meerdere opties met een komma." />
                 </p>
                 <input
                   type="text"
@@ -595,7 +613,10 @@ export default function DjProfielPage() {
             {/* TALEN */}
             <div className="flex flex-col gap-3">
               <div>
-                <p className="text-sm font-semibold text-gray-900">Talen</p>
+                <div className="flex items-center">
+                  <p className="text-sm font-semibold text-gray-900">Talen</p>
+                  <Tooltip text="Welke talen spreek je tijdens een optreden? Dit helpt klanten die een specifieke taal zoeken, bijvoorbeeld voor een internationale bruiloft." />
+                </div>
                 <p className="mt-0.5 text-xs text-gray-500">Welke talen spreek je?</p>
               </div>
               <div
@@ -620,8 +641,9 @@ export default function DjProfielPage() {
                 </div>
               </div>
               <div>
-                <p className="mb-1.5 text-xs font-medium text-gray-500">
+                <p className="mb-1.5 flex items-center text-xs font-medium text-gray-500">
                   Andere talen?
+                  <Tooltip text="Spreek je nog andere talen die niet in de lijst staan? Typ ze hier in, gescheiden door komma's." />
                 </p>
                 <input
                   type="text"

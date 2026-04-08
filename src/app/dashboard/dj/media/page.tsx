@@ -2,6 +2,7 @@
 
 import { Check, Trash2, UploadCloud } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Tooltip } from "@/components/Tooltip";
 import { supabase } from "@/lib/supabase-browser";
 import { parseVideoEmbed, videoEmbedSrc } from "@/lib/video-embed";
 
@@ -451,7 +452,10 @@ export default function DjMediaPage() {
           Wordt op je profiel getoond zodra beide kloppen (optioneel per link).
         </p>
         <label className="mt-4 block">
-          <span className="text-xs font-semibold uppercase text-gray-500">Instagram</span>
+          <span className="flex items-center text-sm font-medium text-gray-700">
+            Instagram URL
+            <Tooltip text="Link naar je Instagram profiel. Gebruik de volledige URL: https://instagram.com/jouwhandle. Wordt als embed getoond op je profiel." />
+          </span>
           <div className="mt-1.5 flex items-center gap-2">
             <input
               type="url"
@@ -472,7 +476,10 @@ export default function DjMediaPage() {
           </div>
         </label>
         <label className="mt-4 block">
-          <span className="text-xs font-semibold uppercase text-gray-500">SoundCloud</span>
+          <span className="flex items-center text-sm font-medium text-gray-700">
+            Soundcloud URL
+            <Tooltip text="Link naar je Soundcloud profiel of een specifieke mix. Gebruik de volledige URL: https://soundcloud.com/jouwhandle. Wordt als player getoond op je profiel." />
+          </span>
           <div className="mt-1.5 flex items-center gap-2">
             <input
               type="url"
