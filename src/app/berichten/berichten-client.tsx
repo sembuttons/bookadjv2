@@ -376,7 +376,7 @@ export function BerichtenClient({
 
   useEffect(() => {
     threadEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [threadMessages.length, activePartner]);
+  }, [threadMessages]);
 
   const selectConversation = (id: string) => {
     const nid = normalizeUserUuid(id);
@@ -465,17 +465,18 @@ export function BerichtenClient({
   }
 
   return (
-    <div
-      className={`flex min-h-[calc(100vh-8rem)] flex-col bg-white md:flex-row md:rounded-2xl md:border md:border-gray-200 md:shadow-sm ${
-        threadOnly ? "min-h-[60vh] md:min-h-[520px]" : ""
-      }`}
-    >
-      {!threadOnly ? (
-        <div
-          className={`w-80 border-r border-gray-200 bg-white flex flex-col h-full ${
-            mobileThread && activePartner ? "hidden md:flex" : "flex"
-          }`}
-        >
+    <div className="flex-1 overflow-hidden flex">
+      <div
+        className={`flex h-full w-full flex-col overflow-hidden bg-white md:flex-row md:rounded-2xl md:border md:border-gray-200 md:shadow-sm ${
+          threadOnly ? "md:min-h-[520px]" : ""
+        }`}
+      >
+        {!threadOnly ? (
+          <div
+            className={`w-80 border-r border-gray-200 bg-white flex flex-col h-full overflow-hidden ${
+              mobileThread && activePartner ? "hidden md:flex" : "flex"
+            }`}
+          >
           <div className="p-4 border-b border-gray-100">
             <h2 className="font-bold text-gray-900 text-lg">Berichten</h2>
             <p className="text-gray-400 text-xs mt-0.5">
@@ -551,18 +552,18 @@ export function BerichtenClient({
               </div>
             ) : null}
           </div>
-        </div>
-      ) : null}
+          </div>
+        ) : null}
 
-      <div
-        className={`flex-1 flex flex-col h-full bg-gray-50 ${
-          threadOnly
-            ? "flex"
-            : !mobileThread || !activePartner
-              ? "hidden md:flex"
-              : "flex"
-        }`}
-      >
+        <div
+          className={`flex-1 flex flex-col h-full overflow-hidden bg-gray-50 ${
+            threadOnly
+              ? "flex"
+              : !mobileThread || !activePartner
+                ? "hidden md:flex"
+                : "flex"
+          }`}
+        >
         {!activePartner ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 py-16 text-center">
             <IconChatEmpty className="text-gray-400" />
@@ -687,7 +688,7 @@ export function BerichtenClient({
               <div ref={threadEndRef} />
             </div>
 
-            <div className="bg-white border-t border-gray-200 p-4">
+            <div className="bg-white border-t border-gray-200 p-4 flex-shrink-0">
               <p className="text-xs text-gray-400 mb-3 text-center">
                 Deel geen telefoonnummers of betaalverzoeken buiten het platform
               </p>
@@ -734,6 +735,7 @@ export function BerichtenClient({
             </div>
           </>
         )}
+        </div>
       </div>
     </div>
   );

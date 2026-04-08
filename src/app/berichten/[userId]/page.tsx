@@ -28,10 +28,16 @@ export default async function BerichtenThreadPage({ params }: PageProps) {
   return (
     <Suspense
       fallback={
-        <div className="py-16 text-center text-gray-400">Laden…</div>
+        <div className="h-screen overflow-hidden flex flex-col">
+          <div className="flex-1 flex items-center justify-center py-16 text-center text-gray-400">
+            Laden…
+          </div>
+        </div>
       }
     >
-      <BerichtenClient initialPartnerId={decoded} threadOnly />
+      <div className="h-screen overflow-hidden flex flex-col">
+        <BerichtenClient initialPartnerId={decoded} threadOnly />
+      </div>
     </Suspense>
   );
 }
