@@ -1,9 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Loader2,
-} from "lucide-react";
+import { CheckCircle, Circle, Loader2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase-browser";
 
@@ -54,6 +52,17 @@ const OCCASIONS = [
   "Anders",
 ] as const;
 
+const EQUIPMENT_PRESETS = [
+  "Controller",
+  "Pioneer CDJ setup",
+  "Speakers",
+  "Subwoofer",
+  "Lichtshow",
+  "Microfoon",
+  "Mengpaneel",
+  "Laptop",
+] as const;
+
 const LANGUAGES = [
   "Nederlands",
   "Engels",
@@ -102,6 +111,8 @@ export default function DjProfielPage() {
   const [extraLanguages, setExtraLanguages] = useState("");
   const [customGenre, setCustomGenre] = useState("");
   const [customOccasion, setCustomOccasion] = useState("");
+  const [equipment, setEquipment] = useState<string[]>([]);
+  const [customEquipment, setCustomEquipment] = useState("");
 
   const firstPhoto = photos[0] ?? null;
   const displayNameForAvatar = useMemo(() => stageName.trim() || "DJ", [stageName]);
@@ -122,7 +133,7 @@ export default function DjProfielPage() {
     const { data: profile, error: pe } = await supabase
       .from("dj_profiles")
       .select(
-        "id, stage_name, bio, home_city, hourly_rate, years_experience, genres, custom_genres, occasions, custom_occasions, languages, extra_languages, photos",
+        "id, stage_name, bio, home_city, hourly_rate, years_experience, genres, custom_genres, occasions, custom_occasions, languages, extra_languages, photos, equipment, custom_equipment",
       )
       .eq("user_id", session.user.id)
       .maybeSingle();
@@ -167,6 +178,12 @@ export default function DjProfielPage() {
         : "",
     );
     setPhotos(Array.isArray(profile.photos) ? (profile.photos as string[]) : []);
+    setEquipment(normalizeStringArray((profile as { equipment?: unknown }).equipment));
+    setCustomEquipment(
+      typeof (profile as { custom_equipment?: unknown }).custom_equipment === "string"
+        ? (profile as { custom_equipment: string }).custom_equipment
+        : "",
+    );
 
     setLoading(false);
   }, []);
@@ -202,6 +219,8 @@ export default function DjProfielPage() {
       custom_occasions: customOccasion.trim() || null,
       languages,
       extra_languages: extraLanguages.trim() || null,
+      equipment,
+      custom_equipment: customEquipment.trim() || null,
       updated_at: new Date().toISOString(),
     };
 
@@ -220,8 +239,10 @@ export default function DjProfielPage() {
     await load();
   }, [
     bio,
+    customEquipment,
     customGenre,
     customOccasion,
+    equipment,
     extraLanguages,
     genres,
     homeCity,
@@ -244,6 +265,14 @@ export default function DjProfielPage() {
   const toggleLanguage = useCallback((l: string) => {
     setLanguages((prev) => toggleInList(prev, l));
   }, []);
+
+  const toggleEquipment = useCallback((item: string) => {
+    setEquipment((prev) => toggleInList(prev, item));
+  }, []);
+
+  const rateNum = hourlyRate === "" ? 0 : Number(hourlyRate);
+  const platformFee = Math.round(rateNum * 0.15);
+  const netRate = Math.round(rateNum * 0.85);
 
   if (loading) {
     return (
@@ -277,6 +306,39 @@ export default function DjProfielPage() {
           {success}
         </p>
       ) : null}
+
+      <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+        <p className="mb-3 font-semibold text-amber-900">Maak je profiel compleet</p>
+        <div className="space-y-1.5">
+          {[
+            { label: "Artiestennaam", done: !!stageName.trim() },
+            { label: "Bio", done: !!bio.trim() && bio.trim().length > 50 },
+            { label: "Stad", done: !!homeCity.trim() },
+            { label: "Uurtarief", done: hourlyRate !== "" && hourlyRate !== 0 },
+            { label: "Genres", done: genres.length > 0 },
+            { label: "Gelegenheden", done: occasions.length > 0 },
+            { label: "Foto's", done: photos.length > 0 },
+            { label: "Apparatuur", done: equipment.length > 0 },
+          ].map(({ label, done }) => (
+            <div key={label} className="flex items-center gap-2 text-sm">
+              {done ? (
+                <CheckCircle className="h-4 w-4 shrink-0 text-green-500" aria-hidden />
+              ) : (
+                <Circle className="h-4 w-4 shrink-0 text-amber-400" aria-hidden />
+              )}
+              <span
+                className={
+                  done
+                    ? "text-gray-500 line-through"
+                    : "font-medium text-amber-800"
+                }
+              >
+                {label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
 
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
         <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
@@ -367,6 +429,22 @@ export default function DjProfielPage() {
                   min={0}
                 />
               </div>
+              {rateNum > 0 ? (
+                <div className="mt-2 rounded-xl bg-gray-50 p-3 text-sm">
+                  <div className="flex justify-between text-gray-600">
+                    <span>Jouw uurtarief</span>
+                    <span>€{rateNum}/uur</span>
+                  </div>
+                  <div className="mt-1 flex justify-between text-xs text-gray-500">
+                    <span>Platformkosten (15%)</span>
+                    <span>-€{platformFee}/uur</span>
+                  </div>
+                  <div className="mt-2 flex justify-between border-t border-gray-200 pt-2 font-semibold text-green-600">
+                    <span>Jij ontvangt</span>
+                    <span>€{netRate}/uur</span>
+                  </div>
+                </div>
+              ) : null}
             </label>
 
             <label className="block">
@@ -384,7 +462,47 @@ export default function DjProfielPage() {
                 placeholder="5"
                 min={0}
               />
+              {yearsExperience === "" || yearsExperience === 0 ? (
+                <p className="mt-1.5 text-xs text-gray-500">
+                  Opkomend talent — laat leeg of 0 als je net begint.
+                </p>
+              ) : null}
             </label>
+          </div>
+
+          <div className="mt-8">
+            <p className="mb-1 text-sm font-semibold text-gray-900">Apparatuur</p>
+            <p className="mb-3 text-xs text-gray-500">
+              Welke apparatuur breng je zelf mee?
+            </p>
+            <div className="space-y-2">
+              {EQUIPMENT_PRESETS.map((item) => (
+                <label
+                  key={item}
+                  className="flex cursor-pointer items-center gap-3"
+                >
+                  <input
+                    type="checkbox"
+                    checked={equipment.includes(item)}
+                    onChange={() => toggleEquipment(item)}
+                    className="h-5 w-5 rounded accent-green-500"
+                  />
+                  <span className="text-sm text-gray-700">{item}</span>
+                </label>
+              ))}
+            </div>
+            <div className="mt-3">
+              <label className="mb-1.5 block text-xs font-medium text-gray-500">
+                Andere apparatuur?
+              </label>
+              <input
+                type="text"
+                value={customEquipment}
+                onChange={(e) => setCustomEquipment(e.target.value)}
+                placeholder="Bijv. LED wall, rookmachine..."
+                className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
+              />
+            </div>
           </div>
 
           <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8 items-start">

@@ -90,7 +90,9 @@ function djNav(): NavItem[] {
       label: "Mijn profiel",
       href: "/dashboard/dj/profiel",
       icon: User,
-      isActive: (p) => p.startsWith("/dashboard/dj/profiel"),
+      isActive: (p) =>
+        p.startsWith("/dashboard/dj/profiel") ||
+        p.startsWith("/dashboard/dj/profiel-bewerken"),
     },
     {
       key: "media",

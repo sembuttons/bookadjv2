@@ -49,7 +49,7 @@ import { DjProfileFaq } from "./dj-profile-faq";
 import { DjUspGrid, type UspItem } from "./dj-usp-grid";
 import { RelatedDjsCarousel } from "./related-djs-carousel";
 import { MobileStickyBookingBar } from "./mobile-sticky-booking-bar";
-import { DjPhotoSection } from "./dj-photo-section";
+import { DjInstagramPhotoGrid } from "./dj-instagram-photo-grid";
 
 export const dynamic = "force-dynamic";
 
@@ -74,6 +74,16 @@ type PageProps = { params: Promise<{ id: string }> };
 function firstName(full: string) {
   const p = full.trim().split(/\s+/)[0];
   return p || full;
+}
+
+function initialsFromName(name: string) {
+  const parts = name
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase() ?? "");
+  return parts.join("") || "?";
 }
 
 function formatSidebarMemberSince(row: DjProfileRow): string {
@@ -188,7 +198,7 @@ function ArrowLeftLink() {
 export default async function DjProfilePage({ params }: PageProps) {
   const { id } = await params;
 
-  const [profileRes, reviewsRes, ownerRes, relatedRes, availRes] = await Promise.all([
+  const [profileRes, reviewsRes, ownerRes, availRes] = await Promise.all([
     supabase.from("dj_profiles").select("*").eq("id", id).maybeSingle(),
     supabase
       .from("reviews")
@@ -196,13 +206,6 @@ export default async function DjProfilePage({ params }: PageProps) {
       .eq("dj_id", id)
       .order("created_at", { ascending: false }),
     supabaseAdmin.from("dj_profiles").select("user_id").eq("id", id).maybeSingle(),
-    supabase
-      .from("dj_profiles")
-      .select("*")
-      .eq("is_visible", true)
-      .eq("verification_status", "verified")
-      .neq("id", id)
-      .limit(30),
     supabase.from("dj_availability").select("blocked_date").eq("dj_id", id),
   ]);
 
@@ -250,7 +253,30 @@ export default async function DjProfilePage({ params }: PageProps) {
 
   const customUsps = parseCustomUsps(profile);
 
-  const relatedPool = (relatedRes.error ? [] : (relatedRes.data ?? [])) as DjProfileRow[];
+  let relatedPool: DjProfileRow[] = [];
+  if (genres.length > 0) {
+    const genreRes = await supabase
+      .from("dj_profiles")
+      .select("*")
+      .eq("is_visible", true)
+      .eq("verification_status", "verified")
+      .neq("id", id)
+      .contains("genres", [genres[0]])
+      .limit(6);
+    if (!genreRes.error && genreRes.data && genreRes.data.length > 0) {
+      relatedPool = genreRes.data as DjProfileRow[];
+    }
+  }
+  if (relatedPool.length === 0) {
+    const fb = await supabase
+      .from("dj_profiles")
+      .select("*")
+      .eq("is_visible", true)
+      .eq("verification_status", "verified")
+      .neq("id", id)
+      .limit(30);
+    relatedPool = (fb.error ? [] : (fb.data ?? [])) as DjProfileRow[];
+  }
   const relatedDjs = shuffleDjPool(relatedPool).slice(0, 6);
 
   const instagramUrl =
@@ -279,22 +305,35 @@ export default async function DjProfilePage({ params }: PageProps) {
       : [];
   const languagesLabel = [...languages, ...extraLanguages].filter(Boolean).join(", ");
 
-  const equipmentRaw = (profile as any).equipment;
-  const equipmentLabel =
-    typeof equipmentRaw === "string" && equipmentRaw.trim()
-      ? equipmentRaw.trim()
-      : customUsps.length > 0
-        ? customUsps
-            .map((u) => u.title)
-            .filter(Boolean)
-            .slice(0, 2)
-            .join(", ")
-        : "";
-
-  const ervaringLabel = years != null ? `${years} jaar ervaring` : "Ervaren DJ";
+  const equipmentRaw = (profile as Record<string, unknown>).equipment;
+  const equipmentList = Array.isArray(equipmentRaw)
+    ? equipmentRaw.filter((x): x is string => typeof x === "string" && Boolean(x.trim()))
+    : [];
+  const customEquipmentRaw = (profile as Record<string, unknown>).custom_equipment;
+  const customEquipment =
+    typeof customEquipmentRaw === "string" ? customEquipmentRaw.trim() : "";
+  const equipmentParts = [
+    ...equipmentList,
+    ...(customEquipment ? [customEquipment] : []),
+  ];
+  const equipmentFromUsps =
+    customUsps.length > 0
+      ? customUsps
+          .map((u) => u.title)
+          .filter(Boolean)
+          .slice(0, 2)
+          .join(", ")
+      : "";
   const apparatuurLabel =
-    (customUsps?.[0]?.title?.trim() || equipmentLabel || "").trim() ||
-    "Professionele apparatuur";
+    (equipmentParts.length > 0
+      ? equipmentParts.join(", ")
+      : equipmentFromUsps
+    ).trim() || "Professionele apparatuur";
+
+  const experienceLabel =
+    typeof years === "number" && years > 0
+      ? `${years}+ jaar in events & clubs`
+      : "Opkomend talent";
   const talenLabel = (languagesLabel || "").trim() || "Nederlands, Engels";
 
   const instagramHandle = (() => {
@@ -351,12 +390,27 @@ export default async function DjProfilePage({ params }: PageProps) {
       <Navbar />
 
       <div className="mx-auto max-w-[1400px] px-4 pb-16 pt-6 sm:px-6 lg:px-8">
-        <DjPhotoSection photos={photoUrls} name={name} />
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-8 lg:items-start">
           <div className="min-w-0 space-y-14">
             {/* Name + badge + location + genres - all in one block */}
             <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
               <div className="min-w-0 space-y-3">
+                <div className="flex flex-wrap items-start gap-4">
+                  <div className="h-24 w-24 shrink-0 overflow-hidden rounded-full bg-green-50 ring-2 ring-gray-100">
+                    {hasPhotos ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={photoUrls[0]}
+                        alt=""
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-2xl font-black text-green-700">
+                        {initialsFromName(name)}
+                      </div>
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1 space-y-3">
                 {/* Name inline with verified badge */}
                 <div className="flex flex-wrap items-center gap-3">
                   <h1 className="text-2xl font-bold tracking-tight text-slate-900 min-[400px]:text-3xl sm:text-4xl">
@@ -428,6 +482,10 @@ export default async function DjProfilePage({ params }: PageProps) {
                 <p className="mt-4 whitespace-pre-line text-base leading-relaxed text-gray-400">
                   {bio}
                 </p>
+                  </div>
+                </div>
+
+                <DjInstagramPhotoGrid photos={photoUrls} name={name} />
               </div>
 
               {/* Stel een vraag */}
@@ -453,7 +511,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                     <Clock className="h-4 w-4 text-green-600" aria-hidden />
                     Jaren ervaring
                   </p>
-                  <p className="mt-1 text-sm text-gray-500">{ervaringLabel}</p>
+                  <p className="mt-1 text-sm text-gray-500">{experienceLabel}</p>
                 </div>
                 <div className="rounded-2xl border border-gray-200 bg-white p-4">
                   <p className="flex items-center gap-2 text-sm font-semibold text-slate-900">

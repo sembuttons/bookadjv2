@@ -711,7 +711,7 @@ export default function BoekenPage() {
             <div className="mt-4 bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm">
               <div className="flex items-start justify-between gap-3">
                 <p className="font-bold text-gray-900">{djName}</p>
-                <p className="font-bold text-green-600">
+                <p className="font-bold text-gray-900">
                   €{hourlyRate.toLocaleString("nl-NL")}/uur
                 </p>
               </div>

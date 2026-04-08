@@ -77,7 +77,11 @@ function getCustomerName(booking: BookingRow): string {
   const row = Array.isArray(u) ? u[0] : u;
   const name = typeof row?.full_name === "string" ? row.full_name.trim() : "";
   if (name) return name;
-  if (typeof row?.email === "string" && row.email.trim()) return row.email.trim();
+  const em = typeof row?.email === "string" ? row.email.trim() : "";
+  if (em) {
+    const local = em.split("@")[0]?.trim();
+    return local || em;
+  }
   return "Klant";
 }
 
@@ -436,6 +440,16 @@ export default function DjDashboardPage() {
           instagramUrl={onboardingInstagram}
           soundcloudUrl={onboardingSoundcloud}
         />
+      ) : null}
+
+      {djProfileId ? (
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+          <p className="text-sm leading-relaxed text-gray-700">
+            <span className="font-semibold text-gray-900">bookadj</span> rekent
+            15% platformkosten per boeking. Jij ontvangt altijd 85% van het
+            overeengekomen bedrag.
+          </p>
+        </div>
       ) : null}
 
       <section aria-labelledby="nieuwe-aanvragen-heading">

@@ -14,6 +14,7 @@ import {
   type MessageRow,
   type UserPreview,
 } from "@/lib/messaging-utils";
+import { MiniCalendar } from "@/components/messaging/mini-calendar";
 import { Skeleton } from "@/components/skeleton";
 import { supabase } from "@/lib/supabase-browser";
 
@@ -145,6 +146,10 @@ export function BerichtenClient({
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [partnerDjProfileId, setPartnerDjProfileId] = useState<string | null>(
+    null,
+  );
   const threadEndRef = useRef<HTMLDivElement>(null);
   const channelRef = useRef<RealtimeChannel | null>(null);
 
@@ -178,7 +183,10 @@ export function BerichtenClient({
         const u = rows.find((r) => r.id === id);
         const full = u?.full_name?.trim() || "";
         const emailPrefix = u?.email?.split("@")[0]?.trim() || "";
-        const name = stage || full || emailPrefix || "Gebruiker";
+        const isDj = list.some((r) => r.user_id === id);
+        const name = isDj
+          ? stage || full || emailPrefix || "Gebruiker"
+          : full || emailPrefix || "Gebruiker";
         next[id] = name;
       }
       return next;
@@ -354,6 +362,23 @@ export function BerichtenClient({
   }, [allMessages, activePartner, userId]);
 
   useEffect(() => {
+    if (!activePartner) {
+      setPartnerDjProfileId(null);
+      setShowCalendar(false);
+      return;
+    }
+    void (async () => {
+      const { data } = await supabase
+        .from("dj_profiles")
+        .select("id")
+        .eq("user_id", activePartner)
+        .maybeSingle();
+      const row = data as { id?: string } | null;
+      setPartnerDjProfileId(typeof row?.id === "string" ? row.id : null);
+    })();
+  }, [activePartner]);
+
+  useEffect(() => {
     if (!userId || !activePartner) return;
     void (async () => {
       await supabase
@@ -375,7 +400,7 @@ export function BerichtenClient({
   }, [activePartner, userId]);
 
   useEffect(() => {
-    threadEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    threadEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [threadMessages]);
 
   const selectConversation = (id: string) => {
@@ -405,13 +430,7 @@ export function BerichtenClient({
       return;
     }
 
-    console.log("Sending message:", {
-      sender_id: session.user.id,
-      recipient_id: partner,
-      content: text,
-    });
-
-    const { data, error } = await supabase.from("messages").insert({
+    const { error } = await supabase.from("messages").insert({
       sender_id: session.user.id,
       recipient_id: partner,
       content: text,
@@ -419,11 +438,8 @@ export function BerichtenClient({
       created_at: new Date().toISOString(),
     });
 
-    console.log("Insert result:", { data, error });
-
     setSending(false);
     if (error) {
-      console.error("Send error:", error);
       setSendError(error.message);
       return;
     }
@@ -444,11 +460,11 @@ export function BerichtenClient({
   if (loading || !userId) {
     return (
       <div
-        className="flex min-h-[40vh] flex-col gap-4 md:flex-row md:rounded-2xl md:border md:border-gray-800 md:bg-[#111827] md:p-4"
+        className="flex min-h-[40vh] flex-col gap-4 border-t border-gray-200 md:min-h-0 md:flex-row md:rounded-2xl md:border md:border-gray-200 md:shadow-sm"
         aria-busy
         aria-label="Berichten laden"
       >
-        <div className="hidden w-full space-y-3 md:block md:w-[280px] md:shrink-0">
+        <div className="hidden w-full space-y-3 md:block md:w-80 md:flex-none">
           <Skeleton className="h-10 w-full rounded-lg" />
           <Skeleton className="h-10 w-full rounded-lg" />
           {Array.from({ length: 5 }, (_, i) => (
@@ -465,15 +481,11 @@ export function BerichtenClient({
   }
 
   return (
-    <div className="flex-1 overflow-hidden flex">
-      <div
-        className={`flex h-full w-full flex-col overflow-hidden bg-white md:flex-row md:rounded-2xl md:border md:border-gray-200 md:shadow-sm ${
-          threadOnly ? "md:min-h-[520px]" : ""
-        }`}
-      >
+    <div className="flex h-full min-h-0 w-full flex-1 overflow-hidden">
+      <div className="flex h-full min-h-0 w-full flex-col overflow-hidden border-t border-gray-200 bg-white md:flex-row md:rounded-2xl md:border md:border-gray-200 md:shadow-sm">
         {!threadOnly ? (
           <div
-            className={`w-80 border-r border-gray-200 bg-white flex flex-col h-full overflow-hidden ${
+            className={`flex h-full w-80 flex-none flex-col overflow-hidden border-r border-gray-200 bg-white ${
               mobileThread && activePartner ? "hidden md:flex" : "flex"
             }`}
           >
@@ -499,7 +511,7 @@ export function BerichtenClient({
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto">
+          <div className="min-h-0 flex-1 overflow-y-auto">
             {conversations.map(({ partnerId, last, name }) => {
               const unreadCount = allMessages.filter(
                 (m) =>
@@ -556,7 +568,7 @@ export function BerichtenClient({
         ) : null}
 
         <div
-          className={`flex-1 flex flex-col h-full overflow-hidden bg-gray-50 ${
+          className={`flex min-h-0 flex-1 flex-col overflow-hidden bg-gray-50 ${
             threadOnly
               ? "flex"
               : !mobileThread || !activePartner
@@ -581,42 +593,81 @@ export function BerichtenClient({
           </div>
         ) : (
           <>
-            <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3">
+            <div className="relative flex shrink-0 items-center gap-3 border-b border-gray-200 bg-white px-4 py-3">
               <button
                 type="button"
-                className="md:hidden p-1 -ml-1 rounded-lg hover:bg-gray-100"
+                className="-ml-1 rounded-lg p-1 hover:bg-gray-100 md:hidden"
                 onClick={() => setActivePartner(null)}
                 aria-label="Terug"
               >
-                <ChevronLeft className="w-5 h-5 text-gray-600" aria-hidden />
+                <ChevronLeft className="h-5 w-5 text-gray-600" aria-hidden />
               </button>
 
-              <div className="relative">
-                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center font-bold text-green-700 text-sm">
-                  {initials(partnerName(activePartner))}
-                </div>
-                <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white" />
-              </div>
-
-              <div className="flex-1">
-                <p className="font-semibold text-gray-900 text-sm">
-                  {partnerName(activePartner)}
-                </p>
-                <p className="text-green-500 text-xs">Online</p>
-              </div>
-
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  className="p-2 rounded-xl hover:bg-gray-100 text-gray-500 hover:text-gray-700 transition-colors"
-                  title="Boeking bekijken"
+              {partnerDjProfileId ? (
+                <Link
+                  href={`/dj/${partnerDjProfileId}`}
+                  className="flex min-w-0 flex-1 items-center gap-3 rounded-xl pr-2 hover:opacity-80"
                 >
-                  <Calendar className="w-4 h-4" aria-hidden />
-                </button>
+                  <div className="relative shrink-0">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-sm font-bold text-green-700">
+                      {initials(partnerName(activePartner))}
+                    </div>
+                    <div className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-green-500" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-gray-900">
+                      {partnerName(activePartner)}
+                    </p>
+                    <p className="text-xs text-green-500">Online</p>
+                  </div>
+                </Link>
+              ) : (
+                <>
+                  <div className="relative shrink-0">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-sm font-bold text-green-700">
+                      {initials(partnerName(activePartner))}
+                    </div>
+                    <div className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-green-500" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-gray-900">
+                      {partnerName(activePartner)}
+                    </p>
+                    <p className="text-xs text-green-500">Online</p>
+                  </div>
+                </>
+              )}
+
+              <div className="relative shrink-0">
+                {partnerDjProfileId ? (
+                  <button
+                    type="button"
+                    onClick={() => setShowCalendar((v) => !v)}
+                    className="rounded-xl p-2 text-gray-500 hover:bg-gray-100"
+                    title="Beschikbaarheid bekijken"
+                  >
+                    <Calendar className="h-4 w-4" aria-hidden />
+                  </button>
+                ) : null}
+                {showCalendar && partnerDjProfileId ? (
+                  <div className="absolute right-0 top-12 z-50 w-72 rounded-2xl border border-gray-200 bg-white p-4 shadow-xl">
+                    <p className="mb-3 text-sm font-semibold text-gray-900">
+                      Beschikbaarheid {partnerName(activePartner)}
+                    </p>
+                    <MiniCalendar djProfileId={partnerDjProfileId} />
+                    <button
+                      type="button"
+                      onClick={() => setShowCalendar(false)}
+                      className="mt-3 w-full text-center text-xs text-gray-400 hover:text-gray-600"
+                    >
+                      Sluiten
+                    </button>
+                  </div>
+                ) : null}
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-4">
               {threadMessages.map((msg, i) => {
                 const isMine = msg.sender_id === userId;
                 const prev = threadMessages[i - 1];
@@ -688,7 +739,7 @@ export function BerichtenClient({
               <div ref={threadEndRef} />
             </div>
 
-            <div className="bg-white border-t border-gray-200 p-4 flex-shrink-0">
+            <div className="shrink-0 border-t border-gray-200 bg-white p-4">
               <p className="text-xs text-gray-400 mb-3 text-center">
                 Deel geen telefoonnummers of betaalverzoeken buiten het platform
               </p>
@@ -709,11 +760,21 @@ export function BerichtenClient({
                         e.preventDefault();
                         e.stopPropagation();
                         void sendMessage();
+                        return false;
                       }
                     }}
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }
+                    }}
+                    autoComplete="off"
+                    autoCorrect="on"
+                    spellCheck
                     placeholder="Typ een bericht... (Enter om te sturen)"
                     rows={1}
-                    className="w-full bg-transparent text-sm text-gray-900 placeholder-gray-400 resize-none focus:outline-none max-h-32 overflow-y-auto"
+                    className="max-h-32 w-full resize-none overflow-y-auto bg-transparent text-sm text-gray-900 placeholder-gray-400 focus:outline-none"
                     style={{ minHeight: "24px" }}
                   />
                 </div>
