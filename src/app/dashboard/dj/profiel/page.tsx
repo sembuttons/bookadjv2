@@ -387,13 +387,14 @@ export default function DjProfielPage() {
             </label>
           </div>
 
-          <div className="mt-8 grid gap-8 md:grid-cols-3">
-            <fieldset>
-              <legend className="text-sm font-semibold text-gray-900 mb-1">Genres</legend>
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+            {/* Genres column */}
+            <div className="flex flex-col">
+              <p className="text-sm font-semibold text-gray-900 mb-1">Genres</p>
               <p className="text-xs text-gray-500 mb-3">
                 Selecteer alle genres die op jou van toepassing zijn.
               </p>
-              <div className="space-y-2 max-h-40 overflow-y-auto border border-gray-200 rounded-2xl p-3">
+              <div className="flex-1 border border-gray-200 rounded-2xl p-3 max-h-52 overflow-y-auto space-y-2">
                 {GENRES.map((g) => (
                   <label key={g} className="flex items-center gap-2 text-sm text-gray-700">
                     <input
@@ -407,7 +408,7 @@ export default function DjProfielPage() {
                 ))}
               </div>
               <div className="mt-3">
-                <label className="text-xs font-medium text-gray-500 mb-1 block">
+                <label className="text-xs font-medium text-gray-500 mb-1.5 block">
                   Staat jouw genre er niet bij?
                 </label>
                 <input
@@ -417,18 +418,16 @@ export default function DjProfielPage() {
                   placeholder="Bijv. Moombahton, Afrobeats..."
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
                 />
-                <p className="text-xs text-gray-400 mt-1">
-                  Meerdere genres? Scheid ze met een komma.
-                </p>
               </div>
-            </fieldset>
+            </div>
 
-            <fieldset>
-              <legend className="text-sm font-semibold text-gray-900 mb-1">Gelegenheden</legend>
+            {/* Occasions column */}
+            <div className="flex flex-col">
+              <p className="text-sm font-semibold text-gray-900 mb-1">Gelegenheden</p>
               <p className="text-xs text-gray-500 mb-3">
                 Voor welke gelegenheden ben je beschikbaar?
               </p>
-              <div className="space-y-2 max-h-40 overflow-y-auto border border-gray-200 rounded-2xl p-3">
+              <div className="flex-1 border border-gray-200 rounded-2xl p-3 max-h-52 overflow-y-auto space-y-2">
                 {OCCASIONS.map((o) => (
                   <label key={o} className="flex items-center gap-2 text-sm text-gray-700">
                     <input
@@ -442,7 +441,7 @@ export default function DjProfielPage() {
                 ))}
               </div>
               <div className="mt-3">
-                <label className="text-xs font-medium text-gray-500 mb-1 block">
+                <label className="text-xs font-medium text-gray-500 mb-1.5 block">
                   Staat jouw gelegenheid er niet bij?
                 </label>
                 <input
@@ -453,14 +452,13 @@ export default function DjProfielPage() {
                   className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
-            </fieldset>
+            </div>
 
-            <fieldset>
-              <legend className="text-sm font-semibold text-gray-900 mb-1">
-                Talen
-              </legend>
+            {/* Languages column */}
+            <div className="flex flex-col">
+              <p className="text-sm font-semibold text-gray-900 mb-1">Talen</p>
               <p className="text-xs text-gray-500 mb-3">Welke talen spreek je?</p>
-              <div className="space-y-2 border border-gray-200 rounded-2xl p-3">
+              <div className="flex-1 border border-gray-200 rounded-2xl p-3 space-y-2">
                 {LANGUAGES.map((l) => (
                   <label key={l} className="flex items-center gap-2 text-sm text-gray-700">
                     <input
@@ -473,18 +471,19 @@ export default function DjProfielPage() {
                   </label>
                 ))}
               </div>
-              <label className="mt-4 block">
-                <span className="text-sm font-semibold text-gray-900 mb-1 block">
-                  Extra talen
-                </span>
+              <div className="mt-3">
+                <label className="text-xs font-medium text-gray-500 mb-1.5 block">
+                  Andere talen?
+                </label>
                 <input
+                  type="text"
                   value={extraLanguages}
                   onChange={(e) => setExtraLanguages(e.target.value)}
-                  className="border border-gray-200 rounded-xl px-4 py-3 text-gray-900 w-full focus:border-green-500 focus:ring-2 focus:ring-green-500/20 focus:outline-none"
-                  placeholder="Bijv. Spaans, Italiaans…"
+                  placeholder="Bijv. Spaans, Italiaans..."
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
                 />
-              </label>
-            </fieldset>
+              </div>
+            </div>
           </div>
 
           <div className="mt-8 flex justify-end">
