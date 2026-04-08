@@ -20,6 +20,8 @@ type Props = {
   responseTimeLabel?: string;
   memberSinceLabel?: string;
   blockedIsoDates?: readonly string[];
+  /** Hide "Stel een vraag" when shown in page header */
+  hideContactButton?: boolean;
 };
 
 function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number) {
@@ -46,6 +48,7 @@ export function BookingPanel({
   responseTimeLabel = "Binnen 2 uur",
   memberSinceLabel = "-",
   blockedIsoDates,
+  hideContactButton = false,
 }: Props) {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY ?? "",
@@ -251,13 +254,15 @@ export function BookingPanel({
         >
           Boeking aanvragen
         </Link>
-        <StelVraagButton
-          djUserId={djUserId ?? undefined}
-          djProfileId={djId}
-          className="btn-secondary mt-3 flex min-h-[44px] w-full items-center justify-center py-3 text-sm"
-        >
-          {contactButtonLabel}
-        </StelVraagButton>
+        {hideContactButton ? null : (
+          <StelVraagButton
+            djUserId={djUserId ?? undefined}
+            djProfileId={djId}
+            className="btn-secondary mt-3 flex min-h-[44px] w-full items-center justify-center py-3 text-sm"
+          >
+            {contactButtonLabel}
+          </StelVraagButton>
+        )}
         </div>
       </div>
 

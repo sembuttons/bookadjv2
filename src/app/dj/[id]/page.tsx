@@ -1,22 +1,18 @@
 import Link from "next/link";
 import {
   BadgeCheck,
+  Calendar,
+  Check,
   CheckCircle2,
   CircleDollarSign,
   Clock,
-  Lock,
-  Headset,
   Headphones,
   LayoutDashboard,
   Languages,
   MapPin,
-  Music,
   Music2,
-  NotebookPen,
-  SlidersHorizontal,
-  Speech,
-  Star as StarIcon,
   Play,
+  Star,
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { notFound } from "next/navigation";
@@ -39,7 +35,6 @@ import {
   type ReviewRow,
   starDistribution,
 } from "@/lib/dj-profile-helpers";
-import { videoEmbedSrc } from "@/lib/video-embed";
 import { StelVraagButton } from "@/components/messaging/stel-vraag-button";
 import { supabase } from "@/lib/supabase";
 import { supabaseAdmin } from "@/lib/supabase-server";
@@ -49,7 +44,8 @@ import { DjProfileFaq } from "./dj-profile-faq";
 import { DjUspGrid, type UspItem } from "./dj-usp-grid";
 import { RelatedDjsCarousel } from "./related-djs-carousel";
 import { MobileStickyBookingBar } from "./mobile-sticky-booking-bar";
-import { DjInstagramPhotoGrid } from "./dj-instagram-photo-grid";
+import { DjPhotoSection } from "./dj-photo-section";
+import { DjProfilePhotoGallery } from "./dj-profile-photo-gallery";
 
 export const dynamic = "force-dynamic";
 
@@ -303,7 +299,23 @@ export default async function DjProfilePage({ params }: PageProps) {
           .map((s) => s.trim())
           .filter(Boolean)
       : [];
-  const languagesLabel = [...languages, ...extraLanguages].filter(Boolean).join(", ");
+  const languagesForStats = [...languages, ...extraLanguages].filter(Boolean);
+
+  const occasionsRaw = (profile as { occasions?: unknown }).occasions;
+  const occasionsSelected = Array.isArray(occasionsRaw)
+    ? (occasionsRaw as unknown[]).filter(
+        (x): x is string => typeof x === "string" && Boolean(x.trim()),
+      )
+    : [];
+  const customOccasionsRaw = (profile as { custom_occasions?: unknown }).custom_occasions;
+  const customOccasionsParsed =
+    typeof customOccasionsRaw === "string"
+      ? customOccasionsRaw
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : [];
+  const occasionsForStats = [...occasionsSelected, ...customOccasionsParsed];
 
   const equipmentRaw = (profile as Record<string, unknown>).equipment;
   const equipmentList = Array.isArray(equipmentRaw)
@@ -316,25 +328,11 @@ export default async function DjProfilePage({ params }: PageProps) {
     ...equipmentList,
     ...(customEquipment ? [customEquipment] : []),
   ];
-  const equipmentFromUsps =
-    customUsps.length > 0
-      ? customUsps
-          .map((u) => u.title)
-          .filter(Boolean)
-          .slice(0, 2)
-          .join(", ")
-      : "";
-  const apparatuurLabel =
-    (equipmentParts.length > 0
-      ? equipmentParts.join(", ")
-      : equipmentFromUsps
-    ).trim() || "Professionele apparatuur";
-
-  const experienceLabel =
-    typeof years === "number" && years > 0
-      ? `${years}+ jaar in events & clubs`
-      : "Opkomend talent";
-  const talenLabel = (languagesLabel || "").trim() || "Nederlands, Engels";
+  const equipmentFromUspsTitles = customUsps
+    .map((u) => u.title)
+    .filter((t): t is string => Boolean(t?.trim()));
+  const equipmentForStats =
+    equipmentParts.length > 0 ? equipmentParts : equipmentFromUspsTitles;
 
   const instagramHandle = (() => {
     if (!instagramUrl) return "";
@@ -382,162 +380,177 @@ export default async function DjProfilePage({ params }: PageProps) {
     }
   })();
   const hasYouTubeVideo = Boolean(youtubeId);
-  const hasAnyMedia =
-    hasPhotos || Boolean(instagramUrl) || Boolean(soundcloudUrl) || hasYouTubeVideo;
 
   return (
     <div className="min-h-screen bg-[#f8fafc] font-sans text-slate-900">
       <Navbar />
 
+      <DjPhotoSection photos={photoUrls} name={name} />
+
       <div className="mx-auto max-w-[1400px] px-4 pb-16 pt-6 sm:px-6 lg:px-8">
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-8 lg:items-start">
-          <div className="min-w-0 space-y-14">
-            {/* Name + badge + location + genres - all in one block */}
-            <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-              <div className="min-w-0 space-y-3">
-                <div className="flex flex-wrap items-start gap-4">
-                  <div className="h-24 w-24 shrink-0 overflow-hidden rounded-full bg-green-50 ring-2 ring-gray-100">
-                    {hasPhotos ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={photoUrls[0]}
-                        alt=""
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-2xl font-black text-green-700">
-                        {initialsFromName(name)}
-                      </div>
-                    )}
-                  </div>
-                  <div className="min-w-0 flex-1 space-y-3">
-                {/* Name inline with verified badge */}
-                <div className="flex flex-wrap items-center gap-3">
-                  <h1 className="text-2xl font-bold tracking-tight text-slate-900 min-[400px]:text-3xl sm:text-4xl">
-                    {name}
-                  </h1>
-                  {isVerifiedProfile(profile) ? (
-                    <div className="inline-flex items-center gap-1.5 rounded-full bg-green-500 px-3 py-1 text-xs font-bold uppercase tracking-wide text-black shadow-sm">
-                      <svg
-                        className="h-3.5 w-3.5 shrink-0"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        aria-hidden
-                      >
-                        <path
-                          d="M5 10l3 3 7-7"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                      Geverifieerde DJ
-                    </div>
-                  ) : null}
-                  {totalReviews > 5 ? (
-                    <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-400 ring-1 ring-amber-200">
-                      Veel geboekt
-                    </div>
-                  ) : null}
+        <div className="mt-6 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+          <div className="flex min-w-0 items-start gap-4">
+            <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md">
+              {hasPhotos ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={photoUrls[0]}
+                  alt=""
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-green-100 text-2xl font-black text-green-700">
+                  {initialsFromName(name)}
                 </div>
-
-                {/* Rating directly under name */}
-                <div className="flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-900">
-                  <span className="flex items-center gap-0.5" aria-hidden>
-                    {Array.from({ length: 5 }, (_, i) => (
-                      <StarIcon
-                        key={i}
-                        className={`h-4 w-4 ${i < Math.round(displayRating) ? "text-amber-400 fill-amber-400" : "text-gray-200 fill-gray-200"}`}
-                      />
-                    ))}
+              )}
+            </div>
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-2xl font-black tracking-tight text-gray-900">
+                  {name}
+                </h1>
+                {isVerifiedProfile(profile) ? (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-green-500 px-2.5 py-1 text-xs font-bold text-black">
+                    <Check className="h-3 w-3 shrink-0" aria-hidden />
+                    Geverifieerde DJ
                   </span>
-                  <span>{displayRating.toFixed(1)}</span>
-                  <span className="text-gray-500 text-sm">
-                    · {totalReviews} beoordelingen
-                  </span>
-                </div>
-
-                {/* Location */}
-                <div className="flex items-center gap-1 text-sm text-gray-500">
-                  <MapPin className="h-4 w-4 text-gray-400" aria-hidden />
-                  <span>{city}</span>
-                </div>
-
-                {/* Genres */}
-                {genres.length > 0 ? (
-                  <div className="flex flex-wrap gap-2">
-                    {genres.map((g) => (
-                      <span
-                        key={g}
-                        className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-medium text-green-700"
-                      >
-                        {g}
-                      </span>
-                    ))}
+                ) : null}
+                {totalReviews > 5 ? (
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-600 ring-1 ring-amber-200">
+                    Veel geboekt
                   </div>
                 ) : null}
-
-                {/* Bio - directly under genres */}
-                <p className="mt-4 whitespace-pre-line text-base leading-relaxed text-gray-400">
-                  {bio}
-                </p>
-                  </div>
+              </div>
+              <div className="mt-1 flex flex-wrap items-center gap-2">
+                <div className="flex gap-0.5" aria-hidden>
+                  {Array.from({ length: 5 }, (_, i) => (
+                    <Star
+                      key={i}
+                      className={`h-4 w-4 ${i < Math.round(displayRating) ? "fill-amber-400 text-amber-400" : "fill-gray-200 text-gray-200"}`}
+                    />
+                  ))}
                 </div>
-
-                <DjInstagramPhotoGrid photos={photoUrls} name={name} />
+                <span className="text-sm font-semibold text-gray-900">
+                  {displayRating.toFixed(1)}
+                </span>
+                <span className="text-sm text-gray-400">
+                  {totalReviews === 0
+                    ? "Nog geen reviews"
+                    : `${totalReviews} ${totalReviews === 1 ? "review" : "reviews"}`}
+                </span>
               </div>
-
-              {/* Stel een vraag */}
-              <div className="flex w-full shrink-0 flex-col gap-1 sm:w-auto sm:items-end">
-                <StelVraagButton
-                  djUserId={djUserId || undefined}
-                  djProfileId={id}
-                  className="w-full min-h-[44px] rounded-xl bg-gradient-to-r from-green-500 to-green-400 px-6 py-3 text-center text-sm font-bold text-black transition-all duration-150 hover:from-green-400 hover:to-green-300 active:scale-[0.98] sm:w-auto"
-                >
-                  Stel {fn} een vraag
-                </StelVraagButton>
-                <p className="text-xs text-gray-500 sm:text-right">
-                  Gemiddelde reactietijd: {avgResponseHoursText(profile)}
-                </p>
+              <div className="mt-1.5 flex items-center gap-1.5 text-sm text-gray-500">
+                <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                <span>{city}</span>
               </div>
+              {genres.length > 0 ? (
+                <div className="mt-2.5 flex flex-wrap gap-1.5">
+                  {genres.map((g) => (
+                    <span
+                      key={g}
+                      className="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600"
+                    >
+                      {g}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
             </div>
+          </div>
+          <div className="flex flex-none flex-col items-start gap-1 lg:items-end">
+            <StelVraagButton
+              djUserId={djUserId || undefined}
+              djProfileId={id}
+              className="w-full min-h-[44px] rounded-xl bg-gradient-to-r from-green-500 to-green-400 px-6 py-3 text-center text-sm font-bold text-black transition-all duration-150 hover:from-green-400 hover:to-green-300 active:scale-[0.98] lg:w-auto"
+            >
+              Stel {fn} een vraag
+            </StelVraagButton>
+            <p className="text-xs text-gray-400 lg:text-right">
+              Reageert binnen {avgResponseHoursText(profile)}
+            </p>
+          </div>
+        </div>
 
-            {/* 3 info-pills */}
-            <section aria-label="DJ details">
-              <div className="grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl border border-gray-200 bg-white p-4">
-                  <p className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                    <Clock className="h-4 w-4 text-green-600" aria-hidden />
-                    Jaren ervaring
-                  </p>
-                  <p className="mt-1 text-sm text-gray-500">{experienceLabel}</p>
-                </div>
-                <div className="rounded-2xl border border-gray-200 bg-white p-4">
-                  <p className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                    <Music2 className="h-4 w-4 text-green-600" aria-hidden />
-                    Apparatuur
-                  </p>
-                  <p className="mt-1 text-sm text-gray-500">{apparatuurLabel}</p>
-                </div>
-                <div className="rounded-2xl border border-gray-200 bg-white p-4">
-                  <p className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                    <Languages className="h-4 w-4 text-green-600" aria-hidden />
-                    Taal
-                  </p>
-                  <p className="mt-1 text-sm text-gray-500">{talenLabel}</p>
-                </div>
-              </div>
+        <div className="mt-5 flex flex-wrap gap-x-6 gap-y-3 border-t border-b border-gray-100 py-4">
+          {typeof years === "number" && years > 0 ? (
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <Clock className="h-4 w-4 shrink-0 text-green-500" aria-hidden />
+              <span>{years}+ jaar ervaring</span>
+            </div>
+          ) : null}
+          {languagesForStats.length > 0 ? (
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <Languages className="h-4 w-4 shrink-0 text-green-500" aria-hidden />
+              <span>{languagesForStats.join(", ")}</span>
+            </div>
+          ) : null}
+          {equipmentForStats.length > 0 ? (
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <Music2 className="h-4 w-4 shrink-0 text-green-500" aria-hidden />
+              <span>
+                {equipmentForStats.slice(0, 3).join(", ")}
+                {equipmentForStats.length > 3
+                  ? ` +${equipmentForStats.length - 3}`
+                  : ""}
+              </span>
+            </div>
+          ) : null}
+          {occasionsForStats.length > 0 ? (
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <Calendar className="h-4 w-4 shrink-0 text-green-500" aria-hidden />
+              <span>
+                {occasionsForStats.slice(0, 3).join(", ")}
+                {occasionsForStats.length > 3
+                  ? ` +${occasionsForStats.length - 3}`
+                  : ""}
+              </span>
+            </div>
+          ) : null}
+        </div>
+
+        <div className="mt-6 grid grid-cols-1 gap-10 lg:grid-cols-[1fr_360px] lg:items-start">
+          <div className="min-w-0 space-y-10">
+            <section>
+              <h2 className="mb-3 text-lg font-bold text-gray-900">Over {fn}</h2>
+              <p className="whitespace-pre-line leading-relaxed text-gray-600">{bio}</p>
             </section>
 
-            {/* DJ in actie - only when video exists */}
+            <div id="booking-panel-anchor" className="lg:hidden">
+              <BookingPanel
+                djId={id}
+                djUserId={djUserId || null}
+                hourlyRate={hourly}
+                homeLat={
+                  typeof profile.home_lat === "number" ? profile.home_lat : null
+                }
+                homeLng={
+                  typeof profile.home_lng === "number" ? profile.home_lng : null
+                }
+                ratePerKm={
+                  typeof profile.rate_per_km === "number"
+                    ? profile.rate_per_km
+                    : null
+                }
+                contactButtonLabel={`Stel ${fn} een vraag`}
+                responseTimeLabel={metaResponse(profile)}
+                memberSinceLabel={formatSidebarMemberSince(profile)}
+                blockedIsoDates={blockedIsoDates}
+                hideContactButton
+              />
+            </div>
+
+            {hasPhotos ? (
+              <section>
+                <h2 className="mb-3 text-lg font-bold text-gray-900">Foto&apos;s</h2>
+                <DjProfilePhotoGallery photos={photoUrls} name={name} />
+              </section>
+            ) : null}
+
             {hasYouTubeVideo ? (
               <section id="dj-video" className="scroll-mt-24" aria-label="DJ in actie">
                 <div className="flex items-center gap-2">
                   <Play className="h-5 w-5 text-green-600" aria-hidden />
-                  <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">
-                    DJ in actie
-                  </h2>
+                  <h2 className="text-lg font-bold text-gray-900">DJ in actie</h2>
                 </div>
 
                 <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-black shadow-sm">
@@ -546,7 +559,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                     src={`https://www.youtube.com/embed/${encodeURIComponent(
                       youtubeId,
                     )}`}
-                    className="w-full aspect-video rounded-2xl"
+                    className="aspect-video w-full rounded-2xl"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   />
@@ -554,12 +567,9 @@ export default async function DjProfilePage({ params }: PageProps) {
               </section>
             ) : null}
 
-            {/* Muziek & Instagram */}
             {soundcloudUrl || instagramUrl ? (
               <section aria-label="Muziek en Instagram">
-                <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">
-                  Muziek &amp; Instagram
-                </h2>
+                <h2 className="text-lg font-bold text-gray-900">Muziek &amp; Instagram</h2>
                 <div
                   className={`mt-4 grid gap-6 ${
                     soundcloudUrl && instagramUrl ? "lg:grid-cols-[3fr_2fr]" : "grid-cols-1"
@@ -586,9 +596,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                     <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-pink-50 via-purple-50 to-amber-50 p-5 shadow-sm">
                       <div className="flex items-start justify-between gap-4">
                         <div className="min-w-0">
-                          <p className="text-sm font-bold text-slate-900">
-                            Instagram
-                          </p>
+                          <p className="text-sm font-bold text-slate-900">Instagram</p>
                           <p className="mt-1 truncate text-sm text-slate-600">
                             {instagramHandle || instagramUrl}
                           </p>
@@ -614,77 +622,11 @@ export default async function DjProfilePage({ params }: PageProps) {
               </section>
             ) : null}
 
-            {/* Waarom bookadj */}
-            <section aria-label="Waarom bookadj">
-              <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">
-                Waarom bookadj
-              </h2>
-              <ul className="mt-4 grid gap-4 sm:grid-cols-2">
-                {[
-                  {
-                    Icon: Lock,
-                    title: "Veilige betaling",
-                    text: "Betaal via het platform met betalingsbescherming.",
-                  },
-                  {
-                    Icon: CheckCircle2,
-                    title: "Geverifieerde DJ's",
-                    text: "DJ-profielen worden gecontroleerd voordat ze live gaan.",
-                  },
-                  {
-                    Icon: Headset,
-                    title: "Klantenservice",
-                    text: "Hulp bij vragen, wijzigingen en eventuele problemen.",
-                  },
-                  {
-                    Icon: BadgeCheck,
-                    title: "Alles op één plek",
-                    text: "Berichten en afspraken overzichtelijk in je account.",
-                  },
-                ].map(({ Icon, title, text }) => (
-                  <li key={title} className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-                    <p className="flex items-center gap-2 text-sm font-bold text-slate-900">
-                      <Icon className="h-4 w-4 text-green-600" aria-hidden />
-                      {title}
-                    </p>
-                    <p className="mt-1 text-sm text-slate-600">{text}</p>
-                  </li>
-                ))}
-              </ul>
-            </section>
-
-            {/* Booking panel - mobile placement (after bio) */}
-            <div id="booking-panel-anchor" className="lg:hidden">
-              <BookingPanel
-                djId={id}
-                djUserId={djUserId || null}
-                hourlyRate={hourly}
-                homeLat={
-                  typeof profile.home_lat === "number" ? profile.home_lat : null
-                }
-                homeLng={
-                  typeof profile.home_lng === "number" ? profile.home_lng : null
-                }
-                ratePerKm={
-                  typeof profile.rate_per_km === "number"
-                    ? profile.rate_per_km
-                    : null
-                }
-                contactButtonLabel={`Stel ${fn} een vraag`}
-                responseTimeLabel={metaResponse(profile)}
-                memberSinceLabel={formatSidebarMemberSince(profile)}
-                blockedIsoDates={blockedIsoDates}
-              />
-            </div>
-
             <DjUspGrid stageName={displayForBio} items={customUsps} />
 
             {reviews.length > 0 ? (
               <section aria-labelledby="reviews-heading">
-                <h2
-                  id="reviews-heading"
-                  className="text-xl font-bold text-slate-900 sm:text-2xl"
-                >
+                <h2 id="reviews-heading" className="text-lg font-bold text-gray-900">
                   Reviews
                 </h2>
                 <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-start">
@@ -759,14 +701,12 @@ export default async function DjProfilePage({ params }: PageProps) {
               <section aria-label="Reviews">
                 <div className="rounded-2xl border border-gray-100 bg-gray-50 p-8 text-center">
                   <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-50">
-                    <StarIcon className="h-6 w-6 text-green-600" aria-hidden />
+                    <Star className="h-6 w-6 fill-green-600 text-green-600" aria-hidden />
                   </div>
-                  <p className="mb-2 font-semibold text-gray-900">
-                    Nog geen reviews
-                  </p>
+                  <p className="mb-2 font-semibold text-gray-900">Nog geen reviews</p>
                   <p className="mx-auto max-w-xs text-sm text-gray-500">
-                    Deze DJ is nieuw op bookadj. Wees de eerste die een boeking
-                    plaatst en een review achterlaat.
+                    Deze DJ is nieuw op bookadj. Wees de eerste die een boeking plaatst en een
+                    review achterlaat.
                   </p>
                   <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-3 py-1.5 text-xs font-medium text-green-700">
                     <CheckCircle2 className="h-4 w-4" aria-hidden />
@@ -777,10 +717,7 @@ export default async function DjProfilePage({ params }: PageProps) {
             )}
 
             <section aria-labelledby="trust-heading">
-              <h2
-                id="trust-heading"
-                className="text-xl font-bold text-slate-900 sm:text-2xl"
-              >
+              <h2 id="trust-heading" className="text-lg font-bold text-gray-900">
                 Waarom bookadj
               </h2>
               <ul className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -842,6 +779,7 @@ export default async function DjProfilePage({ params }: PageProps) {
               responseTimeLabel={metaResponse(profile)}
               memberSinceLabel={formatSidebarMemberSince(profile)}
               blockedIsoDates={blockedIsoDates}
+              hideContactButton
             />
           </aside>
         </div>
