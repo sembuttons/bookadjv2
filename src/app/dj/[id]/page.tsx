@@ -291,6 +291,12 @@ export default async function DjProfilePage({ params }: PageProps) {
             .join(", ")
         : "";
 
+  const ervaringLabel = years != null ? `${years} jaar ervaring` : "Ervaren DJ";
+  const apparatuurLabel =
+    (customUsps?.[0]?.title?.trim() || equipmentLabel || "").trim() ||
+    "Professionele apparatuur";
+  const talenLabel = (languagesLabel || "").trim() || "Nederlands, Engels";
+
   const instagramHandle = (() => {
     if (!instagramUrl) return "";
     try {
@@ -442,41 +448,31 @@ export default async function DjProfilePage({ params }: PageProps) {
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 lg:items-start">
           <div className="min-w-0 space-y-14">
             {/* 3 info-pills */}
-            {years != null || equipmentLabel || languagesLabel ? (
-              <section aria-label="DJ details">
-                <div className="grid gap-3 sm:grid-cols-3">
-                  {years != null ? (
-                    <div className="rounded-2xl border border-gray-200 bg-white p-4">
-                      <p className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                        <Clock className="h-4 w-4 text-green-600" aria-hidden />
-                        Jaren ervaring
-                      </p>
-                      <p className="mt-1 text-sm text-gray-500">
-                        {years} jaar ervaring
-                      </p>
-                    </div>
-                  ) : null}
-                  {equipmentLabel ? (
-                    <div className="rounded-2xl border border-gray-200 bg-white p-4">
-                      <p className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                        <Music2 className="h-4 w-4 text-green-600" aria-hidden />
-                        Apparatuur
-                      </p>
-                      <p className="mt-1 text-sm text-gray-500">{equipmentLabel}</p>
-                    </div>
-                  ) : null}
-                  {languagesLabel ? (
-                    <div className="rounded-2xl border border-gray-200 bg-white p-4">
-                      <p className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                        <Languages className="h-4 w-4 text-green-600" aria-hidden />
-                        Taal
-                      </p>
-                      <p className="mt-1 text-sm text-gray-500">{languagesLabel}</p>
-                    </div>
-                  ) : null}
+            <section aria-label="DJ details">
+              <div className="grid gap-3 sm:grid-cols-3">
+                <div className="rounded-2xl border border-gray-200 bg-white p-4">
+                  <p className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+                    <Clock className="h-4 w-4 text-green-600" aria-hidden />
+                    Jaren ervaring
+                  </p>
+                  <p className="mt-1 text-sm text-gray-500">{ervaringLabel}</p>
                 </div>
-              </section>
-            ) : null}
+                <div className="rounded-2xl border border-gray-200 bg-white p-4">
+                  <p className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+                    <Music2 className="h-4 w-4 text-green-600" aria-hidden />
+                    Apparatuur
+                  </p>
+                  <p className="mt-1 text-sm text-gray-500">{apparatuurLabel}</p>
+                </div>
+                <div className="rounded-2xl border border-gray-200 bg-white p-4">
+                  <p className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+                    <Languages className="h-4 w-4 text-green-600" aria-hidden />
+                    Taal
+                  </p>
+                  <p className="mt-1 text-sm text-gray-500">{talenLabel}</p>
+                </div>
+              </div>
+            </section>
 
             {/* DJ in actie - only when video exists */}
             {hasYouTubeVideo ? (
