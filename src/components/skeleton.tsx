@@ -18,7 +18,7 @@ export function ZoekenResultsSkeleton() {
       {Array.from({ length: 6 }, (_, i) => (
         <li key={i}>
           <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-            <Skeleton className="aspect-[4/3] w-full rounded-none rounded-t-2xl" />
+            <Skeleton className="aspect-[3/2] w-full rounded-none rounded-t-2xl" />
             <div className="space-y-3 p-4">
               <Skeleton className="h-5 w-2/3" />
               <Skeleton className="h-4 w-1/3" />

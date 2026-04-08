@@ -31,9 +31,6 @@ const FILTER_GENRES = [
   "Latin",
 ] as const;
 
-const ZOEKEN_CARD_IMG =
-  "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&q=80&auto=format&fit=crop";
-
 const PRICE_SLIDER_MIN = 50;
 const PRICE_SLIDER_MAX = 350;
 const PRICE_STEP = 5;
@@ -555,23 +552,34 @@ export default function ZoekenPage() {
                 const city = getCity(row);
                 const genres = getGenres(row);
                 const responseLabel = getResponseTimeLabel(row);
+                const djPhoto =
+                  Array.isArray(row.photos) && row.photos.length > 0
+                    ? typeof row.photos[0] === "string"
+                      ? row.photos[0]
+                      : null
+                    : null;
                 return (
                   <li key={id}>
                     <Link
                       href={`/dj/${encodeURIComponent(id)}`}
                       className="group card-interactive block h-full overflow-hidden"
                     >
-                      <div
-                        className="relative aspect-[4/3] overflow-hidden rounded-t-2xl bg-gradient-to-br from-gray-900 to-gray-800 bg-cover bg-center"
-                        style={{ backgroundImage: `url(${ZOEKEN_CARD_IMG})` }}
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/20" />
-                        <span className="absolute left-3 top-3 z-[1] rounded-full bg-green-500 px-2 py-0.5 text-xs font-bold uppercase text-black shadow-sm">
-                          Geverifieerd
-                        </span>
-                        <span className="absolute inset-0 z-[1] flex items-center justify-center text-3xl font-bold text-white drop-shadow-md">
-                          {initials(stage)}
-                        </span>
+                      <div className="relative aspect-[3/2] overflow-hidden rounded-t-2xl">
+                        {djPhoto ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={djPhoto}
+                            alt={stage}
+                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
+                            <span className="text-4xl font-black text-white/20">
+                              {initials(stage)}
+                            </span>
+                          </div>
+                        )}
+                        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/20 to-transparent" />
                       </div>
                       <div className="space-y-2 p-4">
                         <h3 className="text-lg font-semibold text-slate-900 group-hover:underline">
