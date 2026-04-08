@@ -15,7 +15,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase-browser";
 
-const GENRE_SUGGESTIONS = [
+const GENRES = [
   "House",
   "Techno",
   "Afro House",
@@ -42,6 +42,8 @@ const GENRE_SUGGESTIONS = [
   "Afrobeats",
   "Commercial",
   "Oldskool",
+  "Classics",
+  "Nederlandstalig",
 ] as const;
 
 const OCCASIONS = [
@@ -52,6 +54,11 @@ const OCCASIONS = [
   "Festival",
   "Huisfeest",
   "Afstuderen",
+  "Studentenfeest",
+  "Sportgala",
+  "Buurtfeest",
+  "Kerst",
+  "Oud en nieuw",
   "Anders",
 ] as const;
 
@@ -101,8 +108,6 @@ export default function DjProfielPage() {
   const [occasions, setOccasions] = useState<string[]>([]);
   const [languages, setLanguages] = useState<string[]>([]);
   const [extraLanguages, setExtraLanguages] = useState("");
-  const [genreQuery, setGenreQuery] = useState("");
-  const [genreFocus, setGenreFocus] = useState(false);
 
   const firstPhoto = photos[0] ?? null;
   const displayNameForAvatar = useMemo(() => stageName.trim() || "DJ", [stageName]);
@@ -220,36 +225,9 @@ export default function DjProfielPage() {
     yearsExperience,
   ]);
 
-  const addGenre = useCallback((raw: string) => {
-    const q = raw.trim().replace(/\s+/g, " ");
-    if (!q) return;
-    const canonical =
-      (GENRE_SUGGESTIONS as readonly string[]).find(
-        (g) => g.toLowerCase() === q.toLowerCase(),
-      ) ?? q;
-    setGenres((prev) => {
-      if (prev.length >= 8) return prev;
-      const has = prev.some((x) => x.toLowerCase() === canonical.toLowerCase());
-      return has ? prev : [...prev, canonical];
-    });
-    setGenreQuery("");
+  const toggleGenre = useCallback((g: string) => {
+    setGenres((prev) => toggleInList(prev, g));
   }, []);
-
-  const removeGenre = useCallback((g: string) => {
-    setGenres((prev) => prev.filter((x) => x !== g));
-  }, []);
-
-  const genreSuggestions = useMemo(() => {
-    const q = genreQuery.trim().toLowerCase();
-    const selected = new Set(genres.map((g) => g.toLowerCase()));
-    const list = (GENRE_SUGGESTIONS as readonly string[]).filter(
-      (g) => !selected.has(g.toLowerCase()),
-    );
-    if (!q) return list.slice(0, 10);
-    return list
-      .filter((g) => g.toLowerCase().includes(q))
-      .slice(0, 10);
-  }, [genreQuery, genres]);
 
   const toggleOccasion = useCallback((o: string) => {
     setOccasions((prev) => toggleInList(prev, o));
@@ -403,113 +381,51 @@ export default function DjProfielPage() {
 
           <div className="mt-8 grid gap-8 md:grid-cols-3">
             <fieldset>
-              <legend className="text-sm font-semibold text-gray-900 mb-1">
-                Genres
-              </legend>
-              <p className="text-xs text-gray-500 mb-3">Kies je muziekstijlen (max. 8)</p>
-              <div className="relative">
-                <div className="rounded-2xl border border-gray-200 bg-white px-3 py-2.5 focus-within:border-green-500 focus-within:ring-2 focus-within:ring-green-500/20">
-                  <div className="flex flex-wrap gap-2">
-                    {genres.map((g) => (
-                      <span
-                        key={g}
-                        className="inline-flex items-center gap-1 rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-700"
-                      >
-                        {g}
-                        <button
-                          type="button"
-                          onClick={() => removeGenre(g)}
-                          className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full text-green-700/70 hover:bg-green-100 hover:text-green-800"
-                          aria-label={`Verwijder ${g}`}
-                        >
-                          ×
-                        </button>
-                      </span>
-                    ))}
-
-                    <input
-                      value={genreQuery}
-                      onChange={(e) => setGenreQuery(e.target.value)}
-                      onFocus={() => setGenreFocus(true)}
-                      onBlur={() => {
-                        window.setTimeout(() => setGenreFocus(false), 100);
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          e.preventDefault();
-                          addGenre(genreQuery);
-                        }
-                        if (e.key === "," || e.key === "Tab") {
-                          if (genreQuery.trim()) {
-                            e.preventDefault();
-                            addGenre(genreQuery);
-                          }
-                        }
-                        if (e.key === "Backspace" && !genreQuery && genres.length > 0) {
-                          removeGenre(genres[genres.length - 1]);
-                        }
-                      }}
-                      className="min-w-[160px] flex-1 bg-transparent px-2 py-1 text-sm text-gray-900 placeholder-gray-400 outline-none"
-                      placeholder="Voeg genre toe..."
-                      disabled={genres.length >= 8}
-                    />
-                  </div>
-                </div>
-
-                {genreFocus && genreSuggestions.length > 0 ? (
-                  <div className="absolute z-20 mt-2 w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg max-h-64 overflow-y-auto">
-                    {genreSuggestions.map((g) => (
-                      <button
-                        key={g}
-                        type="button"
-                        onClick={() => addGenre(g)}
-                        disabled={genres.length >= 8}
-                        className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm text-gray-900 hover:bg-gray-50"
-                      >
-                        <span>{g}</span>
-                        <span className="text-xs text-gray-400">Voeg toe</span>
-                      </button>
-                    ))}
-                  </div>
-                ) : null}
+              <legend className="text-sm font-semibold text-gray-900 mb-1">Genres</legend>
+              <p className="text-xs text-gray-500 mb-3">
+                Selecteer alle genres die op jou van toepassing zijn.
+              </p>
+              <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto border border-gray-200 rounded-2xl p-3">
+                {GENRES.map((g) => {
+                  const selected = genres.includes(g);
+                  return (
+                    <button
+                      key={g}
+                      type="button"
+                      onClick={() => toggleGenre(g)}
+                      className={`px-4 py-2 rounded-full border text-sm font-medium transition-all whitespace-nowrap ${
+                        selected
+                          ? "bg-green-500 border-green-500 text-black"
+                          : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
+                      }`}
+                    >
+                      {g}
+                    </button>
+                  );
+                })}
               </div>
-              <p className="mt-3 text-xs text-gray-500">Max 8 genres</p>
             </fieldset>
 
             <fieldset>
-              <legend className="text-sm font-semibold text-gray-900 mb-1">
-                Gelegenheden
-              </legend>
+              <legend className="text-sm font-semibold text-gray-900 mb-1">Gelegenheden</legend>
               <p className="text-xs text-gray-500 mb-3">
                 Voor welke gelegenheden ben je beschikbaar?
               </p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {(
-                  [
-                    { value: "Bruiloft", label: "Bruiloft", Icon: Heart },
-                    { value: "Verjaardag", label: "Verjaardag", Icon: Gift },
-                    { value: "Bedrijfsfeest", label: "Bedrijfsfeest", Icon: Briefcase },
-                    { value: "Club & Bar", label: "Club & Bar", Icon: Music },
-                    { value: "Festival", label: "Festival", Icon: Zap },
-                    { value: "Huisfeest", label: "Huisfeest", Icon: Home },
-                    { value: "Afstuderen", label: "Afstuderen", Icon: GraduationCap },
-                    { value: "Anders", label: "Anders", Icon: MoreHorizontal },
-                  ] as const
-                ).map(({ value, label, Icon }) => {
-                  const selected = occasions.includes(value);
+              <div className="flex flex-wrap gap-2 border border-gray-200 rounded-2xl p-3">
+                {OCCASIONS.map((o) => {
+                  const selected = occasions.includes(o);
                   return (
                     <button
-                      key={value}
+                      key={o}
                       type="button"
-                      onClick={() => toggleOccasion(value)}
-                      className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all ${
+                      onClick={() => toggleOccasion(o)}
+                      className={`px-4 py-2 rounded-full border text-sm font-medium transition-all whitespace-nowrap ${
                         selected
-                          ? "border-green-500 bg-green-50 text-green-700"
-                          : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
+                          ? "bg-green-500 border-green-500 text-black"
+                          : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
                       }`}
                     >
-                      <Icon className="h-5 w-5" aria-hidden />
-                      <span className="text-sm font-medium">{label}</span>
+                      {o}
                     </button>
                   );
                 })}
