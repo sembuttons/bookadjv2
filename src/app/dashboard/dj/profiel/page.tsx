@@ -2,15 +2,7 @@
 
 import Link from "next/link";
 import {
-  Briefcase,
-  Gift,
-  GraduationCap,
-  Heart,
-  Home,
   Loader2,
-  MoreHorizontal,
-  Music,
-  Zap,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase-browser";
@@ -385,24 +377,18 @@ export default function DjProfielPage() {
               <p className="text-xs text-gray-500 mb-3">
                 Selecteer alle genres die op jou van toepassing zijn.
               </p>
-              <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto border border-gray-200 rounded-2xl p-3">
-                {GENRES.map((g) => {
-                  const selected = genres.includes(g);
-                  return (
-                    <button
-                      key={g}
-                      type="button"
-                      onClick={() => toggleGenre(g)}
-                      className={`px-4 py-2 rounded-full border text-sm font-medium transition-all whitespace-nowrap ${
-                        selected
-                          ? "bg-green-500 border-green-500 text-black"
-                          : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
-                      }`}
-                    >
-                      {g}
-                    </button>
-                  );
-                })}
+              <div className="space-y-2 max-h-40 overflow-y-auto border border-gray-200 rounded-2xl p-3">
+                {GENRES.map((g) => (
+                  <label key={g} className="flex items-center gap-2 text-sm text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={genres.includes(g)}
+                      onChange={() => toggleGenre(g)}
+                      className="accent-green-500"
+                    />
+                    {g}
+                  </label>
+                ))}
               </div>
             </fieldset>
 
@@ -411,24 +397,18 @@ export default function DjProfielPage() {
               <p className="text-xs text-gray-500 mb-3">
                 Voor welke gelegenheden ben je beschikbaar?
               </p>
-              <div className="flex flex-wrap gap-2 border border-gray-200 rounded-2xl p-3">
-                {OCCASIONS.map((o) => {
-                  const selected = occasions.includes(o);
-                  return (
-                    <button
-                      key={o}
-                      type="button"
-                      onClick={() => toggleOccasion(o)}
-                      className={`px-4 py-2 rounded-full border text-sm font-medium transition-all whitespace-nowrap ${
-                        selected
-                          ? "bg-green-500 border-green-500 text-black"
-                          : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
-                      }`}
-                    >
-                      {o}
-                    </button>
-                  );
-                })}
+              <div className="space-y-2 max-h-40 overflow-y-auto border border-gray-200 rounded-2xl p-3">
+                {OCCASIONS.map((o) => (
+                  <label key={o} className="flex items-center gap-2 text-sm text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={occasions.includes(o)}
+                      onChange={() => toggleOccasion(o)}
+                      className="accent-green-500"
+                    />
+                    {o}
+                  </label>
+                ))}
               </div>
             </fieldset>
 
@@ -437,24 +417,18 @@ export default function DjProfielPage() {
                 Talen
               </legend>
               <p className="text-xs text-gray-500 mb-3">Welke talen spreek je?</p>
-              <div className="flex flex-wrap gap-2">
-                {LANGUAGES.map((l) => {
-                  const selected = languages.includes(l);
-                  return (
-                    <button
-                      key={l}
-                      type="button"
-                      onClick={() => toggleLanguage(l)}
-                      className={`px-4 py-2 rounded-full border text-sm font-medium transition-all ${
-                        selected
-                          ? "bg-green-500 border-green-500 text-black"
-                          : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
-                      }`}
-                    >
-                      {l}
-                    </button>
-                  );
-                })}
+              <div className="space-y-2 border border-gray-200 rounded-2xl p-3">
+                {LANGUAGES.map((l) => (
+                  <label key={l} className="flex items-center gap-2 text-sm text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={languages.includes(l)}
+                      onChange={() => toggleLanguage(l)}
+                      className="accent-green-500"
+                    />
+                    {l}
+                  </label>
+                ))}
               </div>
               <label className="mt-4 block">
                 <span className="text-sm font-semibold text-gray-900 mb-1 block">
