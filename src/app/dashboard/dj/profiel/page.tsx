@@ -505,100 +505,130 @@ export default function DjProfielPage() {
             </div>
           </div>
 
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-            {/* Genres column */}
-            <div className="flex flex-col">
-              <p className="text-sm font-semibold text-gray-900 mb-1">Genres</p>
-              <p className="text-xs text-gray-500 mb-3">
-                Selecteer alle genres die op jou van toepassing zijn.
-              </p>
-              <div className="flex-1 border border-gray-200 rounded-2xl p-3 max-h-52 overflow-y-auto space-y-2">
-                {GENRES.map((g) => (
-                  <label key={g} className="flex items-center gap-2 text-sm text-gray-700">
-                    <input
-                      type="checkbox"
-                      checked={genres.includes(g)}
-                      onChange={() => toggleGenre(g)}
-                      className="accent-green-500"
-                    />
-                    {g}
-                  </label>
-                ))}
+          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+            {/* GENRES */}
+            <div className="flex flex-col gap-3">
+              <div>
+                <p className="text-sm font-semibold text-gray-900">Genres</p>
+                <p className="mt-0.5 text-xs text-gray-500">
+                  Selecteer alle genres die op jou van toepassing zijn.
+                </p>
               </div>
-              <div className="mt-3">
-                <label className="text-xs font-medium text-gray-500 mb-1.5 block">
+              <div
+                className="flex-1 overflow-y-auto rounded-2xl border border-gray-200 p-3"
+                style={{ height: "220px" }}
+              >
+                <div className="space-y-2">
+                  {GENRES.map((genre) => (
+                    <label
+                      key={genre}
+                      className="flex cursor-pointer items-center gap-3"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={genres.includes(genre)}
+                        onChange={() => toggleGenre(genre)}
+                        className="h-5 w-5 flex-none rounded accent-green-500"
+                      />
+                      <span className="text-sm text-gray-700">{genre}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="mb-1.5 text-xs font-medium text-gray-500">
                   Staat jouw genre er niet bij?
-                </label>
+                </p>
                 <input
                   type="text"
                   value={customGenre}
                   onChange={(e) => setCustomGenre(e.target.value)}
                   placeholder="Bijv. Moombahton, Afrobeats..."
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+                  className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm placeholder-gray-400 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
             </div>
 
-            {/* Occasions column */}
-            <div className="flex flex-col">
-              <p className="text-sm font-semibold text-gray-900 mb-1">Gelegenheden</p>
-              <p className="text-xs text-gray-500 mb-3">
-                Voor welke gelegenheden ben je beschikbaar?
-              </p>
-              <div className="flex-1 border border-gray-200 rounded-2xl p-3 max-h-52 overflow-y-auto space-y-2">
-                {OCCASIONS.map((o) => (
-                  <label key={o} className="flex items-center gap-2 text-sm text-gray-700">
-                    <input
-                      type="checkbox"
-                      checked={occasions.includes(o)}
-                      onChange={() => toggleOccasion(o)}
-                      className="accent-green-500"
-                    />
-                    {o}
-                  </label>
-                ))}
+            {/* GELEGENHEDEN */}
+            <div className="flex flex-col gap-3">
+              <div>
+                <p className="text-sm font-semibold text-gray-900">Gelegenheden</p>
+                <p className="mt-0.5 text-xs text-gray-500">
+                  Voor welke gelegenheden ben je beschikbaar?
+                </p>
               </div>
-              <div className="mt-3">
-                <label className="text-xs font-medium text-gray-500 mb-1.5 block">
+              <div
+                className="flex-1 overflow-y-auto rounded-2xl border border-gray-200 p-3"
+                style={{ height: "220px" }}
+              >
+                <div className="space-y-2">
+                  {OCCASIONS.map((occasion) => (
+                    <label
+                      key={occasion}
+                      className="flex cursor-pointer items-center gap-3"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={occasions.includes(occasion)}
+                        onChange={() => toggleOccasion(occasion)}
+                        className="h-5 w-5 flex-none rounded accent-green-500"
+                      />
+                      <span className="text-sm text-gray-700">{occasion}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="mb-1.5 text-xs font-medium text-gray-500">
                   Staat jouw gelegenheid er niet bij?
-                </label>
+                </p>
                 <input
                   type="text"
                   value={customOccasion}
                   onChange={(e) => setCustomOccasion(e.target.value)}
                   placeholder="Bijv. Straatfeest, Kerstmarkt..."
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+                  className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm placeholder-gray-400 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
             </div>
 
-            {/* Languages column */}
-            <div className="flex flex-col">
-              <p className="text-sm font-semibold text-gray-900 mb-1">Talen</p>
-              <p className="text-xs text-gray-500 mb-3">Welke talen spreek je?</p>
-              <div className="flex-1 border border-gray-200 rounded-2xl p-3 space-y-2">
-                {LANGUAGES.map((l) => (
-                  <label key={l} className="flex items-center gap-2 text-sm text-gray-700">
-                    <input
-                      type="checkbox"
-                      checked={languages.includes(l)}
-                      onChange={() => toggleLanguage(l)}
-                      className="accent-green-500"
-                    />
-                    {l}
-                  </label>
-                ))}
+            {/* TALEN */}
+            <div className="flex flex-col gap-3">
+              <div>
+                <p className="text-sm font-semibold text-gray-900">Talen</p>
+                <p className="mt-0.5 text-xs text-gray-500">Welke talen spreek je?</p>
               </div>
-              <div className="mt-3">
-                <label className="text-xs font-medium text-gray-500 mb-1.5 block">
+              <div
+                className="flex-1 overflow-y-auto rounded-2xl border border-gray-200 p-3"
+                style={{ height: "220px" }}
+              >
+                <div className="space-y-2">
+                  {LANGUAGES.map((lang) => (
+                    <label
+                      key={lang}
+                      className="flex cursor-pointer items-center gap-3"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={languages.includes(lang)}
+                        onChange={() => toggleLanguage(lang)}
+                        className="h-5 w-5 flex-none rounded accent-green-500"
+                      />
+                      <span className="text-sm text-gray-700">{lang}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="mb-1.5 text-xs font-medium text-gray-500">
                   Andere talen?
-                </label>
+                </p>
                 <input
                   type="text"
                   value={extraLanguages}
                   onChange={(e) => setExtraLanguages(e.target.value)}
                   placeholder="Bijv. Spaans, Italiaans..."
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+                  className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm placeholder-gray-400 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
                 />
               </div>
             </div>
