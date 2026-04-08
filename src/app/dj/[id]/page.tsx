@@ -352,101 +352,99 @@ export default async function DjProfilePage({ params }: PageProps) {
 
       <div className="mx-auto max-w-[1400px] px-4 pb-16 pt-6 sm:px-6 lg:px-8">
         <DjPhotoSection photos={photoUrls} name={name} />
-
-        {/* Name + badge + location + genres - all in one block */}
-        <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-          <div className="min-w-0 space-y-3">
-
-            {/* Name inline with verified badge */}
-            <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 min-[400px]:text-3xl sm:text-4xl">
-              {name}
-            </h1>
-              {isVerifiedProfile(profile) ? (
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-green-500 px-3 py-1 text-xs font-bold uppercase tracking-wide text-black shadow-sm">
-                  <svg
-                    className="h-3.5 w-3.5 shrink-0"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    aria-hidden
-                  >
-                    <path
-                      d="M5 10l3 3 7-7"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  Geverifieerde DJ
-                </div>
-              ) : null}
-              {totalReviews > 5 ? (
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-400 ring-1 ring-amber-200">
-                  Veel geboekt
-                </div>
-              ) : null}
-            </div>
-
-            {/* Rating directly under name */}
-            <div className="flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-900">
-              <span className="flex items-center gap-0.5" aria-hidden>
-                {Array.from({ length: 5 }, (_, i) => (
-                  <StarIcon
-                    key={i}
-                    className={`h-4 w-4 ${i < Math.round(displayRating) ? "text-amber-400 fill-amber-400" : "text-gray-200 fill-gray-200"}`}
-                  />
-                ))}
-              </span>
-              <span>{displayRating.toFixed(1)}</span>
-              <span className="text-gray-500 text-sm">
-                · {totalReviews} beoordelingen
-              </span>
-            </div>
-
-            {/* Location */}
-            <div className="flex items-center gap-1 text-sm text-gray-500">
-              <MapPin className="h-4 w-4 text-gray-400" aria-hidden />
-              <span>{city}</span>
-            </div>
-
-            {/* Genres */}
-            {genres.length > 0 ? (
-              <div className="flex flex-wrap gap-2">
-                {genres.map((g) => (
-                  <span
-                    key={g}
-                    className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-medium text-green-700"
-                  >
-                    {g}
-                  </span>
-                ))}
-              </div>
-            ) : null}
-
-            {/* Bio - directly under genres */}
-            <p className="mt-4 max-w-3xl whitespace-pre-line text-base leading-relaxed text-gray-400">
-              {bio}
-            </p>
-          </div>
-
-          {/* Stel een vraag */}
-          <div className="flex w-full shrink-0 flex-col gap-1 sm:w-auto sm:items-end">
-            <StelVraagButton
-              djUserId={djUserId || undefined}
-              djProfileId={id}
-              className="w-full min-h-[44px] rounded-xl bg-gradient-to-r from-green-500 to-green-400 px-6 py-3 text-center text-sm font-bold text-black transition-all duration-150 hover:from-green-400 hover:to-green-300 active:scale-[0.98] sm:w-auto"
-            >
-              Stel {fn} een vraag
-            </StelVraagButton>
-            <p className="text-xs text-gray-500 sm:text-right">
-              Gemiddelde reactietijd: {avgResponseHoursText(profile)}
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 lg:items-start">
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-8 lg:items-start">
           <div className="min-w-0 space-y-14">
+            {/* Name + badge + location + genres - all in one block */}
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+              <div className="min-w-0 space-y-3">
+                {/* Name inline with verified badge */}
+                <div className="flex flex-wrap items-center gap-3">
+                  <h1 className="text-2xl font-bold tracking-tight text-slate-900 min-[400px]:text-3xl sm:text-4xl">
+                    {name}
+                  </h1>
+                  {isVerifiedProfile(profile) ? (
+                    <div className="inline-flex items-center gap-1.5 rounded-full bg-green-500 px-3 py-1 text-xs font-bold uppercase tracking-wide text-black shadow-sm">
+                      <svg
+                        className="h-3.5 w-3.5 shrink-0"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        aria-hidden
+                      >
+                        <path
+                          d="M5 10l3 3 7-7"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                      Geverifieerde DJ
+                    </div>
+                  ) : null}
+                  {totalReviews > 5 ? (
+                    <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-400 ring-1 ring-amber-200">
+                      Veel geboekt
+                    </div>
+                  ) : null}
+                </div>
+
+                {/* Rating directly under name */}
+                <div className="flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-900">
+                  <span className="flex items-center gap-0.5" aria-hidden>
+                    {Array.from({ length: 5 }, (_, i) => (
+                      <StarIcon
+                        key={i}
+                        className={`h-4 w-4 ${i < Math.round(displayRating) ? "text-amber-400 fill-amber-400" : "text-gray-200 fill-gray-200"}`}
+                      />
+                    ))}
+                  </span>
+                  <span>{displayRating.toFixed(1)}</span>
+                  <span className="text-gray-500 text-sm">
+                    · {totalReviews} beoordelingen
+                  </span>
+                </div>
+
+                {/* Location */}
+                <div className="flex items-center gap-1 text-sm text-gray-500">
+                  <MapPin className="h-4 w-4 text-gray-400" aria-hidden />
+                  <span>{city}</span>
+                </div>
+
+                {/* Genres */}
+                {genres.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {genres.map((g) => (
+                      <span
+                        key={g}
+                        className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-medium text-green-700"
+                      >
+                        {g}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+
+                {/* Bio - directly under genres */}
+                <p className="mt-4 whitespace-pre-line text-base leading-relaxed text-gray-400">
+                  {bio}
+                </p>
+              </div>
+
+              {/* Stel een vraag */}
+              <div className="flex w-full shrink-0 flex-col gap-1 sm:w-auto sm:items-end">
+                <StelVraagButton
+                  djUserId={djUserId || undefined}
+                  djProfileId={id}
+                  className="w-full min-h-[44px] rounded-xl bg-gradient-to-r from-green-500 to-green-400 px-6 py-3 text-center text-sm font-bold text-black transition-all duration-150 hover:from-green-400 hover:to-green-300 active:scale-[0.98] sm:w-auto"
+                >
+                  Stel {fn} een vraag
+                </StelVraagButton>
+                <p className="text-xs text-gray-500 sm:text-right">
+                  Gemiddelde reactietijd: {avgResponseHoursText(profile)}
+                </p>
+              </div>
+            </div>
+
             {/* 3 info-pills */}
             <section aria-label="DJ details">
               <div className="grid gap-3 sm:grid-cols-3">
