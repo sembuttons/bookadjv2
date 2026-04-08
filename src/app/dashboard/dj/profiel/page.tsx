@@ -383,6 +383,9 @@ export default function DjProfielPage() {
               <legend className="text-sm font-medium text-gray-700 mb-3">
                 Genres
               </legend>
+              <p className="mb-3 text-xs text-gray-500">
+                Typ een genre en kies uit suggesties, of voeg je eigen genre toe.
+              </p>
               <div className="relative">
                 <div className="rounded-2xl border border-gray-200 bg-white px-3 py-2.5 focus-within:border-green-500 focus-within:ring-2 focus-within:ring-green-500/20">
                   <div className="flex flex-wrap gap-2">
@@ -432,7 +435,7 @@ export default function DjProfielPage() {
                 </div>
 
                 {genreFocus && genreSuggestions.length > 0 ? (
-                  <div className="absolute z-20 mt-2 w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg">
+                  <div className="absolute z-20 mt-2 w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg max-h-64 overflow-y-auto">
                     {genreSuggestions.map((g) => (
                       <button
                         key={g}
