@@ -79,13 +79,13 @@ function formatEuroCents(cents: number | null | undefined): string {
 function statusBadgeClasses(status: string | null | undefined): string {
   const s = (status ?? "").toLowerCase();
   if (s === "pending")
-    return "bg-amber-500/20 text-amber-200 ring-amber-500/40";
-  if (s === "confirmed") return "bg-blue-500/20 text-blue-200 ring-blue-500/40";
-  if (s === "paid") return "bg-green-500/20 text-green-200 ring-green-500/40";
+    return "bg-amber-100 text-amber-800 ring-amber-200";
+  if (s === "confirmed") return "bg-blue-100 text-blue-800 ring-blue-200";
+  if (s === "paid") return "bg-green-100 text-green-800 ring-green-200";
   if (s === "cancelled" || s === "declined")
-    return "bg-red-500/20 text-red-200 ring-red-500/40";
-  if (s === "completed") return "bg-gray-500/20 text-gray-300 ring-gray-500/40";
-  return "bg-gray-600/30 text-gray-300 ring-gray-600/50";
+    return "bg-red-100 text-red-800 ring-red-200";
+  if (s === "completed") return "bg-gray-100 text-gray-700 ring-gray-200";
+  return "bg-gray-100 text-gray-600 ring-gray-200";
 }
 
 function statusLabel(status: string | null | undefined): string {
@@ -197,10 +197,10 @@ export function AdminBoekingenClient() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
           Boekingen
         </h1>
-        <p className="mt-1 text-sm text-gray-400">
+        <p className="mt-1 text-sm text-gray-600">
           Overzicht van alle boekingen met klant- en DJ-gegevens.
         </p>
       </div>
@@ -214,8 +214,8 @@ export function AdminBoekingenClient() {
               onClick={() => setFilter(t.key)}
               className={`rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${
                 filter === t.key
-                  ? "bg-green-500/20 text-green-300 ring-1 ring-green-500/40"
-                  : "bg-[#111827] text-gray-400 ring-1 ring-gray-800 hover:text-white"
+                  ? "bg-green-100 text-green-800 ring-1 ring-green-300"
+                  : "bg-gray-100 text-gray-600 ring-1 ring-gray-200 hover:bg-gray-200 hover:text-slate-900"
               }`}
             >
               {t.label}
@@ -227,23 +227,23 @@ export function AdminBoekingenClient() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Zoek op referentie, klant of DJ…"
-          className="w-full max-w-md rounded-xl border border-gray-800 bg-[#111827] px-4 py-2.5 text-sm text-white placeholder:text-gray-500 focus:border-green-500/50 focus:outline-none focus:ring-2 focus:ring-green-500/20"
+          className="w-full max-w-md rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder:text-gray-400 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
         />
       </div>
 
       {error ? (
-        <p className="rounded-lg border border-red-500/35 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+        <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}
         </p>
       ) : null}
 
       {loading ? (
-        <p className="text-gray-400">Laden…</p>
+        <p className="text-gray-500">Laden…</p>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-gray-800 bg-[#0f172a]">
+        <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
           <table className="min-w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-gray-800 text-xs font-semibold uppercase tracking-wide text-gray-500">
+              <tr className="border-b border-gray-200 bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-500">
                 <th className="px-4 py-3">Referentie</th>
                 <th className="px-4 py-3">Klant</th>
                 <th className="px-4 py-3">DJ</th>
@@ -254,7 +254,7 @@ export function AdminBoekingenClient() {
                 <th className="px-4 py-3">Acties</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800">
+            <tbody className="divide-y divide-gray-100">
               {filtered.length === 0 ? (
                 <tr>
                   <td
@@ -266,12 +266,12 @@ export function AdminBoekingenClient() {
                 </tr>
               ) : (
                 filtered.map((b) => (
-                  <tr key={b.id} className="text-gray-200">
-                    <td className="px-4 py-3 font-mono text-xs text-green-300">
+                  <tr key={b.id} className="text-slate-700">
+                    <td className="px-4 py-3 font-mono text-xs font-semibold text-green-700">
                       {bookingRef(b)}
                     </td>
                     <td className="px-4 py-3">
-                      <span className="font-medium text-white">
+                      <span className="font-medium text-slate-900">
                         {customerLabel(b)}
                       </span>
                       <br />
@@ -280,7 +280,7 @@ export function AdminBoekingenClient() {
                       </span>
                     </td>
                     <td className="px-4 py-3">{djLabel(b)}</td>
-                    <td className="px-4 py-3 text-gray-300">
+                    <td className="px-4 py-3 text-gray-600">
                       {b.event_date
                         ? new Date(`${b.event_date}T12:00:00`).toLocaleDateString(
                             "nl-NL",
@@ -297,7 +297,7 @@ export function AdminBoekingenClient() {
                         {statusLabel(b.status)}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-xs text-gray-400">
+                    <td className="px-4 py-3 text-xs text-gray-500">
                       {b.created_at
                         ? new Date(b.created_at).toLocaleString("nl-NL")
                         : "-"}
@@ -306,7 +306,7 @@ export function AdminBoekingenClient() {
                       <button
                         type="button"
                         onClick={() => setDetail(b)}
-                        className="rounded-lg bg-gray-800 px-3 py-1.5 text-xs font-semibold text-white ring-1 ring-gray-700 hover:bg-gray-700"
+                        className="rounded-lg bg-green-500 px-3 py-1.5 text-xs font-semibold text-black ring-1 ring-green-600 hover:bg-green-400"
                       >
                         Bekijk details
                       </button>
@@ -327,13 +327,13 @@ export function AdminBoekingenClient() {
             onClick={() => setDetail(null)}
             aria-hidden
           />
-          <aside className="relative z-10 flex h-full w-full max-w-lg flex-col overflow-y-auto rounded-2xl border border-gray-800 bg-[#0f172a] shadow-xl">
-            <div className="flex items-start justify-between gap-4 border-b border-gray-800 p-5">
+          <aside className="relative z-10 flex h-full w-full max-w-lg flex-col overflow-y-auto rounded-2xl border border-gray-200 bg-white shadow-xl">
+            <div className="flex items-start justify-between gap-4 border-b border-gray-200 p-5">
               <div>
                 <p className="text-xs font-semibold uppercase text-gray-500">
                   Boeking
                 </p>
-                <p className="mt-1 font-mono text-lg font-bold text-green-300">
+                <p className="mt-1 font-mono text-lg font-bold text-green-700">
                   {bookingRef(detail)}
                 </p>
                 <span
@@ -345,7 +345,7 @@ export function AdminBoekingenClient() {
               <button
                 type="button"
                 onClick={() => setDetail(null)}
-                className="rounded-lg p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
+                className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-slate-900"
                 aria-label="Sluiten"
               >
                 ✕
@@ -357,16 +357,16 @@ export function AdminBoekingenClient() {
                 <h3 className="text-xs font-bold uppercase text-gray-500">
                   Klant
                 </h3>
-                <p className="mt-2 font-semibold text-white">
+                <p className="mt-2 font-semibold text-slate-900">
                   {customerLabel(detail)}
                 </p>
-                <p className="text-gray-400">{customerEmail(detail)}</p>
+                <p className="text-gray-600">{customerEmail(detail)}</p>
               </section>
 
               <section>
                 <h3 className="text-xs font-bold uppercase text-gray-500">DJ</h3>
-                <p className="mt-2 font-semibold text-white">{djLabel(detail)}</p>
-                <p className="text-gray-400">
+                <p className="mt-2 font-semibold text-slate-900">{djLabel(detail)}</p>
+                <p className="text-gray-600">
                   {detail.dj_user?.full_name?.trim() ||
                     detail.dj_user?.email?.split("@")[0] ||
                     detail.dj_user?.email ||
@@ -382,7 +382,7 @@ export function AdminBoekingenClient() {
                 ) : null}
               </section>
 
-              <section className="grid gap-2 text-gray-300">
+              <section className="grid gap-2 text-gray-700">
                 <h3 className="text-xs font-bold uppercase text-gray-500">
                   Event
                 </h3>
@@ -414,20 +414,20 @@ export function AdminBoekingenClient() {
                 ) : null}
               </section>
 
-              <section className="rounded-xl border border-gray-800 bg-[#111827] p-4">
+              <section className="rounded-xl border border-gray-200 bg-gray-50 p-4">
                 <h3 className="text-xs font-bold uppercase text-gray-500">
                   Betaling
                 </h3>
-                <p className="mt-2 text-white">
+                <p className="mt-2 text-slate-900">
                   Totaal: {formatEuroCents(detail.total_amount ?? null)}
                 </p>
                 {typeof detail.platform_fee === "number" ? (
-                  <p className="text-gray-400">
+                  <p className="text-gray-600">
                     Platform: {formatEuroCents(detail.platform_fee)}
                   </p>
                 ) : null}
                 {typeof detail.dj_payout === "number" ? (
-                  <p className="text-gray-400">
+                  <p className="text-gray-600">
                     DJ-uitbetaling: {formatEuroCents(detail.dj_payout)}
                   </p>
                 ) : null}
@@ -448,7 +448,7 @@ export function AdminBoekingenClient() {
                 ) : null}
               </section>
 
-              <section className="space-y-2 border-t border-gray-800 pt-4">
+              <section className="space-y-2 border-t border-gray-200 pt-4">
                 <h3 className="text-xs font-bold uppercase text-gray-500">
                   Admin-acties
                 </h3>
@@ -465,7 +465,7 @@ export function AdminBoekingenClient() {
                     type="button"
                     disabled={acting}
                     onClick={() => void patchStatus(detail.id, "completed")}
-                    className="rounded-xl bg-gray-700 px-4 py-3 text-sm font-bold text-white hover:bg-gray-600 disabled:opacity-50"
+                    className="rounded-xl bg-gray-200 px-4 py-3 text-sm font-bold text-slate-900 hover:bg-gray-300 disabled:opacity-50"
                   >
                     Markeer als voltooid
                   </button>
@@ -476,7 +476,7 @@ export function AdminBoekingenClient() {
                         "Terugbetaling initiëren is binnenkort beschikbaar.",
                       )
                     }
-                    className="rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm font-bold text-amber-200 hover:bg-amber-500/20"
+                    className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-bold text-amber-900 hover:bg-amber-100"
                   >
                     Terugbetaling initiëren
                   </button>

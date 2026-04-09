@@ -120,24 +120,24 @@ export function AdminBerichtenClient() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-white">Berichten</h1>
-        <p className="mt-1 text-sm text-gray-400">
+        <h1 className="text-2xl font-bold text-slate-900">Berichten</h1>
+        <p className="mt-1 text-sm text-gray-600">
           Monitor berichten tussen gebruikers.
         </p>
       </div>
 
-      <div className="flex flex-wrap gap-4 rounded-xl border border-gray-800 bg-[#0f172a] px-4 py-3 text-sm">
+      <div className="flex flex-wrap gap-4 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm shadow-sm">
         <span>
-          <span className="font-semibold text-white">{stats.flaggedToday}</span>
-          <span className="text-gray-400"> gemarkeerd vandaag</span>
+          <span className="font-semibold text-slate-900">{stats.flaggedToday}</span>
+          <span className="text-gray-600"> gemarkeerd vandaag</span>
         </span>
         <span>
-          <span className="font-semibold text-white">{stats.suspendedUsers}</span>
-          <span className="text-gray-400"> opgeschorte accounts</span>
+          <span className="font-semibold text-slate-900">{stats.suspendedUsers}</span>
+          <span className="text-gray-600"> opgeschorte accounts</span>
         </span>
         <span>
-          <span className="font-semibold text-white">{stats.messagesToday}</span>
-          <span className="text-gray-400"> berichten vandaag</span>
+          <span className="font-semibold text-slate-900">{stats.messagesToday}</span>
+          <span className="text-gray-600"> berichten vandaag</span>
         </span>
       </div>
 
@@ -155,8 +155,8 @@ export function AdminBerichtenClient() {
             onClick={() => setTab(key)}
             className={`rounded-lg px-4 py-2 text-sm font-semibold ${
               tab === key
-                ? "bg-gray-800 text-white ring-1 ring-gray-600"
-                : "bg-[#0f172a]/80 text-gray-400 ring-1 ring-gray-800 hover:text-white"
+                ? "bg-green-500 text-black ring-1 ring-green-600"
+                : "bg-gray-100 text-gray-600 ring-1 ring-gray-200 hover:bg-gray-200 hover:text-slate-900"
             }`}
           >
             {label}
@@ -165,18 +165,18 @@ export function AdminBerichtenClient() {
       </div>
 
       {error ? (
-        <p className="rounded-lg border border-red-500/35 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+        <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}
         </p>
       ) : null}
 
       {loading ? (
-        <p className="text-gray-400">Laden…</p>
+        <p className="text-gray-500">Laden…</p>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-gray-800 bg-[#0f172a]">
+        <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
           <table className="min-w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-gray-800 text-xs font-semibold uppercase tracking-wide text-gray-500">
+              <tr className="border-b border-gray-200 bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-500">
                 <th className="px-4 py-3">Afzender</th>
                 <th className="px-4 py-3">Ontvanger</th>
                 <th className="px-4 py-3">Bericht</th>
@@ -185,7 +185,7 @@ export function AdminBerichtenClient() {
                 <th className="px-4 py-3">Reden</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800">
+            <tbody className="divide-y divide-gray-100">
               {messages.length === 0 ? (
                 <tr>
                   <td
@@ -199,13 +199,13 @@ export function AdminBerichtenClient() {
                 messages.map((m) => (
                   <tr
                     key={m.id}
-                    className={`cursor-pointer text-gray-200 hover:bg-gray-800/40 ${
-                      m.is_flagged ? "bg-red-950/20" : ""
+                    className={`cursor-pointer text-slate-700 hover:bg-gray-50 ${
+                      m.is_flagged ? "bg-red-50/80" : ""
                     }`}
                     onClick={() => setModalMsg(m)}
                   >
                     <td className="px-4 py-3 align-top">
-                      <div className="font-medium text-white">
+                      <div className="font-medium text-slate-900">
                         {userDisplay(m.sender)}
                       </div>
                       <div className="text-xs text-gray-500">
@@ -213,29 +213,29 @@ export function AdminBerichtenClient() {
                       </div>
                     </td>
                     <td className="px-4 py-3 align-top">
-                      <div className="font-medium text-white">
+                      <div className="font-medium text-slate-900">
                         {userDisplay(m.recipient)}
                       </div>
                       <div className="text-xs text-gray-500">
                         {userEmailLine(m.recipient) || "—"}
                       </div>
                     </td>
-                    <td className="max-w-xs px-4 py-3 align-top text-gray-300">
+                    <td className="max-w-xs px-4 py-3 align-top text-gray-600">
                       {preview(m.content)}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 align-top text-xs text-gray-400">
+                    <td className="whitespace-nowrap px-4 py-3 align-top text-xs text-gray-500">
                       {new Date(m.created_at).toLocaleString("nl-NL")}
                     </td>
                     <td className="px-4 py-3 align-top">
                       {m.is_flagged ? (
-                        <span className="inline-flex rounded-full bg-red-500/25 px-2 py-0.5 text-[10px] font-bold uppercase text-red-200 ring-1 ring-red-500/50">
+                        <span className="inline-flex rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold uppercase text-red-700 ring-1 ring-red-200">
                           Ja
                         </span>
                       ) : (
                         <span className="text-xs text-gray-500">Nee</span>
                       )}
                     </td>
-                    <td className="max-w-[140px] px-4 py-3 align-top text-xs text-gray-400">
+                    <td className="max-w-[140px] px-4 py-3 align-top text-xs text-gray-500">
                       {m.is_flagged && m.flag_reason
                         ? m.flag_reason
                         : "—"}
@@ -256,20 +256,20 @@ export function AdminBerichtenClient() {
             onClick={() => setModalMsg(null)}
             aria-hidden
           />
-          <div className="relative z-10 max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-gray-800 bg-[#0f172a] p-6 shadow-xl">
+          <div className="relative z-10 max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-gray-200 bg-white p-6 shadow-xl">
             <div className="flex items-start justify-between gap-4">
-              <h2 className="text-lg font-bold text-white">Bericht</h2>
+              <h2 className="text-lg font-bold text-slate-900">Bericht</h2>
               <button
                 type="button"
                 onClick={() => setModalMsg(null)}
-                className="rounded-lg p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
+                className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-slate-900"
                 aria-label="Sluiten"
               >
                 ✕
               </button>
             </div>
             {modalMsg.is_flagged ? (
-              <p className="mt-2 inline-flex rounded-full bg-red-500/25 px-2 py-0.5 text-[10px] font-bold uppercase text-red-200">
+              <p className="mt-2 inline-flex rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold uppercase text-red-700">
                 Gemarkeerd
                 {modalMsg.flag_reason ? `: ${modalMsg.flag_reason}` : ""}
               </p>
@@ -279,7 +279,7 @@ export function AdminBerichtenClient() {
                 <p className="text-xs font-semibold uppercase text-gray-500">
                   Afzender
                 </p>
-                <p className="text-white">{userDisplay(modalMsg.sender)}</p>
+                <p className="text-slate-900">{userDisplay(modalMsg.sender)}</p>
                 <p className="text-xs text-gray-500">
                   {userEmailLine(modalMsg.sender) || "—"}
                 </p>
@@ -288,13 +288,13 @@ export function AdminBerichtenClient() {
                 <p className="text-xs font-semibold uppercase text-gray-500">
                   Ontvanger
                 </p>
-                <p className="text-white">{userDisplay(modalMsg.recipient)}</p>
+                <p className="text-slate-900">{userDisplay(modalMsg.recipient)}</p>
                 <p className="text-xs text-gray-500">
                   {userEmailLine(modalMsg.recipient) || "—"}
                 </p>
               </div>
             </div>
-            <p className="mt-4 whitespace-pre-wrap rounded-lg bg-[#111827] p-4 text-sm text-gray-100 ring-1 ring-gray-800">
+            <p className="mt-4 whitespace-pre-wrap rounded-lg bg-gray-50 p-4 text-sm text-slate-900 ring-1 ring-gray-200">
               {modalMsg.content ?? "—"}
             </p>
             <p className="mt-3 text-xs text-gray-500">
@@ -302,17 +302,17 @@ export function AdminBerichtenClient() {
             </p>
             <Link
               href={`/admin/berichten/gesprek/${modalMsg.sender_id}/${modalMsg.recipient_id}`}
-              className="mt-4 inline-block text-sm font-semibold text-green-400 underline"
+              className="mt-4 inline-block text-sm font-semibold text-green-700 underline"
             >
               Bekijk volledig gesprek
             </Link>
             {modalMsg.is_flagged ? (
-              <div className="mt-4 flex flex-wrap gap-2 border-t border-gray-800 pt-4">
+              <div className="mt-4 flex flex-wrap gap-2 border-t border-gray-200 pt-4">
                 <button
                   type="button"
                   disabled={!!acting}
                   onClick={() => void runAction(modalMsg.id, "clear_flag")}
-                  className="rounded-lg bg-gray-800 px-3 py-2 text-sm font-semibold text-white hover:bg-gray-700 disabled:opacity-50"
+                  className="rounded-lg bg-gray-200 px-3 py-2 text-sm font-semibold text-slate-900 hover:bg-gray-300 disabled:opacity-50"
                 >
                   Vlag verwijderen
                 </button>

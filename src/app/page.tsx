@@ -21,6 +21,7 @@ import {
   getCity,
   getGenres,
   getHourlyRate,
+  getProfilePhotoUrls,
   getProfileRating,
   getStageName,
   type DjProfileRow,
@@ -395,20 +396,30 @@ export default async function Home() {
                 const rate = getHourlyRate(dj);
                 const rating = getProfileRating(dj);
                 const displayRating = rating > 0 ? rating : 4.8;
+                const djPhoto = getProfilePhotoUrls(dj)[0] ?? null;
                 return (
                   <li key={dj.id}>
                     <Link href={`/dj/${dj.id}`}>
                       <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gray-200/80">
-                        <div className="relative flex aspect-[5/3] items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
-                          <span className="absolute left-3 top-3 z-[1] rounded-full bg-gradient-to-r from-green-500 to-green-400 px-2 py-0.5 text-xs font-bold text-black shadow-sm">
-                            Geverifieerd
-                          </span>
-                          <span
-                            className="text-2xl font-black text-white drop-shadow-md"
-                            aria-hidden
-                          >
-                            {initialsFromName(name)}
-                          </span>
+                        <div className="relative aspect-[3/2] overflow-hidden rounded-t-2xl">
+                          {djPhoto ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={djPhoto}
+                              alt={name}
+                              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
+                              <span
+                                className="text-4xl font-black text-white/20"
+                                aria-hidden
+                              >
+                                {initialsFromName(name)}
+                              </span>
+                            </div>
+                          )}
+                          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/20 to-transparent" />
                         </div>
                         <div className="flex flex-1 flex-col p-5">
                           <h3 className="truncate font-bold text-gray-900">

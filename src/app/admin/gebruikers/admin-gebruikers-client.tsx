@@ -23,9 +23,9 @@ function displayName(u: UserRow): string {
 function roleBadge(role: string | null | undefined) {
   const r = (role ?? "").toLowerCase();
   if (r === "admin")
-    return "bg-purple-500/20 text-purple-200 ring-purple-500/40";
-  if (r === "dj") return "bg-green-500/20 text-green-200 ring-green-500/40";
-  return "bg-blue-500/20 text-blue-200 ring-blue-500/40";
+    return "bg-purple-100 text-purple-800 ring-purple-200";
+  if (r === "dj") return "bg-green-100 text-green-800 ring-green-200";
+  return "bg-blue-100 text-blue-800 ring-blue-200";
 }
 
 function roleLabel(role: string | null | undefined): string {
@@ -157,10 +157,10 @@ export function AdminGebruikersClient() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
           Gebruikers
         </h1>
-        <p className="mt-1 text-sm text-gray-400">
+        <p className="mt-1 text-sm text-gray-600">
           Rollen beheren, accounts schorsen of verwijderen.
         </p>
       </div>
@@ -174,8 +174,8 @@ export function AdminGebruikersClient() {
               onClick={() => setFilter(t.key)}
               className={`rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${
                 filter === t.key
-                  ? "bg-green-500/20 text-green-300 ring-1 ring-green-500/40"
-                  : "bg-[#111827] text-gray-400 ring-1 ring-gray-800 hover:text-white"
+                  ? "bg-green-100 text-green-800 ring-1 ring-green-300"
+                  : "bg-gray-100 text-gray-600 ring-1 ring-gray-200 hover:bg-gray-200 hover:text-slate-900"
               }`}
             >
               {t.label}
@@ -187,23 +187,23 @@ export function AdminGebruikersClient() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Zoek op naam of e-mail…"
-          className="w-full max-w-md rounded-xl border border-gray-800 bg-[#111827] px-4 py-2.5 text-sm text-white placeholder:text-gray-500 focus:border-green-500/50 focus:outline-none focus:ring-2 focus:ring-green-500/20"
+          className="w-full max-w-md rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder:text-gray-400 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
         />
       </div>
 
       {error ? (
-        <p className="rounded-lg border border-red-500/35 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+        <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}
         </p>
       ) : null}
 
       {loading ? (
-        <p className="text-gray-400">Laden…</p>
+        <p className="text-gray-500">Laden…</p>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-gray-800 bg-[#0f172a]">
+        <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
           <table className="min-w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-gray-800 text-xs font-semibold uppercase tracking-wide text-gray-500">
+              <tr className="border-b border-gray-200 bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-500">
                 <th className="px-4 py-3">Naam</th>
                 <th className="px-4 py-3">E-mail</th>
                 <th className="px-4 py-3">Rol</th>
@@ -212,7 +212,7 @@ export function AdminGebruikersClient() {
                 <th className="px-4 py-3">Acties</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800">
+            <tbody className="divide-y divide-gray-100">
               {filtered.length === 0 ? (
                 <tr>
                   <td
@@ -229,20 +229,20 @@ export function AdminGebruikersClient() {
                   const suspended = Boolean(u.is_suspended);
                   const isSelf = u.id === selfId;
                   return (
-                    <tr key={u.id} className="text-gray-200">
+                    <tr key={u.id} className="text-slate-700">
                       <td className="px-4 py-3">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="font-medium text-white">
+                          <span className="font-medium text-slate-900">
                             {displayName(u)}
                           </span>
                           {suspended ? (
-                            <span className="rounded-full bg-red-500/25 px-2 py-0.5 text-[10px] font-bold uppercase text-red-200 ring-1 ring-red-500/40">
+                            <span className="rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold uppercase text-red-700 ring-1 ring-red-200">
                               Geschorst
                             </span>
                           ) : null}
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-gray-400">
+                      <td className="px-4 py-3 text-gray-600">
                         {u.email ?? "-"}
                       </td>
                       <td className="px-4 py-3">
@@ -266,9 +266,9 @@ export function AdminGebruikersClient() {
                       </td>
                       <td className="px-4 py-3 text-xs">
                         {suspended ? (
-                          <span className="text-red-300">Opgeschort</span>
+                          <span className="font-medium text-red-600">Opgeschort</span>
                         ) : (
-                          <span className="text-green-300">Actief</span>
+                          <span className="font-medium text-green-700">Actief</span>
                         )}
                       </td>
                       <td className="px-4 py-3">
@@ -281,7 +281,7 @@ export function AdminGebruikersClient() {
                                 is_suspended: !suspended,
                               })
                             }
-                            className="rounded-lg bg-gray-800 px-2 py-1.5 text-xs font-semibold text-white ring-1 ring-gray-700 hover:bg-gray-700 disabled:opacity-50"
+                            className="rounded-lg bg-gray-200 px-2 py-1.5 text-xs font-semibold text-slate-900 ring-1 ring-gray-300 hover:bg-gray-300 disabled:opacity-50"
                           >
                             {suspended ? "Activeer account" : "Schors account"}
                           </button>
@@ -289,7 +289,7 @@ export function AdminGebruikersClient() {
                             type="button"
                             disabled={!!actingId || isSelf}
                             onClick={() => setDeleteTarget(u)}
-                            className="rounded-lg bg-red-900/40 px-2 py-1.5 text-xs font-semibold text-red-200 ring-1 ring-red-800 hover:bg-red-900/60 disabled:opacity-50"
+                            className="rounded-lg bg-red-50 px-2 py-1.5 text-xs font-semibold text-red-700 ring-1 ring-red-200 hover:bg-red-100 disabled:opacity-50"
                           >
                             Verwijder account
                           </button>
@@ -312,20 +312,20 @@ export function AdminGebruikersClient() {
             onClick={() => setDeleteTarget(null)}
             aria-hidden
           />
-          <div className="relative z-10 w-full max-w-md rounded-2xl border border-gray-800 bg-[#0f172a] p-6 shadow-xl">
-            <h2 className="text-lg font-bold text-white">Account verwijderen</h2>
-            <p className="mt-3 text-sm text-gray-300">
+          <div className="relative z-10 w-full max-w-md rounded-2xl border border-gray-200 bg-white p-6 shadow-xl">
+            <h2 className="text-lg font-bold text-slate-900">Account verwijderen</h2>
+            <p className="mt-3 text-sm text-gray-600">
               Weet je zeker dat je dit account wilt verwijderen? Dit kan niet
               ongedaan worden gemaakt.
             </p>
-            <p className="mt-2 text-sm font-semibold text-amber-200">
+            <p className="mt-2 text-sm font-semibold text-amber-800">
               {displayName(deleteTarget)} ({deleteTarget.email})
             </p>
             <div className="mt-6 flex justify-end gap-3">
               <button
                 type="button"
                 onClick={() => setDeleteTarget(null)}
-                className="rounded-xl px-4 py-2 text-sm font-semibold text-gray-300 hover:bg-gray-800"
+                className="rounded-xl px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-100"
               >
                 Annuleren
               </button>

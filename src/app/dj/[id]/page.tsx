@@ -388,84 +388,89 @@ export default async function DjProfilePage({ params }: PageProps) {
       <DjPhotoSection photos={photoUrls} name={name} />
 
       <div className="mx-auto max-w-[1400px] px-4 pb-16 pt-6 sm:px-6 lg:px-8">
-        <div className="mt-6 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-          <div className="flex min-w-0 items-start gap-4">
-            <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md">
+        <div className="mt-6 flex items-start gap-5">
+          <div className="flex-none h-20 w-20 md:h-28 md:w-28 rounded-2xl overflow-hidden border border-gray-200 shadow-sm">
               {hasPhotos ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={photoUrls[0]}
-                  alt=""
-                  className="h-full w-full object-cover"
+                  alt={name}
+                  className="h-full w-full object-cover object-top"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center bg-green-100 text-2xl font-black text-green-700">
+                <div className="flex h-full w-full items-center justify-center bg-green-50 text-3xl font-black text-green-600">
                   {initialsFromName(name)}
                 </div>
               )}
-            </div>
-            <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-2xl font-black tracking-tight text-gray-900">
+          </div>
+
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight leading-tight">
                   {name}
-                </h1>
-                {isVerifiedProfile(profile) ? (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-green-500 px-2.5 py-1 text-xs font-bold text-black">
-                    <Check className="h-3 w-3 shrink-0" aria-hidden />
-                    Geverifieerde DJ
-                  </span>
-                ) : null}
-                {totalReviews > 5 ? (
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-600 ring-1 ring-amber-200">
-                    Veel geboekt
-                  </div>
-                ) : null}
-              </div>
-              <div className="mt-1 flex flex-wrap items-center gap-2">
-                <div className="flex gap-0.5" aria-hidden>
-                  {Array.from({ length: 5 }, (_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-4 w-4 ${i < Math.round(displayRating) ? "fill-amber-400 text-amber-400" : "fill-gray-200 text-gray-200"}`}
-                    />
-                  ))}
-                </div>
-                <span className="text-sm font-semibold text-gray-900">
-                  {displayRating.toFixed(1)}
+              </h1>
+              {isVerifiedProfile(profile) ? (
+                <span className="inline-flex items-center gap-1 bg-green-500 text-black text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap">
+                  <Check className="h-3 w-3 shrink-0" aria-hidden />
+                  Geverifieerde DJ
                 </span>
-                <span className="text-sm text-gray-400">
-                  {totalReviews === 0
-                    ? "Nog geen reviews"
-                    : `${totalReviews} ${totalReviews === 1 ? "review" : "reviews"}`}
-                </span>
-              </div>
-              <div className="mt-1.5 flex items-center gap-1.5 text-sm text-gray-500">
-                <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden />
-                <span>{city}</span>
-              </div>
-              {genres.length > 0 ? (
-                <div className="mt-2.5 flex flex-wrap gap-1.5">
-                  {genres.map((g) => (
-                    <span
-                      key={g}
-                      className="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600"
-                    >
-                      {g}
-                    </span>
-                  ))}
+              ) : null}
+              {totalReviews > 5 ? (
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-600 ring-1 ring-amber-200">
+                  Veel geboekt
                 </div>
               ) : null}
             </div>
+
+            <div className="flex items-center gap-2 mt-1.5">
+              <div className="flex gap-0.5" aria-hidden>
+                {Array.from({ length: 5 }, (_, i) => (
+                  <Star
+                    key={i}
+                    className={`h-4 w-4 ${i < Math.round(displayRating) ? "fill-amber-400 text-amber-400" : "fill-gray-200 text-gray-200"}`}
+                  />
+                ))}
+              </div>
+              <span className="text-sm font-bold text-gray-900">
+                {displayRating.toFixed(1)}
+              </span>
+              <span className="text-sm text-gray-400">
+                {totalReviews === 0
+                  ? "Nog geen reviews"
+                  : `${totalReviews} ${totalReviews === 1 ? "review" : "reviews"}`}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1.5 mt-1.5">
+              <MapPin className="h-3.5 w-3.5 text-gray-400 shrink-0" aria-hidden />
+              <span className="text-sm text-gray-500">{city}</span>
+            </div>
+
+            {genres.length > 0 ? (
+              <div className="flex flex-wrap gap-1.5 mt-2.5">
+                {genres.map((g) => (
+                  <span
+                    key={g}
+                    className="bg-gray-100 text-gray-600 text-xs font-medium px-2.5 py-1 rounded-full"
+                  >
+                    {g}
+                  </span>
+                ))}
+              </div>
+            ) : null}
           </div>
-          <div className="flex flex-none flex-col items-start gap-1 lg:items-end">
-            <StelVraagButton
-              djUserId={djUserId || undefined}
-              djProfileId={id}
-              className="w-full min-h-[44px] rounded-xl bg-gradient-to-r from-green-500 to-green-400 px-6 py-3 text-center text-sm font-bold text-black transition-all duration-150 hover:from-green-400 hover:to-green-300 active:scale-[0.98] lg:w-auto"
-            >
-              Stel {fn} een vraag
-            </StelVraagButton>
-            <p className="text-xs text-gray-400 lg:text-right">
+
+          <div className="hidden lg:flex flex-col items-end gap-1 flex-none">
+            {djUserId ? (
+              <StelVraagButton
+                djUserId={djUserId}
+                djProfileId={id}
+                className="rounded-xl bg-green-500 px-5 py-2.5 text-sm font-bold text-black hover:bg-green-400 transition-colors"
+              >
+                Stel {fn} een vraag
+              </StelVraagButton>
+            ) : null}
+            <p className="text-xs text-gray-400">
               Reageert binnen {avgResponseHoursText(profile)}
             </p>
           </div>
@@ -505,6 +510,18 @@ export default async function DjProfilePage({ params }: PageProps) {
                   : ""}
               </span>
             </div>
+          ) : null}
+        </div>
+
+        <div className="mt-4 lg:hidden">
+          {djUserId ? (
+            <StelVraagButton
+              djUserId={djUserId}
+              djProfileId={id}
+              className="w-full min-h-[44px] rounded-xl bg-green-500 px-5 py-3 text-sm font-bold text-black hover:bg-green-400 transition-colors"
+            >
+              Stel {fn} een vraag
+            </StelVraagButton>
           ) : null}
         </div>
 

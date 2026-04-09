@@ -130,19 +130,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (!ready) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a] font-sans text-white">
-        <p className="text-gray-400">Laden…</p>
+      <div className="flex min-h-screen items-center justify-center bg-[#f8fafc] font-sans text-slate-900">
+        <p className="text-gray-500">Laden…</p>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-[#0a0a0a] font-sans text-white">
-      <aside className="flex w-56 shrink-0 flex-col border-r border-gray-900 bg-[#0f0f0f] lg:w-60">
+    <div className="flex min-h-screen bg-[#f8fafc] font-sans text-slate-900">
+      <aside className="flex w-56 shrink-0 flex-col border-r border-gray-200 bg-white shadow-sm lg:w-60">
         <div className="px-4 py-5">
           <Link
             href="/admin"
-            className="text-lg font-bold tracking-tight text-green-400"
+            className="text-lg font-bold tracking-tight text-green-600"
           >
             bookadj
           </Link>
@@ -165,8 +165,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 href={item.href}
                 className={`flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                   active
-                    ? "border-r-2 border-green-500 bg-green-500/10 text-green-400"
-                    : "text-gray-400 hover:bg-gray-900 hover:text-white"
+                    ? "border-r-2 border-green-500 bg-green-50 text-green-800"
+                    : "text-gray-600 hover:bg-gray-100 hover:text-slate-900"
                 }`}
               >
                 <span className="flex-1">{item.label}</span>
@@ -184,13 +184,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             type="button"
             onClick={() => void handleLogout()}
             disabled={loggingOut}
-            className="w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-red-400 transition-colors hover:bg-red-500/10 hover:ring-1 hover:ring-red-800 disabled:opacity-50"
+            className="w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50 hover:ring-1 hover:ring-red-200 disabled:opacity-50"
           >
             {loggingOut ? "Bezig…" : "Uitloggen"}
           </button>
         </div>
       </aside>
-      <main className="min-w-0 flex-1 overflow-auto bg-[#0a0a0a] px-4 py-8 sm:px-6 lg:px-10">
+      <main className="min-w-0 flex-1 overflow-auto bg-[#f8fafc] px-4 py-8 sm:px-6 lg:px-10">
         {children}
       </main>
     </div>

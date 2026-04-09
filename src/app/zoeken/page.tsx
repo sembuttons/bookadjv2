@@ -8,6 +8,7 @@ import {
   getCity,
   getGenres,
   getHourlyRate,
+  getProfilePhotoUrls,
   getProfileRating,
   getResponseTimeLabel,
   getReviewCount,
@@ -552,12 +553,7 @@ export default function ZoekenPage() {
                 const city = getCity(row);
                 const genres = getGenres(row);
                 const responseLabel = getResponseTimeLabel(row);
-                const djPhoto =
-                  Array.isArray(row.photos) && row.photos.length > 0
-                    ? typeof row.photos[0] === "string"
-                      ? row.photos[0]
-                      : null
-                    : null;
+                const djPhoto = getProfilePhotoUrls(row)[0] ?? null;
                 return (
                   <li key={id}>
                     <Link

@@ -41,7 +41,7 @@ function typeBadge(type: QueueType) {
     case "dispute":
       return {
         label: "Geschil",
-        className: "bg-red-500/15 text-red-400 ring-red-500/30",
+        className: "bg-red-50 text-red-700 ring-red-200",
       };
     case "booking":
       return {
@@ -51,7 +51,7 @@ function typeBadge(type: QueueType) {
     default:
       return {
         label: type,
-        className: "bg-[#0f172a]/80 text-gray-400 ring-gray-800",
+        className: "bg-gray-100 text-gray-600 ring-gray-200",
       };
   }
 }
@@ -229,24 +229,24 @@ export default function AdminDashboardPage() {
 
   if (loading) {
     return (
-      <div className="py-12 text-center text-gray-400">Dashboard laden…</div>
+      <div className="py-12 text-center text-gray-500">Dashboard laden…</div>
     );
   }
 
   return (
     <div className="space-y-10">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
           Dashboard
         </h1>
-        <p className="mt-1 text-sm text-gray-400">
+        <p className="mt-1 text-sm text-gray-600">
           Overzicht en prioriteiten voor vandaag.
         </p>
       </div>
 
       {loadError ? (
         <p
-          className="rounded-lg border border-red-500/35 bg-red-500/10 px-3 py-2 text-sm text-red-400"
+          className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
           role="alert"
         >
           {loadError}
@@ -254,35 +254,35 @@ export default function AdminDashboardPage() {
       ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-2xl border border-gray-800 bg-[#111827] p-5 shadow-sm">
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
           <p className="text-sm font-medium text-gray-500">
             Open geschillen
           </p>
-          <p className="mt-2 text-3xl font-bold tabular-nums text-white">
+          <p className="mt-2 text-3xl font-bold tabular-nums text-slate-900">
             {openDisputes}
           </p>
         </div>
-        <div className="rounded-2xl border border-gray-800 bg-[#111827] p-5 shadow-sm">
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
           <p className="text-sm font-medium text-gray-500">
             DJ-verificaties in behandeling
           </p>
-          <p className="mt-2 text-3xl font-bold tabular-nums text-white">
+          <p className="mt-2 text-3xl font-bold tabular-nums text-slate-900">
             {pendingVerifications}
           </p>
         </div>
-        <div className="rounded-2xl border border-gray-800 bg-[#111827] p-5 shadow-sm">
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
           <p className="text-sm font-medium text-gray-500">
             Actieve boekingen
           </p>
-          <p className="mt-2 text-3xl font-bold tabular-nums text-white">
+          <p className="mt-2 text-3xl font-bold tabular-nums text-slate-900">
             {activeBookings}
           </p>
         </div>
-        <div className="rounded-2xl border border-gray-800 bg-[#111827] p-5 shadow-sm">
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
           <p className="text-sm font-medium text-gray-500">
             Omzet deze maand (platformfee)
           </p>
-          <p className="mt-2 text-3xl font-bold tabular-nums text-white">
+          <p className="mt-2 text-3xl font-bold tabular-nums text-slate-900">
             €
             {revenueEuro.toLocaleString("nl-NL", {
               minimumFractionDigits: Number.isInteger(revenueEuro) ? 0 : 2,
@@ -295,44 +295,44 @@ export default function AdminDashboardPage() {
       <section aria-labelledby="priority-heading">
         <h2
           id="priority-heading"
-          className="text-lg font-bold text-white"
+          className="text-lg font-bold text-slate-900"
         >
           Prioriteitenwachtrij
         </h2>
-        <p className="mt-1 text-sm text-gray-400">
+        <p className="mt-1 text-sm text-gray-600">
           Openstaande verificaties, geschillen en langlopende aanvragen.
         </p>
 
         {queue.length === 0 ? (
-          <p className="mt-6 rounded-xl border border-dashed border-gray-800 bg-[#0f172a] px-6 py-10 text-center text-sm text-gray-400">
+          <p className="mt-6 rounded-xl border border-dashed border-gray-200 bg-gray-50 px-6 py-10 text-center text-sm text-gray-600">
             Geen urgente items in de wachtrij.
           </p>
         ) : (
           <>
-            <div className="mt-6 hidden overflow-hidden rounded-2xl border border-gray-800 shadow-sm md:block">
+            <div className="mt-6 hidden overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm md:block">
               <table className="w-full text-left text-sm">
-                <thead className="bg-[#0f172a]">
+                <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-4 py-3 font-semibold text-gray-400">
+                    <th className="px-4 py-3 font-semibold text-gray-500">
                       Omschrijving
                     </th>
-                    <th className="px-4 py-3 font-semibold text-gray-400">
+                    <th className="px-4 py-3 font-semibold text-gray-500">
                       Type
                     </th>
-                    <th className="px-4 py-3 font-semibold text-gray-400">
+                    <th className="px-4 py-3 font-semibold text-gray-500">
                       Leeftijd
                     </th>
-                    <th className="px-4 py-3 font-semibold text-gray-400">
+                    <th className="px-4 py-3 font-semibold text-gray-500">
                       Actie
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-[#111827]">
+                <tbody className="divide-y divide-gray-100 bg-white">
                   {queue.map((row) => {
                     const badge = typeBadge(row.type);
                     return (
                       <tr key={row.id}>
-                        <td className="px-4 py-3 font-medium text-white">
+                        <td className="px-4 py-3 font-medium text-slate-900">
                           {row.description}
                         </td>
                         <td className="px-4 py-3">
@@ -342,13 +342,13 @@ export default function AdminDashboardPage() {
                             {badge.label}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-gray-400">
+                        <td className="px-4 py-3 text-gray-600">
                           {ageLabel(row.createdAt)}
                         </td>
                         <td className="px-4 py-3">
                           <Link
                             href={row.actionHref}
-                            className="inline-flex rounded-lg bg-gray-800 px-3 py-1.5 text-xs font-semibold text-white hover:bg-gray-700"
+                            className="inline-flex rounded-lg bg-green-500 px-3 py-1.5 text-xs font-semibold text-black hover:bg-green-400"
                           >
                             {row.actionLabel}
                           </Link>
@@ -366,9 +366,9 @@ export default function AdminDashboardPage() {
                 return (
                   <li
                     key={row.id}
-                    className="rounded-2xl border border-gray-800 bg-[#111827] p-4 shadow-sm"
+                    className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"
                   >
-                    <p className="font-medium text-white">
+                    <p className="font-medium text-slate-900">
                       {row.description}
                     </p>
                     <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -383,7 +383,7 @@ export default function AdminDashboardPage() {
                     </div>
                     <Link
                       href={row.actionHref}
-                      className="mt-3 inline-flex rounded-lg bg-gray-800 px-3 py-2 text-xs font-semibold text-white hover:bg-gray-700"
+                      className="mt-3 inline-flex rounded-lg bg-green-500 px-3 py-2 text-xs font-semibold text-black hover:bg-green-400"
                     >
                       {row.actionLabel}
                     </Link>
