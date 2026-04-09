@@ -158,16 +158,17 @@ export default function VoorDjsPage() {
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-green-500/90">
             Voor professionele DJ&apos;s
           </p>
-          <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl md:leading-[1.08]">
-            Jouw talent.
+          <h1 className="mt-6 text-4xl font-black tracking-tight sm:text-5xl md:text-6xl md:leading-[1.08]">
+            Jij houdt 100% van je tarief.
             <br />
             <span className="bg-gradient-to-r from-white via-white to-green-400/90 bg-clip-text text-transparent">
-              Jouw podium.
+              Altijd.
             </span>
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-gray-500 sm:text-xl">
-            Meer boekingen, minder moeite. Gratis aanmelden, geen verborgen
-            kosten.
+          <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-gray-400 sm:text-xl">
+            Geen commissie. Geen verborgen kosten. De klant betaalt een kleine{" "}
+            <span className="font-semibold text-white">boekingsbescherming</span>{" "}
+            — jij ontvangt precies wat je vraagt.
           </p>
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
@@ -186,6 +187,40 @@ export default function VoorDjsPage() {
           <p className="mt-8 text-sm text-gray-500">
             Serieuze boekers · Veilige betalingen · Duidelijke afspraken
           </p>
+        </div>
+      </section>
+
+      {/* 3s scan section */}
+      <section className="bg-white px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-4 sm:grid-cols-3">
+            {[
+              { title: "Gratis aanmelden", text: "Maak je profiel aan in minuten." },
+              { title: "Gratis boekingen ontvangen", text: "Ontvang aanvragen via het platform." },
+              { title: "0% commissie", text: "Jij ontvangt 100% van je tarief." },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
+              >
+                <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-50 text-green-600 ring-1 ring-green-100">
+                  <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none" aria-hidden>
+                    <path
+                      d="M5 10l3 3 7-7"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+                <div className="min-w-0">
+                  <p className="font-bold text-slate-900">{item.title}</p>
+                  <p className="mt-1 text-sm text-slate-600">{item.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

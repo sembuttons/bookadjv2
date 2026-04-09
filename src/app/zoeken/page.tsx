@@ -553,6 +553,7 @@ export default function ZoekenPage() {
                 const city = getCity(row);
                 const genres = getGenres(row);
                 const responseLabel = getResponseTimeLabel(row);
+                const hourly = getHourlyRate(row);
                 const djPhoto = getProfilePhotoUrls(row)[0] ?? null;
                 return (
                   <li key={id}>
@@ -582,6 +583,9 @@ export default function ZoekenPage() {
                           {stage}
                         </h3>
                         <p className="text-sm text-slate-500">{city}</p>
+                        <p className="text-sm font-semibold text-slate-900">
+                          {hourly != null ? `€${Math.round(hourly)}/uur` : "Tarief op aanvraag"}
+                        </p>
                         <div className="flex flex-wrap gap-2">
                           {genres.slice(0, 4).map((g) => (
                             <span
@@ -595,10 +599,7 @@ export default function ZoekenPage() {
                         <p className="text-xs text-gray-500">
                           Reactietijd: {responseLabel}
                         </p>
-                        <div className="flex items-center justify-between pt-3">
-                          <span className="text-sm text-slate-500">
-                            Profiel bekijken
-                          </span>
+                        <div className="flex justify-end pt-3">
                           <span className="inline-flex items-center gap-1 text-sm font-medium text-amber-600">
                             <IconSparkleNew className="shrink-0 text-amber-500" />
                             Nieuw

@@ -47,7 +47,7 @@ const customerSteps: Step[] = [
   {
     n: "03",
     title: "Betaal veilig via bookadj",
-    desc: "Je betaling wordt veilig vastgehouden. Pas na het event wordt de DJ uitbetaald.",
+    desc: "Je betaalt het tarief van de DJ plus een kleine boekingsbescherming. Hiermee garanderen we veilige betaling en ondersteuning als er iets misgaat.",
     Icon: CreditCard,
   },
   {
@@ -80,7 +80,7 @@ const djSteps: Step[] = [
   {
     n: "04",
     title: "Speel en word betaald",
-    desc: "Na het event wordt je uitbetaald. Veilig, snel en betrouwbaar.",
+    desc: "Jij ontvangt altijd 100% van je tarief. De klant betaalt boekingsbescherming bovenop jouw bedrag.",
     Icon: Wallet,
   },
 ];

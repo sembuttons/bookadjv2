@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { CheckCircle, Circle, Loader2 } from "lucide-react";
 import { Tooltip } from "@/components/Tooltip";
+import { getHourlyRate, type DjProfileRow } from "@/lib/dj-profile-helpers";
 import { calculateServiceFee, calculateTotalPrice } from "@/lib/pricing";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase-browser";
@@ -157,7 +158,10 @@ export default function DjProfielPage() {
     setStageName(typeof profile.stage_name === "string" ? profile.stage_name : "");
     setBio(typeof profile.bio === "string" ? profile.bio : "");
     setHomeCity(typeof profile.home_city === "string" ? profile.home_city : "");
-    setHourlyRate(typeof profile.hourly_rate === "number" ? profile.hourly_rate : "");
+    {
+      const r = getHourlyRate(profile as DjProfileRow);
+      setHourlyRate(r != null ? r : "");
+    }
     setYearsExperience(
       typeof profile.years_experience === "number" ? profile.years_experience : "",
     );
@@ -213,7 +217,8 @@ export default function DjProfielPage() {
       stage_name: stageName.trim() || null,
       bio: bio.trim() || null,
       home_city: homeCity.trim() || null,
-      hourly_rate: hourlyRate === "" ? null : hourlyRate,
+      hourly_rate:
+        hourlyRate === "" ? null : Number(hourlyRate),
       years_experience: yearsExperience === "" ? null : yearsExperience,
       genres,
       custom_genres: customGenre.trim() || null,

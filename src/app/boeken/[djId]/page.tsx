@@ -780,12 +780,21 @@ export default function BoekenPage() {
                   {formatPrice(serviceFeeEuro)}
                 </span>
               </div>
+              <div className="flex justify-between text-gray-600">
+                <span>Reiskosten (indicatie)</span>
+                <span className="font-semibold text-gray-900">
+                  {travelCost > 0 ? formatPrice(travelCost) : formatPrice(0)}
+                </span>
+              </div>
               <div className="mt-3 border-t border-gray-200 pt-3 flex items-baseline justify-between text-xl font-black text-gray-900">
                 <span>Totaal</span>
                 <span>{formatPrice(totalPriceEuro)}</span>
               </div>
               <p className="mt-2 text-xs text-gray-500">
                 Het uurtarief wordt vastgelegd bij je aanvraag.
+              </p>
+              <p className="mt-1 text-xs text-gray-500">
+                Totaal is exclusief reiskosten. Reiskosten worden bevestigd door de DJ na je aanvraag.
               </p>
             </div>
 

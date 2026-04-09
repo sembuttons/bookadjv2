@@ -23,16 +23,41 @@ export function getCity(row: DjProfileRow): string {
   return typeof c === "string" ? c : "-";
 }
 
-export function getHourlyRate(row: DjProfileRow): number | null {
-  const v =
-    row.hourly_rate ??
-    row.hourly_rate_min ??
-    row.rate_per_hour ??
-    row.base_hourly_rate;
-  if (typeof v === "number" && !Number.isNaN(v)) return v;
+/** Parse hourly rate from DB/API (PostgREST often returns `numeric` as string). */
+function parseHourlyScalar(v: unknown): number | null {
+  if (v == null) return null;
+  if (typeof v === "bigint") {
+    const n = Number(v);
+    return Number.isFinite(n) && n > 0 ? n : null;
+  }
+  if (typeof v === "number" && Number.isFinite(v)) {
+    return v > 0 ? v : null;
+  }
   if (typeof v === "string") {
-    const n = parseFloat(v);
-    return Number.isNaN(n) ? null : n;
+    const t = v.trim().replace(/€/g, "").replace(/\s/g, "");
+    if (!t) return null;
+    const n = parseFloat(
+      t.includes(",")
+        ? t.replace(/\./g, "").replace(",", ".")
+        : t.replace(",", "."),
+    );
+    if (!Number.isFinite(n) || n <= 0) return null;
+    return n;
+  }
+  return null;
+}
+
+export function getHourlyRate(row: DjProfileRow): number | null {
+  const keys = [
+    "hourly_rate",
+    "hourly_rate_min",
+    "rate_per_hour",
+    "base_hourly_rate",
+    "hourlyRate",
+  ] as const;
+  for (const k of keys) {
+    const n = parseHourlyScalar(row[k]);
+    if (n != null) return n;
   }
   return null;
 }

@@ -233,12 +233,21 @@ export function BookingPanel({
             </span>
             <span className="font-medium text-slate-700">{formatPrice(serviceFee)}</span>
           </div>
+          <div className="flex justify-between text-slate-500">
+            <span>Reiskosten (indicatie)</span>
+            <span className="font-medium text-slate-700">
+              {travelCost > 0 ? formatPrice(travelCost) : "-"}
+            </span>
+          </div>
           <div className="border-t border-gray-200 pt-2 flex items-baseline justify-between">
             <span className="text-base font-bold text-slate-900">Totaal</span>
             <span className="text-lg font-black text-slate-900">
               {formatPrice(totalPrice)}
             </span>
           </div>
+          <p className="text-xs text-gray-400">
+            Totaal is exclusief reiskosten. Reiskosten worden bevestigd na je aanvraag.
+          </p>
         </div>
 
         <Link

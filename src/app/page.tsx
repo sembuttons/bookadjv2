@@ -23,6 +23,7 @@ import {
   getHourlyRate,
   getProfilePhotoUrls,
   getProfileRating,
+  getReviewCount,
   getStageName,
   type DjProfileRow,
 } from "@/lib/dj-profile-helpers";
@@ -395,8 +396,12 @@ export default async function Home() {
                 const djGenres = getGenres(dj).slice(0, 3);
                 const rate = getHourlyRate(dj);
                 const rating = getProfileRating(dj);
-                const displayRating = rating > 0 ? rating : 4.8;
+                const reviewCount = getReviewCount(dj);
                 const djPhoto = getProfilePhotoUrls(dj)[0] ?? null;
+                const filledStars = Math.min(
+                  5,
+                  Math.max(0, Math.round(rating)),
+                );
                 return (
                   <li key={dj.id}>
                     <Link href={`/dj/${dj.id}`}>
@@ -442,7 +447,13 @@ export default async function Home() {
                               </span>
                             )}
                           </div>
-                          <div className="mt-4 flex items-end justify-between pt-4">
+                          <div
+                            className={
+                              reviewCount > 0
+                                ? "mt-4 flex items-end justify-between pt-4"
+                                : "mt-4 flex items-end pt-4"
+                            }
+                          >
                             <div>
                               <p className="text-lg font-black text-gray-900">
                                 {rate != null
@@ -460,12 +471,27 @@ export default async function Home() {
                                 </p>
                               ) : null}
                             </div>
-                            <div className="text-right text-sm">
-                              <StarRow value={Math.round(displayRating)} />
-                              <p className="mt-1 font-semibold text-green-600">
-                                {displayRating.toFixed(1)}
-                              </p>
-                            </div>
+                            {reviewCount > 0 ? (
+                              <span className="inline-flex items-center gap-1 text-sm font-semibold text-gray-900">
+                                <span className="flex gap-0.5" aria-hidden>
+                                  {[1, 2, 3, 4, 5].map((i) => (
+                                    <svg
+                                      key={i}
+                                      className={`h-3.5 w-3.5 ${
+                                        i <= filledStars
+                                          ? "fill-amber-400 text-amber-400"
+                                          : "fill-gray-200 text-gray-200"
+                                      }`}
+                                      viewBox="0 0 20 20"
+                                      fill="currentColor"
+                                    >
+                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                  ))}
+                                </span>
+                                {rating.toFixed(1)}
+                              </span>
+                            ) : null}
                           </div>
                         </div>
                       </article>
@@ -625,6 +651,33 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* DJ strip (subtle, near bottom) */}
+      <section className="bg-[#f8fafc] px-4 py-12 sm:px-6 lg:px-8" aria-label="Voor DJ's">
+        <div className="mx-auto max-w-7xl">
+          <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0">
+                <p className="text-sm font-semibold uppercase tracking-wide text-green-600">
+                  Ben jij DJ?
+                </p>
+                <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-900">
+                  Meld je gratis aan.
+                </h2>
+                <p className="mt-2 text-slate-600">
+                  0% commissie. Ontvang boekingen, beheer je profiel, en houd je volledige tarief.
+                </p>
+              </div>
+              <Link
+                href="/voor-djs"
+                className="inline-flex min-h-[44px] shrink-0 items-center justify-center rounded-xl bg-green-500 px-6 py-3 text-sm font-bold text-black transition-colors hover:bg-green-400"
+              >
+                Aanmelden als DJ →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section
         id="voor-djs"
@@ -662,7 +715,7 @@ export default async function Home() {
               Zoek een DJ
             </Link>
             <Link
-              href="/aanmelden"
+              href="/auth?tab=aanmelden"
               className="inline-flex items-center justify-center rounded-xl border border-white/20 px-8 py-4 text-sm font-semibold text-white transition-all duration-150 hover:bg-white/10"
             >
               Account aanmaken

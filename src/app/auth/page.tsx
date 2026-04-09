@@ -612,6 +612,12 @@ export default function AuthPage() {
                   DJ
                 </label>
               </div>
+              {role === "dj" ? (
+                <div className="mt-3 rounded-xl border border-green-200 bg-green-50 px-4 py-2.5 text-sm text-green-800">
+                  <span className="font-semibold">Je houdt 100% van je tarief</span> — wij rekenen
+                  niets aan jou.
+                </div>
+              ) : null}
             </div>
             <button
               type="submit"

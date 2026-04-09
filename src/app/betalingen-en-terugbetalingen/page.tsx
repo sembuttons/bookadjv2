@@ -46,10 +46,32 @@ export default function BetalingenTerugbetalingenPage() {
             een aanvraag die wordt afgewezen.
           </p>
           <p>
-            Het platform houdt een deel van het bedrag in voor
-            servicekosten en uitbetaling aan de DJ volgens de afspraken in je
-            boeking en de voorwaarden.
+            Je betaalt het tarief van de DJ plus{" "}
+            <strong className="text-slate-900">Boekingsbescherming</strong>.
           </p>
+          <ul className="mt-4 space-y-2 rounded-xl border border-gray-200 bg-gray-50 p-5 text-slate-700">
+            {[
+              "Veilige betaling via het platform",
+              "Volledige terugbetaling als de DJ annuleert (volgens beleid)",
+              "Klantenservice bij problemen",
+              "Geld wordt pas uitbetaald na het event",
+            ].map((t) => (
+              <li key={t} className="flex gap-3">
+                <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-50 text-green-600 ring-1 ring-green-100">
+                  <svg className="h-3 w-3" viewBox="0 0 12 12" fill="none" aria-hidden>
+                    <path
+                      d="M2.5 6l2.5 2.5L9.5 3.5"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+                <span>{t}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
