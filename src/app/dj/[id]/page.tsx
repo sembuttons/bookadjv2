@@ -423,22 +423,24 @@ export default async function DjProfilePage({ params }: PageProps) {
             </div>
 
             <div className="flex items-center gap-2 mt-1.5">
-              <div className="flex gap-0.5" aria-hidden>
-                {Array.from({ length: 5 }, (_, i) => (
-                  <Star
-                    key={i}
-                    className={`h-4 w-4 ${i < Math.round(displayRating) ? "fill-amber-400 text-amber-400" : "fill-gray-200 text-gray-200"}`}
-                  />
-                ))}
-              </div>
-              <span className="text-sm font-bold text-gray-900">
-                {displayRating.toFixed(1)}
-              </span>
-              <span className="text-sm text-gray-400">
-                {totalReviews === 0
-                  ? "Nog geen reviews"
-                  : `${totalReviews} ${totalReviews === 1 ? "review" : "reviews"}`}
-              </span>
+              {totalReviews > 0 ? (
+                <>
+                  <div className="flex gap-0.5" aria-hidden>
+                    {Array.from({ length: 5 }, (_, i) => (
+                      <Star
+                        key={i}
+                        className={`h-4 w-4 ${i < Math.round(displayRating) ? "fill-amber-400 text-amber-400" : "fill-gray-200 text-gray-200"}`}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-sm font-bold text-gray-900">
+                    {displayRating.toFixed(1)}
+                  </span>
+                  <span className="text-sm text-gray-400">
+                    {totalReviews} {totalReviews === 1 ? "review" : "reviews"}
+                  </span>
+                </>
+              ) : null}
             </div>
 
             <div className="flex items-center gap-1.5 mt-1.5">
@@ -641,7 +643,7 @@ export default async function DjProfilePage({ params }: PageProps) {
 
             <DjUspGrid stageName={displayForBio} items={customUsps} />
 
-            {reviews.length > 0 ? (
+            {totalReviews > 0 ? (
               <section aria-labelledby="reviews-heading">
                 <h2 id="reviews-heading" className="text-lg font-bold text-gray-900">
                   Reviews
@@ -712,23 +714,6 @@ export default async function DjProfilePage({ params }: PageProps) {
                       </article>
                     );
                   })}
-                </div>
-              </section>
-            ) : (
-              <section aria-label="Reviews">
-                <div className="rounded-2xl border border-gray-100 bg-gray-50 p-8 text-center">
-                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-50">
-                    <Star className="h-6 w-6 fill-green-600 text-green-600" aria-hidden />
-                  </div>
-                  <p className="mb-2 font-semibold text-gray-900">Nog geen reviews</p>
-                  <p className="mx-auto max-w-xs text-sm text-gray-500">
-                    Deze DJ is nieuw op bookadj. Wees de eerste die een boeking plaatst en een
-                    review achterlaat.
-                  </p>
-                  <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-3 py-1.5 text-xs font-medium text-green-700">
-                    <CheckCircle2 className="h-4 w-4" aria-hidden />
-                    Geverifieerde DJ
-                  </div>
                 </div>
               </section>
             )}
