@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DashboardShellSkeleton } from "@/components/skeleton";
 import { supabase } from "@/lib/supabase-browser";
 import { OCCASION_OPTIONS } from "@/lib/occasions";
@@ -161,13 +161,33 @@ export default function DjProfielAanmakenPage() {
     return null;
   }, [hourlyNum]);
 
+  const successRedirectRef = useRef<number | null>(null);
+
+  const goToDashboard = useCallback(() => {
+    if (successRedirectRef.current != null) {
+      window.clearTimeout(successRedirectRef.current);
+      successRedirectRef.current = null;
+    }
+    router.push("/dashboard/dj");
+    router.refresh();
+  }, [router]);
+
   useEffect(() => {
     if (!success) return;
-    const t = window.setTimeout(() => {
+    if (successRedirectRef.current != null) {
+      window.clearTimeout(successRedirectRef.current);
+    }
+    successRedirectRef.current = window.setTimeout(() => {
+      successRedirectRef.current = null;
       router.push("/dashboard/dj");
       router.refresh();
-    }, 3000);
-    return () => window.clearTimeout(t);
+    }, 90_000);
+    return () => {
+      if (successRedirectRef.current != null) {
+        window.clearTimeout(successRedirectRef.current);
+        successRedirectRef.current = null;
+      }
+    };
   }, [success, router]);
 
   const toggleLanguage = (lang: string) => {
@@ -350,8 +370,16 @@ export default function DjProfielAanmakenPage() {
               Na goedkeuring word je zichtbaar in de zoekresultaten.
             </li>
           </ol>
-          <p className="mt-6 text-xs text-gray-500">
-            Je wordt zo doorgestuurd naar je dashboard…
+          <button
+            type="button"
+            onClick={() => goToDashboard()}
+            className="mt-6 w-full min-h-[44px] rounded-xl bg-green-500 px-4 py-3 text-sm font-bold text-black transition-colors hover:bg-green-400"
+          >
+            Naar mijn dashboard
+          </button>
+          <p className="mt-3 text-center text-xs text-gray-500">
+            Je wordt automatisch doorgestuurd na ongeveer anderhalve minuut als je
+            hier niets kiest.
           </p>
         </div>
       </div>

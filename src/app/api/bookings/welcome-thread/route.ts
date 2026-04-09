@@ -46,11 +46,19 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Geen toegang." }, { status: 403 });
   }
 
-  const { data: profile, error: profErr } = await supabaseAdmin
-    .from("dj_profiles")
-    .select("user_id, stage_name, display_name, full_name")
-    .eq("id", row.dj_id)
-    .maybeSingle();
+  const [{ data: profile, error: profErr }, { data: customerRow }] =
+    await Promise.all([
+      supabaseAdmin
+        .from("dj_profiles")
+        .select("user_id, stage_name, display_name, full_name")
+        .eq("id", row.dj_id)
+        .maybeSingle(),
+      supabaseAdmin
+        .from("users")
+        .select("full_name, email")
+        .eq("id", row.customer_id)
+        .maybeSingle(),
+    ]);
 
   if (profErr || !profile) {
     return NextResponse.json(
@@ -81,21 +89,27 @@ export async function POST(req: Request) {
     (typeof p.full_name === "string" && p.full_name.trim()) ||
     "de DJ";
 
-  const content = `Je boeking is verzonden! Je kunt hier direct met ${djName} chatten.`;
+  const cu = customerRow as
+    | { full_name?: string | null; email?: string | null }
+    | null;
+  const customerName =
+    (typeof cu?.full_name === "string" && cu.full_name.trim()) ||
+    (typeof cu?.email === "string" && cu.email.split("@")[0]?.trim()) ||
+    "Klant";
 
-  const { data: existingRows } = await supabaseAdmin
+  /** Neutral copy so both klant and DJ zien wie de boeker is (geen alleen-“je”-tekst). */
+  const content = `${customerName} heeft een boeking geplaatst. Chat hier verder met ${djName}.`;
+
+  const { data: existingThread } = await supabaseAdmin
     .from("messages")
-    .select("id, content")
+    .select("id")
     .eq("booking_id", bookingId)
-    .eq("sender_id", auth.user.id)
+    .eq("sender_id", row.customer_id)
     .eq("recipient_id", djAuthId)
-    .limit(25);
+    .eq("inbox_type", "book_me")
+    .limit(1);
 
-  const alreadyWelcome = (existingRows ?? []).some((r: { content?: string }) =>
-    (r.content ?? "").startsWith("Je boeking is verzonden!"),
-  );
-
-  if (alreadyWelcome) {
+  if (existingThread && existingThread.length > 0) {
     return NextResponse.json({ ok: true, duplicate: true });
   }
 

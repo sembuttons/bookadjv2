@@ -6,12 +6,7 @@ import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
 import { useCallback, useMemo, useState } from "react";
 import { DatePickerPopover } from "@/components/date-picker-popover";
 import { StelVraagButton } from "@/components/messaging/stel-vraag-button";
-import { Tooltip } from "@/components/Tooltip";
-import {
-  calculateServiceFee,
-  calculateTotalPrice,
-  formatPrice,
-} from "@/lib/pricing";
+import { calculateTotalPrice, formatPrice } from "@/lib/pricing";
 
 const libraries = ["places"] as const;
 
@@ -100,7 +95,6 @@ export function BookingPanel({
     [hourlyRate, hours],
   );
 
-  const serviceFee = useMemo(() => calculateServiceFee(djCost), [djCost]);
   const totalPrice = useMemo(() => calculateTotalPrice(djCost), [djCost]);
 
   const hourOptions = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -221,32 +215,17 @@ export function BookingPanel({
           </p>
         )}
 
-        <div className="mt-6 space-y-2 rounded-xl border border-gray-100 bg-slate-50 px-4 py-3 text-sm">
-          <div className="flex justify-between text-slate-500">
-            <span>{hours}x DJ Tarief</span>
-            <span className="font-medium text-slate-700">{formatPrice(djCost)}</span>
-          </div>
-          <div className="flex justify-between text-slate-500">
-            <span className="inline-flex items-center">
-              Boekingsbescherming
-              <Tooltip text="De boekingsbescherming dekt veilige betaling, ondersteuning bij problemen en volledige terugbetaling als de DJ annuleert." />
+        <div className="mt-6 rounded-xl border border-gray-100 bg-slate-50 px-4 py-3 text-sm">
+          <div className="flex items-baseline justify-between gap-3">
+            <span className="font-semibold text-slate-700">
+              Totaal (na acceptatie)
             </span>
-            <span className="font-medium text-slate-700">{formatPrice(serviceFee)}</span>
-          </div>
-          <div className="flex justify-between text-slate-500">
-            <span>Reiskosten (indicatie)</span>
-            <span className="font-medium text-slate-700">
-              {travelCost > 0 ? formatPrice(travelCost) : "-"}
-            </span>
-          </div>
-          <div className="border-t border-gray-200 pt-2 flex items-baseline justify-between">
-            <span className="text-base font-bold text-slate-900">Totaal</span>
             <span className="text-lg font-black text-slate-900">
               {formatPrice(totalPrice)}
             </span>
           </div>
-          <p className="text-xs text-gray-400">
-            Totaal is exclusief reiskosten. Reiskosten worden bevestigd na je aanvraag.
+          <p className="mt-2 text-xs text-gray-400">
+            Reiskosten komen bovenop en worden door de DJ bevestigd.
           </p>
         </div>
 

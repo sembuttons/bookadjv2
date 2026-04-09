@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { DjOnboardingChecklist } from "@/components/dj-onboarding-checklist";
 import { DashboardBookingsSkeleton, EmptyState } from "@/components/skeleton";
 import { supabase } from "@/lib/supabase-browser";
@@ -58,6 +58,8 @@ type UserEmbed = {
 
 type BookingRow = {
   id: string;
+  customer_id?: string | null;
+  reference?: string | null;
   status?: string | null;
   event_date?: string | null;
   start_time?: string | null;
@@ -100,6 +102,15 @@ function hoursValue(b: BookingRow): number {
   return 0;
 }
 
+type AcceptSuccessInfo = {
+  customerName: string;
+  eventDateLabel: string;
+  reference: string;
+  customerUserId: string | null;
+};
+
+const ACCEPT_SUCCESS_AUTO_CLOSE_MS = 60_000;
+
 export default function DjDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -112,6 +123,36 @@ export default function DjDashboardPage() {
   const [onboardingVideoUrl, setOnboardingVideoUrl] = useState<unknown>(null);
   const [onboardingInstagram, setOnboardingInstagram] = useState<unknown>(null);
   const [onboardingSoundcloud, setOnboardingSoundcloud] = useState<unknown>(null);
+  const [acceptSuccess, setAcceptSuccess] = useState<AcceptSuccessInfo | null>(
+    null,
+  );
+  const acceptAutoCloseRef = useRef<number | null>(null);
+
+  const clearAcceptSuccess = useCallback(() => {
+    if (acceptAutoCloseRef.current) {
+      window.clearTimeout(acceptAutoCloseRef.current);
+      acceptAutoCloseRef.current = null;
+    }
+    setAcceptSuccess(null);
+  }, []);
+
+  const scheduleAcceptSuccessAutoClose = useCallback(() => {
+    if (acceptAutoCloseRef.current) {
+      window.clearTimeout(acceptAutoCloseRef.current);
+    }
+    acceptAutoCloseRef.current = window.setTimeout(() => {
+      setAcceptSuccess(null);
+      acceptAutoCloseRef.current = null;
+    }, ACCEPT_SUCCESS_AUTO_CLOSE_MS);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (acceptAutoCloseRef.current) {
+        window.clearTimeout(acceptAutoCloseRef.current);
+      }
+    };
+  }, []);
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -214,6 +255,19 @@ export default function DjDashboardPage() {
   const handleAccept = useCallback(
     async (bookingId: string) => {
       if (!djProfileId) return;
+      const acceptedReq = pending.find((r) => r.id === bookingId);
+      const customerUserId =
+        typeof acceptedReq?.customer_id === "string" &&
+        acceptedReq.customer_id.trim()
+          ? acceptedReq.customer_id.trim()
+          : null;
+      const refDisplay =
+        acceptedReq &&
+        typeof acceptedReq.reference === "string" &&
+        acceptedReq.reference.trim()
+          ? acceptedReq.reference.trim()
+          : bookingId.slice(0, 8).toUpperCase();
+
       setActionId(bookingId);
       const { error } = await supabase
         .from("bookings")
@@ -335,9 +389,19 @@ export default function DjDashboardPage() {
           /* e-mailfout blokkeert acceptatie niet */
         }
       }
+
+      setAcceptSuccess({
+        customerName: acceptedReq ? getCustomerName(acceptedReq) : "Klant",
+        eventDateLabel: acceptedReq
+          ? formatEventDate(acceptedReq.event_date)
+          : "-",
+        reference: refDisplay,
+        customerUserId,
+      });
+      scheduleAcceptSuccessAutoClose();
       await loadData();
     },
-    [djProfileId, loadData],
+    [djProfileId, loadData, pending, scheduleAcceptSuccessAutoClose],
   );
 
   const handleDecline = useCallback(
@@ -720,6 +784,96 @@ export default function DjDashboardPage() {
           </ul>
         )}
       </section>
+
+      {acceptSuccess ? (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4"
+          role="presentation"
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="accept-success-title"
+            className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl border border-gray-200 bg-white p-6 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-green-700">
+              <svg
+                className="h-7 w-7"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.2}
+                aria-hidden
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+            <h2
+              id="accept-success-title"
+              className="mt-4 text-center text-xl font-bold text-gray-900"
+            >
+              Boeking geaccepteerd
+            </h2>
+            <p className="mt-2 text-center text-sm text-slate-600">
+              De aanvraag staat nu bij{" "}
+              <span className="font-semibold text-slate-800">
+                Bevestigde boekingen
+              </span>
+              . De klant ontvangt een bevestiging per e-mail.
+            </p>
+            <dl className="mt-5 space-y-3 rounded-xl border border-gray-100 bg-gray-50 p-4 text-sm">
+              <div>
+                <dt className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                  Klant
+                </dt>
+                <dd className="mt-0.5 font-semibold text-slate-900">
+                  {acceptSuccess.customerName}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                  Datum evenement
+                </dt>
+                <dd className="mt-0.5 font-medium text-slate-900">
+                  {acceptSuccess.eventDateLabel}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                  Referentie
+                </dt>
+                <dd className="mt-0.5 font-mono text-sm font-semibold text-slate-900">
+                  {acceptSuccess.reference}
+                </dd>
+              </div>
+            </dl>
+            {acceptSuccess.customerUserId ? (
+              <Link
+                href={`/berichten/${encodeURIComponent(acceptSuccess.customerUserId)}`}
+                className="mt-4 flex min-h-[44px] items-center justify-center rounded-xl border-2 border-green-200 bg-green-50 px-4 py-3 text-center text-sm font-bold text-green-800 transition-colors hover:bg-green-100"
+              >
+                Open gesprek met klant
+              </Link>
+            ) : null}
+            <button
+              type="button"
+              onClick={() => clearAcceptSuccess()}
+              className="mt-4 w-full min-h-[44px] rounded-xl bg-green-500 px-4 py-3 text-sm font-bold text-black transition-colors hover:bg-green-400"
+            >
+              Sluiten
+            </button>
+            <p className="mt-3 text-center text-xs text-gray-500">
+              Dit venster sluit automatisch na ongeveer een minuut. Gebruik de
+              knop hierboven om direct verder te gaan.
+            </p>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

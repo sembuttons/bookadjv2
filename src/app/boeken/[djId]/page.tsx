@@ -21,7 +21,6 @@ import {
   formatPrice,
 } from "@/lib/pricing";
 import { supabase } from "@/lib/supabase-browser";
-import { Tooltip } from "@/components/Tooltip";
 
 const EVENT_TYPES = [
   "Verjaardagsfeest",
@@ -186,7 +185,6 @@ export default function BoekenPage() {
   const genres = profile ? getGenres(profile) : [];
 
   const djCostEuro = useMemo(() => hourlyRate * hours, [hourlyRate, hours]);
-  const serviceFeeEuro = useMemo(() => calculateServiceFee(djCostEuro), [djCostEuro]);
   const totalPriceEuro = useMemo(() => calculateTotalPrice(djCostEuro), [djCostEuro]);
 
   const blockedSet = useMemo(
@@ -761,40 +759,18 @@ export default function BoekenPage() {
               </ul>
             </div>
 
-            <div className="mt-5 bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm">
-              <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-                Prijsopbouw
-              </p>
-              <div className="mt-3 flex justify-between text-gray-600">
-                <span>{hours}x DJ Tarief</span>
-                <span className="font-semibold text-gray-900">
-                  {formatPrice(djCostEuro)}
+            <div className="mt-5 rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm">
+              <div className="flex items-baseline justify-between gap-4">
+                <span className="text-sm font-semibold text-gray-700">
+                  Totaal (na acceptatie)
                 </span>
-              </div>
-              <div className="flex justify-between text-gray-600">
-                <span className="inline-flex items-center">
-                  Boekingsbescherming
-                  <Tooltip text="De boekingsbescherming dekt veilige betaling, ondersteuning bij problemen en volledige terugbetaling als de DJ annuleert." />
+                <span className="text-xl font-black text-gray-900">
+                  {formatPrice(totalPriceEuro)}
                 </span>
-                <span className="font-semibold text-gray-900">
-                  {formatPrice(serviceFeeEuro)}
-                </span>
-              </div>
-              <div className="flex justify-between text-gray-600">
-                <span>Reiskosten (indicatie)</span>
-                <span className="font-semibold text-gray-900">
-                  {travelCost > 0 ? formatPrice(travelCost) : formatPrice(0)}
-                </span>
-              </div>
-              <div className="mt-3 border-t border-gray-200 pt-3 flex items-baseline justify-between text-xl font-black text-gray-900">
-                <span>Totaal</span>
-                <span>{formatPrice(totalPriceEuro)}</span>
               </div>
               <p className="mt-2 text-xs text-gray-500">
-                Het uurtarief wordt vastgelegd bij je aanvraag.
-              </p>
-              <p className="mt-1 text-xs text-gray-500">
-                Totaal is exclusief reiskosten. Reiskosten worden bevestigd door de DJ na je aanvraag.
+                Het uurtarief wordt vastgelegd bij je aanvraag. Reiskosten komen
+                daar bovenop en worden door de DJ bevestigd.
               </p>
             </div>
 
