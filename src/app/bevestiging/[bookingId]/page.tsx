@@ -5,11 +5,16 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import {
+  BookingCostBreakdownCard,
+  type TravelBreakdownLine,
+} from "@/components/booking-cost-breakdown";
+import {
   getDisplayName,
+  getDjHomeCityForTravel,
   type DjProfileRow,
 } from "@/lib/dj-profile-helpers";
 import { supabase } from "@/lib/supabase-browser";
-import { formatPrice } from "@/lib/pricing";
+import { calculateServiceFee } from "@/lib/pricing";
 
 type BookingRow = Record<string, unknown> & { id: string };
 
@@ -49,6 +54,21 @@ function totalAsEuro(booking: BookingRow): number {
   }
   if (typeof t === "string") {
     const n = parseFloat(t);
+    return Number.isNaN(n) ? 0 : n;
+  }
+  return 0;
+}
+
+/** Boekingsbedragen: meestal centen (integer ≥ 100), soms al euro. */
+function moneyFromBookingField(v: unknown): number {
+  if (typeof v === "number" && Number.isFinite(v)) {
+    if (Number.isInteger(v) && Math.abs(v) >= 100) {
+      return v / 100;
+    }
+    return v;
+  }
+  if (typeof v === "string") {
+    const n = parseFloat(v);
     return Number.isNaN(n) ? 0 : n;
   }
   return 0;
@@ -111,6 +131,10 @@ export default function BevestigingPage() {
   const [dj, setDj] = useState<DjProfileRow | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [travelLine, setTravelLine] = useState<TravelBreakdownLine>({
+    state: "pending",
+    label: "Wordt door DJ bevestigd",
+  });
 
   useEffect(() => {
     let cancelled = false;
@@ -197,6 +221,92 @@ export default function BevestigingPage() {
     };
   }, [authReady, bookingId]);
 
+  useEffect(() => {
+    if (!booking || !dj) return;
+    let cancelled = false;
+    const addrRaw = booking.venue_address ?? booking.location;
+    const addr = typeof addrRaw === "string" ? addrRaw.trim() : "";
+    if (!addr) {
+      setTravelLine({
+        state: "pending",
+        label: "Wordt door DJ bevestigd",
+      });
+      return;
+    }
+
+    const homeCity = getDjHomeCityForTravel(dj);
+    const homeLat =
+      typeof dj.home_lat === "number" && Number.isFinite(dj.home_lat)
+        ? dj.home_lat
+        : null;
+    const homeLng =
+      typeof dj.home_lng === "number" && Number.isFinite(dj.home_lng)
+        ? dj.home_lng
+        : null;
+    const hasOrigin =
+      (homeLat != null && homeLng != null) ||
+      (typeof homeCity === "string" && homeCity.trim().length > 0);
+
+    if (!hasOrigin) {
+      setTravelLine({
+        state: "pending",
+        label: "Wordt door DJ bevestigd",
+      });
+      return;
+    }
+
+    setTravelLine({ state: "loading" });
+
+    (async () => {
+      try {
+        const res = await fetch("/api/travel-cost", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            venueAddress: addr,
+            homeLat,
+            homeLng,
+            homeCity: homeCity?.trim() || null,
+          }),
+        });
+        const data = (await res.json()) as {
+          ok?: boolean;
+          costEuro?: number;
+          distanceKm?: number;
+        };
+        if (cancelled) return;
+        if (
+          res.ok &&
+          data.ok &&
+          typeof data.costEuro === "number" &&
+          typeof data.distanceKm === "number"
+        ) {
+          setTravelLine({
+            state: "indicative",
+            euro: data.costEuro,
+            returnKm: data.distanceKm,
+          });
+        } else {
+          setTravelLine({
+            state: "pending",
+            label: "Wordt door DJ bevestigd",
+          });
+        }
+      } catch {
+        if (!cancelled) {
+          setTravelLine({
+            state: "pending",
+            label: "Wordt door DJ bevestigd",
+          });
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [booking, dj]);
+
   const djName = dj ? getDisplayName(dj) : "DJ";
   const eventDate =
     typeof booking?.event_date === "string" ? booking.event_date : "";
@@ -204,6 +314,45 @@ export default function BevestigingPage() {
     typeof booking?.start_time === "string" ? booking.start_time : "";
   const location = booking ? venueLine(booking) : "-";
   const totalEuro = booking ? totalAsEuro(booking) : 0;
+
+  let djTariffEuro = booking ? moneyFromBookingField(booking.dj_payout) : 0;
+  const platformFeeEuro = booking
+    ? moneyFromBookingField(booking.platform_fee)
+    : 0;
+  if (booking && djTariffEuro <= 0 && totalEuro > 0) {
+    djTariffEuro = Math.max(0, totalEuro - platformFeeEuro);
+  }
+  const serviceEuro =
+    platformFeeEuro > 0
+      ? platformFeeEuro
+      : booking
+        ? calculateServiceFee(djTariffEuro)
+        : 0;
+  const hoursBooked =
+    booking &&
+    typeof booking.hours === "number" &&
+    booking.hours > 0
+      ? booking.hours
+      : null;
+  const hourlySnap =
+    booking &&
+    typeof booking.hourly_rate_snapshot === "number" &&
+    booking.hourly_rate_snapshot > 0
+      ? booking.hourly_rate_snapshot
+      : null;
+  const hoursDisplay =
+    hoursBooked ??
+    (hourlySnap != null && djTariffEuro > 0
+      ? Math.max(1, Math.round(djTariffEuro / hourlySnap))
+      : 1);
+  const hourlyDisplay =
+    hourlySnap ??
+    (hoursDisplay > 0 ? djTariffEuro / hoursDisplay : djTariffEuro);
+
+  const grandTotalEuro =
+    travelLine.state === "indicative"
+      ? Math.round((totalEuro + travelLine.euro) * 100) / 100
+      : totalEuro;
 
   const reference = formatReference(booking, bookingId);
 
@@ -343,9 +492,17 @@ export default function BevestigingPage() {
                 </dd>
               </div>
               <div className="sm:col-span-2">
-                <dt className="text-xs text-gray-500">Totaal</dt>
-                <dd className="mt-0.5 text-lg font-bold text-white">
-                  {formatPrice(totalEuro)}
+                <dt className="text-xs text-gray-500">Kostenoverzicht</dt>
+                <dd className="mt-2">
+                  <BookingCostBreakdownCard
+                    variant="dark"
+                    hours={hoursDisplay}
+                    hourlyRate={hourlyDisplay}
+                    djTariffEuro={djTariffEuro}
+                    serviceEuro={serviceEuro}
+                    travel={travelLine}
+                    grandTotalEuro={grandTotalEuro}
+                  />
                 </dd>
               </div>
             </dl>

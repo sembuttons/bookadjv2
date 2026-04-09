@@ -3,10 +3,14 @@
 import Link from "next/link";
 import { Lock, ShieldCheck } from "lucide-react";
 import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
+import {
+  BookingCostBreakdownCard,
+  type TravelBreakdownLine,
+} from "@/components/booking-cost-breakdown";
 import { DatePickerPopover } from "@/components/date-picker-popover";
 import { StelVraagButton } from "@/components/messaging/stel-vraag-button";
-import { calculateTotalPrice, formatPrice } from "@/lib/pricing";
+import { calculateServiceFee, calculateTotalPrice } from "@/lib/pricing";
 
 const libraries = ["places"] as const;
 
@@ -14,8 +18,11 @@ type Props = {
   djId: string;
   djUserId?: string | null;
   hourlyRate: number;
+  /** DJ basis when beschikbaar (veel profielen hebben alleen stad). */
   homeLat?: number | null;
   homeLng?: number | null;
+  /** Woon-/thuisstad (home_city of city) voor geocoding als lat/lng ontbreken. */
+  djHomeCity?: string | null;
   ratePerKm?: number | null;
   contactButtonLabel?: string;
   responseTimeLabel?: string;
@@ -25,26 +32,14 @@ type Props = {
   hideContactButton?: boolean;
 };
 
-function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number) {
-  const R = 6371;
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLon = ((lon2 - lon1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) ** 2;
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-}
-
 export function BookingPanel({
   djId,
   djUserId,
   hourlyRate,
   homeLat,
   homeLng,
-  ratePerKm,
+  djHomeCity,
+  ratePerKm: _ratePerKm,
   contactButtonLabel = "Stel een vraag",
   responseTimeLabel = "Binnen 2 uur",
   memberSinceLabel = "-",
@@ -61,8 +56,110 @@ export function BookingPanel({
   const [venueAddress, setVenueAddress] = useState("");
   const [travelCost, setTravelCost] = useState(0);
   const [travelDistance, setTravelDistance] = useState(0);
+  const [travelLine, setTravelLine] = useState<TravelBreakdownLine>({
+    state: "pending",
+    label: "Wordt door DJ bevestigd",
+  });
   const [autocomplete, setAutocomplete] =
     useState<google.maps.places.Autocomplete | null>(null);
+  const travelReqSeq = useRef(0);
+
+  const hasTravelOrigin =
+    (typeof homeLat === "number" && typeof homeLng === "number") ||
+    (typeof djHomeCity === "string" && djHomeCity.trim().length > 0);
+
+  const calculateTravelCost = useCallback(
+    async (address: string) => {
+      const addr = address.trim();
+      if (!addr) {
+        setTravelCost(0);
+        setTravelDistance(0);
+        setTravelLine({
+          state: "pending",
+          label: "Wordt door DJ bevestigd",
+        });
+        return;
+      }
+
+      if (!hasTravelOrigin) {
+        setTravelCost(0);
+        setTravelDistance(0);
+        setTravelLine({
+          state: "pending",
+          label: "Wordt door DJ bevestigd",
+        });
+        return;
+      }
+
+      const seq = ++travelReqSeq.current;
+      setTravelLine({ state: "loading" });
+
+      try {
+        const res = await fetch("/api/travel-cost", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            venueAddress: addr,
+            homeLat,
+            homeLng,
+            homeCity: djHomeCity?.trim() || null,
+          }),
+        });
+        const data = (await res.json()) as {
+          ok?: boolean;
+          costEuro?: number;
+          distanceKm?: number;
+          error?: string;
+        };
+
+        if (seq !== travelReqSeq.current) return;
+
+        if (!res.ok) {
+          console.error("[BookingPanel] travel-cost API error", res.status, data);
+          setTravelCost(0);
+          setTravelDistance(0);
+          setTravelLine({
+            state: "pending",
+            label: "Wordt door DJ bevestigd",
+          });
+          return;
+        }
+
+        if (
+          data.ok &&
+          typeof data.costEuro === "number" &&
+          typeof data.distanceKm === "number"
+        ) {
+          setTravelCost(data.costEuro);
+          setTravelDistance(data.distanceKm);
+          setTravelLine({
+            state: "indicative",
+            euro: data.costEuro,
+            returnKm: data.distanceKm,
+          });
+        } else {
+          console.error("[BookingPanel] travel-cost unexpected response", data);
+          setTravelCost(0);
+          setTravelDistance(0);
+          setTravelLine({
+            state: "pending",
+            label: "Wordt door DJ bevestigd",
+          });
+        }
+      } catch (e) {
+        console.error("[BookingPanel] travel-cost fetch failed", e);
+        if (seq === travelReqSeq.current) {
+          setTravelCost(0);
+          setTravelDistance(0);
+          setTravelLine({
+            state: "pending",
+            label: "Wordt door DJ bevestigd",
+          });
+        }
+      }
+    },
+    [homeLat, homeLng, djHomeCity, hasTravelOrigin],
+  );
 
   const onPlaceChanged = useCallback(() => {
     if (!autocomplete) return;
@@ -70,25 +167,18 @@ export function BookingPanel({
     const formatted = place?.formatted_address ?? place?.name ?? "";
     if (formatted) setVenueAddress(formatted);
 
-    const loc = place?.geometry?.location;
-    if (!loc) return;
-    const lat = typeof loc.lat === "function" ? loc.lat() : null;
-    const lng = typeof loc.lng === "function" ? loc.lng() : null;
-    if (lat == null || lng == null) return;
-
-    if (typeof homeLat === "number" && typeof homeLng === "number") {
-      const crow = haversineKm(homeLat, homeLng, lat, lng);
-      const roadReturnTrip = crow * 1.3 * 2;
-      const kmRounded = Math.round(roadReturnTrip);
-      const perKm = typeof ratePerKm === "number" && ratePerKm > 0 ? ratePerKm : 0.42;
-      const cost = Math.round(roadReturnTrip * perKm);
-      setTravelDistance(kmRounded);
-      setTravelCost(cost);
-    } else {
-      setTravelDistance(0);
+    const addrForApi = formatted.trim();
+    if (!addrForApi) {
       setTravelCost(0);
+      setTravelDistance(0);
+      setTravelLine({
+        state: "pending",
+        label: "Wordt door DJ bevestigd",
+      });
+      return;
     }
-  }, [autocomplete, homeLat, homeLng, ratePerKm]);
+    void calculateTravelCost(addrForApi);
+  }, [autocomplete, calculateTravelCost]);
 
   const djCost = useMemo(
     () => Math.round(hourlyRate * hours * 100) / 100,
@@ -96,6 +186,13 @@ export function BookingPanel({
   );
 
   const totalPrice = useMemo(() => calculateTotalPrice(djCost), [djCost]);
+  const serviceEuro = useMemo(() => calculateServiceFee(djCost), [djCost]);
+  const grandTotalEuro = useMemo(() => {
+    if (travelLine.state === "indicative") {
+      return Math.round((totalPrice + travelLine.euro) * 100) / 100;
+    }
+    return totalPrice;
+  }, [totalPrice, travelLine]);
 
   const hourOptions = [1, 2, 3, 4, 5, 6, 7, 8];
 
@@ -182,6 +279,9 @@ export function BookingPanel({
                 type="text"
                 value={venueAddress}
                 onChange={(e) => setVenueAddress(e.target.value)}
+                onBlur={(e) => {
+                  void calculateTravelCost(e.target.value);
+                }}
                 placeholder="Straat en huisnummer, Stad"
                 className="input-field pl-10"
               />
@@ -205,27 +305,33 @@ export function BookingPanel({
               (geschatte afstand: {travelDistance}km retour)
             </span>
           </div>
-        ) : venueAddress.trim() ? (
-          <p className="mt-2 rounded-xl border border-gray-100 bg-gray-50 px-3 py-2 text-xs italic text-slate-500">
-            Selecteer een adres uit de lijst om reiskosten te berekenen.
-          </p>
-        ) : (
+        ) : !venueAddress.trim() ? (
           <p className="mt-2 rounded-xl border border-gray-100 bg-gray-50 px-3 py-2 text-xs italic text-slate-500">
             Vul het adres in om reiskosten te berekenen.
           </p>
+        ) : !hasTravelOrigin ? (
+          <p className="mt-2 rounded-xl border border-gray-100 bg-gray-50 px-3 py-2 text-xs italic text-slate-500">
+            Wordt door DJ bevestigd (geen thuisbasis bekend voor deze indicatie).
+          </p>
+        ) : travelLine.state === "indicative" || travelLine.state === "loading" ? null : (
+          <p className="mt-2 rounded-xl border border-gray-100 bg-gray-50 px-3 py-2 text-xs italic text-slate-500">
+            Selecteer een adres uit de lijst om reiskosten te berekenen.
+          </p>
         )}
 
-        <div className="mt-6 rounded-xl border border-gray-100 bg-slate-50 px-4 py-3 text-sm">
-          <div className="flex items-baseline justify-between gap-3">
-            <span className="font-semibold text-slate-700">
-              Totaal (na acceptatie)
-            </span>
-            <span className="text-lg font-black text-slate-900">
-              {formatPrice(totalPrice)}
-            </span>
-          </div>
-          <p className="mt-2 text-xs text-gray-400">
-            Reiskosten komen bovenop en worden door de DJ bevestigd.
+        <div className="mt-6 space-y-3">
+          <BookingCostBreakdownCard
+            variant="light"
+            hours={hours}
+            hourlyRate={hourlyRate}
+            djTariffEuro={djCost}
+            serviceEuro={serviceEuro}
+            travel={travelLine}
+            grandTotalEuro={grandTotalEuro}
+          />
+          <p className="text-xs text-gray-400">
+            Reiskosten komen bovenop het DJ-tarief en de servicekosten en worden
+            door de DJ bevestigd.
           </p>
         </div>
 

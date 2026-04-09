@@ -23,6 +23,15 @@ export function getCity(row: DjProfileRow): string {
   return typeof c === "string" ? c : "-";
 }
 
+/** Thuisbasis voor reiskosten: `home_city` (dashboard) of `city` (aanmelding). */
+export function getDjHomeCityForTravel(row: DjProfileRow): string | null {
+  const hc = row.home_city;
+  if (typeof hc === "string" && hc.trim()) return hc.trim();
+  const c = row.city;
+  if (typeof c === "string" && c.trim()) return c.trim();
+  return null;
+}
+
 /** Parse hourly rate from DB/API (PostgREST often returns `numeric` as string). */
 function parseHourlyScalar(v: unknown): number | null {
   if (v == null) return null;

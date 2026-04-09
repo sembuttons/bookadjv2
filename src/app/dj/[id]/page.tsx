@@ -20,6 +20,7 @@ import {
   averageFromReviews,
   getBio,
   getCity,
+  getDjHomeCityForTravel,
   getGenres,
   getHourlyRate,
   getProfilePhotoUrls,
@@ -215,6 +216,7 @@ export default async function DjProfilePage({ params }: PageProps) {
   const name = getStageName(profile);
   const displayForBio = getStageName(profile);
   const city = getCity(profile);
+  const djHomeCityForTravel = getDjHomeCityForTravel(profile);
   const years = getYearsExperience(profile);
   const genres = getGenres(profile);
   const hourly = getHourlyRate(profile) ?? 125;
@@ -545,6 +547,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                 homeLng={
                   typeof profile.home_lng === "number" ? profile.home_lng : null
                 }
+                djHomeCity={djHomeCityForTravel}
                 ratePerKm={
                   typeof profile.rate_per_km === "number"
                     ? profile.rate_per_km
@@ -774,6 +777,7 @@ export default async function DjProfilePage({ params }: PageProps) {
               hourlyRate={hourly}
               homeLat={typeof profile.home_lat === "number" ? profile.home_lat : null}
               homeLng={typeof profile.home_lng === "number" ? profile.home_lng : null}
+              djHomeCity={djHomeCityForTravel}
               ratePerKm={
                 typeof profile.rate_per_km === "number" ? profile.rate_per_km : null
               }
