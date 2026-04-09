@@ -15,7 +15,13 @@ import {
   getHourlyRate,
   type DjProfileRow,
 } from "@/lib/dj-profile-helpers";
+import {
+  calculateServiceFee,
+  calculateTotalPrice,
+  formatPrice,
+} from "@/lib/pricing";
 import { supabase } from "@/lib/supabase-browser";
+import { Tooltip } from "@/components/Tooltip";
 
 const EVENT_TYPES = [
   "Verjaardagsfeest",
@@ -179,15 +185,9 @@ export default function BoekenPage() {
   const city = profile ? getCity(profile) : "-";
   const genres = profile ? getGenres(profile) : [];
 
-  const djCostEuro = useMemo(
-    () => Math.round(hourlyRate * hours * 100) / 100,
-    [hourlyRate, hours],
-  );
-
-  const estimatedTotalEuro = useMemo(
-    () => Math.round((djCostEuro + travelCost) * 100) / 100,
-    [djCostEuro, travelCost],
-  );
+  const djCostEuro = useMemo(() => hourlyRate * hours, [hourlyRate, hours]);
+  const serviceFeeEuro = useMemo(() => calculateServiceFee(djCostEuro), [djCostEuro]);
+  const totalPriceEuro = useMemo(() => calculateTotalPrice(djCostEuro), [djCostEuro]);
 
   const blockedSet = useMemo(
     () => new Set(blockedIsoDates),
@@ -259,9 +259,11 @@ export default function BoekenPage() {
         return;
       }
 
-      const totalAmountCents = Math.round(hours * hourlyRate * 100);
-      const platformFeeCents = Math.round(totalAmountCents * 0.15);
-      const djPayoutCents = totalAmountCents - platformFeeCents;
+      const djCostEuro = hours * hourlyRate;
+      const serviceFeeEuro = calculateServiceFee(djCostEuro);
+      const totalAmountCents = Math.round((djCostEuro + serviceFeeEuro) * 100);
+      const platformFeeCents = serviceFeeEuro * 100;
+      const djPayoutCents = Math.round(djCostEuro * 100);
       const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
 
       setSubmitting(true);
@@ -761,31 +763,29 @@ export default function BoekenPage() {
 
             <div className="mt-5 bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm">
               <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-                Prijsopbouw (indicatie)
+                Prijsopbouw
               </p>
               <div className="mt-3 flex justify-between text-gray-600">
-                <span>
-                  Uurtarief × uren ({hours} × €{hourlyRate.toLocaleString("nl-NL")})
-                </span>
+                <span>{hours}x DJ Tarief</span>
                 <span className="font-semibold text-gray-900">
-                  €{djCostEuro.toLocaleString("nl-NL")}
+                  {formatPrice(djCostEuro)}
                 </span>
               </div>
               <div className="flex justify-between text-gray-600">
-                <span>Reiskosten (indicatie)</span>
+                <span className="inline-flex items-center">
+                  Boekingsbescherming
+                  <Tooltip text="De boekingsbescherming dekt veilige betaling, ondersteuning bij problemen en volledige terugbetaling als de DJ annuleert." />
+                </span>
                 <span className="font-semibold text-gray-900">
-                  {travelCost > 0
-                    ? `€${travelCost.toLocaleString("nl-NL")}`
-                    : "€0"}
+                  {formatPrice(serviceFeeEuro)}
                 </span>
               </div>
-              <div className="mt-3 border-t border-gray-200 pt-3 flex justify-between text-xl font-black text-gray-900">
-                <span>Totaal (indicatie)</span>
-                <span>€{estimatedTotalEuro.toLocaleString("nl-NL")}</span>
+              <div className="mt-3 border-t border-gray-200 pt-3 flex items-baseline justify-between text-xl font-black text-gray-900">
+                <span>Totaal</span>
+                <span>{formatPrice(totalPriceEuro)}</span>
               </div>
               <p className="mt-2 text-xs text-gray-500">
-                Het uurtarief wordt vastgelegd bij je aanvraag. Reiskosten kunnen door de DJ worden
-                bevestigd.
+                Het uurtarief wordt vastgelegd bij je aanvraag.
               </p>
             </div>
 

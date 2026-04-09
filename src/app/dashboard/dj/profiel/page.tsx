@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { CheckCircle, Circle, Loader2 } from "lucide-react";
 import { Tooltip } from "@/components/Tooltip";
+import { calculateServiceFee, calculateTotalPrice } from "@/lib/pricing";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase-browser";
 
@@ -272,8 +273,8 @@ export default function DjProfielPage() {
   }, []);
 
   const rateNum = hourlyRate === "" ? 0 : Number(hourlyRate);
-  const platformFee = Math.round(rateNum * 0.15);
-  const netRate = Math.round(rateNum * 0.85);
+  const serviceFee = rateNum > 0 ? calculateServiceFee(rateNum) : 0;
+  const customerTotal = rateNum > 0 ? calculateTotalPrice(rateNum) : 0;
 
   if (loading) {
     return (
@@ -441,12 +442,16 @@ export default function DjProfielPage() {
                     <span>€{rateNum}/uur</span>
                   </div>
                   <div className="mt-1 flex justify-between text-xs text-gray-500">
-                    <span>Platformkosten (15%)</span>
-                    <span>-€{platformFee}/uur</span>
+                    <span>Boekingsbescherming (klant betaalt)</span>
+                    <span>+€{serviceFee}</span>
                   </div>
                   <div className="mt-2 flex justify-between border-t border-gray-200 pt-2 font-semibold text-green-600">
                     <span>Jij ontvangt</span>
-                    <span>€{netRate}/uur</span>
+                    <span>€{rateNum}/uur</span>
+                  </div>
+                  <div className="mt-1 flex justify-between text-xs text-gray-500">
+                    <span>Klant betaalt totaal</span>
+                    <span>€{customerTotal}</span>
                   </div>
                 </div>
               ) : null}

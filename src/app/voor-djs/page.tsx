@@ -401,14 +401,13 @@ export default function VoorDjsPage() {
               </ul>
               <div className="mt-10 rounded-2xl border border-gray-200 bg-gray-50 p-5 text-left">
                 <p className="text-sm font-semibold text-slate-900">
-                  Platformcommission
+                  Geen commissie op jouw tarief
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                  bookadj houdt per bevestigde boeking een platformcommission in,
-                  gangbaar <strong className="font-semibold text-slate-900">10–15%</strong> van het
-                  boekingsbedrag, afhankelijk van het type opdracht en je
-                  overeenkomst. Het exacte percentage zie je transparant in je
-                  dashboard vóór je een aanvraag accepteert.
+                  Jij ontvangt altijd <strong className="font-semibold text-slate-900">100% van je eigen tarief</strong>.
+                  De klant betaalt daarnaast <strong className="font-semibold text-slate-900">Boekingsbescherming</strong>:
+                  10% van het DJ-bedrag (min €15, max €150). Dit dekt veilige betaling, ondersteuning bij
+                  problemen en volledige terugbetaling als de DJ annuleert.
                 </p>
               </div>
               <Link

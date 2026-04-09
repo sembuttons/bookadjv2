@@ -9,6 +9,11 @@ import {
   type DjProfileRow,
 } from "@/lib/dj-profile-helpers";
 import { supabase } from "@/lib/supabase-browser";
+import {
+  calculateServiceFee,
+  calculateTotalPrice,
+  formatPrice,
+} from "@/lib/pricing";
 
 type BookingRow = Record<string, unknown> & { id: string };
 
@@ -203,6 +208,15 @@ export default function BevestigingPage() {
     typeof booking?.start_time === "string" ? booking.start_time : "";
   const location = booking ? venueLine(booking) : "-";
   const totalEuro = booking ? totalAsEuro(booking) : 0;
+  const hours =
+    booking && typeof (booking as any).hours === "number" ? ((booking as any).hours as number) : 0;
+  const hourlySnapshot =
+    booking && typeof (booking as any).hourly_rate_snapshot === "number"
+      ? ((booking as any).hourly_rate_snapshot as number)
+      : 0;
+  const djCostEuro = hours > 0 && hourlySnapshot > 0 ? hours * hourlySnapshot : 0;
+  const serviceFeeEuro = djCostEuro > 0 ? calculateServiceFee(djCostEuro) : 0;
+  const computedTotalEuro = djCostEuro > 0 ? calculateTotalPrice(djCostEuro) : 0;
 
   const reference = formatReference(booking, bookingId);
 
@@ -342,9 +356,32 @@ export default function BevestigingPage() {
                 </dd>
               </div>
               <div className="sm:col-span-2">
-                <dt className="text-xs text-gray-500">Totaalbedrag</dt>
-                <dd className="mt-0.5 text-lg font-bold text-white">
-                  €{totalEuro.toLocaleString("nl-NL")}
+                <dt className="text-xs text-gray-500">Prijs</dt>
+                <dd className="mt-2 rounded-xl border border-gray-800 bg-[#111827] p-4">
+                  <div className="flex justify-between text-sm text-gray-300">
+                    <span>
+                      {hours > 0 ? `${hours}x DJ Tarief` : "DJ Tarief"}
+                    </span>
+                    <span className="font-semibold text-white">
+                      {djCostEuro > 0 ? formatPrice(djCostEuro) : "-"}
+                    </span>
+                  </div>
+                  <div className="mt-2 flex justify-between text-sm text-gray-300">
+                    <span>Boekingsbescherming</span>
+                    <span className="font-semibold text-white">
+                      {djCostEuro > 0 ? formatPrice(serviceFeeEuro) : "-"}
+                    </span>
+                  </div>
+                  <div className="mt-3 border-t border-gray-800 pt-3 flex items-baseline justify-between">
+                    <span className="text-sm font-semibold text-gray-200">
+                      Totaal betaald
+                    </span>
+                    <span className="text-lg font-bold text-white">
+                      {djCostEuro > 0
+                        ? formatPrice(computedTotalEuro || totalEuro)
+                        : formatPrice(totalEuro)}
+                    </span>
+                  </div>
                 </dd>
               </div>
             </dl>

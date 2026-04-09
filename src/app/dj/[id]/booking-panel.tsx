@@ -6,6 +6,12 @@ import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
 import { useCallback, useMemo, useState } from "react";
 import { DatePickerPopover } from "@/components/date-picker-popover";
 import { StelVraagButton } from "@/components/messaging/stel-vraag-button";
+import { Tooltip } from "@/components/Tooltip";
+import {
+  calculateServiceFee,
+  calculateTotalPrice,
+  formatPrice,
+} from "@/lib/pricing";
 
 const libraries = ["places"] as const;
 
@@ -94,7 +100,8 @@ export function BookingPanel({
     [hourlyRate, hours],
   );
 
-  const total = useMemo(() => djCost + travelCost, [djCost, travelCost]);
+  const serviceFee = useMemo(() => calculateServiceFee(djCost), [djCost]);
+  const totalPrice = useMemo(() => calculateTotalPrice(djCost), [djCost]);
 
   const hourOptions = [1, 2, 3, 4, 5, 6, 7, 8];
 
@@ -216,27 +223,20 @@ export function BookingPanel({
 
         <div className="mt-6 space-y-2 rounded-xl border border-gray-100 bg-slate-50 px-4 py-3 text-sm">
           <div className="flex justify-between text-slate-500">
-            <span>
-              DJ ({hours} uur × €{hourlyRate})
-            </span>
-            <span className="font-medium">
-              €{djCost.toLocaleString("nl-NL")}
-            </span>
+            <span>{hours}x DJ Tarief</span>
+            <span className="font-medium text-slate-700">{formatPrice(djCost)}</span>
           </div>
           <div className="flex justify-between text-slate-500">
-            <span>Apparatuur</span>
-            <span className="font-medium text-green-600">Inbegrepen</span>
-          </div>
-          <div className="flex justify-between text-slate-500">
-            <span>Reiskosten</span>
-            <span className="font-medium text-slate-600">
-              {travelCost > 0 ? `€${travelCost.toLocaleString("nl-NL")}` : "-"}
+            <span className="inline-flex items-center">
+              Boekingsbescherming
+              <Tooltip text="De boekingsbescherming dekt veilige betaling, ondersteuning bij problemen en volledige terugbetaling als de DJ annuleert." />
             </span>
+            <span className="font-medium text-slate-700">{formatPrice(serviceFee)}</span>
           </div>
-          <div className="flex justify-between pt-2 text-base font-bold text-slate-900">
-            <span>Totaal (indicatie)</span>
-            <span className="bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">
-              €{total.toLocaleString("nl-NL")}
+          <div className="border-t border-gray-200 pt-2 flex items-baseline justify-between">
+            <span className="text-base font-bold text-slate-900">Totaal</span>
+            <span className="text-lg font-black text-slate-900">
+              {formatPrice(totalPrice)}
             </span>
           </div>
         </div>
