@@ -29,6 +29,8 @@ type BookingRow = {
   location?: string | null;
   event_type?: string | null;
   total_amount?: number | null;
+  platform_fee?: number | null;
+  dj_payout?: number | null;
   dj_profiles?: DjEmbed | DjEmbed[];
 };
 
@@ -181,6 +183,7 @@ export default function KlantDashboardPage() {
   const [bookings, setBookings] = useState<BookingRow[]>([]);
   const [filter, setFilter] = useState<FilterTab>("alle");
   const [actionId, setActionId] = useState<string | null>(null);
+  const [openPriceId, setOpenPriceId] = useState<string | null>(null);
 
   const loadBookings = useCallback(async () => {
     setLoading(true);
@@ -529,10 +532,39 @@ export default function KlantDashboardPage() {
                       </div>
                     </div>
                     <div className="flex flex-col items-stretch gap-3 pt-4 sm:w-52 sm:shrink-0 sm:border-l sm:border-t-0 sm:pl-6 sm:pt-0">
-                      <p className="text-sm text-gray-500">Totaal</p>
+                      <p className="text-sm text-gray-500">Totaal betaald</p>
                       <p className="text-xl font-bold text-slate-900">
                         {formatEuroFromCents(booking.total_amount)}
                       </p>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setOpenPriceId((v) => (v === booking.id ? null : booking.id))
+                        }
+                        className="text-left text-sm font-semibold text-green-700 hover:text-green-800"
+                      >
+                        {openPriceId === booking.id ? "Verberg prijsdetails" : "Toon prijsdetails"}
+                      </button>
+                      {openPriceId === booking.id ? (
+                        <div className="rounded-xl bg-gray-50 border border-gray-200 p-3 text-sm">
+                          <div className="flex justify-between text-gray-600">
+                            <span>DJ Tarief</span>
+                            <span className="font-semibold text-gray-900">
+                              {formatEuroFromCents(booking.dj_payout)}
+                            </span>
+                          </div>
+                          <div className="mt-2 flex justify-between text-gray-600">
+                            <span>Boekingsbescherming</span>
+                            <span className="font-semibold text-gray-900">
+                              {formatEuroFromCents(booking.platform_fee)}
+                            </span>
+                          </div>
+                          <div className="mt-3 border-t border-gray-200 pt-3 flex justify-between font-semibold text-gray-900">
+                            <span>Totaal</span>
+                            <span>{formatEuroFromCents(booking.total_amount)}</span>
+                          </div>
+                        </div>
+                      ) : null}
                       <div className="flex flex-wrap gap-2">
                         <Link
                           href={`/bevestiging/${encodeURIComponent(booking.id)}`}

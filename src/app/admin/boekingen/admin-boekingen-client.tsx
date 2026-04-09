@@ -418,19 +418,40 @@ export function AdminBoekingenClient() {
                 <h3 className="text-xs font-bold uppercase text-gray-500">
                   Betaling
                 </h3>
-                <p className="mt-2 text-slate-900">
-                  Totaal: {formatEuroCents(detail.total_amount ?? null)}
-                </p>
-                {typeof detail.platform_fee === "number" ? (
-                  <p className="text-gray-600">
-                    Platform: {formatEuroCents(detail.platform_fee)}
-                  </p>
-                ) : null}
-                {typeof detail.dj_payout === "number" ? (
-                  <p className="text-gray-600">
-                    DJ-uitbetaling: {formatEuroCents(detail.dj_payout)}
-                  </p>
-                ) : null}
+                <div className="mt-2 space-y-2">
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>DJ Tarief</span>
+                    <span className="font-semibold text-slate-900">
+                      {formatEuroCents(detail.dj_payout ?? null)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>Boekingsbescherming</span>
+                    <span className="font-semibold text-slate-900">
+                      {formatEuroCents(detail.platform_fee ?? null)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>Totaal klant</span>
+                    <span className="font-semibold text-slate-900">
+                      {formatEuroCents(detail.total_amount ?? null)}
+                    </span>
+                  </div>
+                  <div className="mt-3 border-t border-gray-200 pt-3 space-y-2">
+                    <div className="flex justify-between text-sm text-gray-600">
+                      <span>DJ ontvangt</span>
+                      <span className="font-semibold text-slate-900">
+                        {formatEuroCents(detail.dj_payout ?? null)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-sm text-gray-600">
+                      <span>bookadj verdient</span>
+                      <span className="font-semibold text-slate-900">
+                        {formatEuroCents(detail.platform_fee ?? null)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
                 {typeof detail.hourly_rate_snapshot === "number" ? (
                   <p className="text-xs text-gray-500">
                     Uurtarief (snapshot): €{detail.hourly_rate_snapshot}

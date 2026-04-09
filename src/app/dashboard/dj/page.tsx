@@ -445,9 +445,9 @@ export default function DjDashboardPage() {
       {djProfileId ? (
         <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
           <p className="text-sm leading-relaxed text-gray-700">
-            <span className="font-semibold text-gray-900">bookadj</span> rekent
-            15% platformkosten per boeking. Jij ontvangt altijd 85% van het
-            overeengekomen bedrag.
+            <span className="font-semibold text-gray-900">bookadj</span> werkt
+            met <span className="font-semibold text-gray-900">Boekingsbescherming</span>.
+            Jij ontvangt altijd <span className="font-semibold text-gray-900">100% van jouw tarief</span>.
           </p>
         </div>
       ) : null}
@@ -574,17 +574,18 @@ export default function DjDashboardPage() {
 
                         <div className="flex flex-wrap gap-6 pt-4">
                           <div>
-                            <p className="text-xs text-gray-500">Bruto</p>
+                            <p className="text-xs text-gray-500">Jouw tarief</p>
                             <p className="text-lg font-bold text-slate-900">
-                              {formatEuroFromCents(req.total_amount)}
+                              {formatEuroFromCents(req.dj_payout)}
                             </p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500">
-                              Jouw verdienste na 15% platformkosten
-                            </p>
+                            <p className="text-xs text-gray-500">Jij ontvangt</p>
                             <p className="text-lg font-bold text-green-600">
                               {formatEuroFromCents(req.dj_payout)}
+                            </p>
+                            <p className="mt-1 text-xs text-gray-400">
+                              De klant betaalt {formatEuroFromCents(req.total_amount)} (incl. boekingsbescherming)
                             </p>
                           </div>
                         </div>
@@ -688,10 +689,19 @@ export default function DjDashboardPage() {
                           </dd>
                         </div>
                         <div>
-                          <dt className="text-gray-500">Netto uitbetaling</dt>
+                          <dt className="text-gray-500">Jouw tarief</dt>
+                          <dd className="text-lg font-bold text-slate-900">
+                            {formatEuroFromCents(b.dj_payout)}
+                          </dd>
+                        </div>
+                        <div>
+                          <dt className="text-gray-500">Jij ontvangt</dt>
                           <dd className="text-lg font-bold text-green-600">
                             {formatEuroFromCents(b.dj_payout)}
                           </dd>
+                          <p className="mt-1 text-xs text-gray-400">
+                            De klant betaalt {formatEuroFromCents(b.total_amount)} (incl. boekingsbescherming)
+                          </p>
                         </div>
                         <div>
                           <dt className="text-gray-500">
