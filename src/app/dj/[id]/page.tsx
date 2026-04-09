@@ -716,7 +716,7 @@ export default async function DjProfilePage({ params }: PageProps) {
                   })}
                 </div>
               </section>
-            )}
+            ) : null}
 
             <section aria-labelledby="trust-heading">
               <h2 id="trust-heading" className="text-lg font-bold text-gray-900">
