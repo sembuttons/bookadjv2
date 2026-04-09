@@ -10,7 +10,6 @@ import {
   getHourlyRate,
   getProfilePhotoUrls,
   getProfileRating,
-  getResponseTimeLabel,
   getReviewCount,
   getStageName,
   type DjProfileRow,
@@ -552,7 +551,8 @@ export default function ZoekenPage() {
                 const stage = getStageName(row);
                 const city = getCity(row);
                 const genres = getGenres(row);
-                const responseLabel = getResponseTimeLabel(row);
+                const reviewCount = getReviewCount(row);
+                const profileRating = getProfileRating(row);
                 const hourly = getHourlyRate(row);
                 const djPhoto = getProfilePhotoUrls(row)[0] ?? null;
                 return (
@@ -586,24 +586,34 @@ export default function ZoekenPage() {
                         <p className="text-sm font-semibold text-slate-900">
                           {hourly != null ? `€${Math.round(hourly)}/uur` : "Tarief op aanvraag"}
                         </p>
-                        <div className="flex flex-wrap gap-2">
-                          {genres.slice(0, 4).map((g) => (
-                            <span
-                              key={g}
-                              className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
-                            >
-                              {g}
+                        <div className="flex items-center justify-between gap-2 pt-1">
+                          <div className="flex min-w-0 flex-wrap gap-1.5">
+                            {genres.slice(0, 3).map((g) => (
+                              <span
+                                key={g}
+                                className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-700"
+                              >
+                                {g}
+                              </span>
+                            ))}
+                          </div>
+                          {reviewCount === 0 ? (
+                            <span className="inline-flex flex-none items-center gap-1 text-xs font-semibold text-amber-600">
+                              <IconSparkleNew className="shrink-0 text-amber-500" />
+                              Nieuw
                             </span>
-                          ))}
-                        </div>
-                        <p className="text-xs text-gray-500">
-                          Reactietijd: {responseLabel}
-                        </p>
-                        <div className="flex justify-end pt-3">
-                          <span className="inline-flex items-center gap-1 text-sm font-medium text-amber-600">
-                            <IconSparkleNew className="shrink-0 text-amber-500" />
-                            Nieuw
-                          </span>
+                          ) : (
+                            <span className="inline-flex flex-none items-center gap-1 text-xs font-semibold text-gray-700">
+                              <svg
+                                className="h-3 w-3 fill-amber-400"
+                                viewBox="0 0 20 20"
+                                aria-hidden
+                              >
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                              </svg>
+                              {profileRating.toFixed(1)}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </Link>
